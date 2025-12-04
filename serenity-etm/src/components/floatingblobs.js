@@ -1,71 +1,83 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import useViewport from '../hooks/useViewport';
+import {motion} from 'framer-motion';
+import { useEffect, useState, useId } from 'react';
 
-export default function FloatingBlobs({ count = 5 }) {
-
-    const viewport = useViewport();
+export default function FloatingBlobs ({count = 12, className = ''}) {
     const [blobs, setBlobs] = useState([]);
-    
+    const filterId = useId(); // prevents svg ID collisions in nextjs
+
     useEffect(() => {
-        if(!viewport.width || !viewport.height) return;
-
-        const newBlobs = Array.from({length: count}).map(() => {
-            const size = 150 + Math.random() * 250;
-            const pos = getRandomPosition(viewport, size);
-            const ani = getRandomAnimation(viewport, size);
-
-            return {size, pos, ani};
-        });
-
-        setBlobs(newBlobs);
-    }, [viewport, count]);
+        const arr = Array.from({length: count}).map(() => ({
+            size: 220 + Math.random() * 260,
+            x: Math.random() * 80,
+            y: Math.random() * 80,
+            dx: (Math.random() - 0.5) * 35,
+            dy: (Math.random() - 0.5) * 35,
+        }));
+        setBlobs(arr);
+    }, [count]);
 
     return (
-        <div className='absolute inset-0 overflow-hidden -z-0'>
-            {blobs.map((blob, i) => (
-                <motion.div
-                    key = {i}
-                    className='absolute rounded-full'
-                    style={{
-                        width: blob.size,
-                        height: blob.size,
-                        top: blob.pos.y,
-                        left: blob.pos.x,
-                        background: 'radial-gradient(circle, rgba(203, 123, 135, 0.5) 0%, rgba(255, 182, 193, 0) 70%)',
-                        filter: 'blur(40px)',
-                    }}
-                    animate={{
-                        x: blob.ani.x,
-                        y: blob.ani.y,
-                    }}
-                    transition={{
-                        duration: 15 + Math.random() * 20,
-                        repeat: Infinity,
-                        repeatType: 'loop',
-                        ease: 'easeInOut',
-                    }}
-                />
-            ))}
-        </div>
+        <>
+            {/* Gooey filter inspired by lava lamps */}
+            <svg
+                className='absolute w-0 h-0'
+                aria-hidden='true'
+                focusable='false'
+            >
+                <filter id={filterId}>
+                    <feGaussianBlur in='SourceGraphic' stdDeviation='35' result='blur' />
+                    <feColorMatrix
+                        in='blur'
+                        mode='matrix'
+                        values='
+                            1 0 0 0 0
+                            0 1 0 0 0
+                            0 0 1 0 0
+                            0 0 0 20 -9
+                        '
+                        result='gooey'
+                    />
+                    <feBlend in='SourceGraphic' in2='gooey' />
+                </filter>
+            </svg>
+
+            {/* Blob layer */}
+            <div
+                className={`absolute inset-0 z-10 pointer-events-none ${className}`}
+                style={{
+                    filter: `url(#${filterId})`,
+                }}
+            >
+                {blobs.map((b, i) => (
+                    <motion.div
+                        key={i}
+                        style={{
+                            position: 'absolute',
+                            width: b.size,
+                            height: b.size,
+                            left: `${b.x}vw`,
+                            top: `${b.y}vh`,
+                            borderRadius: '50%',
+
+                            background: 'radial-gradient(circle at 30% 30%, rgba(158, 208, 241, 0.8), transparent 70%), radial-gradient(circle at 70% 70%, rgba(244, 244, 240, 0.8), transparent 70%), radial-gradient(circle at 50% 50%, rgba(209, 187, 227, 0.8), transparent 70%)',
+
+                            filter: 'blur(70px)',
+                        }}
+                        animate={{
+                            x: [0, `{b.dx}vw`, `${-b.dx*0.6}vw`, 0],
+                            y: [0, `{b.dy}vh`, `${-b.dy*0.6}vh`, 0],
+                            scale: [1, 1.15, 0.95, 1],
+                        }}
+                        transition={{
+                            duration: 40 + Math.random() * 25,
+                            repeat: Infinity,
+                            ease: 'easeInOut',
+                        }}
+                    />
+                ))}
+            </div>
+        </>
     );
-}
-
-function getRandomPosition(viewport, size) {
-    return {
-        x: Math.random() * (viewport.width - size),
-        y: Math.random() * (viewport.height - size),
-    };
-}
-
-function getRandomAnimation(viewport, size) {
-    const rangeX = Math.random() * (viewport.width -size);
-    const rangeY = Math.random() * (viewport.height -size);
-
-    return {
-        x: [0, rangeX, -rangeX/2, 0],
-        y: [0, rangeY, -rangeY/2, 0],
-    };
 }
