@@ -1,4 +1,4 @@
-import create from 'zustand';
+import {create} from 'zustand';
 
 const useStore = create((set) => ({
     theme: 'light',
@@ -8,4 +8,6 @@ const useStore = create((set) => ({
     setEmotionValue: (value) => set({emotionValue: value}),
 
     // for global states 
-}))
+}));
+
+export default useStore;
