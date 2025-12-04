@@ -9,12 +9,12 @@ module.exports = {
         extend: {
             colors: {
                 light: {
-                    background: "#fffdd0",
+                    background: "#f4f1e8",
                     foreground: "#121212",
                 },
                 dark: {
                     background: "#121212",
-                    foreground: "#fffdd0",
+                    foreground: "#F4F1E8",
                 },
             },
         },

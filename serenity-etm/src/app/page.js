@@ -1,65 +1,73 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import FloatingBlobs from '../components/floatingblobs';
+
+export default function IntroPage() {
+    
+    const router = useRouter();
+    const [accepted, setAccepted] = useState(false);
+
+    return (
+        <main
+            className='flex flex-col min-h-screen items-center justify-center text-white p-4 bg-light-background dark:bg-dark-background'
+        >
+            <FloatingBlobs className='absolute inset-0 -z-10'/>
+
+            <div
+                className='w-full max-w-lg bg-neutral-900 rounded-xl p-6 space-y-6 z-10'
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+                <h1 className='text-3xl font-bold'>Serenity ETM</h1>
+                <p className='text-neutral-300'>
+                    A calm, emotion-aware email and task manager to reduce workplace stress.
+                </p>
+            </div>
+
+            <div 
+                className='border border-neutral-700 p-4 rounded-md max-h-48 overflow-y-auto z-10'
             >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
-}
+                <p className='text-neutral-400 text-sm'>
+                    By using this prototype, you agree that the application will adapt its interface based on your detected stress level. No real biometric data is stored, and this is a prototype for academic purposes.
+                </p>
+            </div>
+
+            <div 
+                className='flex items-center space-x-2 z-10'
+            >
+                <input
+                    type='checkbox'
+                    id='accept'
+                    checked={accepted}
+                    onChange={() => {setAccepted(!accepted)}}
+                    className='w-4 h-4 accent-blue-500 z-10'
+                />
+                <label htmlFor='accept' className='text-sm text-neutral-300 z-10'>
+                    I agree to the Terms & Conditions
+                </label>
+            </div>
+
+            <button
+                disabled={!accepted}
+                className={`w-full p-2 rounded-lg font-medium transition-colors z-10
+                ${accepted
+                    ? "bg-blue-500 hover:bg-blue-600 text-white cursor-pointer"
+                    : "bg-neutral-700 text-neutral-400 cursor-not-allowed"
+                }`}
+                onClick={()=>router.push("/emails")}
+            >
+                Enter Serentiy Workplace
+            </button>
+
+            <p className='text-center text-sm text-neutral-400 z-10'>
+                <button
+                    className='underline hover:text-blue-400 z-10'
+                    onClick={() => router.push('/terms')}
+                >
+                    Read full Terms & Conditions
+                </button>
+            </p>
+        </main>
+    );
+};

@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-
 import useViewport from '../hooks/useViewport';
 
 export default function FloatingBlobs({ count = 5 }) {
@@ -25,7 +24,7 @@ export default function FloatingBlobs({ count = 5 }) {
     }, [viewport, count]);
 
     return (
-        <div className='absolute inset-0 overflow-hidden -z-10'>
+        <div className='absolute inset-0 overflow-hidden -z-0'>
             {blobs.map((blob, i) => (
                 <motion.div
                     key = {i}
@@ -35,8 +34,8 @@ export default function FloatingBlobs({ count = 5 }) {
                         height: blob.size,
                         top: blob.pos.y,
                         left: blob.pos.x,
-                        background: 'radial-gradient(circle, rgba(255, 182, 193, 0.5) 0%, rgba(255, 182, 193, 0) 70%)',
-                        filter: 'blur(80px)',
+                        background: 'radial-gradient(circle, rgba(203, 123, 135, 0.5) 0%, rgba(255, 182, 193, 0) 70%)',
+                        filter: 'blur(40px)',
                     }}
                     animate={{
                         x: blob.ani.x,
