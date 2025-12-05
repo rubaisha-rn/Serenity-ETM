@@ -1,22 +1,76 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import FloatingBlobs from '../components/floatingblobs';
 import StressControl from '../components/stressControl';
+import useStore from '../store/useStore';
 
 export default function IntroPage() {
     
     const router = useRouter();
+    
     const [accepted, setAccepted] = useState(false);
+    const emotionValue = useStore((s) => s.emotionValue);
+    const stress01 = emotionValue / 100;
+    const [stressPalette, setStressPalette] = useState('low');
+    const [theme, setTheme] = useState('light'); 
+
+    useEffect(() => {
+        const darkModeEnabled = document.documentElement.classList.contains('dark');
+        setTheme(darkModeEnabled ? 'dark' : 'light');
+    }, []);
+
+    useEffect(() => {
+        if (stress01 !== undefined) {
+            if (stress01 < 0.33) setStressPalette('low');
+            else if (stress01 < 0.66) setStressPalette('mid');
+            else setStressPalette('high');}
+    }, [stress01]);
+
+    const textAClasses = {
+        light: {
+            low: 'text-light-low-textA',
+            mid: 'text-light-mid-textA',
+            high: 'text-light-high-textA',
+        },
+        dark: {},
+    };
+
+    const textBClasses = {
+        light: {
+            low: 'text-light-low-textB',
+            mid: 'text-light-mid-textB',
+            high: 'text-light-high-textB',
+        },
+        dark: {},
+    };
+
+    const bgClasses = {
+        light: {
+            low: 'bg-light-low-bg',
+            mid: 'bg-light-mid-bg',
+            high: 'bg-light-high-bg',
+        },
+        dark: {},
+    };
+
+    const buttonClasses = {
+        light: {
+            low: 'bg-light-low-button hover:bg-light-low-buttonHover',
+            mid: 'bg-light-mid-button hover:bg-light-mid-buttonHover',
+            high: 'bg-light-high-button hover:bg-light-high-buttonHover',
+        },
+        dark: {},
+    };    
 
     return (
         <main
-            className='relative min-h-screen text-light-mainText bg-light-background dark:bg-dark-background overflow-hidden'
+            className={`relative min-h-screen ${textAClasses[theme][stressPalette]} ${bgClasses[theme][stressPalette]} overflow-hidden`}
         >
             <FloatingBlobs className='z-0'/>
-            {/* <StressControl className='z-20' /> */}
+            <StressControl className='z-20' />
 
             {/* 2x2 grid layout */}
             <div 
@@ -50,7 +104,7 @@ export default function IntroPage() {
                         
                         <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface'>Email & Task Manager</h1>
                         
-                        <p className='pt-4 text-light-subText font-Roboto text-[clamp(0.8rem,1.1vw,1rem)] leading-snug'>A calm, emotion-aware email and task manager to reduce workplace stress.</p>
+                        <p className={`pt-4 ${textBClasses[theme][stressPalette]} font-Roboto text-[clamp(0.8rem,1.1vw,1rem)] leading-snug`}>A calm, emotion-aware email and task manager to reduce workplace stress.</p>
                     
                     </div>
                 </div>
@@ -73,7 +127,7 @@ export default function IntroPage() {
                 >
                     <div className='w-full max-w-md space-y-4'>
                         
-                        <p className='text-light-subText font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug'>
+                        <p className={`${textBClasses[theme][stressPalette]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>
                             By using this prototype, you agree that the application will adapt its interface based on your detected stress level. No real biometric data is stored, and this is a prototype for academic purposes.  
                         </p>
 
@@ -87,7 +141,7 @@ export default function IntroPage() {
                                 className='w-3 h-3 accent-blue-500'
                             />
                             
-                            <label htmlFor='accept' className='text-light-subText font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug'>I agree to the&nbsp;
+                            <label htmlFor='accept' className={`${textBClasses[theme][stressPalette]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>I agree to the&nbsp;
                                 
                                 <button
                                     className='underline hover:text-blue-400'
@@ -101,7 +155,7 @@ export default function IntroPage() {
                         <button
                             disabled={!accepted}
                             className={`font-Roboto text-[clamp(0.8rem,1.1vw,1rem)] leading-snug w-full py-3 rounded-full font-medium transition-colors ${accepted
-                                ? 'bg-light-button hover:bg-light-buttonHover text-white cursor-pointer'
+                                ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
                                 : 'bg-neutral-600 text-neutral-400 cursor-not-allowed'
                             }`}
                             onClick={() => router.push('/emails')}
