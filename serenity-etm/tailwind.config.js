@@ -15,7 +15,7 @@ module.exports = {
                 light: {
                     low: {
                         bg: '#f4f1e8',
-                        card: '#ffd6c9',
+                        card: '#f4f1e8',
                         icon: '#dce9f5',
                         textA: '#25030393',
                         textB: '#353535',

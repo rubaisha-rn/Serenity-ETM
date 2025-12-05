@@ -2,8 +2,8 @@
 
 import {motion} from 'framer-motion';
 import { useEffect, useState, useId } from 'react';
-import useStore from '../store/useStore';
-import { useStressColors } from '../hooks/useStressColors';
+import useStore from '@/store/useStore';
+import { useStressColors } from '@/hooks/useStressColors';
 
 export default function FloatingBlobs ({count = 12, className = ''}) {
 

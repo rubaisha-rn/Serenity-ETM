@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-import FloatingBlobs from '../components/floatingblobs';
-import StressControl from '../components/stressControl';
-import useStore from '../store/useStore';
+import FloatingBlobs from '@/components/floatingblobs';
+import StressControl from '@/components/stressControl';
+import useStore from '@/store/useStore';
 
 export default function IntroPage() {
     
@@ -98,13 +98,13 @@ export default function IntroPage() {
                     md:order-none
                     md:pt-4'
                 >
-                    <div className='max-w-md p-6 space-y-4'>
+                    <div className='max-w-md p-6'>
                         
                         <h1 className='text-[clamp(4.5rem,7.8vw,8rem)] leading-none font-AbrilFatface'>Serenity</h1>
                         
                         <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface'>Email & Task Manager</h1>
                         
-                        <p className={`pt-4 ${textBClasses[theme][stressPalette]} font-Roboto text-[clamp(0.8rem,1.1vw,1rem)] leading-snug`}>A calm, emotion-aware email and task manager to reduce workplace stress.</p>
+                        <p className={`pt-10 ${textAClasses[theme][stressPalette]} font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug`}>Stay productive, stay calm: your stress-aware inbox.</p>
                     
                     </div>
                 </div>

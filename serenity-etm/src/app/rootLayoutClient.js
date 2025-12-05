@@ -2,7 +2,7 @@
 
 import { Geist, Geist_Mono } from "next/font/google";
 import { useEffect } from "react";
-import useStore from "../store/useStore";
+import useStore from "@/store/useStore";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
