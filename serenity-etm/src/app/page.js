@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import FloatingBlobs from '../components/floatingblobs';
+import StressControl from '../components/stressControl';
 
 export default function IntroPage() {
     
@@ -14,7 +15,8 @@ export default function IntroPage() {
         <main
             className='flex flex-col min-h-screen items-center justify-center text-white p-4 bg-light-background dark:bg-dark-background'
         >
-            <FloatingBlobs className='absolute inset-0 -z-10'/>
+            <FloatingBlobs className='z-10'/>
+            <StressControl/>
 
             <div
                 className='w-full max-w-lg bg-neutral-900 rounded-xl p-6 space-y-6 z-10'

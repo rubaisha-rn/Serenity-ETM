@@ -1,11 +1,15 @@
 import {create} from 'zustand';
 
 const useStore = create((set) => ({
+    
     theme: 'light',
     setTheme: (theme) => set({theme}),
 
-    emotionValue: 0,
-    setEmotionValue: (value) => set({emotionValue: value}),
+    emotionValue: 0, // 0-100
+    setEmotionValue: (value) => 
+        set({
+            emotionValue: Math.min(100, Math.max(0, value)), // stress value will always be between 0-100
+        }),
 
     // for global states 
 }));
