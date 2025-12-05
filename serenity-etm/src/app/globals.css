@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Abril-Fatface';
+    src: url('../../public/fonts/AbrilFatface-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Roboto';
+    src: url('../../public/fonts/Roboto-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
 body {
     @apply bg-light-background text-light-foreground dark:bg-dark-background dark:text-dark-foreground;
     font-family: Arial, Helvetica, sans-serif;
