@@ -5,7 +5,7 @@ import { useEffect, useState, useId } from 'react';
 import useStore from '@/store/useStore';
 import { useStressColors } from '@/hooks/useStressColors';
 
-export default function FloatingBlobs ({count = 12, className = ''}) {
+export default function FloatingBlobs ({count = 10, className = ''}) {
 
     const emotionValue = useStore((s) => s.emotionValue);
     const stress01 = emotionValue / 100;
@@ -26,8 +26,8 @@ export default function FloatingBlobs ({count = 12, className = ''}) {
         setBlobs(arr);
     }, [count]);
 
-    const speed = 20 + stress01 * 50; // slow on high stress 
-    const blur = 50 + stress01 * 40; // soft on high stress
+    const speed = 30 + stress01 * 60; // slow on high stress 
+    const blur = 90 + stress01 * 50; // soft on high stress
     const scaleRange = 1 + stress01 * 0.2; // gentler breathing 
 
     return (
@@ -47,7 +47,7 @@ export default function FloatingBlobs ({count = 12, className = ''}) {
                             1 0 0 0 0
                             0 1 0 0 0
                             0 0 1 0 0
-                            0 0 0 20 -9
+                            0 0 0 5 -2
                         '
                         result='gooey'
                     />
@@ -73,13 +73,13 @@ export default function FloatingBlobs ({count = 12, className = ''}) {
                             top: `${b.y}vh`,
                             borderRadius: '50%',
 
-                            background: `radial-gradient(circle at 30% 30%, ${colors[0]}, transparent 70%), radial-gradient(circle at 70% 70%, ${colors[1]}, transparent 70%), radial-gradient(circle at 50% 50%, ${colors[2]}, transparent 70%)`,
+                            background: `radial-gradient(circle at 35% 35%, ${colors[0]} 0%, transparent 78%), radial-gradient(circle at 65% 35%, ${colors[1]} 0%, transparent 78%), radial-gradient(circle at 50% 65%, ${colors[2]} 0%, transparent 78%)`,
 
                             filter: `blur(${blur}px)`,
                         }}
                         animate={{
-                            x: [0, `{b.dx}vw`, `${-b.dx*0.6}vw`, 0],
-                            y: [0, `{b.dy}vh`, `${-b.dy*0.6}vh`, 0],
+                            x: [0, `${b.dx}vw`, `${-b.dx*0.6}vw`, 0],
+                            y: [0, `${b.dy}vh`, `${-b.dy*0.6}vh`, 0],
                             scale: [1, scaleRange, 0.95, 1],
                         }}
                         transition={{

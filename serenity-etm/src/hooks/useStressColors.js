@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 
 const Palettes = {
-    low: ['#ffd6c9', '#fff1c1', '#dce9f5'],
-    mid: ['#cfe7f2', '#dff3ea', '#e6e2f5'],
-    high: ['#daddf7', '#e8f3ef', '#eef0f4'],
+    low: ['#deb6ab', '#f2e1a6', '#c4d9eb'],
+    mid: ['#b6d8e8', '#bfe7d6', '#c9c4eb'],
+    high: ['#b8beeb', '#cfe6df', '#d3d7e0'],
 };
 
 function lerp(a, b, t) {

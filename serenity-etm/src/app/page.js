@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import FloatingBlobs from '@/components/floatingblobs';
 import StressControl from '@/components/stressControl';
 import useStore from '@/store/useStore';
+import Header from '@/components/header';
+import Image from 'next/image';
 
 export default function IntroPage() {
     
@@ -72,6 +74,19 @@ export default function IntroPage() {
             <FloatingBlobs className='z-0'/>
             <StressControl className='z-20' />
 
+            <Header
+                title="Serenity ETM"
+                logo={<Image
+                    src="/logo/logo.png"
+                    alt='Serenity ETM Logo'
+                    width={24}
+                    height={24}
+                    priority
+                />}
+                sticky
+                textClass={textBClasses[theme]}
+            />
+
             {/* 2x2 grid layout */}
             <div 
                 className='
@@ -100,7 +115,7 @@ export default function IntroPage() {
                 >
                     <div className='max-w-md p-6'>
                         
-                        <h1 className='text-[clamp(4.5rem,7.8vw,8rem)] leading-none font-AbrilFatface'>Serenity</h1>
+                        <h1 className='text-[clamp(4.5rem,7.8vw,8rem)] leading-none font-AbrilFatface transition-colors duration-500 ease-in-out'>Serenity</h1>
                         
                         <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface'>Email & Task Manager</h1>
                         
