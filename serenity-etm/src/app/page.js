@@ -79,10 +79,15 @@ export default function IntroPage() {
                 logo={<Image
                     src="/logo/logo.png"
                     alt='Serenity ETM Logo'
-                    width={24}
-                    height={24}
+                    width={18}
+                    height={18}
                     priority
+                    className='opacity-50'
                 />}
+                navLinks={[
+                    {label: 'Home', href: '/'},
+                    {label: 'Terms & Conditions', href: '/terms'},
+                ]}
                 sticky
                 textClass={textBClasses[theme]}
             />
