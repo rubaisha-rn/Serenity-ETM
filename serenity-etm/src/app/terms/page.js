@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Header from "@/components/header";
 import FloatingBlobs from '@/components/floatingblobs';
 import Image from "next/image";
+import PrototypeTag from "@/components/prototypeTag";
+import Footer from "@/components/footer";
 
 export default function TermsPage () {
     
@@ -38,6 +40,7 @@ export default function TermsPage () {
         <main className={`relative min-h-screen ${textAClasses[theme]} ${bgClasses[theme]}`}>
             
             <FloatingBlobs className='z-0'/>
+            <PrototypeTag />
 
             <Header
                 title="Serenity ETM"
@@ -49,10 +52,6 @@ export default function TermsPage () {
                     priority
                 />}
                 showBack
-                navLinks={[
-                    {label: 'Home', href: '/'},
-                    {label: 'Terms & Conditions', href: '/terms'},
-                ]}
                 sticky
             />
         
@@ -145,7 +144,7 @@ export default function TermsPage () {
                 </div>
 
             </div>
-
+            <Footer />
         </main>
     );  
 }

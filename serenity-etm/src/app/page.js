@@ -8,6 +8,8 @@ import StressControl from '@/components/stressControl';
 import useStore from '@/store/useStore';
 import Header from '@/components/header';
 import Image from 'next/image';
+import PrototypeTag from '@/components/prototypeTag';
+import Footer from '@/components/footer';
 
 export default function IntroPage() {
     
@@ -31,6 +33,15 @@ export default function IntroPage() {
             else setStressPalette('high');}
     }, [stress01]);
 
+    const headingClasses = {
+        light: {
+            low: 'text-light-low-acc',
+            mid: 'text-light-mid-acc',
+            high: 'text-light-high-acc',
+        },
+        dark: {},
+    };
+
     const textAClasses = {
         light: 'text-light-textA',
         dark: {},
@@ -52,19 +63,15 @@ export default function IntroPage() {
 
     const buttonClasses = {
         light: {
-            low: 'bg-light-low-button hover:bg-light-low-buttonHover border-light-low-a border-2',
-            mid: 'bg-light-mid-button hover:bg-light-mid-buttonHover border-light-mid-a border-2',
-            high: 'bg-light-high-button hover:bg-light-high-buttonHover border-light-high-a border-2',
+            low: 'bg-light-low-acc hover:bg-light-low-accHover border-light-low-a border-2',
+            mid: 'bg-light-mid-acc hover:bg-light-mid-accHover border-light-mid-a border-2',
+            high: 'bg-light-high-acc hover:bg-light-high-accHover border-light-high-a border-2',
         },
         dark: {},
     };    
 
     return (
-        <main
-            className={`relative min-h-screen ${textAClasses[theme]} ${bgClasses[theme][stressPalette]} overflow-hidden`}
-        >
-            <FloatingBlobs className='z-0'/>
-            <StressControl className='z-20' />
+        <div className={`${headingClasses[theme][stressPalette]} ${bgClasses[theme][stressPalette]}`}>
 
             <Header
                 title="Serenity ETM"
@@ -75,105 +82,113 @@ export default function IntroPage() {
                     height={18}
                     priority
                 />}
-                navLinks={[
-                    {label: 'Home', href: '/'},
-                    {label: 'Terms & Conditions', href: '/terms'},
-                ]}
                 sticky
             />
 
-            {/* 2x2 grid layout */}
-            <div 
-                className='
-                relative z-10 
-                grid grid-cols-1 grid-rows-1 
+            <main className='relative min-h-screen overflow-hidden'>
                 
-                md:grid-cols-2
-                md:grid-rows-2
-                
-                h-screen
-                gap-6 p-8
-                md:p-10
-                md:mt-0'
-            >
+                <PrototypeTag />
+                <FloatingBlobs className='z-0'/>
+                <StressControl className='z-10' />
 
-                {/* top left box */}
-                <div className='
-                    flex 
-                    items-center
-                    justify-start
-                    h-full
-                    order-1
+                {/* 2x2 grid layout */}
+                <div 
+                    className='
+                    relative z-10 
+                    grid grid-cols-1 grid-rows-1 
                     
-                    md:order-none'
+                    md:grid-cols-2
+                    md:grid-rows-2
+                    
+                    h-screen
+                    gap-6 p-8
+                    md:p-10
+                    md:mt-0'
                 >
-                    <div className='max-w-md p-6 pt-0'>
-                        
-                        <h1 className='text-8xl leading-none font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85'>Serenity</h1>
-                        
-                        <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface opacity-80'>Email & Task Manager</h1>
-                        
-                        <p className={`pt-6 ${textAClasses[theme]} font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug`}>Stay productive, stay calm: your stress-aware inbox.</p>
-                    
-                    </div>
-                </div>
 
-                {/* top right and bottom left intentionally left empty */}
-                <div />
-                <div />
-
-                {/* bottom right */}
-                <div className='
-                    flex 
-                    items-center
-                    justify-start
-                    h-full
-                    order-2
-                    
-                    md:order-none
-                    md:ml-40
-                    md:mr-10'
-                >
-                    <div className='w-full max-w-md space-y-4'>
+                    {/* top left box */}
+                    <div className='
+                        flex 
+                        items-center
+                        justify-start
+                        h-full
+                        order-1
                         
-                        <p className={`${textBClasses[theme]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>
-                            By using this prototype, you agree that the application will adapt its interface based on your detected stress level. No real biometric data is stored, and this is a prototype for academic purposes.  
-                        </p>
-
-                        <div className='flex items-center space-x-2'>
+                        md:order-none'
+                    >
+                        <div className='max-w-md p-6 pt-0'>
                             
-                            <input
-                                type='checkbox'
-                                id='accept'
-                                checked={accepted}
-                                onChange={() => setAccepted(!accepted)}
-                                className='w-3 h-3 accent-blue-500'
-                            />
+                            <h1 className='text-8xl leading-none font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85'>Serenity</h1>
                             
-                            <label htmlFor='accept' className={`${textBClasses[theme]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>I agree to the&nbsp;
-                                
-                                <button
-                                    className='underline hover:text-blue-400'
-                                    onClick={()=> router.push('/terms')}
-                                >Terms and Conditions</button>
+                            <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface opacity-80'>Email & Task Manager</h1>
                             
-                            </label>
+                            <p className={`pt-6 ${textAClasses[theme]} font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug`}>Stay productive, stay calm: your stress-aware inbox.</p>
                         
                         </div>
+                    </div>
 
-                        <button
-                            disabled={!accepted}
-                            className={`font-Roboto text-[clamp(0.8rem,1.05vw,1rem)] leading-snug w-full py-2.5 rounded-lg transition-colors ${accepted
-                                ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
-                                : `${buttonClasses[theme][stressPalette]} text-white opacity-40 pointer-events-none cursor-not-allowed`
-                            }`}
-                            onClick={() => router.push('/emails')}
-                        >
-                            Enter Serenity Workplace
-                        </button>
+                    {/* top right and bottom left intentionally left empty */}
+                    <div />
+                    <div />
+
+                    {/* bottom right */}
+                    <div className='
+                        flex 
+                        items-center
+                        justify-start
+                        h-full
+                        order-2
+                        ml-6
+                        mr-6
+                        
+                        md:order-none
+                        md:ml-40
+                        md:mr-10'
+                    >
+                        <div className='w-full max-w-md space-y-4'>
+                            
+                            <p className={`${textBClasses[theme]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>
+                                By using this prototype, you agree that the application will adapt its interface based on your detected stress level. No real biometric data is stored, and this is a prototype for academic purposes.  
+                            </p>
+
+                            <div className='flex items-center space-x-2'>
+                                
+                                <input
+                                    type='checkbox'
+                                    id='accept'
+                                    checked={accepted}
+                                    onChange={() => setAccepted(!accepted)}
+                                    className='w-3 h-3 accent-blue-500'
+                                />
+                                
+                                <label htmlFor='accept' className={`${textBClasses[theme]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>I agree to the&nbsp;
+                                    
+                                    <button
+                                        className='underline hover:text-blue-400'
+                                        onClick={()=> router.push('/terms')}
+                                    >Terms and Conditions</button>
+                                
+                                </label>
+                            
+                            </div>
+
+                            <button
+                                disabled={!accepted}
+                                className={`font-Roboto text-[clamp(0.8rem,1.05vw,1rem)] leading-snug w-full py-2.5 rounded-lg transition-colors ${accepted
+                                    ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
+                                    : `${buttonClasses[theme][stressPalette]} text-white opacity-40 pointer-events-none cursor-not-allowed`
+                                }`}
+                                onClick={() => router.push('/emails')}
+                            >
+                                Enter Serenity Workplace
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
+
+                <Footer />
+
+            </main>
+        </div>
     );
 };

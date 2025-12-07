@@ -3,13 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
+import { NAV_LINKS } from "@/constants/navigation";
 
 export default function Header({
     title = 'Serenity ETM',
     logo = null,
     showBack = false,
     backHref = '/',
-    navLinks = [],
     rightElement = null,
     sticky = false,
 }) {
@@ -63,7 +63,7 @@ export default function Header({
                 `}
             >
                 {logo && <div className="w-4 h-3.5 opacity-50">{logo}</div>}
-                <h1 className='font-AbrilFatface text-sm text-light-textC'>
+                <h1 className='font-AbrilFatface text-sm text-light-textA opacity-50'>
                     {title}
                 </h1>
             </div>
@@ -83,7 +83,7 @@ export default function Header({
                         }
                     `}
                 >
-                    {navLinks.map((link) => (
+                    {NAV_LINKS.map((link) => (
                         <button
                             key={link.href}
                             onClick={() => {
