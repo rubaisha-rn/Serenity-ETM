@@ -11,32 +11,31 @@ export default function FloatingBlobs ({count = 10, className = ''}) {
     const stress01 = emotionValue / 100;
 
     const colors = useStressColors(stress01);
-
     const [blobs, setBlobs] = useState([]);
     const filterId = useId(); // prevents svg ID collisions in nextjs
-
-    useEffect(() => {
-        const arr = Array.from({length: count}).map(() => ({
-            size: 240 + Math.random() * 300,
-            x: Math.random() * 80,
-            y: Math.random() * 80,
-            dx: (Math.random() - 0.5) * 40,
-            dy: (Math.random() - 0.5) * 40,
-        }));
-        setBlobs(arr);
-    }, [count]);
 
     const speed = 30 + stress01 * 60; // slow on high stress 
     const blur = 90 + stress01 * 50; // soft on high stress
     const scaleRange = 1 + stress01 * 0.2; // gentler breathing 
 
+    useEffect(() => {
+        const arr = Array.from({length: count}).map((_, i) => ({
+            size: 240 + Math.random() * 300,
+            x: Math.random() * 80,
+            y: Math.random() * 80,
+            dx: (Math.random() - 0.5) * 40,
+            dy: (Math.random() - 0.5) * 40,
+            color: colors[i % colors.length],
+        }));
+
+        setBlobs(arr);
+    }, [count, colors]);
+
     return (
         <>
             {/* Gooey filter inspired by lava lamps */}
             <svg
-                className='absolute w-0 h-0'
-                aria-hidden='true'
-                // focusable='false'
+                className='absolute w-0 h-0' aria-hidden='true'
             >
                 <filter id={filterId}>
                     <feGaussianBlur in='SourceGraphic' stdDeviation='35' result='blur' />
@@ -72,10 +71,10 @@ export default function FloatingBlobs ({count = 10, className = ''}) {
                             left: `${b.x}vw`,
                             top: `${b.y}vh`,
                             borderRadius: '50%',
-
-                            background: `radial-gradient(circle at 35% 35%, ${colors[0]} 0%, transparent 78%), radial-gradient(circle at 65% 35%, ${colors[1]} 0%, transparent 78%), radial-gradient(circle at 50% 65%, ${colors[2]} 0%, transparent 78%)`,
-
+                            background: b.color,
                             filter: `blur(${blur}px)`,
+                            opacity: 0.85,
+                            boxShadow: `0 0 80px ${b.color}`,
                         }}
                         animate={{
                             x: [0, `${b.dx}vw`, `${-b.dx*0.6}vw`, 0],
