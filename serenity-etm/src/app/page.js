@@ -32,20 +32,12 @@ export default function IntroPage() {
     }, [stress01]);
 
     const textAClasses = {
-        light: {
-            low: 'text-light-low-textA',
-            mid: 'text-light-mid-textA',
-            high: 'text-light-high-textA',
-        },
+        light: 'text-light-textA',
         dark: {},
     };
 
     const textBClasses = {
-        light: {
-            low: 'text-light-low-textB',
-            mid: 'text-light-mid-textB',
-            high: 'text-light-high-textB',
-        },
+        light: 'text-light-textB',
         dark: {},
     };
 
@@ -60,16 +52,16 @@ export default function IntroPage() {
 
     const buttonClasses = {
         light: {
-            low: 'bg-light-low-button hover:bg-light-low-buttonHover',
-            mid: 'bg-light-mid-button hover:bg-light-mid-buttonHover',
-            high: 'bg-light-high-button hover:bg-light-high-buttonHover',
+            low: 'bg-light-low-button hover:bg-light-low-buttonHover border-light-low-a border-2',
+            mid: 'bg-light-mid-button hover:bg-light-mid-buttonHover border-light-mid-a border-2',
+            high: 'bg-light-high-button hover:bg-light-high-buttonHover border-light-high-a border-2',
         },
         dark: {},
     };    
 
     return (
         <main
-            className={`relative min-h-screen ${textAClasses[theme][stressPalette]} ${bgClasses[theme][stressPalette]} overflow-hidden`}
+            className={`relative min-h-screen ${textAClasses[theme]} ${bgClasses[theme][stressPalette]} overflow-hidden`}
         >
             <FloatingBlobs className='z-0'/>
             <StressControl className='z-20' />
@@ -82,14 +74,12 @@ export default function IntroPage() {
                     width={18}
                     height={18}
                     priority
-                    className='opacity-50'
                 />}
                 navLinks={[
                     {label: 'Home', href: '/'},
                     {label: 'Terms & Conditions', href: '/terms'},
                 ]}
                 sticky
-                textClass={textBClasses[theme]}
             />
 
             {/* 2x2 grid layout */}
@@ -115,16 +105,15 @@ export default function IntroPage() {
                     h-full
                     order-1
                     
-                    md:order-none
-                    md:pt-4'
+                    md:order-none'
                 >
-                    <div className='max-w-md p-6'>
+                    <div className='max-w-md p-6 pt-0'>
                         
-                        <h1 className='text-[clamp(4.5rem,7.8vw,8rem)] leading-none font-AbrilFatface transition-colors duration-500 ease-in-out'>Serenity</h1>
+                        <h1 className='text-8xl leading-none font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85'>Serenity</h1>
                         
-                        <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface'>Email & Task Manager</h1>
+                        <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface opacity-80'>Email & Task Manager</h1>
                         
-                        <p className={`pt-10 ${textAClasses[theme][stressPalette]} font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug`}>Stay productive, stay calm: your stress-aware inbox.</p>
+                        <p className={`pt-6 ${textAClasses[theme]} font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug`}>Stay productive, stay calm: your stress-aware inbox.</p>
                     
                     </div>
                 </div>
@@ -147,7 +136,7 @@ export default function IntroPage() {
                 >
                     <div className='w-full max-w-md space-y-4'>
                         
-                        <p className={`${textBClasses[theme][stressPalette]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>
+                        <p className={`${textBClasses[theme]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>
                             By using this prototype, you agree that the application will adapt its interface based on your detected stress level. No real biometric data is stored, and this is a prototype for academic purposes.  
                         </p>
 
@@ -161,7 +150,7 @@ export default function IntroPage() {
                                 className='w-3 h-3 accent-blue-500'
                             />
                             
-                            <label htmlFor='accept' className={`${textBClasses[theme][stressPalette]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>I agree to the&nbsp;
+                            <label htmlFor='accept' className={`${textBClasses[theme]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>I agree to the&nbsp;
                                 
                                 <button
                                     className='underline hover:text-blue-400'
@@ -174,9 +163,9 @@ export default function IntroPage() {
 
                         <button
                             disabled={!accepted}
-                            className={`font-Roboto text-[clamp(0.8rem,1.1vw,1rem)] leading-snug w-full py-3 rounded-full font-medium transition-colors ${accepted
+                            className={`font-Roboto text-[clamp(0.8rem,1.05vw,1rem)] leading-snug w-full py-2.5 rounded-lg transition-colors ${accepted
                                 ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
-                                : 'bg-neutral-600 text-neutral-400 cursor-not-allowed'
+                                : `${buttonClasses[theme][stressPalette]} text-white opacity-40 pointer-events-none cursor-not-allowed`
                             }`}
                             onClick={() => router.push('/emails')}
                         >

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Header from "@/components/header";
+import FloatingBlobs from '@/components/floatingblobs';
+import Image from "next/image";
 
 export default function TermsPage () {
     
@@ -13,12 +15,12 @@ export default function TermsPage () {
     }, []);
 
     const textAClasses = {
-        light: 'text-light-low-textA',
+        light: 'text-light-textA',
         dark: '',
     };
 
     const textBClasses = {
-        light: 'text-light-low-textB',
+        light: 'text-light-textB',
         dark: '',
     };
 
@@ -35,22 +37,33 @@ export default function TermsPage () {
     return (
         <main className={`relative min-h-screen ${textAClasses[theme]} ${bgClasses[theme]}`}>
             
+            <FloatingBlobs className='z-0'/>
+
             <Header
                 title="Serenity ETM"
+                logo={<Image
+                    src="/logo/logo.png"
+                    alt='Serenity ETM Logo'
+                    width={18}
+                    height={18}
+                    priority
+                />}
                 showBack
-                backHref="/"
+                navLinks={[
+                    {label: 'Home', href: '/'},
+                    {label: 'Terms & Conditions', href: '/terms'},
+                ]}
                 sticky
-                textClass={textBClasses[theme]}
             />
         
             <div className={`flex items-center justify-center min-h-[calc(100vh-4rem)] px-6 md:px-12 py-12 relative z-10 ${cardClasses[theme]} mx-6 md:mx-36`}>
 
-                <div className={`w-full max-w-3xl ${textBClasses[theme]} p-8`}>
+                <div className={`w-full max-w-3xl ${textBClasses[theme]} p-6`}>
 
                     {/* header */}
                     <div className="mb-12">
                         
-                        <h1 className='font-sans font-bold text-[calmp(2.8rem, 6vw, 4rem)] text-xl'>
+                        <h1 className='font-sans font-bold text-[calmp(2.8rem, vw, 8rem)] text-2xl'>
                             Terms & Conditions 
                         </h1>
                         
@@ -63,7 +76,7 @@ export default function TermsPage () {
                         <div>
                             <h3 className="font-semibold text-base mb-2">1. Prototype Disclaimer</h3>
 
-                            <p className="text-sm">Serenity is a university prototype created strictly for academic and demonstrational purposes. This system is not intended for commercial use.</p>
+                            <p className="text-sm">Serenity ETM is a university prototype created strictly for academic and demonstrational purposes. This system is not intended for commercial ot real-world deployment.</p>
 
                         </div>
 
@@ -74,7 +87,7 @@ export default function TermsPage () {
                             </h3>
 
                             <p className="text-sm">
-                                The application adapts its visual interface based on estimated stress values. These values are not medical indicators and carry no diagnostic meaning.
+                                The application adapts its visual interface based on calculated stress estimates derived from user interaction or simulated inputs. These values are not medical indicators and carry no diagnostic or clinical meaning.
                             </p>
 
                         </div>
@@ -86,7 +99,7 @@ export default function TermsPage () {
                             </h3>
 
                             <p className="text-sm">
-                                No real biometric or medical data is stored. Any stress values are either simulated or processed locally for demonstration purposes.
+                                No real biometric, health, or medical data is stored. Stress values calculated locally within the prototype environment for demonstration purposes only and are not used for medical assessment.
                             </p>
 
                         </div>
@@ -98,7 +111,7 @@ export default function TermsPage () {
                             </h3>
 
                             <p className="text-sm">
-                                All displayed emails, tasks, and workplace data are fictional and generated for user demonstration only.
+                                All displayed emails, tasks, and workplace data are entirely fictional and generated soley for demonstration and interaction testing within the prototupe.
                             </p>
 
                         </div>
@@ -110,7 +123,7 @@ export default function TermsPage () {
                             </h3>
 
                             <p className="text-sm">
-                                The creators of Serenity assume no responsibility for improper usage, misinterpretation, or dependency on the prototype.
+                                The creators of Serenity ETM assume no responsibility for improper usage, misinterpretation, or psychological reliance on the prototype's feedback, insights, or adaptive behaviours.
                             </p>
 
                         </div>
@@ -122,7 +135,7 @@ export default function TermsPage () {
                             </h3>
 
                             <p className="text-sm">
-                                These terms are subject to change at any time without prior notice as the prototype evolves. 
+                                These terms are subject to change at any time without prior notice as the prototype evolves during academic development. 
                             </p>
 
                         </div>

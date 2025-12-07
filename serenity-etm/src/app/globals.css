@@ -17,7 +17,7 @@
 }
 
 body {
-    @apply bg-light-low-bg text-light-low-textC dark:bg-dark-low-bg dark:text-dark-low-textC;
+    @apply bg-light-low-bg text-light-textC dark:bg-dark-low-bg dark:text-dark-textC;
     font-family: Arial, Helvetica, sans-serif;
     overflow-x: hidden;
 }
