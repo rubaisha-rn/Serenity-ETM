@@ -82,6 +82,7 @@ export default function IntroPage() {
                     height={18}
                     priority
                 />}
+                thisPage = '/'
                 sticky
             />
 

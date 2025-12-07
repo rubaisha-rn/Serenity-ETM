@@ -51,6 +51,7 @@ export default function TermsPage () {
                     height={18}
                     priority
                 />}
+                thisPage="/terms"
                 showBack
                 sticky
             />
