@@ -11,6 +11,9 @@ const useStore = create((set) => ({
             emotionValue: Math.min(100, Math.max(0, value)), // stress value will always be between 0-100
         }),
 
+    focusMode: false,
+    setFocusMode: (value) => set({ focusMode: value }),
+
     // for global states 
 }));
 

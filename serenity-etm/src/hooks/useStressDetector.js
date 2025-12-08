@@ -6,8 +6,12 @@ import useStore from "@/store/useStore";
 const MIN_INTERVAL_MS = 10 * 1000; // 10s
 const MAX_INTERVAL_MS = 20 * 1000; // 20s
 const TRANSITION_MS = 500; // 5ms
+const FOCUS_DURATION_MS = 1 * 60 * 1000;
 
 export default function useStressDetector() {
+    const focusLockRef = useRef(false);
+    const focusTimerRef = useRef(null);
+
     const setStress = useStore((state) => state.setEmotionValue);
     const prevStressRef = useRef(0);
     const targetStressRef = useRef(0);
@@ -134,6 +138,16 @@ export default function useStressDetector() {
                             setStress(target);
                         }
 
+                        if(!focusLockRef.current && (Math.round(prevStressRef.current) > 60)) {
+                            focusLockRef.current = true;
+                            useStore.getState().setFocusMode(true);
+
+                            focusTimerRef.current = setTimeout(() => {
+                                focusLockRef.current = false;
+                                useStore.getState().setFocusMode(false);
+                            }, FOCUS_DURATION_MS);
+                        }
+
                         animationRef.current = requestAnimationFrame(animate);
                     };
                     animationRef.current = requestAnimationFrame(animate);
@@ -153,6 +167,7 @@ export default function useStressDetector() {
         return () => {
             cancelAnimationFrame(animationRef.current);
             clearTimeout(timeoutRef.current);
+            clearTimeout(focusTimerRef.current);
             if (stopSDK) stopSDK();
             window.__morphcastInitialized = false;
         };
