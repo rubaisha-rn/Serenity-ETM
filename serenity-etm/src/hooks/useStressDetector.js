@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import useStore from "@/store/useStore";
 
 const MIN_INTERVAL_MS = 10 * 1000; // 10s
@@ -9,6 +9,7 @@ const TRANSITION_MS = 500; // 5ms
 const FOCUS_DURATION_MS = 1 * 60 * 1000;
 
 export default function useStressDetector() {
+    const sdkActive = useStore((state) => state.sdkActive);
     const focusLockRef = useRef(false);
     const focusTimerRef = useRef(null);
 
@@ -25,7 +26,23 @@ export default function useStressDetector() {
         emotionBias: 0,
     });
 
+    const stopSDKRef = useRef(null);
+    const sdkActiveRef = useState(sdkActive);
+
     useEffect(() => {
+        sdkActiveRef.current = sdkActive;
+    }, [sdkActive]);
+
+    useEffect(() => {
+
+        if (!sdkActive) {
+            if(stopSDKRef.current) stopSDKRef.current();
+            cancelAnimationFrame(animationRef.current);
+            clearTimeout(timeoutRef.current);
+            clearTimeout(focusTimerRef.current);
+            return;
+        }
+
         if(window.__morphcastInitialized) return;
         window.__morphcastInitialized = true;
 
@@ -128,17 +145,14 @@ export default function useStressDetector() {
                         const prev = prevStressRef.current;
                         const target = targetStressRef.current;
                         const delta = target - prev;
-
-                        if (useStore.getState().sdkActive) {
                                 
-                            if (Math.abs(delta) > 0.5) {
-                                const step = delta * (16 / TRANSITION_MS);
-                                prevStressRef.current = prev + step;
-                                setStress(Math.round(prev + step));
-                            } else {
-                                prevStressRef.current = target;
-                                setStress(target);
-                            }
+                        if (Math.abs(delta) > 0.5) {
+                            const step = delta * (16 / TRANSITION_MS);
+                            prevStressRef.current = prev + step;
+                            setStress(Math.round(prev + step));
+                        } else {
+                            prevStressRef.current = target;
+                            setStress(target);
                         }
 
                         if(!focusLockRef.current && (Math.round(prevStressRef.current) > 60)) {
@@ -175,5 +189,5 @@ export default function useStressDetector() {
             if (stopSDK) stopSDK();
             window.__morphcastInitialized = false;
         };
-    }, []);
+    }, [sdkActive]);
 }
