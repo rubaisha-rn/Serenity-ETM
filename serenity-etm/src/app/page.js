@@ -92,18 +92,25 @@ export default function IntroPage() {
                 <FloatingBlobs className='z-0'/>
                 {/* <StressControl className='z-10' /> */}
 
-                <div
+                {/* 2x2 grid layout */}
+                <div 
                     className='
-                        relative z-10 
-                        md:grid md:grid-cols-1 md:grid-rows-1 
-                        h-screen
-                        gap-6 p-8
-                        md:p-10
-                        md:mt-0'
+                    relative z-10 
+                    grid grid-cols-1 grid-rows-1 
+                    
+                    md:grid-cols-2
+                    md:grid-rows-2
+                    
+                    h-screen
+                    gap-6 p-8
+                    md:p-10
+                    md:mt-0'
                 >
-                    <div
-                        className='flex 
-                        items-end
+
+                    {/* top left box */}
+                    <div className='
+                        flex 
+                        items-center
                         justify-start
                         h-full
                         order-1
@@ -117,8 +124,35 @@ export default function IntroPage() {
                             <h1 className='text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface opacity-80'>Email & Task Manager</h1>
                             
                             <p className={`pt-6 ${textAClasses[theme]} font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug`}>Stay productive, stay calm: your stress-aware inbox.</p>
+                        
+                        </div>
+                    </div>
 
-                            <div className='flex items-center space-x-2 pt-6 pb-1'>
+                    {/* top right and bottom left intentionally left empty */}
+                    <div />
+                    <div />
+
+                    {/* bottom right */}
+                    <div className='
+                        flex 
+                        items-center
+                        justify-start
+                        h-full
+                        order-2
+                        ml-6
+                        mr-6
+                        
+                        md:order-none
+                        md:ml-40
+                        md:mr-10'
+                    >
+                        <div className='w-full max-w-md space-y-4'>
+                            
+                            <p className={`${textBClasses[theme]} font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}>
+                                By using this prototype, you agree that the application will adapt its interface based on your detected stress level. No real biometric data is stored, and this is a prototype for academic purposes.  
+                            </p>
+
+                            <div className='flex items-center space-x-2'>
                                 
                                 <input
                                     type='checkbox'
@@ -139,29 +173,18 @@ export default function IntroPage() {
                             
                             </div>
 
-                            <div className='flex flex-row gap-1'>
-                                <button
-                                    disabled={!accepted}
-                                    className={`flex-[3] font-Roboto text-[clamp(0.8rem,1.05vw,1rem)] leading-snug py-2.5 px-8 rounded-full transition-colors ${accepted
-                                        ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
-                                        : `${buttonClasses[theme][stressPalette]} text-white opacity-40 pointer-events-none cursor-not-allowed`
-                                    }`}
-                                    onClick={() => router.push('/emails')}
-                                >
-                                    Enter Serenity Workplace
-                                </button>
-
-                                <button
-                                    className={`flex-[1] font-Roboto text-[clamp(0.8rem,1.05vw,1rem)] leading-snug py-2.5 px-8 rounded-full transition-colors ${buttonClasses[theme][stressPalette]} ${textBClasses[theme]} bg-white cursor-pointer bg-transparent`}
-                                    onClick={() => router.push('/emails')}
-                                >
-                                    Demo
-                                </button>
-
-                            </div>
+                            <button
+                                disabled={!accepted}
+                                className={`font-Roboto text-[clamp(0.8rem,1.05vw,1rem)] leading-snug w-full py-2.5 rounded-lg transition-colors ${accepted
+                                    ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
+                                    : `${buttonClasses[theme][stressPalette]} text-white opacity-40 pointer-events-none cursor-not-allowed`
+                                }`}
+                                onClick={() => router.push('/emails')}
+                            >
+                                Enter Serenity Workplace
+                            </button>
                         </div>
                     </div>
-                    <div/>
                 </div>
 
                 <Footer />
