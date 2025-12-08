@@ -90,7 +90,7 @@ export default function IntroPage() {
                 
                 <PrototypeTag />
                 <FloatingBlobs className='z-0'/>
-                {/* <StressControl className='z-10' /> */}
+                <StressControl className='z-10' />
 
                 {/* 2x2 grid layout */}
                 <div 

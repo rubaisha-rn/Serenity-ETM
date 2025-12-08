@@ -3,6 +3,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { useEffect } from "react";
 import useStore from "@/store/useStore";
+import useStressDetector from "@/hooks/useStressDetector";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export default function RootLayoutClient({ children }) {
-
+    useStressDetector();
     const { theme } = useStore();
 
     useEffect(() => {
@@ -32,6 +34,9 @@ export default function RootLayoutClient({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Morphcast scripts run globally */}
+        <Script src="https://sdk.morphcast.com/mphtools/v1.1/mphtools.js" data-config="cameraPrivacyPopup" strategy="afterInteractive" />
+        <Script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js" strategy="afterInteractive" />
         {children}
       </body>
     </html>
