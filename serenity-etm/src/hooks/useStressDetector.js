@@ -129,13 +129,16 @@ export default function useStressDetector() {
                         const target = targetStressRef.current;
                         const delta = target - prev;
 
-                        if (Math.abs(delta) > 0.5) {
-                            const step = delta * (16 / TRANSITION_MS);
-                            prevStressRef.current = prev + step;
-                            setStress(Math.round(prev + step));
-                        } else {
-                            prevStressRef.current = target;
-                            setStress(target);
+                        if (useStore.getState().sdkActive) {
+                                
+                            if (Math.abs(delta) > 0.5) {
+                                const step = delta * (16 / TRANSITION_MS);
+                                prevStressRef.current = prev + step;
+                                setStress(Math.round(prev + step));
+                            } else {
+                                prevStressRef.current = target;
+                                setStress(target);
+                            }
                         }
 
                         if(!focusLockRef.current && (Math.round(prevStressRef.current) > 60)) {
@@ -157,6 +160,7 @@ export default function useStressDetector() {
                         timeoutRef.current = setTimeout(scheduleNextCheck, interval);
                     };
                     scheduleNextCheck();
+
             } catch (err) {
                 console.log('MorphCast SDK error:', err);
             }

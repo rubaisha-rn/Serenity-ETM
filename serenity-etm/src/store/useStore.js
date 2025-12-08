@@ -14,6 +14,9 @@ const useStore = create((set) => ({
     focusMode: false,
     setFocusMode: (value) => set({ focusMode: value }),
 
+    sdkActive: true,
+    setSdkActive: (value) => set({ sdkActive: value }),
+
     // for global states 
 }));
 

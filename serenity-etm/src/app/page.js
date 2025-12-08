@@ -33,15 +33,6 @@ export default function IntroPage() {
             else setStressPalette('high');}
     }, [stress01]);
 
-    const headingClasses = {
-        light: {
-            low: 'text-light-low-acc',
-            mid: 'text-light-mid-acc',
-            high: 'text-light-high-acc',
-        },
-        dark: {},
-    };
-
     const textAClasses = {
         light: 'text-light-textA',
         dark: {},
@@ -71,7 +62,7 @@ export default function IntroPage() {
     };    
 
     return (
-        <div className={`${headingClasses[theme][stressPalette]}`}>
+        <div className={`${textAClasses[theme]}`}>
 
             <Header
                 title="Serenity ETM"
