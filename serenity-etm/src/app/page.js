@@ -75,6 +75,7 @@ export default function IntroPage() {
                 />}
                 thisPage = '/'
                 sticky
+                transparent
             />
 
             <main className={`relative min-h-screen overflow-hidden ${bgClasses[theme][stressPalette]}`}>
@@ -170,7 +171,7 @@ export default function IntroPage() {
                                     ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
                                     : `${buttonClasses[theme][stressPalette]} text-white opacity-40 pointer-events-none cursor-not-allowed`
                                 }`}
-                                onClick={() => router.push('/emails')}
+                                onClick={() => router.push('/tasks')}
                             >
                                 Enter Serenity Workplace
                             </button>

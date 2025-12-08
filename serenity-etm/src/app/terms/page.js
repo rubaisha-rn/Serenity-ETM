@@ -54,6 +54,7 @@ export default function TermsPage () {
                 thisPage="/terms"
                 showBack
                 sticky
+                transparent
             />
         
             <div className={`flex items-center justify-center min-h-[calc(100vh-4rem)] px-6 md:px-12 py-12 relative z-10 ${cardClasses[theme]} mx-6 md:mx-36`}>

@@ -12,6 +12,7 @@ export default function Header({
     backHref = '/',
     thisPage = '',
     sticky = false,
+    transparent = false,
 }) {
     const router = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -22,7 +23,7 @@ export default function Header({
             z-30 h-8 w-full
             grid grid-cols-3 items-center 
             px-12
-            backdrop-blur-xl
+            ${transparent ? 'backdrop-blur-xl' : 'bg-white'}
             transition-all duration-500
             ${sticky ? 'sticky top-0' : ''}
             `}
