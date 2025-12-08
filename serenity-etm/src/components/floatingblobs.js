@@ -60,10 +60,16 @@ export default function FloatingBlobs({ count = 10, className = '' }) {
                 colors[1],
                 colors[2],
             ];
-        } else {
-            const t = (stress - 0.5) / 0.5;
+        } else if (stress < 0.75) {
+            const t = (stress - 0.5) / 0.25;
             return [
                 mixHex(colors[1], colors[2], t),
+                colors[1],
+                colors[2],
+            ];
+        }  else {
+            return [
+                colors[2],
                 colors[1],
                 colors[2],
             ];

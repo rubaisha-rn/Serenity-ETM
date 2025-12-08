@@ -1,166 +1,160 @@
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useStore from "@/store/useStore";
-import Script from 'next/script';
+
+const MIN_INTERVAL_MS = 10 * 1000; // 10s
+const MAX_INTERVAL_MS = 20 * 1000; // 20s
+const TRANSITION_MS = 500; // 5ms
 
 export default function useStressDetector() {
-    const setStressScore = useStore((state) => state.setEmotionValue);
-    
+    const setStress = useStore((state) => state.setEmotionValue);
+    const prevStressRef = useRef(0);
+    const targetStressRef = useRef(0);
+    const animationRef = useRef(null);
+    const timeoutRef = useRef(null);
+
+    const latestSignalsRef = useRef({
+        arousal: 0,
+        valence: 0,
+        attention: 0,
+        emotionBias: 0,
+    });
+
     useEffect(() => {
-        if(window.__morphcastInitialized) {
-            console.log('MorphCast already initialised.');
-            return;
-        }
+        if(window.__morphcastInitialized) return;
         window.__morphcastInitialized = true;
 
-        const init = async () => {
-            console.log('Waiting for MorphCast SDK...');
+        let CYInstance;
+        let stopSDK = null;
 
-            const waitForCY = () =>
-
-                new Promise((resolve, reject) => {
+        const initSDK = async () => {
+            try {
+                // wait for CY
+                const CY = await new Promise((resolve, reject) => {
                     let tries = 0;
                     const check = setInterval(() => {
-                        tries += 1;
+                        tries++;
                         if (window.CY && window.CY.loader) {
                             clearInterval(check);
                             resolve(window.CY);
                         } else if (tries > 40) {
                             clearInterval(check);
-                            reject(new Error('MorphCast SDK not found after waiting.'));
+                            reject('MorphCast SDK not found');
                         }
                     }, 250);
                 });
 
-            let CY;
-            try {
-                CY = await waitForCY();
-            } catch (err) {
-                console.error("MorphCast SDK never loaded:", err);
-                return;
-            }
+                CYInstance = CY;
 
-            console.log("MorphCast SDK ready");
+                const loader = await CY.loader()
+                    .licenseKey("sk6d1bdc4e0b38fecf4215452600f59abd8d710358d338")
+                    .addModule(CY.modules().FACE_AROUSAL_VALENCE.name, { smoothness: 0.7 })
+                    .addModule(CY.modules().FACE_EMOTION.name, { smoothness: 0.4 })
+                    .addModule(CY.modules().FACE_ATTENTION.name, { smoothness: 0.8 })
+                    .load();
 
-            try {
-                const loaderResult = await CY.loader()
-                .licenseKey("sk6d1bdc4e0b38fecf4215452600f59abd8d710358d338")
-                .addModule(CY.modules().FACE_AROUSAL_VALENCE.name, { smoothness: 0.7 })
-                .addModule(CY.modules().FACE_EMOTION.name, { smoothness: 0.4 })
-                .addModule(CY.modules().FACE_ATTENTION.name, { smoothness: 0.8 })
-                .load();
+                    const { start, stop } = loader;
+                    stopSDK = stop;
 
-                const { start } = loaderResult;
-                start();
+                    const emotionEvent = CY.modules().FACE_EMOTION.eventName;
+                    const arousalEvent = CY.modules().FACE_AROUSAL_VALENCE.eventName;
 
-                const emotionEventName =
-                (CY.modules && CY.modules().FACE_EMOTION && CY.modules().FACE_EMOTION.eventName) ||
-                "cyFaceEmotionResult";
-                const arousalEventName =
-                (CY.modules &&
-                    CY.modules().FACE_AROUSAL_VALENCE &&
-                    CY.modules().FACE_AROUSAL_VALENCE.eventName) ||
-                "cyFaceArousalValenceResult";
+                    const calculateStress = () => {
+                        const { arousal, valence, attention, emotionBias } = latestSignalsRef.current;
 
-                const signals = {
-                    arousal: 0,
-                    valence: 0,
-                    attention: 0,
-                    emotionBias: 0,
-                    stress: 0
-                };
+                        let baseStress = arousal * (1 - valence);
+                        baseStress *= 0.7 + attention * 0.6;
 
-                const emotionHandler = (evt) => {
-                    try {
+                        let combinedStress = baseStress * 0.55 + emotionBias * 0.45;
+                        combinedStress = Math.pow(combinedStress, 0.7);
+                        combinedStress *= 2.5;
+                        combinedStress = Math.min(Math.max(combinedStress, 0), 1);
+
+                        targetStressRef.current = Math.round(combinedStress * 100);
+                    };
+
+                    const emotionHandler = (evt) => {
                         const data = evt?.detail?.output?.FACE_EMOTION;
                         if (!data) return;
 
                         const emotions = data.emotions || data || {};
-
-                        const anger = emotions.angry ?? emotions.anger ?? 0;
-                        const fear = emotions.fearful ?? emotions.fear ?? 0;
-                        const disgust = emotions.disgusted ?? emotions.disgust ?? 0;
+                        const anger = emotions.angry ?? 0;
+                        const fear = emotions.fearful ?? 0;
+                        const disgust = emotions.disgusted ?? 0;
                         const sad = emotions.sad ?? 0;
                         const happy = emotions.happy ?? 0;
                         const surprise = emotions.surprise ?? 0;
 
-                        let emotionStress =
-                        anger * 1.0 +
-                        fear * 1.0 +
-                        disgust * 0.6 +
-                        sad * 0.5 +
-                        surprise * 0.3 -
-                        happy * 0.7;
+                        let emotionStress = 
+                            anger * 1.0 +
+                            fear * 1.0 +
+                            disgust * 0.6 +
+                            sad * 0.5 +
+                            surprise * 0.3 -
+                            happy * 0.7;
 
-                        emotionStress = Math.min(Math.max(emotionStress, 0), 1);
-                        signals.emotionBias = emotionStress;
+                        latestSignalsRef.current.emotionBias = Math.min(Math.max(emotionStress, 0), 1);
 
-                    } catch (e) {
-                        console.error("Error in emotionHandler:", e);
+                        calculateStress();
+                    };
+
+                    const arousalHandler = (evt) => {
+                        const data = evt?.detail?.output?.FACE_AROUSAL_VALENCE?.emotion || evt?.detail?.output;
+                        if(!data) return;
+
+                        latestSignalsRef.current.arousal = (data.arousal + 1) / 2;
+                        latestSignalsRef.current.valence = (data.valence + 1) / 2;
+                        latestSignalsRef.current.attention = evt?.detail?.output?.FACE_ATTENTION?.attention ?? 0.5;
+
+                        calculateStress();
+                    };
+
+                    if (CY.on) {
+                        CY.on(emotionEvent, emotionHandler);
+                        CY.on(arousalEvent, arousalHandler);
+                    } else {
+                        window.addEventListener(emotionEvent, emotionHandler);
+                        window.addEventListener(arousalEvent, arousalHandler);
                     }
-                };
 
-                const arousalHandler = (evt) => {
-                    try {
-                        const shape1 = evt?.detail?.output?.FACE_AROUSAL_VALENCE?.emotion;
-                        const shape2 = evt?.detail?.output;
-                        const data = shape1 || shape2;
-                        if (!data) return;
+                    start();
 
-                        const arousal = typeof data.arousal === "number" ? data.arousal : data.Arousal ?? 0;
-                        const valence = typeof data.valence === "number" ? data.valence : data.Valence ?? 0;
+                    const animate = () => {
+                        const prev = prevStressRef.current;
+                        const target = targetStressRef.current;
+                        const delta = target - prev;
 
-                        const A = (arousal + 1) / 2;
-                        const V = (valence + 1) / 2;
-                        const Neg = 1 - V;
+                        if (Math.abs(delta) > 0.5) {
+                            const step = delta * (16 / TRANSITION_MS);
+                            prevStressRef.current = prev + step;
+                            setStress(Math.round(prev + step));
+                        } else {
+                            prevStressRef.current = target;
+                            setStress(target);
+                        }
 
-                        signals.arousal = A;
-                        signals.valence = V;
+                        animationRef.current = requestAnimationFrame(animate);
+                    };
+                    animationRef.current = requestAnimationFrame(animate);
 
-                        const attention = evt?.detail?.output?.FACE_ATTENTION?.attention ?? 0.5;
-                        signals.attention = attention;
-
-                        let baseStress = A * Neg;
-                        const cognitionBoost = 0.7 + attention * 0.6;
-                        baseStress *= cognitionBoost;
-
-                        let combinedStress = baseStress * 0.65 + signals.emotionBias * 0.35;
-
-                        combinedStress = Math.pow(combinedStress, 0.7);
-                        const positivitySuppression = Math.pow(signals.valence, 1.3);
-                        combinedStress *= (1 - positivitySuppression);
-                        combinedStress = combinedStress * 3.2;
-                        combinedStress = Math.pow(combinedStress, 0.85)
-                        combinedStress = Math.min(Math.max(combinedStress, 0), 1);
-
-                        const newStress = Math.round(combinedStress * 100);
-
-                        setStressScore(newStress);
-
-                    } catch (e) {
-                        console.error("Error in arousalHandler:", e);
-                    }
-                };
-
-                if (typeof CY.on === "function") {
-                    CY.on(emotionEventName, emotionHandler);
-                    CY.on(arousalEventName, arousalHandler);
-                } else {
-                    window.addEventListener(emotionEventName, emotionHandler);
-                    window.addEventListener(arousalEventName, arousalHandler);
-                }
+                    const scheduleNextCheck = () => {
+                        const interval = MIN_INTERVAL_MS + Math.random() * (MAX_INTERVAL_MS - MIN_INTERVAL_MS);
+                        timeoutRef.current = setTimeout(scheduleNextCheck, interval);
+                    };
+                    scheduleNextCheck();
             } catch (err) {
-                console.error("MorphCast failed to initialize or attach handlers:", err);
+                console.log('MorphCast SDK error:', err);
             }
         };
 
-        init();
+        initSDK();
 
         return () => {
-            try {
-                window.__morphcastInitialized = false;
-            } catch {}
+            cancelAnimationFrame(animationRef.current);
+            clearTimeout(timeoutRef.current);
+            if (stopSDK) stopSDK();
+            window.__morphcastInitialized = false;
         };
     }, []);
 }
