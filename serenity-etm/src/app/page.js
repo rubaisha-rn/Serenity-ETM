@@ -74,6 +74,7 @@ export default function IntroPage() {
                     priority
                 />}
                 thisPage = '/'
+                showRight
                 sticky
                 transparent
             />

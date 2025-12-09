@@ -53,6 +53,7 @@ export default function TermsPage () {
                 />}
                 thisPage="/terms"
                 showBack
+                showRight
                 sticky
                 transparent
             />

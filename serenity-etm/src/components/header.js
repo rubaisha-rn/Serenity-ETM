@@ -9,6 +9,7 @@ export default function Header({
     title = 'Serenity ETM',
     logo = null,
     showBack = false,
+    showRight = false,
     backHref = '/',
     thisPage = '',
     sticky = false,
@@ -69,78 +70,80 @@ export default function Header({
             </div>
 
             {/* right slot */}
-            <div className="flex justify-end items-center gap-5">
-                
-                {/* nav links */}
-                <div
-                    className={`
-                    flex items-center gap-5
-                    transition-all duration-300 ease-out
-                        ${
-                            menuOpen
-                                ? 'opacity-100 translate-x-0'
-                                : 'opacity-0 translate-x-4 pointer-events-none'
-                        }
-                    `}
-                >
-                    {NAV_LINKS.map((link) => {
-                        const isActive = thisPage === link.href;
+            { showRight ??    (
+                <div className="flex justify-end items-center gap-5">
+                    
+                    {/* nav links */}
+                    <div
+                        className={`
+                        flex items-center gap-5
+                        transition-all duration-300 ease-out
+                            ${
+                                menuOpen
+                                    ? 'opacity-100 translate-x-0'
+                                    : 'opacity-0 translate-x-4 pointer-events-none'
+                            }
+                        `}
+                    >
+                        {NAV_LINKS.map((link) => {
+                            const isActive = thisPage === link.href;
 
-                        return (
-                            <button
-                                key={link.href}
-                                onClick={() => {
-                                    router.push(link.href);
-                                    setMenuOpen(false);
-                                }}
-                                className="relative flex flex-col items-center font-Roboto text-xs transition-opacity hover:opacity-50 text-light-textB"
-                            >
-                                <span>{link.label}</span>
+                            return (
+                                <button
+                                    key={link.href}
+                                    onClick={() => {
+                                        router.push(link.href);
+                                        setMenuOpen(false);
+                                    }}
+                                    className="relative flex flex-col items-center font-Roboto text-xs transition-opacity hover:opacity-50 text-light-textB"
+                                >
+                                    <span>{link.label}</span>
 
-                                {isActive && (
-                                    <span
-                                        className="absolute -bottom-2 left-1/2 -translate-x-1/2"
-                                    >
-                                        <Image
-                                            src='/icons/pointer.png'
-                                            alt="Page pointer"
-                                            width={10}
-                                            height={10}
-                                            priority
-                                        />
-                                    </span>
-                                )}
-                            </button>
-                        )
-                    })}       
+                                    {isActive && (
+                                        <span
+                                            className="absolute -bottom-2 left-1/2 -translate-x-1/2"
+                                        >
+                                            <Image
+                                                src='/icons/pointer.png'
+                                                alt="Page pointer"
+                                                width={10}
+                                                height={10}
+                                                priority
+                                            />
+                                        </span>
+                                    )}
+                                </button>
+                            )
+                        })}       
+                    </div>
+
+                    {/* menu toggle */}
+                    <button
+                        onClick={() => setMenuOpen(prev => !prev)}
+                        className="relative w-6 h-6 flex-none"
+                    >
+                        <Image
+                            src='/icons/menuOpen.png'
+                            alt="Open menu"
+                            width={20}
+                            height={20}
+                            priority
+                            className={`absolute inset-0 transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-50'}`}
+                        />
+
+                        <Image
+                            src='/icons/menuClose.png'
+                            alt="Close menu"
+                            width={20}
+                            height={20}
+                            priority
+                            className={`absolute inset-0 transition-opacity duration-300 ${menuOpen ? 'opacity-50' : 'opacity-0'}`}
+                        />
+
+                    </button>
+
                 </div>
-
-                {/* menu toggle */}
-                <button
-                    onClick={() => setMenuOpen(prev => !prev)}
-                    className="relative w-6 h-6 flex-none"
-                >
-                    <Image
-                        src='/icons/menuOpen.png'
-                        alt="Open menu"
-                        width={20}
-                        height={20}
-                        priority
-                        className={`absolute inset-0 transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-50'}`}
-                    />
-
-                    <Image
-                        src='/icons/menuClose.png'
-                        alt="Close menu"
-                        width={20}
-                        height={20}
-                        priority
-                        className={`absolute inset-0 transition-opacity duration-300 ${menuOpen ? 'opacity-50' : 'opacity-0'}`}
-                    />
-
-                </button>
-
-            </div>
+            )}
 
         </header>
     );

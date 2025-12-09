@@ -1,14 +1,38 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from "framer-motion";
 import useStore from '@/store/useStore';
 
+const IMG = {
+    focus: {
+        idle: '/icons/focus/focus.png',
+        active: '/icons/focus/focusON.png',
+    },
+    priority: {
+        idle: '/icons/priority/priority.png',
+        active: '/icons/priority/priorityON.png',
+    },
+    stress: {
+        idle: '/icons/stress/stress.png',
+        active: '/icons/stress/stressON.png',
+    },
+    breathe: {
+        idle: '/icons/breathe/breathe.png',
+        active: '/icons/breathe/breatheON.png',
+    },
+}
+
 export default function CollapsableRightSidebar() {
 
-    const router = useRouter();
     const [expanded, setExpanded] = useState(false);
+    const [stressOpen, setStressOpen] = useState(false);
+
+    const [focusActive, setFocusActive] = useState(false);
+    const [priorityActive, setPriorityActive] = useState(false);
+    const [stressActive, setStressActive] = useState(false);
+    const [breatheActive, setBreatheActive] = useState(false);
+    
     const emotionValue = useStore((s) => s.emotionValue);
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
@@ -36,7 +60,7 @@ export default function CollapsableRightSidebar() {
         dark: {},
     };
 
-    const bgClasses = {
+    const cardClasses = {
         light: {
             low: 'bg-light-low-card',
             mid: 'bg-light-mid-card',
@@ -45,41 +69,156 @@ export default function CollapsableRightSidebar() {
         dark: {},
     };
 
-    const navItems = [
-        { label: 'Email', icon: 'E'},
-        { label: 'Tasks', icon: 'T'},
-        { label: 'Notifications', icon: 'N'},
-    ];
+    const accClasses = {
+        light: {
+            low: 'bg-light-low-acc hover:bg-light-low-accHover',
+            mid: 'bg-light-mid-acc hover:bg-light-low-accHover',
+            high: 'bg-light-high-acc hover:bg-light-low-accHover',
+        },
+        dark: {},
+    };
+
+    const buttonClasses = {
+        light: {
+            low: 'bg-light-low-a hover:bg-light-low-b',
+            mid: 'bg-light-mid-c hover:bg-light-mid-b',
+            high: 'bg-light-high-c hover:bg-light-high-b',
+        },
+        dark: {},
+    };
 
     return (
         <>
-        {/* sidebar */}
-        <motion.aside
-            animate={{width: expanded ? 200 : 40}}
-            transition={{type: 'spring', stiffness: 260, damping: 20}}
-            className={`fixed top-0 right-0 z-20 ${bgClasses[theme][stressPalette]} bg-opacity-40 text-black flex flex-col items-center py-4 shadow-xl overflow-hidden h-screen rounded-l-xl`}
-        >
             {/* toggle button */}
-            <button
-                className="mb-6 flex h-10 w-10 items-center justify-center rounded-lg hover:bg-zinc-800 transition"
+            <motion.button
+                whileHover={{scale: 1.1}}
+                whileTap={{scale: 0.9}}
+                animate={{right: expanded ? 202 : 22}}
+                transition={{duration: 0.25, ease: 'easeInOut'}}
                 onClick={() => setExpanded(!expanded)}
+                className={`fixed bottom-2 z-20 ${accClasses[theme][stressPalette]} shadow-xl p-1.5 pr-6 rounded-full`}
             >
-                <span className="text-lg">M</span>
-            </button>
 
-            {/* nav buttons */}
-            <div className="flex flex-col gap-3 w-full px-2">
-                {navItems.map((item, index) => (
-                    <button
-                        key={index}
-                        className="flex items-center gap-3 w-full rounded-lg px-3 py-2 hover:bg-zinc-800 transition"
+                {expanded 
+                    ? <img
+                        src='/icons/backw.png'
+                        alt='close arrow'
+                        className='w-5 h-5 opacity-80 rotate-180'
+                    /> 
+                    : <img
+                        src='/icons/backw.png'
+                        alt='close arrow'
+                        className='w-5 h-5 opacity-80'
+                    />}
+
+            </motion.button>
+
+            {/* side bar */}
+            <motion.div
+                initial={{width: 40}}
+                animate={{width: expanded ? 220 : 40}}
+                transition={{type: 'spring', stiffness: 260, damping: 20}}
+                className={`fixed top-0 right-0 z-30 ${cardClasses[theme][stressPalette]} flex flex-col justify-between h-screen shadow-xl overflow-hidden py-6 pt-6`}
+                style={{ overflow: 'clip' }}
+            >
+                <div className='flex flex-col items-center gap-4 w-full p-4'>
+
+                    {/* focus button */}
+                    <motion.button
+                        whileHover={{scale: 1.05}}
+                        whileTap={{scale: 0.95}}
+                        onClick={() => setFocusActive(!focusActive)}
+                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
                     >
-                        <span className="text-lg w-6 text-center"> {item.icon} </span>
-                        {expanded && <span className="text-sm whitespace-nowrap">{item.label}</span>}
-                    </button>
-                ))}
-            </div>
-        </motion.aside>
+                        <img
+                            src={focusActive ? IMG.focus.active : IMG.focus.idle}
+                            alt='focus mode'
+                            className='w-6 h-6 opacity-80 shrink-0'
+                        />
+
+                        <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expanded? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                            Focus Mode
+                        </span>
+
+                    </motion.button>
+
+                    <motion.button
+                        whileHover={{scale: 1.05}}
+                        whileTap={{scale: 0.95}}
+                        onClick={() => setPriorityActive(!priorityActive)}
+                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                    >
+                        <img
+                            src={priorityActive ? IMG.priority.active : IMG.priority.idle}
+                            alt='priority mode'
+                            className='w-6 h-6 opacity-80 shrink-0'
+                        />
+                        
+                        <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expanded? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                            Priority Mode
+                        </span>
+                    </motion.button>
+
+                    <div className='flex flex-col items-center w-full'>
+                        <motion.button
+                            whileHover={{scale: 1.05}}
+                            whileTap={{scale: 0.95}}
+                            onClick={() => {setStressActive(!stressActive)
+                            setStressOpen(!stressOpen)
+                            }}
+                            className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        >
+                            <img
+                                src={stressActive ? IMG.stress.active : IMG.stress.idle}
+                                alt='stress detection'
+                                className='w-6 h-6 opacity-80 shrink-0'
+                            />
+                            
+                            <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expanded? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                                Stress Detection
+                            </span>
+                        </motion.button>
+
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ height: !stressOpen && expanded ? 90 : 0, opacity: !stressOpen && expanded ? 1 : 0 }}
+                            transition={{duration: 0.25}}
+                            className='w-full overflow-hidden px-1'
+                        >
+                            <label className='text-sm font-medium'>Stress Level</label>
+                            <input
+                                type='range'
+                                min={0}
+                                max={100}
+                                value={emotionValue}
+                                className='w-full mt-2'
+                                readOnly
+                            />
+                            <div className='text-xs mt-1 text-gray-500'>{emotionValue}</div>
+                        </motion.div>
+                    </div>  
+                </div>
+
+                {/* breathe button */}
+                <div className='flex justify-center pb-4 px-4'>
+                    <motion.button
+                        whileHover={{scale: 1.05}}
+                        whileTap={{scale: 0.95}}
+                        onClick={() => setBreatheActive(!breatheActive)}
+                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                    >
+                        <img
+                            src={breatheActive ? IMG.breathe.active : IMG.breathe.idle}
+                            alt='breathe button'
+                            className='w-6 h-6 opacity-80 shrink-0'
+                        />
+                        
+                        <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expanded? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                            Breathe
+                        </span>
+                    </motion.button>
+                </div>
+            </motion.div>
         </>
     );
 }
