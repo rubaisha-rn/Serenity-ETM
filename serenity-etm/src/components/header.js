@@ -71,7 +71,7 @@ export default function Header({
             </div>
 
             {/* right slot */}
-            { showRight ??    (
+            { showRight && (
                 <div className="flex justify-end items-center gap-5">
                     
                     {/* nav links */}

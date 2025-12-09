@@ -3,13 +3,15 @@
 import Header from "@/components/header";
 import Image from "next/image";
 import AppShell from "@/shells/appShell";
-import Footer from "@/components/footer";
+import ThinFooter from "@/components/thinFooter";
 import PrototypeTag from '@/components/prototypeTag';
 
 export default function TasksPage() {
     return (
         <div className="bg-light-mid-bg">
-            {/* <PrototypeTag/> */}
+
+            <PrototypeTag/>
+            
             <Header
                 title="Serenity ETM"
                 logo={<Image
@@ -26,7 +28,7 @@ export default function TasksPage() {
                 <h1>Content.</h1>
             </AppShell>
 
-            <Footer/>
+            <ThinFooter />
 
         </div>
     );

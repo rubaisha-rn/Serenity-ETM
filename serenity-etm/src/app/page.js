@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 import FloatingBlobs from '@/components/floatingblobs';
-import StressControl from '@/components/stressControl';
 import useStore from '@/store/useStore';
 import Header from '@/components/header';
 import Image from 'next/image';
@@ -83,7 +82,6 @@ export default function IntroPage() {
                 
                 <PrototypeTag />
                 <FloatingBlobs className='z-0'/>
-                <StressControl className='z-10' />
 
                 {/* 2x2 grid layout */}
                 <div 
