@@ -14,10 +14,17 @@ const useStore = create((set) => ({
     focusMode: false,
     setFocusMode: (value) => set({ focusMode: value }),
 
+    priorityMode: false,
+    setPriorityMode: (value) => set({ priorityMode: value }),
+
+    breatheMode: false,
+    setBreatheMode: (value) => set({ breatheMode: value }),
+
+    screen: 'tasks',
+    setScreen: (screen) => set({screen}),
+
     sdkActive: true,
     setSdkActive: (value) => set({ sdkActive: value }),
-
-    // for global states 
 }));
 
 export default useStore;

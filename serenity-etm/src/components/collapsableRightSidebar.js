@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
 import useStore from '@/store/useStore';
+import { Info } from 'lucide-react';
 
 const IMG = {
     focus: {
@@ -26,14 +27,9 @@ const IMG = {
 export default function CollapsableRightSidebar() {
 
     const [expanded, setExpanded] = useState(false);
-    const [stressOpen, setStressOpen] = useState(false);
 
-    const [focusActive, setFocusActive] = useState(false);
-    const [priorityActive, setPriorityActive] = useState(false);
-    const [stressActive, setStressActive] = useState(false);
-    const [breatheActive, setBreatheActive] = useState(false);
+    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, breatheMode, setBreatheMode} = useStore();
     
-    const emotionValue = useStore((s) => s.emotionValue);
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
     const [theme, setTheme] = useState('light'); 
@@ -72,17 +68,17 @@ export default function CollapsableRightSidebar() {
     const accClasses = {
         light: {
             low: 'bg-light-low-acc hover:bg-light-low-accHover',
-            mid: 'bg-light-mid-acc hover:bg-light-low-accHover',
-            high: 'bg-light-high-acc hover:bg-light-low-accHover',
+            mid: 'bg-light-mid-acc hover:bg-light-mid-accHover',
+            high: 'bg-light-high-acc hover:bg-light-high-accHover',
         },
         dark: {},
     };
 
     const buttonClasses = {
         light: {
-            low: 'bg-light-low-a hover:bg-light-low-b',
-            mid: 'bg-light-mid-c hover:bg-light-mid-b',
-            high: 'bg-light-high-c hover:bg-light-high-b',
+            low: 'bg-light-low-icons hover:bg-light-low-b',
+            mid: 'bg-light-mid-icons hover:bg-light-mid-b',
+            high: 'bg-light-high-icons hover:bg-light-high-b',
         },
         dark: {},
     };
@@ -98,18 +94,11 @@ export default function CollapsableRightSidebar() {
                 onClick={() => setExpanded(!expanded)}
                 className={`fixed bottom-2 z-20 ${accClasses[theme][stressPalette]} shadow-xl p-1.5 pr-6 rounded-full`}
             >
-
-                {expanded 
-                    ? <img
-                        src='/icons/backw.png'
-                        alt='close arrow'
-                        className='w-5 h-5 opacity-80 rotate-180'
-                    /> 
-                    : <img
-                        src='/icons/backw.png'
-                        alt='close arrow'
-                        className='w-5 h-5 opacity-80'
-                    />}
+                <img
+                    src='/icons/backw.png'
+                    alt='close arrow'
+                    className={`w-5 h-5 opacity-80 ${expanded ? 'rotate-180' : ''}`}
+                /> 
 
             </motion.button>
 
@@ -121,17 +110,17 @@ export default function CollapsableRightSidebar() {
                 className={`fixed top-0 right-0 z-30 ${cardClasses[theme][stressPalette]} flex flex-col justify-between h-screen shadow-xl overflow-hidden py-6 pt-6`}
                 style={{ overflow: 'clip' }}
             >
-                <div className='flex flex-col items-center gap-4 w-full p-4'>
+                <div className={`flex flex-col items-center w-full p-4 ${expanded ? 'gap-1' : 'gap-4'}`}>
 
                     {/* focus button */}
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
-                        onClick={() => setFocusActive(!focusActive)}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        onClick={() => setFocusMode(!focusMode)}
+                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
                     >
                         <img
-                            src={focusActive ? IMG.focus.active : IMG.focus.idle}
+                            src={focusMode ? IMG.focus.active : IMG.focus.idle}
                             alt='focus mode'
                             className='w-6 h-6 opacity-80 shrink-0'
                         />
@@ -142,14 +131,23 @@ export default function CollapsableRightSidebar() {
 
                     </motion.button>
 
+                    {expanded && (
+                        <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                            <Info className='w-2 h-2 mt-0.5 shrink-0'/>
+                            Hides non-urgent items when stress is high. You can also activate it manually. 
+                            <br/><br/>
+                        </span>
+                    )}
+
+                    {/* priority button */}
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
-                        onClick={() => setPriorityActive(!priorityActive)}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        onClick={() => setPriorityMode(!priorityMode)}
+                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
                     >
                         <img
-                            src={priorityActive ? IMG.priority.active : IMG.priority.idle}
+                            src={priorityMode ? IMG.priority.active : IMG.priority.idle}
                             alt='priority mode'
                             className='w-6 h-6 opacity-80 shrink-0'
                         />
@@ -159,17 +157,25 @@ export default function CollapsableRightSidebar() {
                         </span>
                     </motion.button>
 
+                    {expanded && (
+                        <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                            <Info className='w-2 h-2 mt-0.5 shrink-0'/>
+                            Shows your most important emails and tasks first. 
+                            <br/><br/>
+                        </span>
+                    )}
+
+                    {/* stress detection */}
                     <div className='flex flex-col items-center w-full'>
                         <motion.button
                             whileHover={{scale: 1.05}}
                             whileTap={{scale: 0.95}}
-                            onClick={() => {setStressActive(!stressActive)
-                            setStressOpen(!stressOpen)
+                            onClick={() => {                            setSdkActive(!sdkActive)
                             }}
-                            className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                            className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
                         >
                             <img
-                                src={stressActive ? IMG.stress.active : IMG.stress.idle}
+                                src={sdkActive ? IMG.stress.active : IMG.stress.idle}
                                 alt='stress detection'
                                 className='w-6 h-6 opacity-80 shrink-0'
                             />
@@ -179,36 +185,45 @@ export default function CollapsableRightSidebar() {
                             </span>
                         </motion.button>
 
+                        {expanded && (
+                            <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                            <Info className='w-2 h-2 mt-0.5 shrink-0'/>
+                                Automatically estimates stress. <br/>
+                                If turned off, use the slider to set your stress level manually.
+                                <br/>
+                            </span>
+                        )}
+
                         <motion.div
                             initial={{ opacity: 0, height: 0 }}
-                            animate={{ height: !stressOpen && expanded ? 90 : 0, opacity: !stressOpen && expanded ? 1 : 0 }}
+                            animate={{ height: expanded ? 90 : 0, opacity: expanded ? 1 : 0 }}
                             transition={{duration: 0.25}}
-                            className='w-full overflow-hidden px-1'
+                            className='w-full overflow-hidden'
                         >
-                            <label className='text-sm font-medium'>Stress Level</label>
+                            <label className='text-[0.6rem] font-semibold text-gray-500'>Stress Level: {emotionValue}</label>
                             <input
                                 type='range'
                                 min={0}
                                 max={100}
+                                step={1}
                                 value={emotionValue}
-                                className='w-full mt-2'
-                                readOnly
+                                onChange={(e) => setEmotionValue(Number(e.target.value))}
+                                className={`w-full mt-2 accent-[#373737]`}
                             />
-                            <div className='text-xs mt-1 text-gray-500'>{emotionValue}</div>
                         </motion.div>
                     </div>  
                 </div>
 
                 {/* breathe button */}
-                <div className='flex justify-center pb-4 px-4'>
+                <div className={`flex ${expanded ? 'flex-col' : ''} justify-center px-4 gap-1`}>
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
-                        onClick={() => setBreatheActive(!breatheActive)}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-30 hover:bg-opacity-50 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        onClick={() => setBreatheMode(!breatheMode)}
+                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
                     >
                         <img
-                            src={breatheActive ? IMG.breathe.active : IMG.breathe.idle}
+                            src={breatheMode ? IMG.breathe.active : IMG.breathe.idle}
                             alt='breathe button'
                             className='w-6 h-6 opacity-80 shrink-0'
                         />
@@ -217,6 +232,13 @@ export default function CollapsableRightSidebar() {
                             Breathe
                         </span>
                     </motion.button>
+
+                    {expanded && (
+                        <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                            <Info className='w-2 h-2 mt-0.5 shrink-0'/>
+                            Opens a short calming break to help you reset.
+                        </span>
+                    )}
                 </div>
             </motion.div>
         </>

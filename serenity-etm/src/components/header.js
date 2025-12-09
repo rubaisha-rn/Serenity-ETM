@@ -21,9 +21,10 @@ export default function Header({
     return (
         <header
             className={`
-            z-30 h-8 w-full
+            z-50 h-8 w-full
             grid grid-cols-3 items-center 
             px-12
+            shadow-4-xl
             ${transparent ? 'backdrop-blur-xl' : 'bg-white'}
             transition-all duration-500
             ${sticky ? 'sticky top-0' : ''}
