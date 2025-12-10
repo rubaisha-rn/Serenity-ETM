@@ -23,8 +23,11 @@ const useStore = create((set) => ({
     screen: 'tasks',
     setScreen: (screen) => set({screen}),
 
-    secondBarExpanded: false,
-    setSecondBarExpanded: (secondBarExpanded) => set({secondBarExpanded}), 
+    expandedMain: false,
+    setExpandedMain: (expandedMain) => set({expandedMain}), 
+
+    expandedSecondary: false,
+    setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}), 
 
     sdkActive: true,
     setSdkActive: (value) => set({ sdkActive: value }),

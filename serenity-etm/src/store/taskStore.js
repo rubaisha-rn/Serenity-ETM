@@ -18,6 +18,14 @@ export const useTaskStore = create((set) => ({
             priority: 'low',
             completed: false,
         },
+        {
+            id: '3',
+            title: "Testing Task",
+            created: '10-12-2025',
+            due: '02-01-2026',
+            priority: 'medium',
+            completed: false,
+        },
     ],
 
     addTask: (task) => 

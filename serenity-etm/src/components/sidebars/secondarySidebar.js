@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function SecondarySidebar() {
     
-    const {screen, emotionValue, secondBarExpanded} = useStore();
-    const expanded = true;
+    const {screen, emotionValue, expandedSecondary, expandedMain} = useStore();
 
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
@@ -62,32 +61,34 @@ export default function SecondarySidebar() {
         dark: {},
     };
 
+    const mainLeft = expandedMain ? 220 : 40;
+
     const TaskButtons = () => (
         <>
-            <SidebarButton label='All Tasks' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='Today' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='Upcoming' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='High Priority' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='Completed' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='All Tasks' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Today' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Upcoming' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='High Priority' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Completed' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
         </>
     );
 
     const EmailButtons = () => (
         <>
-            <SidebarButton label='Inbox' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='Starred' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='Priority' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='Drafts' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
-            <SidebarButton label='Archive' icon='/icons/menuOpen.png' expanded={expanded} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Inbox' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Starred' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Priority' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Drafts' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
+            <SidebarButton label='Archive' icon='/icons/menuOpen.png' expanded={expandedSecondary} theme={theme} stressPalette={stressPalette} />
         </>
     );
 
     return (
         <motion.div
-            initial={{width: 0}}
-            animate={{width: expanded ? 180 : 0}}
-            transition={{type: 'spring', stiffness: 240, damping: 22}}
-            className={`h-screen z-20 p-4 border-r overflow-hidden shadow-xl ${cardClasses[theme][stressPalette]}`}
+            initial={{width: 0, left: 40}}
+            animate={{width: expandedSecondary ? 200 : 40, left: mainLeft}}
+            transition={{type: 'spring', stiffness: 300, damping: 30}}
+            className={`absolute h-screen top-0 z-10 p-2 border-r mt-7 overflow-hidden shadow-xl items-center justify-center ${cardClasses[theme][stressPalette]}`}
         >
             <div className="flex flex-col gap-3">
                 {screen === 'tasks' && <TaskButtons/>}
@@ -117,9 +118,9 @@ function SidebarButton({label, icon, expanded, theme, stressPalette}) {
         <motion.button
             whileHover={{scale: 1.05}}
             whileTap={{scale: 0.95}}
-            className={`flex items-center w-full rounded-lg p-2 gap-3 ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40`}
+            className={`flex items-center w-full rounded-lg p-1 gap-3 ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40`}
         >
-            <img src={icon} className="w-5 h-5 opacity-80 shrink-0" />
+            <img src={icon} className="w-5 h-5 opacity-80 flex-none shrink-0 grow-0 basis-5" />
             <span className={`${textClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expanded ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {label}
             </span>
