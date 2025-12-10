@@ -23,6 +23,9 @@ const useStore = create((set) => ({
     screen: 'tasks',
     setScreen: (screen) => set({screen}),
 
+    secondBarExpanded: false,
+    setSecondBarExpanded: (secondBarExpanded) => set({secondBarExpanded}), 
+
     sdkActive: true,
     setSdkActive: (value) => set({ sdkActive: value }),
 }));

@@ -19,6 +19,8 @@ export default function CollapsableLeftSidebar() {
     const [expanded, setExpanded] = useState(false);
 
     const {screen, setScreen, emotionValue} = useStore();
+    const secondBarExpanded = useStore((s) => s.secondBarExpanded);
+    const setSecondBarExpanded = useStore((s) => s.setSecondBarExpanded);
     
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
@@ -115,7 +117,7 @@ export default function CollapsableLeftSidebar() {
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
-                        onClick={onclick}
+                        onClick={() => setSecondBarExpanded(!secondBarExpanded)}
                         className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
                     >
                         <img

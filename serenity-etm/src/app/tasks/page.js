@@ -3,10 +3,26 @@
 import Header from "@/components/header";
 import Image from "next/image";
 import AppShell from "@/shells/appShell";
-import ThinFooter from "@/components/thinFooter";
+import ThinFooter from "@/components/footers/thinFooter";
 import PrototypeTag from '@/components/prototypeTag';
+import { useTaskStore } from "@/store/taskStore";
+import useStore from "@/store/useStore";
+import { motion } from "framer-motion";
+import SecondarySidebar from "@/components/sidebars/secondarySidebar";
 
 export default function TasksPage() {
+
+    const {tasks, toggleComplete} = useTaskStore();
+    const {emotionValue, focusMode, secondbarExpanded} = useStore();
+
+    const filtered = tasks.filter((t) =>
+        focusMode ? t.priority === 'high' : true
+    );
+
+    const sorted = focusMode
+        ? [...filtered].sort((a, b) => Number(a.completed) - Number(b.completed))
+        : filtered;
+
     return (
         <div className="bg-light-mid-bg">
 
@@ -25,7 +41,37 @@ export default function TasksPage() {
             />
 
             <AppShell>
-                <h1>Content.</h1>
+
+                <div className="space y-3">
+                    {focusMode && (
+                        <div className="p-3 rounded-xl bg-red-100 text-red-800 text-sm">
+                            Smart Focus Mode: Showing only urgent tasks.
+                        </div>
+                    )}
+
+                    {sorted.map((task) => (
+                        <motion.div
+                            key={task.id}
+                            initial={{opacity: 0, y:10}}
+                            animate={{opacity: 1, y: 0}}
+                            className="p-4 bg-white rounded-xl shadow flex items-center justify-between"
+                        >
+                            <div>
+                                <p className={`font-medium ${task.completed ? 'line-through' : ''}`}>
+                                    {task.title}
+                                </p>
+                                <p className="text-xs text-gray-500">Due: {task.due}</p>
+                            </div>
+
+                            <button
+                                onClick={() => toggleComplete(task.id)}
+                                className="px-3 py-1 text-sm rounded-md bg-gray-200 hover:bg-gray-300"
+                            >
+                                {task.completed ? 'Undo' : 'Done'}
+                            </button>
+                        </motion.div>
+                    ))}
+                </div>
             </AppShell>
 
             <ThinFooter />

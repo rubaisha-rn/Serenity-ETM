@@ -8,7 +8,7 @@ import useStore from '@/store/useStore';
 import Header from '@/components/header';
 import Image from 'next/image';
 import PrototypeTag from '@/components/prototypeTag';
-import Footer from '@/components/footer';
+import Footer from '@/components/footers/footer';
 
 export default function IntroPage() {
     
