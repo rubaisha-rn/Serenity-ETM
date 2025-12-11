@@ -7,10 +7,9 @@ import ThinFooter from "@/components/footers/thinFooter";
 import PrototypeTag from '@/components/prototypeTag';
 import { useTaskStore } from "@/store/taskStore";
 import useStore from "@/store/useStore";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
-import { ZCOOL_KuaiLe } from "next/font/google";
 
 export default function TasksPage() {
 
@@ -83,6 +82,16 @@ export default function TasksPage() {
             <AppShell>
 
                 <motion.div className='space y-3 transition-all duration-300'
+                    initial='hidden'
+                    animate='visible'
+                    variants={{
+                        hidden: {},
+                        visible: {
+                            transition: {
+                                staggerChildren: 0.05,
+                            },
+                        },
+                    }}
                     style={{marginLeft: contentMargin}}
                 >
                     <AddTask />
@@ -93,28 +102,40 @@ export default function TasksPage() {
                         </div>
                     )}
 
-                    {sorted.map((task) => (
-                        <motion.div
-                            key={task.id}
-                            initial={{opacity: 0, y:10}}
-                            animate={{opacity: 1, y: 0}}
-                            className="p-4 bg-white rounded-xl shadow flex items-center justify-between"
-                        >
-                            <div>
-                                <p className={`font-medium ${task.completed ? 'line-through' : ''}`}>
-                                    {task.title}
-                                </p>
-                                <p className="text-xs text-gray-500">Due: {task.due}</p>
-                            </div>
-
-                            <button
-                                onClick={() => toggleComplete(task.id)}
-                                className="px-3 py-1 text-sm rounded-md bg-gray-200 hover:bg-gray-300"
+                    <AnimatePresence>
+                        {sorted.map((task) => (
+                            <motion.div
+                                key={task.id}
+                                layout
+                                layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
+                                initial={{opacity: 0, y:10}}
+                                animate={{opacity: 1, 
+                                    y: 0,
+                                    scale: task.completed ? 0.95 : 1,
+                                    backgroundColor: task.completed ? '#d1fae5' : '#ffffff',
+                                }}
+                                exit={{opacity: 0, y: -10}}
+                                transition={{duration: 0.3}}
+                                className="p-4 bg-white rounded-xl shadow flex items-center justify-between"
                             >
-                                {task.completed ? 'Undo' : 'Done'}
-                            </button>
-                        </motion.div>
-                    ))}
+                                <div>
+                                    <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                        {task.title}
+                                    </p>
+                                    <p className="text-xs text-gray-500">Due: {task.due}</p>
+                                </div>
+
+                                <motion.button
+                                    onClick={() => toggleComplete(task.id)}
+                                    animate={{scale: task.completed ? 0.9 : 1}}
+                                    transition={{type: 'spring', stiffness: 300, damping: 20}}
+                                    className="px-3 py-1 text-sm rounded-md bg-gray-200 hover:bg-gray-300"
+                                >
+                                    {task.completed ? 'Undo' : 'Done'}
+                                </motion.button>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
                 </motion.div>
 
             </AppShell>
@@ -127,6 +148,8 @@ export default function TasksPage() {
 
 function sortTasks(a, b) {
     const priorityOrder = {high: 3, medium: 2, low: 1};
+
+    if (a.completed !== b.completed) return a.completed ? 1 : -1;
 
     if (priorityOrder[b.priority] !== priorityOrder[a.priority]) {
         return priorityOrder[b.priority] - priorityOrder[a.priority];
