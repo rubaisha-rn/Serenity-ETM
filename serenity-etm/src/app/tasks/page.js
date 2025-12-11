@@ -10,36 +10,54 @@ import useStore from "@/store/useStore";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
+import { ZCOOL_KuaiLe } from "next/font/google";
 
 export default function TasksPage() {
 
     const {tasks, toggleComplete} = useTaskStore();
-    const {emotionValue, focusMode, expandedSecondary, expandedMain, showTasks} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks} = useStore();
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
         let results = tasks;
         const today = new Date().toISOString().split('T')[0];
 
-        if(focusMode) {
-            results = results.filter((t) => t.priority === 'high');
-        }
+        if(emotionValue > 70) {
 
-        if (showTasks === 'today') {
-            results = results.filter((t) => t.due === today);
-        }
-        else if (showTasks === 'completed') {
-            results = results.filter((t) => t.completed);
-        }
-        else if (showTasks === 'priority') {
-            results = results.filter((t) => t.priority === 'high');
-        }
-        else if (showTasks === 'upcoming') {
-            results = results.filter((t) => t.due >= today);
-        }
+            setFocusMode(true);
+            results = results.filter((t) => t.priority === 'high').slice(0,3);
+            results = results.sort(sortTasks);
 
+        } else {
+
+            if (priorityMode) {
+                results = results.filter((t) => t.priority === 'high');
+            }
+
+            if (emotionValue >= 50 && emotionValue <= 70) {
+                results = results.filter((t) => t.priority != 'low');
+            }
+
+            if (focusMode) {
+                results = results.filter((t) => t.priority === 'high').slice(0,3);
+            }
+            
+            if (showTasks === 'today') {
+                results = results.filter((t) => t.due === today);
+            }
+            else if (showTasks === 'completed') {
+                results = results.filter((t) => t.completed);
+            }
+            else if (showTasks === 'priority') {
+                results = results.filter((t) => t.priority === 'high');
+            }
+            else if (showTasks === 'upcoming') {
+                results = results.filter((t) => t.due >= today);
+            }
+        }
+        results.sort(sortTasks);
         setSorted(results);
-    }, [tasks, showTasks, focusMode]);
+    }, [tasks, showTasks, focusMode, priorityMode, emotionValue]);
 
     const mainWidth = expandedMain ? 220 : 40;
     const secondaryWidth = expandedSecondary ? 200 : 40;
@@ -105,4 +123,20 @@ export default function TasksPage() {
 
         </div>
     );
+}
+
+function sortTasks(a, b) {
+    const priorityOrder = {high: 3, medium: 2, low: 1};
+
+    if (priorityOrder[b.priority] !== priorityOrder[a.priority]) {
+        return priorityOrder[b.priority] - priorityOrder[a.priority];
+    }
+
+    const dateA = new Date(a.due).getTime();
+    const dateB = new Date(b.due).getTime();
+    if (dateA !== dateB) return dateA-dateB;
+
+    if(a.completed !== b.completed) return a.completed ? 1 : -1;
+
+    return 0;
 }

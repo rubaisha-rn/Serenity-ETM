@@ -7,7 +7,7 @@ import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
-    const {screen, emotionValue, expandedSecondary, expandedMain, setShowTasks} = useStore();
+    const {screen, focusMode, emotionValue, expandedSecondary, expandedMain, setShowTasks} = useStore();
 
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
@@ -71,7 +71,7 @@ export default function SecondarySidebar() {
             initial={{width: 0, left: 40}}
             animate={{width: expandedSecondary ? 200 : 40, left: mainLeft}}
             transition={{type: 'spring', stiffness: 300, damping: 30}}
-            className={`absolute h-screen top-0 z-100 p-2 border-r mt-7 overflow-hidden shadow-xl items-center justify-center ${cardClasses[theme][stressPalette]}`}
+            className={`absolute h-screen top-0 z-10 p-2 border-r mt-7 overflow-hidden shadow-xl items-center justify-center ${cardClasses[theme][stressPalette]}`}
         >
             <div className="flex flex-col gap-3">
                 {screen === 'tasks' && (
