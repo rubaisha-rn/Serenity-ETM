@@ -7,7 +7,7 @@ import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
-    const {screen, focusMode, emotionValue, expandedSecondary, expandedMain, setShowTasks} = useStore();
+    const {screen, emotionValue, expandedSecondary, expandedMain, setShowTasks} = useStore();
 
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
@@ -25,13 +25,8 @@ export default function SecondarySidebar() {
             else setStressPalette('high');}
     }, [stress01]);
 
-    const textAClasses = {
+    const textClasses = {
         light: 'text-light-textA',
-        dark: {},
-    };
-
-    const textBClasses = {
-        light: 'text-light-textB',
         dark: {},
     };
 
@@ -44,36 +39,33 @@ export default function SecondarySidebar() {
         dark: {},
     };
 
-    const themeAClasses = {
-        light: {
-            low: 'bg-light-low-a',
-            mid: 'bg-light-mid-a',
-            high: 'bg-light-high-a',
-        },
-        dark: {},
-    }
-
-    const accClasses = {
-        light: {
-            low: 'bg-light-low-acc hover:bg-light-low-accHover',
-            mid: 'bg-light-mid-acc hover:bg-light-mid-accHover',
-            high: 'bg-light-high-acc hover:bg-light-high-accHover',
-        },
-        dark: {},
-    };
-
     const mainLeft = expandedMain ? 220 : 40;
-
-    if(!theme) return null;
 
     return (
         <motion.div
             initial={{width: 0, left: 40}}
             animate={{width: expandedSecondary ? 200 : 40, left: mainLeft}}
             transition={{type: 'spring', stiffness: 300, damping: 30}}
-            className={`absolute h-screen top-0 z-10 p-2 border-r mt-7 overflow-hidden shadow-xl items-center justify-center ${cardClasses[theme][stressPalette]}`}
+            className={`fixed top-0 z-10 border-r overflow-hidden shadow-xl items-center justify-center ${expandedSecondary ? 'p-2 pt-11' : 'p-1.5 pt-10'} ${cardClasses[theme][stressPalette]} h-screen`}
         >
             <div className="flex flex-col gap-3">
+
+                {expandedSecondary && (
+                    <div className="flex flex-row items-center gap-1">
+                    
+                        <div className="w-4 h-3.5 opacity-70">
+                            <img
+                                src="/logo/logo.png"
+                            />
+                        </div>
+
+                        <h1 className={`font-Roboto text-sm font-bold ${textClasses[theme]} opacity-70`}>
+                            Task Manager
+                        </h1>
+
+                    </div>
+                )}
+
                 {screen === 'tasks' && (
                     <TaskButtons
                         expandedSecondary={expandedSecondary}

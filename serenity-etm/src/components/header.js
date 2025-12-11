@@ -1,9 +1,10 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { NAV_LINKS } from "@/constants/navigation";
+import useStore from '@/store/useStore';
 
 export default function Header({
     title = 'Serenity ETM',
@@ -15,6 +16,43 @@ export default function Header({
     sticky = false,
     transparent = false,
 }) {
+
+    const {emotionValue} = useStore();
+    const stress01 = emotionValue / 100;
+    const [stressPalette, setStressPalette] = useState('low');
+    const [theme, setTheme] = useState('light'); 
+
+    useEffect(() => {
+        const darkModeEnabled = document.documentElement.classList.contains('dark');
+        setTheme(darkModeEnabled ? 'dark' : 'light');
+    }, []);
+
+    useEffect(() => {
+        if (stress01 !== undefined) {
+            if (stress01 < 0.33) setStressPalette('low');
+            else if (stress01 < 0.66) setStressPalette('mid');
+            else setStressPalette('high');}
+    }, [stress01]);
+
+    const textAClasses = {
+        light: 'text-light-textA',
+        dark: {},
+    };
+
+    const textBClasses = {
+        light: 'text-light-textB',
+        dark: {},
+    };
+
+    const blankCardClasses = {
+        light: {
+            low: 'bg-light-low-blankCard',
+            mid: 'bg-light-mid-blankCard',
+            high: 'bg-light-high-blankCard',
+        },
+        dark: {},
+    };
+
     const router = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);
 
@@ -25,7 +63,7 @@ export default function Header({
             grid grid-cols-3 items-center 
             px-12
             shadow-4-xl
-            ${transparent ? 'backdrop-blur-xl' : 'bg-white'}
+            ${transparent ? 'backdrop-blur-xl' : `${blankCardClasses[theme][stressPalette]}`}
             transition-all duration-500
             ${sticky ? 'sticky top-0' : ''}
             `}
@@ -65,7 +103,7 @@ export default function Header({
                 `}
             >
                 {logo && <div className="w-4 h-3.5 opacity-50">{logo}</div>}
-                <h1 className='font-AbrilFatface text-sm text-light-textA opacity-50'>
+                <h1 className={`font-AbrilFatface text-sm ${textAClasses[theme]} opacity-50`}>
                     {title}
                 </h1>
             </div>
@@ -96,7 +134,7 @@ export default function Header({
                                         router.push(link.href);
                                         setMenuOpen(false);
                                     }}
-                                    className="relative flex flex-col items-center font-Roboto text-xs transition-opacity hover:opacity-50 text-light-textB"
+                                    className={`relative flex flex-col items-center font-Roboto text-xs transition-opacity hover:opacity-50 ${textBClasses[theme]}`}
                                 >
                                     <span>{link.label}</span>
 

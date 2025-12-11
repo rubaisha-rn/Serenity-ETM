@@ -40,33 +40,19 @@ export default function CollapsableLeftSidebar() {
             else setStressPalette('high');}
     }, [stress01]);
 
-    const textAClasses = {
+    const textClasses = {
         light: 'text-light-textA',
         dark: {},
     };
 
-    const textBClasses = {
-        light: 'text-light-textB',
-        dark: {},
-    };
-
-    const cardClasses = {
+    const blankCardClasses = {
         light: {
-            low: 'bg-light-low-card',
-            mid: 'bg-light-mid-card',
-            high: 'bg-light-high-card',
+            low: 'bg-light-low-blankCard',
+            mid: 'bg-light-mid-blankCard',
+            high: 'bg-light-high-blankCard',
         },
         dark: {},
     };
-
-    const themeAClasses = {
-        light: {
-            low: 'bg-light-low-a',
-            mid: 'bg-light-mid-a',
-            high: 'bg-light-high-a',
-        },
-        dark: {},
-    }
 
     const accClasses = {
         light: {
@@ -77,11 +63,20 @@ export default function CollapsableLeftSidebar() {
         dark: {},
     };
 
-    const buttonClasses = {
+    const activeButtonClasses = {
         light: {
-            low: 'bg-light-low-icons hover:bg-light-low-b',
-            mid: 'bg-light-mid-icons hover:bg-light-mid-b',
-            high: 'bg-light-high-icons hover:bg-light-high-b',
+            low: 'bg-light-low-a bg-opacity-70 hover:bg-light-low-a hover:bg-opacity-100',
+            mid: 'bg-light-mid-a bg-opacity-70 hover:bg-light-mid-a hover:bg-opacity-100',
+            high: 'bg-light-high-a bg-opacity-70 hover:bg-light-high-a hover:bg-opacity-100',
+        },
+        dark: {},
+    }
+
+    const inactiveButtonClasses = {
+        light: {
+            low: 'bg-light-low-icons bg-opacity-20 hover:bg-light-low-icons hover:bg-opacity-50',
+            mid: 'bg-light-mid-icons bg-opacity-20 hover:bg-light-mid-icons hover:bg-opacity-50',
+            high: 'bg-light-high-icons bg-opacity-20 hover:bg-light-high-icons hover:bg-opacity-50',
         },
         dark: {},
     };
@@ -110,17 +105,19 @@ export default function CollapsableLeftSidebar() {
                 initial={{width: 40}}
                 animate={{width: expandedMain? 220 : 40}}
                 transition={{type: 'spring', stiffness: 260, damping: 20}}
-                className={`fixed top-0 left-0 z-30 ${cardClasses[theme][stressPalette]} flex flex-col justify-between h-screen shadow-xl overflow-hidden py-6 pt-6`}
+                className={`fixed top-0 left-0 z-30 ${blankCardClasses[theme][stressPalette]} flex flex-col justify-between h-screen shadow-xl overflow-hidden py-6 pt-6`}
                 style={{ overflow: 'clip' }}
             >
-                <div className='flex flex-col items-center w-full p-4 gap-4'>
+                <div className='flex flex-col items-center w-full p-4 gap-3'>
 
                     {/* menu button */}
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setExpandedSecondary(!expandedSecondary)}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expandedMain? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        className={`flex items-center 
+                            ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 justify-center p-1.5 rounded-md'} 
+                            ${expandedSecondary ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                     >
                         <img
                             src={IMG.menu}
@@ -128,7 +125,7 @@ export default function CollapsableLeftSidebar() {
                             className='w-5 h-5 opacity-80 shrink-0'
                         />
 
-                        <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                        <span className={`${textClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                             Menu
                         </span>
 
@@ -139,7 +136,10 @@ export default function CollapsableLeftSidebar() {
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setScreen('emails')}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expandedMain? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'} ${screen==='emails' ? `${themeAClasses[theme][stressPalette]} bg-opacity-100` : ''} ${screen === 'emails' && !expandedMain? 'py-8 px-2 rounded-md' : ''}`}
+                        className={`flex items-center 
+                            ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'} 
+                            ${screen==='emails' ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`} 
+                            ${screen === 'emails' && !expandedMain ? 'py-8 px-1.5 rounded-md' : 'p-1.5 rounded-md'}`}
                     >
                         <img
                             src={IMG.email}
@@ -147,7 +147,7 @@ export default function CollapsableLeftSidebar() {
                             className='w-5 h-5 opacity-80 shrink-0'
                         />
 
-                        <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                        <span className={`${textClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                             Email Manager
                         </span>
 
@@ -158,7 +158,10 @@ export default function CollapsableLeftSidebar() {
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setScreen('tasks')}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'} ${screen==='tasks' ? `${themeAClasses[theme][stressPalette]} bg-opacity-100` : ''} ${screen === 'tasks' && !expandedMain ? 'py-8 px-2 rounded-md' : ''}`}
+                        className={`flex items-center 
+                            ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'} 
+                            ${screen==='tasks' ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`} 
+                            ${screen === 'tasks' && !expandedMain ? 'py-8 px-1.5 rounded-md' : 'p-1.5 rounded-md'}`}
                     >
                         <img
                             src={IMG.tasks}
@@ -166,7 +169,7 @@ export default function CollapsableLeftSidebar() {
                             className='w-5 h-5 opacity-80 shrink-0'
                         />
 
-                        <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                        <span className={`${textClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                             Task Manager
                         </span>
 
@@ -180,7 +183,8 @@ export default function CollapsableLeftSidebar() {
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => router.push('/')}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        className={`flex items-center 
+                            ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full p-1.5 rounded-md'} ${inactiveButtonClasses[theme][stressPalette]}`}
                     >
                         <img
                             src={IMG.logout}
@@ -188,7 +192,7 @@ export default function CollapsableLeftSidebar() {
                             className='w-5 h-5 opacity-80 shrink-0'
                         />
 
-                        <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                        <span className={`${textClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expandedMain ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                             Logout
                         </span>
 

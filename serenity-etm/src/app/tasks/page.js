@@ -62,10 +62,35 @@ export default function TasksPage() {
     const secondaryWidth = expandedSecondary ? 200 : 40;
     const contentMargin = mainWidth + secondaryWidth;
 
-    return (
-        <div className="bg-light-mid-bg">
+    const stress01 = emotionValue / 100;
+    const [stressPalette, setStressPalette] = useState('low');
+    const [theme, setTheme] = useState('light'); 
 
-            <PrototypeTag/>
+    useEffect(() => {
+        const darkModeEnabled = document.documentElement.classList.contains('dark');
+        setTheme(darkModeEnabled ? 'dark' : 'light');
+    }, []);
+
+    useEffect(() => {
+        if (stress01 !== undefined) {
+            if (stress01 < 0.33) setStressPalette('low');
+            else if (stress01 < 0.66) setStressPalette('mid');
+            else setStressPalette('high');}
+    }, [stress01]);
+
+    const bgClasses = {
+        light: {
+            low: 'bg-light-low-bg',
+            mid: 'bg-light-mid-bg',
+            high: 'bg-light-high-bg',
+        },
+        dark: {},
+    };
+
+    return (
+        <div className={`${bgClasses[theme][stressPalette]} relative h-screen`}>
+
+            {/* <PrototypeTag/> */}
             
             <Header
                 title="Serenity ETM"

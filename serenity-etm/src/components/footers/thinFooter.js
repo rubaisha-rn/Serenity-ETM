@@ -22,7 +22,7 @@ export default function ThinFooter() {
             else setStressPalette('high');}
     }, [stress01]);
 
-    const bgClasses = {
+    const cardClasses = {
         light: {
             low: 'bg-light-low-card',
             mid: 'bg-light-mid-card',
@@ -31,13 +31,18 @@ export default function ThinFooter() {
         dark: {},
     };
 
+    const textClasses = {
+        light: 'text-light-textC',
+        dark: {},
+    };
+
     return(
-        <div className={`z-30 w-full
+        <div className={`z-0 w-full
             flex flex-col items-center justify-center
             p-4 relative
-            ${bgClasses[theme][stressPalette]}`}
+            ${cardClasses[theme][stressPalette]}`}
         >
-            <p className='font-Roboto text-[0.6rem] text-light-textC text-center'>© 2025, Serenity ETM. All right reserved.</p>
+            <p className={`font-Roboto text-[0.6rem] text-center ${textClasses[theme]}`}>© 2025, Serenity ETM. All right reserved.</p>
         </div>
     );
 }

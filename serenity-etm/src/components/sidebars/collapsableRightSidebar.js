@@ -65,6 +65,24 @@ export default function CollapsableRightSidebar() {
         dark: {},
     };
 
+    const buttonClasses = {
+        light: {
+            low: 'bg-light-low-icons hover:bg-light-low-b',
+            mid: 'bg-light-mid-icons hover:bg-light-mid-b',
+            high: 'bg-light-high-icons hover:bg-light-high-b',
+        },
+        dark: {},
+    };
+
+    const blankCardClasses = {
+        light: {
+            low: 'bg-light-low-blankCard',
+            mid: 'bg-light-mid-blankCard',
+            high: 'bg-light-high-blankCard',
+        },
+        dark: {},
+    };
+
     const accClasses = {
         light: {
             low: 'bg-light-low-acc hover:bg-light-low-accHover',
@@ -74,11 +92,20 @@ export default function CollapsableRightSidebar() {
         dark: {},
     };
 
-    const buttonClasses = {
+    const activeButtonClasses = {
         light: {
-            low: 'bg-light-low-icons hover:bg-light-low-b',
-            mid: 'bg-light-mid-icons hover:bg-light-mid-b',
-            high: 'bg-light-high-icons hover:bg-light-high-b',
+            low: 'bg-light-low-a bg-opacity-70 hover:bg-light-low-a hover:bg-opacity-100',
+            mid: 'bg-light-mid-a bg-opacity-70 hover:bg-light-mid-a hover:bg-opacity-100',
+            high: 'bg-light-high-a bg-opacity-70 hover:bg-light-high-a hover:bg-opacity-100',
+        },
+        dark: {},
+    }
+
+    const inactiveButtonClasses = {
+        light: {
+            low: 'bg-light-low-icons bg-opacity-20 hover:bg-light-low-icons hover:bg-opacity-50',
+            mid: 'bg-light-mid-icons bg-opacity-20 hover:bg-light-mid-icons hover:bg-opacity-50',
+            high: 'bg-light-high-icons bg-opacity-20 hover:bg-light-high-icons hover:bg-opacity-50',
         },
         dark: {},
     };
@@ -107,17 +134,18 @@ export default function CollapsableRightSidebar() {
                 initial={{width: 40}}
                 animate={{width: expanded ? 220 : 40}}
                 transition={{type: 'spring', stiffness: 260, damping: 20}}
-                className={`fixed top-0 right-0 z-30 ${cardClasses[theme][stressPalette]} flex flex-col justify-between h-screen shadow-xl overflow-hidden py-6 pt-6`}
+                className={`fixed top-0 right-0 z-30 ${blankCardClasses[theme][stressPalette]} flex flex-col justify-between h-screen shadow-xl overflow-hidden py-6 pt-6`}
                 style={{ overflow: 'clip' }}
             >
-                <div className={`flex flex-col items-center w-full p-4 ${expanded ? 'gap-1' : 'gap-4'}`}>
+                <div className={`flex flex-col items-center w-full p-4 gap-3`}>
 
                     {/* focus button */}
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setFocusMode(!focusMode)}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                        ${focusMode ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                     >
                         <img
                             src={focusMode ? IMG.focus.active : IMG.focus.idle}
@@ -132,7 +160,7 @@ export default function CollapsableRightSidebar() {
                     </motion.button>
 
                     {expanded && (
-                        <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                        <span className={`flex gap-1 text-[0.6rem] transition-all duration-150 ${textBClasses[theme]}`}>
                             <Info className='w-2 h-2 mt-0.5 shrink-0'/>
                             Hides non-urgent items when stress is high. You can also activate it manually. 
                             <br/><br/>
@@ -144,7 +172,8 @@ export default function CollapsableRightSidebar() {
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setPriorityMode(!priorityMode)}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                        ${priorityMode ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                     >
                         <img
                             src={priorityMode ? IMG.priority.active : IMG.priority.idle}
@@ -158,7 +187,7 @@ export default function CollapsableRightSidebar() {
                     </motion.button>
 
                     {expanded && (
-                        <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                        <span className={`flex gap-1 text-[0.6rem] transition-all duration-150 ${textBClasses[theme]}`}>
                             <Info className='w-2 h-2 mt-0.5 shrink-0'/>
                             Shows your most important emails and tasks first. 
                             <br/><br/>
@@ -172,7 +201,8 @@ export default function CollapsableRightSidebar() {
                             whileTap={{scale: 0.95}}
                             onClick={() => {                            setSdkActive(!sdkActive)
                             }}
-                            className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                            className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                            ${sdkActive ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                         >
                             <img
                                 src={sdkActive ? IMG.stress.active : IMG.stress.idle}
@@ -186,7 +216,7 @@ export default function CollapsableRightSidebar() {
                         </motion.button>
 
                         {expanded && (
-                            <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                            <span className={`flex gap-1 text-[0.6rem] transition-all duration-150 ${textBClasses[theme]}`}>
                             <Info className='w-2 h-2 mt-0.5 shrink-0'/>
                                 Automatically estimates stress. <br/>
                                 If turned off, use the slider to set your stress level manually.
@@ -201,7 +231,7 @@ export default function CollapsableRightSidebar() {
                             className='w-full overflow-hidden'
                             style={{pointerEvents: expanded ? 'auto' : 'none'}}
                         >
-                            <label className='text-[0.6rem] font-semibold text-gray-500'>Stress Level: {emotionValue}</label>
+                            <label className={`text-[0.6rem] font-semibold ${textBClasses[theme]}`}>Stress Level: {emotionValue}</label>
                             <input
                                 type='range'
                                 min={0}
@@ -221,7 +251,8 @@ export default function CollapsableRightSidebar() {
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setBreatheMode(!breatheMode)}
-                        className={`flex items-center ${buttonClasses[theme][stressPalette]} bg-opacity-25 hover:bg-opacity-40 ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'}`}
+                        className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                        ${breatheMode ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                     >
                         <img
                             src={breatheMode ? IMG.breathe.active : IMG.breathe.idle}
@@ -235,7 +266,7 @@ export default function CollapsableRightSidebar() {
                     </motion.button>
 
                     {expanded && (
-                        <span className={`flex gap-1 text-[0.6rem] text-gray-500 transition-all duration-150`}>
+                        <span className={`flex gap-1 text-[0.6rem] transition-all duration-150 ${textBClasses[theme]}`}>
                             <Info className='w-2 h-2 mt-0.5 shrink-0'/>
                             Opens a short calming break to help you reset.
                         </span>

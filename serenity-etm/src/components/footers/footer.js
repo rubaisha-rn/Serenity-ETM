@@ -26,12 +26,17 @@ export default function Footer() {
             else setStressPalette('high');}
     }, [stress01]);
 
-    const bgClasses = {
+    const blankCardClasses = {
         light: {
-            low: 'bg-light-low-card',
-            mid: 'bg-light-mid-card',
-            high: 'bg-light-high-card',
+            low: 'bg-light-low-blankCard',
+            mid: 'bg-light-mid-blankCard',
+            high: 'bg-light-high-blankCard',
         },
+        dark: {},
+    };
+
+    const textClasses = {
+        light: 'text-light-textC',
         dark: {},
     };
 
@@ -39,7 +44,7 @@ export default function Footer() {
         <div className={`z-30 w-full
             flex flex-col items-center justify-center
             pt-12 pb-6 px-6 relative space-y-4
-            ${bgClasses[theme][stressPalette]}`}
+            ${blankCardClasses[theme][stressPalette]}`}
         >
             <div>
                 <Image
@@ -59,7 +64,7 @@ export default function Footer() {
                         onClick={() => {
                             router.push(link.href);
                         }}
-                        className="font-Roboto text-xs transition-opacity hover:opacity-50 text-light-textC"
+                        className={`font-Roboto text-xs transition-opacity hover:opacity-50 ${textClasses[theme]}`}
                     >
                         {link.label}
                     </button>
@@ -67,8 +72,8 @@ export default function Footer() {
             </div>
 
             <div className='w-full pt-8'>
-                <hr className='text-light-textA'/>
-                <p className='font-Roboto text-xs text-light-textC text-center mt-2'>© 2025, Serenity ETM. All right reserved.</p>
+                <hr className={`${textClasses[theme]}`} />
+                <p className={`'font-Roboto text-xs text-center mt-2 ${textClasses[theme]}`}>© 2025, Serenity ETM. All right reserved.</p>
             </div>
         </div>
     );
