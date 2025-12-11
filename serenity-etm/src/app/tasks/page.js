@@ -8,19 +8,38 @@ import PrototypeTag from '@/components/prototypeTag';
 import { useTaskStore } from "@/store/taskStore";
 import useStore from "@/store/useStore";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import AddTask from "@/components/tasks/addTask";
 
 export default function TasksPage() {
 
     const {tasks, toggleComplete} = useTaskStore();
-    const {emotionValue, focusMode, expandedSecondary, expandedMain} = useStore();
+    const {emotionValue, focusMode, expandedSecondary, expandedMain, showTasks} = useStore();
+    const [sorted, setSorted] = useState([]);
 
-    const filtered = tasks.filter((t) =>
-        focusMode ? t.priority === 'high' : true
-    );
+    useEffect(() => {
+        let results = tasks;
+        const today = new Date().toISOString().split('T')[0];
 
-    const sorted = focusMode
-        ? [...filtered].sort((a, b) => Number(a.completed) - Number(b.completed))
-        : filtered;
+        if(focusMode) {
+            results = results.filter((t) => t.priority === 'high');
+        }
+
+        if (showTasks === 'today') {
+            results = results.filter((t) => t.due === today);
+        }
+        else if (showTasks === 'completed') {
+            results = results.filter((t) => t.completed);
+        }
+        else if (showTasks === 'priority') {
+            results = results.filter((t) => t.priority === 'high');
+        }
+        else if (showTasks === 'upcoming') {
+            results = results.filter((t) => t.due >= today);
+        }
+
+        setSorted(results);
+    }, [tasks, showTasks, focusMode]);
 
     const mainWidth = expandedMain ? 220 : 40;
     const secondaryWidth = expandedSecondary ? 200 : 40;
@@ -48,6 +67,8 @@ export default function TasksPage() {
                 <motion.div className='space y-3 transition-all duration-300'
                     style={{marginLeft: contentMargin}}
                 >
+                    <AddTask />
+
                     {focusMode && (
                         <div className="p-3 rounded-xl bg-red-100 text-red-800 text-sm">
                             Smart Focus Mode: Showing only urgent tasks.

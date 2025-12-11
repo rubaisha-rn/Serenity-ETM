@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import useStore from "@/store/useStore";
 
-const MIN_INTERVAL_MS = 10 * 1000; // 10s
-const MAX_INTERVAL_MS = 20 * 1000; // 20s
+const MIN_INTERVAL_MS = 1 * 60 * 1000; // 1min
+const MAX_INTERVAL_MS = 5 * 60 * 1000; // 5min
 const TRANSITION_MS = 500; // 5ms
-const FOCUS_DURATION_MS = 1 * 60 * 1000;
+const FOCUS_DURATION_MS = 15 * 60 * 1000; // 15mins
 
 export default function useStressDetector() {
     const sdkActive = useStore((state) => state.sdkActive);

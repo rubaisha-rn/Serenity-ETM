@@ -26,8 +26,11 @@ const useStore = create((set) => ({
     expandedMain: false,
     setExpandedMain: (expandedMain) => set({expandedMain}), 
 
-    expandedSecondary: false,
+    expandedSecondary: true,
     setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}), 
+
+    showTasks: 'all',
+    setShowTasks: (showTasks) => set({showTasks}),
 
     sdkActive: true,
     setSdkActive: (value) => set({ sdkActive: value }),

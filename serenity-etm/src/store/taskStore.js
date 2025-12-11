@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 export const useTaskStore = create((set) => ({
+    
     tasks: [
         {
             id: '1',
@@ -24,13 +25,13 @@ export const useTaskStore = create((set) => ({
             created: '10-12-2025',
             due: '02-01-2026',
             priority: 'medium',
-            completed: false,
+            completed: true,
         },
     ],
 
     addTask: (task) => 
         set ((state) => ({
-            tasks: [...state.tasks, {...task, id:crypto.randomUUID()}],
+            tasks: [...state.tasks, task],
         })),
 
     toggleComplete: (id) => 

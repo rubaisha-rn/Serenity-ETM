@@ -92,7 +92,7 @@ export default function CollapsableRightSidebar() {
                 animate={{right: expanded ? 202 : 22}}
                 transition={{duration: 0.25, ease: 'easeInOut'}}
                 onClick={() => setExpanded(!expanded)}
-                className={`fixed bottom-2 z-20 ${accClasses[theme][stressPalette]} shadow-xl p-1.5 pr-6 rounded-full`}
+                className={`fixed bottom-2 z-10 ${accClasses[theme][stressPalette]} shadow-xl p-1.5 pr-6 rounded-full`}
             >
                 <img
                     src='/icons/backw.png'
@@ -199,6 +199,7 @@ export default function CollapsableRightSidebar() {
                             animate={{ height: expanded ? 90 : 0, opacity: expanded ? 1 : 0 }}
                             transition={{duration: 0.25}}
                             className='w-full overflow-hidden'
+                            style={{pointerEvents: expanded ? 'auto' : 'none'}}
                         >
                             <label className='text-[0.6rem] font-semibold text-gray-500'>Stress Level: {emotionValue}</label>
                             <input
