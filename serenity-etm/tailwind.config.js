@@ -14,8 +14,8 @@ module.exports = {
             colors: {
                 light: {
                     low: {
-                        bg: '#f6f7f9',
-                        card: '#ffffff',
+                        bg: '#fcf9f4',
+                        card: '#fcfaf7',
                         blankCard: '#fcfcfc',
                         a: '#deb6ab',
                         b: '#f2e1a6',
@@ -25,7 +25,7 @@ module.exports = {
                         accHover: '#5a4744',
                     },
                     mid: {
-                        bg: '#ecebe8',
+                        bg: '#e8eaec',
                         card: '#f4f7fa',
                         blankCard: '#f8fbff',
                         a: '#b6d8e8',
@@ -37,7 +37,7 @@ module.exports = {
                     },
                     high: {
                         bg: '#f9fafc',
-                        card: '#ffffff',
+                        card: '#fbf9ff',
                         blankCard: '#fcfaff',
                         a: '#b8beeb',
                         b: '#cfe6df',

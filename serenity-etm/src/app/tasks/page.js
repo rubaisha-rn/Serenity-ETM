@@ -87,10 +87,43 @@ export default function TasksPage() {
         dark: {},
     };
 
+    const cardClasses = {
+        light: {
+            low: 'bg-light-low-blankCard',
+            mid: 'bg-light-mid-card',
+            high: 'bg-light-high-card',
+        },
+        dark: {},
+    };
+
+    const textAClasses = {
+        light: 'text-light-textA',
+        dark: '',
+    };
+
+    const textBClasses = {
+        light: 'text-light-textB',
+        dark: '',
+    };
+
+    const textCClasses = {
+        light: 'text-light-textC',
+        dark: '',
+    };
+
+    const completedTasksClasses = {
+        light: {
+            low: 'bg-light-low-icons bg-opacity-20',
+            mid: 'bg-light-mid-icons bg-opacity-20',
+            high: 'bg-light-high-icons bg-opacity-20',
+        },
+        dark: {},
+    }
+
     return (
         <div className={`${bgClasses[theme][stressPalette]} relative h-screen`}>
 
-            {/* <PrototypeTag/> */}
+            <PrototypeTag/>
             
             <Header
                 title="Serenity ETM"
@@ -106,7 +139,7 @@ export default function TasksPage() {
 
             <AppShell>
 
-                <motion.div className='space y-3 transition-all duration-300'
+                <motion.div className='space y-3 transition-all duration-300 mr-10'
                     initial='hidden'
                     animate='visible'
                     variants={{
@@ -119,48 +152,60 @@ export default function TasksPage() {
                     }}
                     style={{marginLeft: contentMargin}}
                 >
-                    <AddTask />
+                    <div className="absolute bottom-2 right-100 z-30">
+                        <AddTask />
+                    </div>
 
-                    {focusMode && (
-                        <div className="p-3 rounded-xl bg-red-100 text-red-800 text-sm">
-                            Smart Focus Mode: Showing only urgent tasks.
-                        </div>
-                    )}
+                    <div className={`w-full flex-1 px-4 py-6 ${cardClasses[theme][stressPalette]} shadow-xl relative rounded-lg`}>
 
-                    <AnimatePresence>
-                        {sorted.map((task) => (
-                            <motion.div
-                                key={task.id}
-                                layout
-                                layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
-                                initial={{opacity: 0, y:10}}
-                                animate={{opacity: 1, 
-                                    y: 0,
-                                    scale: task.completed ? 0.95 : 1,
-                                    backgroundColor: task.completed ? '#d1fae5' : '#ffffff',
-                                }}
-                                exit={{opacity: 0, y: -10}}
-                                transition={{duration: 0.3}}
-                                className="p-4 bg-white rounded-xl shadow flex items-center justify-between"
-                            >
-                                <div>
-                                    <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
-                                        {task.title}
-                                    </p>
-                                    <p className="text-xs text-gray-500">Due: {task.due}</p>
-                                </div>
+                        <h1 className={`${textCClasses[theme]} font-Roboto font-bold my-2`}>My Tasks</h1>
 
-                                <motion.button
-                                    onClick={() => toggleComplete(task.id)}
-                                    animate={{scale: task.completed ? 0.9 : 1}}
-                                    transition={{type: 'spring', stiffness: 300, damping: 20}}
-                                    className="px-3 py-1 text-sm rounded-md bg-gray-200 hover:bg-gray-300"
+                        <AnimatePresence>
+                            {sorted.map((task) => (
+                                <motion.div
+                                    key={task.id}
+                                    layout
+                                    layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
+                                    initial={{opacity: 0, y:10}}
+                                    animate={{opacity: 1, 
+                                        y: 0,
+                                        scale: task.completed ? 0.95 : 1,
+                                    }}
+                                    exit={{opacity: 0, y: -10}}
+                                    transition={{duration: 0.3}}
+                                    className={`p-4 rounded-xl shadow flex ${task.completed ? `${completedTasksClasses[theme][stressPalette]}` : 'bg-white-200'}`}
                                 >
-                                    {task.completed ? 'Undo' : 'Done'}
-                                </motion.button>
-                            </motion.div>
-                        ))}
-                    </AnimatePresence>
+
+                                    <div className={`flex-1`}>
+                                        <input
+                                            type='checkbox'
+                                            id='accept'
+                                            checked={task.completed}
+                                            onChange={() => toggleComplete(task.id)}
+                                            className='w-4 h-4 accent-blue-500'
+                                        />
+                                    </div>
+                                    <div className={`flex-3 text-left`}>
+                                        <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            {task.title}
+                                        </p>
+                                    </div>
+                                    <div className={`flex-1`}>
+                                        <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            {task.due}
+                                        </p>
+                                    </div>
+                                    <div className={`flex-1`}>
+                                        <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            {task.priority}
+                                        </p>
+                                    </div>
+                                    
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>  
+
+                    </div>
                 </motion.div>
 
             </AppShell>

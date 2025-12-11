@@ -4,8 +4,11 @@ import { useState, useEffect, use } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useStore from "@/store/useStore";
 import { useTaskStore } from "@/store/taskStore";
+import { useRouter } from "next/navigation";
 
 export default function AddTask() {
+
+    const router = useRouter();
 
     const {emotionValue} = useStore();
     const {addTask} = useTaskStore();
@@ -137,6 +140,7 @@ export default function AddTask() {
                             <div className="flex justify-end gap-3 mt-5">
                                 <button
                                     className="px-3 py-1 text-sm bg-gray-200 rounded-md"
+                                    onClick={() => setOpen(false)}
                                 >
                                     Cancel
                                 </button>

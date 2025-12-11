@@ -51,15 +51,9 @@ export default function SecondarySidebar() {
             <div className="flex flex-col gap-3">
 
                 {expandedSecondary && (
-                    <div className="flex flex-row items-center gap-1">
-                    
-                        <div className="w-4 h-3.5 opacity-70">
-                            <img
-                                src="/logo/logo.png"
-                            />
-                        </div>
+                    <div className="flex items-center p-2">
 
-                        <h1 className={`font-Roboto text-sm font-bold ${textClasses[theme]} opacity-70`}>
+                        <h1 className={`text-md ${textClasses[theme]} opacity-70`}>
                             Task Manager
                         </h1>
 

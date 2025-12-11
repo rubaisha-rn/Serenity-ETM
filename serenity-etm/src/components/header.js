@@ -62,7 +62,7 @@ export default function Header({
             z-50 h-8 w-full
             grid grid-cols-3 items-center 
             px-12
-            shadow-4-xl
+            shadow-lg
             ${transparent ? 'backdrop-blur-xl' : `${blankCardClasses[theme][stressPalette]}`}
             transition-all duration-500
             ${sticky ? 'sticky top-0' : ''}
