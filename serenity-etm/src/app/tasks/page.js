@@ -40,9 +40,20 @@ export default function TasksPage() {
             if (focusMode) {
                 results = results.filter((t) => t.priority === 'high').slice(0,3);
             }
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const tomorrow = new Date(today);
+            today.setDate(today.getDate() + 1);
             
             if (showTasks === 'today') {
-                results = results.filter((t) => t.due === today);
+                results = results.filter((t) => {
+                    if (!t.due) return false;
+                    const [day, month, year] = t.due.split('-');
+                    const taskDate = new Date(`${year}-${month}-${day}`);
+                    return taskDate >= today && taskDate < tomorrow;
+                });
             }
             else if (showTasks === 'completed') {
                 results = results.filter((t) => t.completed);
@@ -51,7 +62,13 @@ export default function TasksPage() {
                 results = results.filter((t) => t.priority === 'high');
             }
             else if (showTasks === 'upcoming') {
-                results = results.filter((t) => t.due >= today);
+                results = results.filter((t) => {
+                    if (!t.due) return false;
+                    const [day, month, year] = t.due.split('-');
+                    const taskDate = new Date(`${year}-${month}-${day}`);
+                    taskDate.setHours(0, 0, 0, 0);
+                    return taskDate.getTime() >= today.getTime();
+                });
             }
         }
         results.sort(sortTasks);
@@ -160,49 +177,77 @@ export default function TasksPage() {
 
                         <h1 className={`${textCClasses[theme]} font-Roboto font-bold my-2`}>My Tasks</h1>
 
-                        <AnimatePresence>
-                            {sorted.map((task) => (
-                                <motion.div
-                                    key={task.id}
-                                    layout
-                                    layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
-                                    initial={{opacity: 0, y:10}}
-                                    animate={{opacity: 1, 
-                                        y: 0,
-                                        scale: task.completed ? 0.95 : 1,
-                                    }}
-                                    exit={{opacity: 0, y: -10}}
-                                    transition={{duration: 0.3}}
-                                    className={`p-4 rounded-xl shadow flex ${task.completed ? `${completedTasksClasses[theme][stressPalette]}` : 'bg-white-200'}`}
-                                >
+                        <div className="grid grid-cols-[40px_3fr_100px_100px] gap-4 items-center text-left">
+                            <div>
+                                <p className="text-xs">Tasks</p>
+                            </div>
+                            <div/>
+                            <div>
+                                <p className="text-xs">Due Date</p>
+                            </div>
+                            <div>
+                                <p className="text-xs">Priority</p>
+                            </div>
+                        </div>
 
-                                    <div className={`flex-1`}>
-                                        <input
-                                            type='checkbox'
-                                            id='accept'
-                                            checked={task.completed}
-                                            onChange={() => toggleComplete(task.id)}
-                                            className='w-4 h-4 accent-blue-500'
-                                        />
-                                    </div>
-                                    <div className={`flex-3 text-left`}>
-                                        <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
-                                            {task.title}
-                                        </p>
-                                    </div>
-                                    <div className={`flex-1`}>
-                                        <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
-                                            {task.due}
-                                        </p>
-                                    </div>
-                                    <div className={`flex-1`}>
-                                        <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
-                                            {task.priority}
-                                        </p>
-                                    </div>
-                                    
-                                </motion.div>
-                            ))}
+                        <AnimatePresence>
+                            {sorted.map((task) => {
+                                
+                                const formattedDate = (() => {
+                                    if (!task.due) return '';
+                                    const [day, month, year] = task.due.split('-');
+                                    if (!day || !month || !year) return '';
+                                    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                                    return `${monthNames[parseInt(month, 10) -1]} ${parseInt(day, 10)}`
+                                })();
+
+                                return (
+                                    <motion.div
+                                        key={task.id}
+                                        layout
+                                        layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
+                                        initial={{opacity: 0, y:10}}
+                                        animate={{opacity: 1, 
+                                            y: 0,
+                                            scale: task.completed ? 0.95 : 1,
+                                        }}
+                                        exit={{opacity: 0, y: -10}}
+                                        transition={{duration: 0.3}}
+                                        className={`p-4 rounded-xl shadow
+                                        grid grid-cols-[40px_3fr_100px_100px] gap-4 items-center text-left ${task.completed ? `${completedTasksClasses[theme][stressPalette]}` : 'bg-white-200'}`}
+                                    >
+
+                                        <div>
+                                            <input
+                                                type='checkbox'
+                                                id='accept'
+                                                checked={task.completed}
+                                                onChange={() => toggleComplete(task.id)}
+                                                className='w-4 h-4 accent-blue-500'
+                                            />
+                                        </div>
+                                        <div>
+                                            <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                                {task.title}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                                {formattedDate}
+                                            </p>
+                                        </div>
+                                        <div className={`rounded-sm text-black text-sm p-0.5 text-center 
+                                            ${task.priority === 'high' ? 'bg-red-500 bg-opacity-30' : ''}
+                                            ${task.priority === 'medium' ? 'bg-yellow-300 bg-opacity-30' : ''}
+                                            ${task.priority === 'low' ? 'bg-green-300 bg-opacity-30' : ''}`}>
+                                            <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                                {task.priority}
+                                            </p>
+                                        </div>
+                                        
+                                    </motion.div>
+                                )
+                            })}
                         </AnimatePresence>  
 
                     </div>
