@@ -10,6 +10,7 @@ import useStore from "@/store/useStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
+import ModeBanner from "@/components/modeBanner";
 
 export default function TasksPage() {
 
@@ -152,6 +153,8 @@ export default function TasksPage() {
                 />}
                 sticky
             />
+
+            <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
 
             <AppShell>
 

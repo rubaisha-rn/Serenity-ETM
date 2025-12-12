@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useEmailStore } from "@/store/emailStore";
 import EmailReader from "@/components/emails/emailReader";
+import ModeBanner from "@/components/modeBanner";
 
 export default function EmailsPage () {
 
@@ -139,6 +140,7 @@ export default function EmailsPage () {
             />
 
             <PrototypeTag/>
+            <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
             
             <AppShell>
                 
