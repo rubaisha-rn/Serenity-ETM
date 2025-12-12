@@ -84,7 +84,7 @@ export default function AddTask() {
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
                 onClick={() => setOpen(true)}
-                className={`px-4 py-2 rounded-lg ${palette.acc[theme][stressPalette]} text-sm`}
+                className={`px-4 py-2 rounded-lg ${palette.acc[theme][stressPalette]} text-sm text-white`}
             >
                 + Add Task
             </motion.button>

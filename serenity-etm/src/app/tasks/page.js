@@ -45,13 +45,12 @@ export default function TasksPage() {
             today.setHours(0, 0, 0, 0);
 
             const tomorrow = new Date(today);
-            today.setDate(today.getDate() + 1);
+            tomorrow.setDate(today.getDate() + 1);
             
             if (showTasks === 'today') {
                 results = results.filter((t) => {
-                    if (!t.due) return false;
-                    const [day, month, year] = t.due.split('-');
-                    const taskDate = new Date(`${year}-${month}-${day}`);
+                    const taskDate = parseDDMMYYYY(t.due);
+                    if(!taskDate) return false;
                     return taskDate >= today && taskDate < tomorrow;
                 });
             }
@@ -63,11 +62,9 @@ export default function TasksPage() {
             }
             else if (showTasks === 'upcoming') {
                 results = results.filter((t) => {
-                    if (!t.due) return false;
-                    const [day, month, year] = t.due.split('-');
-                    const taskDate = new Date(`${year}-${month}-${day}`);
-                    taskDate.setHours(0, 0, 0, 0);
-                    return taskDate.getTime() >= today.getTime();
+                    const taskDate = parseDDMMYYYY(t.due);
+                    if(!taskDate) return false;
+                    return taskDate >= today;
                 });
             }
         }
@@ -169,7 +166,7 @@ export default function TasksPage() {
                     }}
                     style={{marginLeft: contentMargin}}
                 >
-                    <div className="absolute bottom-2 right-100 z-30">
+                    <div className="mb-6">
                         <AddTask />
                     </div>
 
@@ -213,8 +210,8 @@ export default function TasksPage() {
                                         }}
                                         exit={{opacity: 0, y: -10}}
                                         transition={{duration: 0.3}}
-                                        className={`p-4 rounded-xl shadow
-                                        grid grid-cols-[40px_3fr_100px_100px] gap-4 items-center text-left ${task.completed ? `${completedTasksClasses[theme][stressPalette]}` : 'bg-white-200'}`}
+                                        className={`p-3 rounded-xl shadow
+                                        grid grid-cols-[40px_3fr_100px_100px] gap-4 mb-1 items-center text-left ${task.completed ? `${completedTasksClasses[theme][stressPalette]}` : 'bg-white'}`}
                                     >
 
                                         <div>
@@ -227,12 +224,12 @@ export default function TasksPage() {
                                             />
                                         </div>
                                         <div>
-                                            <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            <p className={`text-sm ${task.completed ? 'line-through text-gray-400' : ''}`}>
                                                 {task.title}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            <p className={`text-sm ${task.completed ? 'line-through text-gray-400' : ''}`}>
                                                 {formattedDate}
                                             </p>
                                         </div>
@@ -270,11 +267,15 @@ function sortTasks(a, b) {
         return priorityOrder[b.priority] - priorityOrder[a.priority];
     }
 
-    const dateA = new Date(a.due).getTime();
-    const dateB = new Date(b.due).getTime();
+    const dateA = parseDDMMYYYY(a.due)?.getTime() ?? Infinity;
+    const dateB = parseDDMMYYYY(b.due)?.getTime() ?? Infinity;
     if (dateA !== dateB) return dateA-dateB;
 
-    if(a.completed !== b.completed) return a.completed ? 1 : -1;
+    return dateA - dateB;
+}
 
-    return 0;
+function parseDDMMYYYY(dateStr) {
+    if (!dateStr) return null;
+    const [day, month, year] = dateStr.split('-').map(Number);
+    return new Date(year, month-1, day);
 }
