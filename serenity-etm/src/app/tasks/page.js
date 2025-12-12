@@ -18,19 +18,19 @@ export default function TasksPage() {
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
+
         let results = tasks;
-        const today = new Date().toISOString().split('T')[0];
 
         if(emotionValue > 70) {
 
             setFocusMode(true);
             results = results.filter((t) => t.priority === 'high').slice(0,3);
-            results = results.sort(sortTasks);
 
         } else {
 
             if (priorityMode) {
-                results = results.filter((t) => t.priority === 'high');
+                // results = results.filter((t) => t.priority !== 'low');
+                results = [...results].sort((a,b) => sortTasks(a, b, priorityMode));
             }
 
             if (emotionValue >= 50 && emotionValue <= 70) {
@@ -68,8 +68,10 @@ export default function TasksPage() {
                 });
             }
         }
-        results.sort(sortTasks);
+
+        results = [...results].sort((a,b) => sortTasks(a, b, priorityMode));
         setSorted(results);
+    
     }, [tasks, showTasks, focusMode, priorityMode, emotionValue]);
 
     const mainWidth = expandedMain ? 220 : 40;
@@ -258,24 +260,52 @@ export default function TasksPage() {
     );
 }
 
-function sortTasks(a, b) {
+function sortTasks(a, b, priorityMode) {
     const priorityOrder = {high: 3, medium: 2, low: 1};
 
+    // completed status
     if (a.completed !== b.completed) return a.completed ? 1 : -1;
 
-    if (priorityOrder[b.priority] !== priorityOrder[a.priority]) {
-        return priorityOrder[b.priority] - priorityOrder[a.priority];
-    }
-
+    // parse sort
     const dateA = parseDDMMYYYY(a.due)?.getTime() ?? Infinity;
     const dateB = parseDDMMYYYY(b.due)?.getTime() ?? Infinity;
-    if (dateA !== dateB) return dateA-dateB;
 
-    return dateA - dateB;
+    // priority numbers
+    const pA = priorityOrder[a.priority] || 0;
+    const pB = priorityOrder[b.priority] || 0;
+
+    // priority mode on
+    if(priorityMode) {
+
+        if (pA !== pB) return pB - pA;
+        if (dateA !== dateB) return dateA - dateB;
+        return 0;
+    } 
+    else {
+        
+        if (dateA !== dateB) return dateA - dateB;
+        if (pA !== pB) return pB - pA;
+        return 0;
+    }
 }
 
 function parseDDMMYYYY(dateStr) {
     if (!dateStr) return null;
-    const [day, month, year] = dateStr.split('-').map(Number);
+
+    const clean = dateStr.trim();
+    const parts = clean.split('-');
+
+    if(parts.length !== 3) return null;
+
+    let [day, month, year] = parts.map(p => p.trim());
+
+    if (year.length === 2) {
+        year = '20' + year;
+    }
+
+    day = Number(day);
+    month = Number(month);
+    year = Number(year);
+
     return new Date(year, month-1, day);
 }
