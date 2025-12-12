@@ -170,7 +170,7 @@ export default function IntroPage() {
                                     ? `${buttonClasses[theme][stressPalette]} text-white cursor-pointer`
                                     : `${buttonClasses[theme][stressPalette]} text-white opacity-40 pointer-events-none cursor-not-allowed`
                                 }`}
-                                onClick={() => router.push('/tasks')}
+                                onClick={() => router.push('/emails')}
                             >
                                 Enter Serenity Workplace
                             </button>

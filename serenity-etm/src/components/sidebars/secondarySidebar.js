@@ -2,12 +2,15 @@
 
 import { motion } from "framer-motion";
 import useStore from "@/store/useStore";
+import { useEmailStore } from "@/store/emailStore";
 import { useEffect, useState } from "react";
 import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
     const {screen, emotionValue, expandedSecondary, expandedMain, setShowTasks} = useStore();
+
+    const {setShowEmails} = useEmailStore();
 
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
@@ -54,7 +57,7 @@ export default function SecondarySidebar() {
                     <div className="flex items-center p-2">
 
                         <h1 className={`text-md ${textClasses[theme]} opacity-70`}>
-                            Task Manager
+                            {screen === 'emails' ? 'Email Manager' : 'Task Manager'}
                         </h1>
 
                     </div>
@@ -73,7 +76,7 @@ export default function SecondarySidebar() {
                         expandedSecondary={expandedSecondary}
                         theme={theme}
                         stressPalette={stressPalette}
-                        setShowTasks={setShowTasks}
+                        setShowEmails={setShowEmails}
                     />
                 )}
             </div>

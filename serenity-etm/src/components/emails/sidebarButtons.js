@@ -1,11 +1,11 @@
 'use client';
 
 import { motion } from "framer-motion";
-import useStore from "@/store/useStore";
+import { useEmailStore } from "@/store/emailStore";
 
-export default function TasksSidebarButton({label, shortLabel, icon, expanded, theme, stressPalette, onClick}) {
+export default function EmailsSidebarButton({label, shortLabel, icon, expanded, theme, stressPalette, onClick}) {
 
-    const {showTasks} = useStore();
+    const {showEmails} = useEmailStore();
 
     const textClasses = {
         light: 'text-light-textA',
@@ -34,7 +34,7 @@ export default function TasksSidebarButton({label, shortLabel, icon, expanded, t
         <motion.button
             whileHover={{scale: 1.05}}
             whileTap={{scale: 0.95}}
-            className={`flex items-center w-full rounded-md ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 justify-center rounded-md'} ${showTasks === shortLabel ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
+            className={`flex items-center w-full rounded-md ${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 justify-center rounded-md'} ${showEmails === shortLabel ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
             onClick={onClick}
         >
             <img src={icon} className="w-5 h-5 opacity-80 shrink-0 m-1.5" />

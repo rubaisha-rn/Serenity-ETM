@@ -20,7 +20,7 @@ const useStore = create((set) => ({
     breatheMode: false,
     setBreatheMode: (value) => set({ breatheMode: value }),
 
-    screen: 'tasks',
+    screen: 'emails',
     setScreen: (screen) => set({screen}),
 
     expandedMain: false,
