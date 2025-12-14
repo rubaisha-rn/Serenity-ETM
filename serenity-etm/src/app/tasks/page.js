@@ -12,11 +12,12 @@ import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
 import ModeBanner from "@/components/modeBanner";
 import BreakPopup from "@/components/breakPopup";
+import CalmOverlay from "@/components/calmOverlay";
 
 export default function TasksPage() {
 
     const {tasks, toggleComplete, completedTasksCount, setCompletedTasksCount} = useTaskStore();
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks, calmMode} = useStore();
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
@@ -164,6 +165,23 @@ export default function TasksPage() {
                     onAcknowledge={() => setCompletedTasksCount(0)}
                 />
             )}
+
+            <AnimatePresence>
+                {calmMode && (
+                    <motion.div
+                        key='calm-overlay-wrapper'
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{ duration: 0.6, ease: 'easeInOut'}}
+                        className="fixed inset-0 bg-black bg-opacity-40 z-[9999] pointer-events-auto"
+                    >
+                        <div className="absolute inset-0 pointer-events-none">
+                            <CalmOverlay />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <AppShell>
 

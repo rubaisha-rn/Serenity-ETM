@@ -12,12 +12,13 @@ import { useEmailStore } from "@/store/emailStore";
 import EmailReader from "@/components/emails/emailReader";
 import ModeBanner from "@/components/modeBanner";
 import BreakPopup from "@/components/breakPopup";
+import CalmOverlay from "@/components/calmOverlay";
 
 export default function EmailsPage () {
 
     const {emails, showEmails, toggleStar, setSelectedEmail, markAsRead, readEmailCount, setReadEmailCount} = useEmailStore();
 
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, calmMode} = useStore();
 
     const mainWidth = expandedMain ? 220 : 40;
     const secondaryWidth = expandedSecondary ? 200 : 40;
@@ -150,6 +151,23 @@ export default function EmailsPage () {
                     onAcknowledge={() => setReadEmailCount(0)}
                 />
             )}
+
+            <AnimatePresence>
+                {calmMode && (
+                    <motion.div
+                        key='calm-overlay-wrapper'
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{ duration: 0.6, ease: 'easeInOut'}}
+                        className="fixed inset-0 bg-black bg-opacity-40 z-[9999] pointer-events-auto"
+                    >
+                        <div className="absolute inset-0 pointer-events-none">
+                            <CalmOverlay />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             
             <AppShell>
                 

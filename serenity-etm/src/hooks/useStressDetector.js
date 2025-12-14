@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import useStore from "@/store/useStore";
 
+const LICENSE_KEY = '';
+
 const MIN_INTERVAL_MS = 1 * 60 * 1000; // 1min
 const MAX_INTERVAL_MS = 5 * 60 * 1000; // 5min
 const TRANSITION_MS = 500; // 5ms
@@ -69,7 +71,7 @@ export default function useStressDetector() {
                 CYInstance = CY;
 
                 const loader = await CY.loader()
-                    .licenseKey("sk6d1bdc4e0b38fecf4215452600f59abd8d710358d338")
+                    .licenseKey(LICENSE_KEY)
                     .addModule(CY.modules().FACE_AROUSAL_VALENCE.name, { smoothness: 0.7 })
                     .addModule(CY.modules().FACE_EMOTION.name, { smoothness: 0.4 })
                     .addModule(CY.modules().FACE_ATTENTION.name, { smoothness: 0.8 })

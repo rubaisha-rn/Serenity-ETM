@@ -18,9 +18,9 @@ const IMG = {
         idle: '/icons/stress/stress.png',
         active: '/icons/stress/stressON.png',
     },
-    breathe: {
-        idle: '/icons/breathe/breathe.png',
-        active: '/icons/breathe/breatheON.png',
+    calm: {
+        idle: '/icons/calm/calm.png',
+        active: '/icons/calm/calmON.png',
     },
 }
 
@@ -28,7 +28,7 @@ export default function CollapsableRightSidebar() {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, breatheMode, setBreatheMode} = useStore();
+    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode} = useStore();
     
     const stress01 = emotionValue / 100;
     const [stressPalette, setStressPalette] = useState('low');
@@ -144,7 +144,7 @@ export default function CollapsableRightSidebar() {
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setFocusMode(!focusMode)}
-                        className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                        className={`flex items-center ${expanded ? 'gap-2 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
                         ${focusMode ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                     >
                         <img
@@ -172,7 +172,7 @@ export default function CollapsableRightSidebar() {
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
                         onClick={() => setPriorityMode(!priorityMode)}
-                        className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                        className={`flex items-center ${expanded ? 'gap-2 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
                         ${priorityMode ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                     >
                         <img
@@ -201,7 +201,7 @@ export default function CollapsableRightSidebar() {
                             whileTap={{scale: 0.95}}
                             onClick={() => {                            setSdkActive(!sdkActive)
                             }}
-                            className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                            className={`flex items-center ${expanded ? 'gap-2 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
                             ${sdkActive ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                         >
                             <img
@@ -245,23 +245,23 @@ export default function CollapsableRightSidebar() {
                     </div>  
                 </div>
 
-                {/* breathe button */}
+                {/* calm button */}
                 <div className={`flex ${expanded ? 'flex-col' : ''} justify-center px-4 gap-1`}>
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
-                        onClick={() => setBreatheMode(!breatheMode)}
-                        className={`flex items-center $${expanded ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
-                        ${breatheMode ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
+                        onClick={() => setCalmMode(!calmMode)}
+                        className={`flex items-center ${expanded ? 'gap-2 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-md'}
+                        ${calmMode ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`}`}
                     >
                         <img
-                            src={breatheMode ? IMG.breathe.active : IMG.breathe.idle}
-                            alt='breathe button'
+                            src={calmMode ? IMG.calm.active : IMG.calm.idle}
+                            alt='calm button'
                             className='w-6 h-6 opacity-80 shrink-0'
                         />
                         
                         <span className={`${textAClasses[theme]} text-sm whitespace-nowrap transition-all duration-150 ${expanded? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
-                            Breathe
+                            Calm Overlay
                         </span>
                     </motion.button>
 

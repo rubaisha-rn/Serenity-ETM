@@ -17,8 +17,8 @@ const useStore = create((set) => ({
     priorityMode: false,
     setPriorityMode: (value) => set({ priorityMode: value }),
 
-    breatheMode: false,
-    setBreatheMode: (value) => set({ breatheMode: value }),
+    calmMode: false,
+    setCalmMode: (value) => set({ calmMode: value }),
 
     screen: 'emails',
     setScreen: (screen) => set({screen}),
