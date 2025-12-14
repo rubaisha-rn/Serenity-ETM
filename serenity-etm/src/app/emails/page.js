@@ -11,10 +11,11 @@ import { useEffect, useState } from "react";
 import { useEmailStore } from "@/store/emailStore";
 import EmailReader from "@/components/emails/emailReader";
 import ModeBanner from "@/components/modeBanner";
+import BreakPopup from "@/components/breakPopup";
 
 export default function EmailsPage () {
 
-    const {emails, showEmails, toggleStar, setSelectedEmail, markAsRead} = useEmailStore();
+    const {emails, showEmails, toggleStar, setSelectedEmail, markAsRead, readEmailCount, setReadEmailCount} = useEmailStore();
 
     const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain} = useStore();
 
@@ -141,6 +142,14 @@ export default function EmailsPage () {
 
             <PrototypeTag/>
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
+
+            {readEmailCount >= 5 && emotionValue >= 70 && (
+                <BreakPopup
+                    scenario= 'emails'
+                    durationMs={20000}
+                    onAcknowledge={() => setReadEmailCount(0)}
+                />
+            )}
             
             <AppShell>
                 
@@ -174,6 +183,7 @@ export default function EmailsPage () {
                                     onClick={() => {
                                         setSelectedEmail(mail)
                                         markAsRead(mail.id)
+                                        setReadEmailCount(readEmailCount+1)
                                     }}
                                 >
                                     <div>

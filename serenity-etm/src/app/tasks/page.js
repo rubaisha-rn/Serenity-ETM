@@ -11,10 +11,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
 import ModeBanner from "@/components/modeBanner";
+import BreakPopup from "@/components/breakPopup";
 
 export default function TasksPage() {
 
-    const {tasks, toggleComplete} = useTaskStore();
+    const {tasks, toggleComplete, completedTasksCount, setCompletedTasksCount} = useTaskStore();
     const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks} = useStore();
     const [sorted, setSorted] = useState([]);
 
@@ -156,6 +157,14 @@ export default function TasksPage() {
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
 
+            {completedTasksCount >= 3 && emotionValue >= 70 && (
+                <BreakPopup
+                    scenario= 'tasks'
+                    durationMs={20000}
+                    onAcknowledge={() => setCompletedTasksCount(0)}
+                />
+            )}
+
             <AppShell>
 
                 <motion.div className='space y-3 transition-all duration-300 mr-10'
@@ -224,7 +233,10 @@ export default function TasksPage() {
                                                 type='checkbox'
                                                 id='accept'
                                                 checked={task.completed}
-                                                onChange={() => toggleComplete(task.id)}
+                                                onChange={() => {
+                                                    toggleComplete(task.id)
+                                                    setCompletedTasksCount(completedTasksCount+1)
+                                                }}
                                                 className='w-4 h-4 accent-blue-500'
                                             />
                                         </div>

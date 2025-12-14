@@ -87,4 +87,7 @@ export const useTaskStore = create((set) => ({
                 t.id === id ? {...t, ...updated} : t
             ),
         })),
+
+    completedTasksCount: 0,
+    setCompletedTasksCount: (count) => set({completedTasksCount: count}),
 }));

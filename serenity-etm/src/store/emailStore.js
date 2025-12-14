@@ -46,7 +46,7 @@ export const useEmailStore = create((set) => ({
             body: 'Make sure your slides are ready for the meeting tomorrow morning.',
             starred: true,
             priority: 'normal',
-            folder: 'archive',
+            folder: 'inbox',
             read: false,
             timestamp: '2025-01-12T23:38:59.124Z',
         },
@@ -58,7 +58,7 @@ export const useEmailStore = create((set) => ({
             body: 'Make sure your slides are ready for the meeting tomorrow morning.',
             starred: true,
             priority: 'normal',
-            folder: 'sent',
+            folder: 'inbox',
             read: false,
             timestamp: '2025-01-12T23:38:59.124Z',
         },
@@ -116,4 +116,7 @@ export const useEmailStore = create((set) => ({
                 },
             ],
         })),
+
+    readEmailCount: 0,
+    setReadEmailCount: (count) => set({readEmailCount: count}),
 }))

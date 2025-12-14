@@ -160,7 +160,10 @@ export default function CollapsableLeftSidebar() {
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
-                        onClick={() => setScreen('tasks')}
+                        onClick={() => {
+                            setScreen('tasks')
+                            router.push('/tasks')
+                        }}
                         className={`flex items-center 
                             ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full'} 
                             ${screen==='tasks' ? `${activeButtonClasses[theme][stressPalette]}` : `${inactiveButtonClasses[theme][stressPalette]}`} 
