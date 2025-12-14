@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import useStore from "@/store/useStore";
 import useStressDetector from "@/hooks/useStressDetector";
 import Script from "next/script";
+import UseStressColorProvider from "@/hooks/useStressColorProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,8 +24,10 @@ export default function RootLayoutClient({ children }) {
     useEffect(() => {
         if(theme === 'dark') {
             document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
         }
         else{
+            document.documentElement.classList.add('light');
             document.documentElement.classList.remove('dark');
         }
     }, [theme]);
@@ -37,7 +40,9 @@ export default function RootLayoutClient({ children }) {
         {/* Morphcast scripts run globally */}
         <Script src="https://sdk.morphcast.com/mphtools/v1.1/mphtools.js" data-config="cameraPrivacyPopup" strategy="afterInteractive" />
         <Script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js" strategy="afterInteractive" />
-        {children}
+            <UseStressColorProvider>
+                {children}
+            </UseStressColorProvider>
       </body>
     </html>
   );

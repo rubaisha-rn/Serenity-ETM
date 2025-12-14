@@ -3,7 +3,7 @@ import {create} from 'zustand';
 const useStore = create((set) => ({
     
     theme: 'light',
-    setTheme: (theme) => set({theme}),
+    setTheme: (theme) => set({theme}), // add a button to change theme
 
     emotionValue: 0, // 0-100
     setEmotionValue: (value) => 

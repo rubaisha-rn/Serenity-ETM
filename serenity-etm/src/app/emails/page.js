@@ -127,7 +127,7 @@ export default function EmailsPage () {
     }, [emails, showEmails, focusMode, priorityMode, emotionValue]);
 
     return (
-        <div className={`${bgClasses[theme][stressPalette]} relative h-screen`}>
+        <div className={`bg-[var(--bg-main)] relative h-screen`}>
             
             <Header
                 title="Serenity ETM"

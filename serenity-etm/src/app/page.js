@@ -61,7 +61,7 @@ export default function IntroPage() {
     };    
 
     return (
-        <div className={`${textAClasses[theme]}`}>
+        <div className={`text-[var(--text-a)]`}>
 
             <Header
                 title="Serenity ETM"
@@ -78,7 +78,7 @@ export default function IntroPage() {
                 transparent
             />
 
-            <main className={`relative min-h-screen overflow-hidden ${bgClasses[theme][stressPalette]}`}>
+            <main className={`relative min-h-screen overflow-hidden bg-[var(--bg-main)]`}>
                 
                 <PrototypeTag />
                 <FloatingBlobs className='z-0'/>
