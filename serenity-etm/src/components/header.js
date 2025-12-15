@@ -1,4 +1,3 @@
-// done
 'use client';
 
 import { useRouter } from "next/navigation";
@@ -18,7 +17,7 @@ export default function Header({
     transparent = false,
 }) {
 
-    const {focusMode, priorityMode, setTheme} = useStore();
+    const {setTheme} = useStore();
 
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');

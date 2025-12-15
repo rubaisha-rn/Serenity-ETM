@@ -1,32 +1,19 @@
-// 'use client';
+'use client';
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useStore from "@/store/useStore";
 import { useTaskStore } from "@/store/taskStore";
-import { useRouter } from "next/navigation";
 
 export default function AddTask() {
 
-    const router = useRouter();
-
-    const {emotionValue} = useStore();
+    const {setTheme} = useStore();
     const {addTask} = useTaskStore();
-    const stress01 = emotionValue / 100;
-    const [stressPalette, setStressPalette] = useState('low');
-    const [theme, setTheme] = useState('light'); 
 
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
-
-    useEffect(() => {
-        if (stress01 !== undefined) {
-            if (stress01 < 0.33) setStressPalette('low');
-            else if (stress01 < 0.66) setStressPalette('mid');
-            else setStressPalette('high');}
-    }, [stress01]);
 
     const [open, setOpen] = useState(false);
 
@@ -52,31 +39,6 @@ export default function AddTask() {
         setOpen(false);
     };
 
-    const palette = {
-        bg: {
-            light: {
-                low: 'bg-light-low-card',
-                mid: 'bg-light-mid-card',
-                high: 'bg-light-high-card',
-            },
-            dark: {},
-        },
-        acc: {
-            light: {
-                low: 'bg-light-low-acc hover:bg-light-low-accHover',
-                mid: 'bg-light-mid-acc hover:bg-light-mid-accHover',
-                high: 'bg-light-high-acc hover:bg-light-high-accHover',
-            },
-            dark: {},
-        },
-        text: {
-            light: 'text-light-textA',
-            dark: '',
-        },
-    };
-
-    if (!palette) return null;
-
     return (
         <>
             {/* add task button */}
@@ -84,7 +46,7 @@ export default function AddTask() {
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
                 onClick={() => setOpen(true)}
-                className={`px-4 py-2 rounded-lg ${palette.acc[theme][stressPalette]} text-sm text-white`}
+                className={`px-4 py-1.5 rounded-lg bg-[var(--acc-main)] hover:bg-[var(--accHover-main)] border-2 border-[var(--a-main)] text-sm text-[var(--text-d)]`}
             >
                 + Add Task
             </motion.button>
@@ -103,9 +65,9 @@ export default function AddTask() {
                             animate={{scale: 1, opacity: 1}}
                             exit={{scale: 0.8, opacity: 0}}
                             transition={{type:'spring', stiffness: 200, damping: 20}}
-                            className={`p-6 rounded-xl w-80 shadow-xl ${palette.bg[theme][stressPalette]}`}
+                            className={`p-6 rounded-xl w-80 shadow-xl bg-[var(--bg-main)]`}
                         >
-                            <h2 className={`text-lg font-semi-bold mb-4 ${palette.text[theme]}`}>
+                            <h2 className={`text-lg font-semi-bold mb-4 text-[var(--text-a)]`}>
                                 Add New Task
                             </h2>
 
@@ -115,7 +77,7 @@ export default function AddTask() {
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     placeholder="Task Title"
-                                    className="w-full p-2 rounded-md border focus:outline-none"
+                                    className="w-full text-sm p-2 rounded-md border focus:outline-none"
                                 />
 
                                 <input
@@ -123,13 +85,13 @@ export default function AddTask() {
                                     value={due}
                                     onChange={(e) => setDue(e.target.value)}
                                     placeholder="Task Title"
-                                    className="w-full p-2 rounded-md border focus:outline-none"
+                                    className="w-full p-2 text-sm rounded-md border focus:outline-none"
                                 />
 
                                 <select
                                     value={priority}
                                     onChange={(e) => setPriority(e.target.value)}
-                                    className="w-full p-2 rounded-md border focus:outline-none"
+                                    className="w-full p-2 text-sm rounded-md border focus:outline-none"
                                 >
                                     <option value='low'>Low Priority</option>
                                     <option value='medium'>Medium Priority</option>
@@ -138,15 +100,16 @@ export default function AddTask() {
                             </div>
 
                             <div className="flex justify-end gap-3 mt-5">
+                                
                                 <button
-                                    className="px-3 py-1 text-sm bg-gray-200 rounded-md"
+                                    className="px-3 py-1 text-sm bg-[var(--icons-main)] hover:bg-[var(--iconsHover-main)] rounded-md"
                                     onClick={() => setOpen(false)}
                                 >
                                     Cancel
                                 </button>
 
                                 <button
-                                    className="px-3 py-1 text-sm bg-gray-200 rounded-md"
+                                    className="px-3 py-1 text-sm bg-[var(--a-main)] hover:bg-[var(--aHover-main)] rounded-md"
                                     onClick={submitTask}
                                 >
                                     Add

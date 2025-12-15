@@ -1,7 +1,5 @@
 'use client';
 
-import Header from "@/components/header";
-import Image from "next/image";
 import AppShell from "@/shells/appShell";
 import ThinFooter from "@/components/footers/thinFooter";
 import { useTaskStore } from "@/store/taskStore";
@@ -16,7 +14,7 @@ import CalmOverlay from "@/components/calmOverlay";
 export default function TasksPage() {
 
     const {tasks, toggleComplete, completedTasksCount, setCompletedTasksCount} = useTaskStore();
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks, calmMode} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks, calmMode, setTheme, setScreen} = useStore();
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
@@ -31,7 +29,6 @@ export default function TasksPage() {
         } else {
 
             if (priorityMode) {
-                // results = results.filter((t) => t.priority !== 'low');
                 results = [...results].sort((a,b) => sortTasks(a, b, priorityMode));
             }
 
@@ -73,6 +70,7 @@ export default function TasksPage() {
 
         results = [...results].sort((a,b) => sortTasks(a, b, priorityMode));
         setSorted(results);
+        setScreen('tasks');
     
     }, [tasks, showTasks, focusMode, priorityMode, emotionValue]);
 
@@ -80,66 +78,13 @@ export default function TasksPage() {
     const secondaryWidth = expandedSecondary ? 200 : 40;
     const contentMargin = mainWidth + secondaryWidth;
 
-    const stress01 = emotionValue / 100;
-    const [stressPalette, setStressPalette] = useState('low');
-    const [theme, setTheme] = useState('light'); 
-
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
 
-    useEffect(() => {
-        if (stress01 !== undefined) {
-            if (stress01 < 0.33) setStressPalette('low');
-            else if (stress01 < 0.66) setStressPalette('mid');
-            else setStressPalette('high');}
-    }, [stress01]);
-
-    const bgClasses = {
-        light: {
-            low: 'bg-light-low-bg',
-            mid: 'bg-light-mid-bg',
-            high: 'bg-light-high-bg',
-        },
-        dark: {},
-    };
-
-    const cardClasses = {
-        light: {
-            low: 'bg-light-low-blankCard',
-            mid: 'bg-light-mid-card',
-            high: 'bg-light-high-card',
-        },
-        dark: {},
-    };
-
-    const textAClasses = {
-        light: 'text-light-textA',
-        dark: '',
-    };
-
-    const textBClasses = {
-        light: 'text-light-textB',
-        dark: '',
-    };
-
-    const textCClasses = {
-        light: 'text-light-textC',
-        dark: '',
-    };
-
-    const completedTasksClasses = {
-        light: {
-            low: 'bg-light-low-icons bg-opacity-20',
-            mid: 'bg-light-mid-icons bg-opacity-20',
-            high: 'bg-light-high-icons bg-opacity-20',
-        },
-        dark: {},
-    }
-
     return (
-        <div className={`${bgClasses[theme][stressPalette]} relative h-screen`}>
+        <div className={`bg-[var(--bg-main)] relative h-screen`}>
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
             
@@ -183,15 +128,19 @@ export default function TasksPage() {
                     }}
                     style={{marginLeft: contentMargin}}
                 >
-                    <div className="mb-6">
-                        <AddTask />
+                    <div className="flex flex-row gap-4 justify-center items-center">
+                        <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--text-d)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
+                            Search Tasks
+                        </div>
+
+                        <div>
+                            <AddTask />
+                        </div>
                     </div>
 
-                    <div className={`w-full flex-1 px-4 py-6 ${cardClasses[theme][stressPalette]} shadow-xl relative rounded-lg`}>
+                    <div className={`w-full flex-1 px-2 py-4 mt-4 bg-[var(--cardA-main)] shadow-lg relative rounded-lg`}>
 
-                        <h1 className={`${textCClasses[theme]} font-Roboto font-bold my-2`}>My Tasks</h1>
-
-                        <div className="grid grid-cols-[40px_3fr_100px_100px] gap-4 items-center text-left">
+                        <div className="grid grid-cols-[40px_3fr_100px_100px] gap-4 text-left">
                             <div>
                                 <p className="text-xs">Tasks</p>
                             </div>
@@ -227,8 +176,7 @@ export default function TasksPage() {
                                         }}
                                         exit={{opacity: 0, y: -10}}
                                         transition={{duration: 0.3}}
-                                        className={`p-3 rounded-xl shadow
-                                        grid grid-cols-[40px_3fr_100px_100px] gap-4 mb-1 items-center text-left ${task.completed ? `${completedTasksClasses[theme][stressPalette]}` : 'bg-white'}`}
+                                        className={`p-2 rounded-lg shadow grid grid-cols-[40px_3fr_100px_100px] gap-4 mb-1 items-center text-left ${task.completed ? 'bg-[var(--bg-main)]' : 'bg-[var(--blankCard-main)]'}`}
                                     >
 
                                         <div>
@@ -244,32 +192,29 @@ export default function TasksPage() {
                                             />
                                         </div>
                                         <div>
-                                            <p className={`text-sm ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            <p className={`text-sm ${task.completed ? 'line-through text-[var(--text-c)]' : ''}`}>
                                                 {task.title}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className={`text-sm ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            <p className={`text-sm ${task.completed ? 'line-through text-[var(--text-c)]' : ''}`}>
                                                 {formattedDate}
                                             </p>
                                         </div>
-                                        <div className={`rounded-sm text-black text-sm p-0.5 text-center 
+                                        <div className={`rounded-sm text-[var(--text-b)] text-sm p-0.5 text-center 
                                             ${task.priority === 'high' ? 'bg-red-500 bg-opacity-30' : ''}
                                             ${task.priority === 'medium' ? 'bg-yellow-300 bg-opacity-30' : ''}
                                             ${task.priority === 'low' ? 'bg-green-300 bg-opacity-30' : ''}`}>
-                                            <p className={`font-medium ${task.completed ? 'line-through text-gray-400' : ''}`}>
+                                            <p className={`font-medium ${task.completed ? 'line-through text-[var(--text-c)]' : ''}`}>
                                                 {task.priority}
                                             </p>
                                         </div>
-                                        
                                     </motion.div>
                                 )
                             })}
                         </AnimatePresence>  
-
                     </div>
                 </motion.div>
-
             </AppShell>
 
             <ThinFooter />

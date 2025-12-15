@@ -15,60 +15,16 @@ export default function EmailsPage () {
 
     const {emails, showEmails, toggleStar, setSelectedEmail, markAsRead, readEmailCount, setReadEmailCount} = useEmailStore();
 
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, calmMode} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, calmMode, setScreen, setTheme} = useStore();
 
     const mainWidth = expandedMain ? 220 : 40;
     const secondaryWidth = expandedSecondary ? 200 : 40;
     const contentMargin = mainWidth + secondaryWidth;
 
-    const stress01 = emotionValue / 100;
-    const [stressPalette, setStressPalette] = useState('low');
-    const [theme, setTheme] = useState('light'); 
-
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
-
-    useEffect(() => {
-        if (stress01 !== undefined) {
-            if (stress01 < 0.33) setStressPalette('low');
-            else if (stress01 < 0.66) setStressPalette('mid');
-            else setStressPalette('high');}
-    }, [stress01]);
-
-    const bgClasses = {
-        light: {
-            low: 'bg-light-low-bg',
-            mid: 'bg-light-mid-bg',
-            high: 'bg-light-high-bg',
-        },
-        dark: {},
-    };
-
-    const cardClasses = {
-        light: {
-            low: 'bg-light-low-blankCard',
-            mid: 'bg-light-mid-card',
-            high: 'bg-light-high-card',
-        },
-        dark: {},
-    };
-
-    const textAClasses = {
-        light: 'text-light-textA',
-        dark: '',
-    };
-
-    const textBClasses = {
-        light: 'text-light-textB',
-        dark: '',
-    };
-
-    const textCClasses = {
-        light: 'text-light-textC',
-        dark: '',
-    };
 
     const [filtered, setFiltered] = useState([]);
 
@@ -120,6 +76,7 @@ export default function EmailsPage () {
 
         results = [...results].sort((a, b) => sortEmails(a, b, priorityMode));
         setFiltered(results);
+        setScreen('emails');
 
     }, [emails, showEmails, focusMode, priorityMode, emotionValue]);
 
@@ -168,8 +125,12 @@ export default function EmailsPage () {
                     }}
                     style={{marginLeft: contentMargin}}
                 >
-                    <div className="w-full flex-1 px-4 py-6 bg-[var(--cardA-main)] shadow-xl relative rounded-lg">
-                        <h1 className={`text-[var(--text-a)] font-Roboto font-bold my-2`}>My Emails</h1>
+
+                    <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--text-d)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
+                        Search Emails
+                    </div>
+
+                    <div className="w-full flex-1 px-2 py-4 mt-4 bg-[var(--cardA-main)] relative rounded-lg">
 
                         <AnimatePresence>
                             {filtered.map((mail) => (
@@ -180,8 +141,7 @@ export default function EmailsPage () {
                                     initial={{opacity: 0, y:10}}
                                     animate={{opacity: 1, y: 0,}}
                                     transition={{duration: 0.3}}
-                                    className={`p-3 rounded-xl shadow
-                                    grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 mb-1 items-center text-left ${mail.read ? 'bg-gray-400' : 'bg-white'}`}
+                                    className={`p-1.5 shadow grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 mb-1 items-center text-left ${mail.read ? 'bg-[var(--bg-main)]' : 'bg-[var(--text-d)]'}`}
                                     onClick={() => {
                                         setSelectedEmail(mail)
                                         markAsRead(mail.id)
@@ -190,7 +150,7 @@ export default function EmailsPage () {
                                 >
                                     <div>
                                         <button
-                                            className="px-3 py-1 text-sm rounded-md bg-gray-200"
+                                            className={`px-1 py-0.5 text-2xl rounded-md`}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 toggleStar(mail.id);
@@ -201,23 +161,25 @@ export default function EmailsPage () {
                                     </div>
 
                                     <div>
-                                        <p className="text-sm font-semibold">{mail.from}</p>
-                                        <p className="text-xs">{new Date(mail.timestamp).toLocaleString()}</p>
+                                        <p className="text-sm font-semibold text-[var(--text-b)]">{mail.from}</p>
+                                        <p className="text-xs text-[var(--text-c)]">{new Date(mail.timestamp).toLocaleString()}</p>
                                     </div>
 
                                     <div>
-                                        <p className="text-sm font-semibold">{mail.subject}</p>
-                                        <p className="text-xs">{mail.body}</p>
+                                        <p className="text-sm font-semibold text-[var(--text-a)]">{mail.subject}</p>
+                                        <p className="text-xs text-[var(--text-c)]">{mail.body}</p>
                                     </div>
 
-                                    <div>
+                                    <div className={`rounded-sm text-[var(--text-b)] text-sm p-0.5 text-center
+                                        ${mail.priority === 'high' ? 'bg-red-500 bg-opacity-30' : ''}
+                                        ${mail.priority === 'normal' ? 'bg-yellow-300 bg-opacity-30' : ''}`}>
                                         <p className="text-sm font-semibold">{mail.priority}</p>
                                     </div>
                                 </motion.div>
                             ))}
 
                             {filtered.length === 0 && (
-                                <p>No emails found.</p>
+                                <p className="text-[var(--text-b)] text-sm">No emails found.</p>
                             )}
                         </AnimatePresence>
                     </div>

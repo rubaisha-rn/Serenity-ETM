@@ -1,4 +1,3 @@
-//done
 'use client';
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -37,7 +36,7 @@ export default function ModeBanner({mode}) {
                                     src="/icons/priority/priorityW.png"
                                     className='w-5 h-5 shrink-0'
                                  /> 
-                                : ''}
+                            : ''}
                         </div>
 
                         <div>
