@@ -4,7 +4,6 @@ import Header from "@/components/header";
 import Image from "next/image";
 import AppShell from "@/shells/appShell";
 import ThinFooter from "@/components/footers/thinFooter";
-import PrototypeTag from '@/components/prototypeTag';
 import { useTaskStore } from "@/store/taskStore";
 import useStore from "@/store/useStore";
 import { motion, AnimatePresence } from "framer-motion";
@@ -142,26 +141,12 @@ export default function TasksPage() {
     return (
         <div className={`${bgClasses[theme][stressPalette]} relative h-screen`}>
 
-            <PrototypeTag/>
-            
-            <Header
-                title="Serenity ETM"
-                logo={<Image
-                    src="/logo/logo.png"
-                    alt='Serenity ETM Logo'
-                    width={18}
-                    height={18}
-                    priority
-                />}
-                sticky
-            />
-
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
-
-            {completedTasksCount >= 3 && emotionValue >= 70 && (
+            
+            {/* {completedTasksCount >= 3 && emotionValue >= 70 && ( */}
+            {completedTasksCount >= 1 && emotionValue >= 0 && (
                 <BreakPopup
                     scenario= 'tasks'
-                    durationMs={20000}
                     onAcknowledge={() => setCompletedTasksCount(0)}
                 />
             )}
@@ -174,7 +159,7 @@ export default function TasksPage() {
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
                         transition={{ duration: 0.6, ease: 'easeInOut'}}
-                        className="fixed inset-0 bg-black bg-opacity-40 z-[9999] pointer-events-auto"
+                        className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
                     >
                         <div className="absolute inset-0 pointer-events-none">
                             <CalmOverlay />

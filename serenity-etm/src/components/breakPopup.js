@@ -6,44 +6,28 @@ import { motion, AnimatePresence } from "framer-motion";
 const SCENARIOS = {
     emails: {
         title: 'Time for a break!',
-        message: "You've been working for a while. Stand up, stretch, or rest your eyes for a few minutes.",
+        message: "You've read more than 5 emails! Time to stand up, stretch, or rest your eyes for a few minutes.",
         accent: 'bg-blue-500',
     },
     tasks: {
         title: 'Time for a break!',
-        message: "You've been working for a while. Stand up, stretch, or rest your eyes for a few minutes.",
+        message: "You've completed more than 3 tasks! Time to stand up, stretch, or rest your eyes for a few minutes.",
         accent: 'bg-blue-500',
     },
-    custom: {
-        title: 'Reminder',
-        message: 'You have a new notification',
-        accent: 'bg-emerald-500',
-    }
 };
 
 export default function BreakPopup({
-    scenario = 'break',
+    scenario = 'emails',
     message,
-    intervalMs, 
-    durationMs = 15000,
+    durationMs = 30*60*1000, //15000
     onAcknowledge
 }) {
     const [open, setOpen] = useState(false);
-    const data = SCENARIOS[scenario] ?? SCENARIOS.custom;
+    const data = SCENARIOS[scenario] ?? SCENARIOS.emails;
 
     useEffect(() => {
         setOpen(true);
     }, []);
-
-    useEffect(() => {
-        if(!intervalMs) return;
-
-        const timer = setInterval(() => {
-            setOpen(true);
-        }, intervalMs);
-
-        return () => clearInterval(timer);
-    }, [intervalMs]);
 
     useEffect(() => {
         if(!open) return;
@@ -52,7 +36,7 @@ export default function BreakPopup({
             setOpen(false);
         }, durationMs);
 
-        return () => clearTimeout(durationMs);
+        return () => clearTimeout(hideTimer);
     }, [open, durationMs]);
 
     const handleClose = () => {
@@ -68,31 +52,55 @@ export default function BreakPopup({
                     animate={{opacity: 1, y: 0}}
                     exit={{opacity: 0, y: 40}}
                     transition={{duration: 0.3}}
-                    className="fixed bottom-6 right-6 z-50 max-w-sm"
+                    className="fixed bottom-2 right-12 z-50 max-w-sm"
                 >
-                    <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                        <div className={`h-1.5 ${data.accent}`} />
-                        <div className="p-5">
-                            <h3 className="text-lg font-semibold text-gray-600">
+                    <div className="bg-[var(--blankCard-main)] border-[0.0rem] border-[var(--text-a)] rounded-xl shadow-xl overflow-hidden flex flex-row gap-4 p-2 justify-center items-center">
+
+                        {scenario === 'emails' ? 
+                            <img
+                                src="/icons/email.png"
+                                className='w-12 h-12 shrink-0 object-contain'
+                            /> 
+                        :   <img
+                                src="/icons/tasks.png"
+                                className='w-12 h-12 shrink-0 object-contain'
+                            />
+                        }
+                        
+                        <div className="flex-1">
+                        
+                            <h3 className="text-sm font-semibold font-Roboto text-[var(--text-b)]">
                                 {data.title}
                             </h3>
-                            <p className="mt-2 text-sm text-gray-600">
+
+                            <p className="text-xs font-Roboto text-[var(--text-c)]">
                                 {message || data.message}
                             </p>
-                            <div className="mt-4 flex justify-end gap-2">
-                                <button
-                                    onClick={handleClose}
-                                    className="px-4 py-2 text-sm rounded-xl bg-gray-100 hover:bg-gray-200 transition"
-                                >
-                                    Dismiss
-                                </button>
-                                <button
-                                    onClick={handleClose}
-                                    className="px-4 py-2 text-sm rounded-xl text-white bg-gray-900 hover:bg-gray-800 transition"
-                                >
-                                    Got it
-                                </button>
-                            </div>
+                        
+                        </div>
+                        
+                        <div className="flex flex-col justify-end gap-2">
+                            
+                            <button
+                                onClick={handleClose}
+                                className="p-2 rounded-xl bg-[var(--success)] transition"
+                            >
+                                <img
+                                    src="/icons/accept.png"
+                                    className='w-5 h-5 shrink-0 object-contain'
+                                /> 
+                            </button>
+
+                            <button
+                                onClick={handleClose}
+                                className="p-2 rounded-xl bg-[var(--b-main)] transition"
+                            >
+                                <img
+                                    src="/icons/dismiss.png"
+                                    className='w-5 h-5 shrink-0 object-contain'
+                                /> 
+                            </button>
+                        
                         </div>
                     </div>
                 </motion.div>

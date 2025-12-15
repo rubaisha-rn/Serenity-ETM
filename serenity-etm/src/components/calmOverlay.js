@@ -1,6 +1,7 @@
+// done
 'use client';
 
-import { motion, AnimatePresence, delay } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useEffect, useState, useId } from 'react';
 import useStore from '@/store/useStore';
 
@@ -10,12 +11,13 @@ const Palettes = [
     ['#729e91', '#c9c4eb', '#bfd9d1'],
 ];
 
-const OVERLAY_DURATION = 1 * 60 * 1000; // one min
+const OVERLAY_DURATION = 8000; // 8secs
 const BLOB_COUNT = 10;
 const BLOB_BLUR = 100;
 const BLOB_SCALE = 1.08;
 
 export default function CalmOverlay() {
+
     const {calmMode, setCalmMode} = useStore();
     const [blobs, setBlobs] = useState([]);
     const filterId = useId();
@@ -105,7 +107,7 @@ export default function CalmOverlay() {
                     initial={{opacity: 0, y: 6}}
                     animate={{opacity: 1, y: 0}}
                     transition={{delay: 0.8}}
-                    className='rounded-xl bg-white/60 px-6 py-3 text-sm text-slate-700 shadow-sm backdrop-blur-md'
+                    className='rounded-xl px-6 py-3 text-2xl text-[var(--text-d)] font-AbrilFatface'
                 >
                     Let's slow things down for a moment.
                 </motion.div>

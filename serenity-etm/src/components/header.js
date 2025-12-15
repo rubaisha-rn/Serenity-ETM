@@ -1,3 +1,4 @@
+// done
 'use client';
 
 import { useRouter } from "next/navigation";
@@ -17,41 +18,12 @@ export default function Header({
     transparent = false,
 }) {
 
-    const {emotionValue} = useStore();
-    const stress01 = emotionValue / 100;
-    const [stressPalette, setStressPalette] = useState('low');
-    const [theme, setTheme] = useState('light'); 
+    const {focusMode, priorityMode, setTheme} = useStore();
 
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
-
-    useEffect(() => {
-        if (stress01 !== undefined) {
-            if (stress01 < 0.33) setStressPalette('low');
-            else if (stress01 < 0.66) setStressPalette('mid');
-            else setStressPalette('high');}
-    }, [stress01]);
-
-    const textAClasses = {
-        light: 'text-light-textA',
-        dark: {},
-    };
-
-    const textBClasses = {
-        light: 'text-light-textB',
-        dark: {},
-    };
-
-    const blankCardClasses = {
-        light: {
-            low: 'bg-light-low-blankCard',
-            mid: 'bg-light-mid-blankCard',
-            high: 'bg-light-high-blankCard',
-        },
-        dark: {},
-    };
 
     const router = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -62,11 +34,10 @@ export default function Header({
             z-50 h-8 w-full
             grid grid-cols-3 items-center 
             px-12
-            shadow-lg
-            ${transparent ? 'backdrop-blur-xl' : `${blankCardClasses[theme][stressPalette]}`}
+            shadow-md
+            ${transparent ? 'backdrop-blur-xl' : 'bg-[var(--blankCard-main)]'}
             transition-all duration-500
-            ${sticky ? 'sticky top-0' : ''}
-            `}
+            ${sticky ? 'sticky top-0' : ''}`}
         >
             {/* left */}
 
@@ -92,9 +63,7 @@ export default function Header({
             {/* Brand logo and name */}
 
             <div
-                className={`
-                flex items-center justify-center gap-1
-                transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]
+                className={`flex items-center justify-center gap-1 transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]
                     ${
                         menuOpen
                             ? 'opacity-100 scale-100'
@@ -103,7 +72,7 @@ export default function Header({
                 `}
             >
                 {logo && <div className="w-4 h-3.5 opacity-50">{logo}</div>}
-                <h1 className={`font-AbrilFatface text-sm ${textAClasses[theme]} opacity-50`}>
+                <h1 className="font-AbrilFatface text-sm text-[var(--text-a)] opacity-50">
                     {title}
                 </h1>
             </div>
@@ -114,9 +83,7 @@ export default function Header({
                     
                     {/* nav links */}
                     <div
-                        className={`
-                        flex items-center gap-5
-                        transition-all duration-300 ease-out
+                        className={`flex items-center gap-5 transition-all duration-300 ease-out
                             ${
                                 menuOpen
                                     ? 'opacity-100 translate-x-0'
@@ -134,7 +101,7 @@ export default function Header({
                                         router.push(link.href);
                                         setMenuOpen(false);
                                     }}
-                                    className={`relative flex flex-col items-center font-Roboto text-xs transition-opacity hover:opacity-50 ${textBClasses[theme]}`}
+                                    className="relative flex flex-col items-center font-Roboto text-xs transition-opacity hover:opacity-50 text-[var(--text-b)]"
                                 >
                                     <span>{link.label}</span>
 

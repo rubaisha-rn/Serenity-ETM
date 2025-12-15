@@ -17,23 +17,32 @@
 }
 
 :root {
-    --bg-main: #ffffff;
+    --bg-main: #f7f0f0;
 
-    --card-main: #fcfaf7;
-    --blankCard-main: #fcfcfc;
+    --cardA-main: #fcfaf7;
+    --cardB-main: #fcfaf7;
+    --blankCard-main: #ffffff;
 
-    --a-main: #deb6ab;
-    --b-main: #f2e1a6;
-    --c-main: #c4d9eb;
+    --a-main: #dec3bc;
+    --aHover-main: #907c76;
+    --b-main: #f0e9cf;
+    --bHover-main: #aba593;
 
-    --icons-main: #7c828d;
+    --icons-main: #c5c8cd;
+    --iconsHover-main: #b2b4b7;
 
-    --acc-main: #3a2b28;
-    --accHover-main: #5a4744;
+    --acc-main: #291c19;
+    --accHover-main: #443532;
 
     --text-a: #000000;
     --text-b: #202020;
     --text-c: #444444;
+    --text-d: #ffffff;
+
+    --danger: #b91c1c;
+    --warning: #ffcc00;
+    --neutral: #0062ff;
+    --success: #00ad45;
 }
 
 .dark {

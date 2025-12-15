@@ -1,3 +1,4 @@
+//done
 'use client';
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -18,13 +19,32 @@ export default function ModeBanner({mode}) {
         <AnimatePresence>
             {show && (
                 <motion.div
-                    initial={{y: -50, opacity: 0}}
-                    animate={{y: 0, opacity: 1}}
-                    exit={{y: -50, opacity: 0}}
+                    initial={{y: -50, opacity: 0, x: '-50%'}}
+                    animate={{y: 0, opacity: 1, x: '-50%'}}
+                    exit={{y: -50, opacity: 0, x: '-50%'}}
                     transition={{ type: 'spring', stiffness: 300, damping: 20}}
-                    className="fixed top-0 left-1/2 tranform -translate-x-1/2 bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg z-50 font-semibold"
+                    className={`fixed top-1 left-1/2 transform -translate-x-1/2 text-[var(--text-d)] px-6 py-1 rounded-lg shadow-2xl z-50 justify-center text-sm ${mode === 'focus' ? 'bg-[var(--danger)]' : mode === 'priority' ? 'bg-[var(--warning)]' : 'bg-[var(--acc-main)]'}`}
                 >
-                    {mode === 'focus' ? 'Focus Mode Activated.' : 'Priority Mode Activated.'}
+                    <div className="flex flex-row gap-2 justify-center items-center">
+                        <div>
+                            {mode === 'focus' 
+                                ? <img
+                                    src="/icons/focus/focusW.png"
+                                    className='w-5 h-5 shrink-0'
+                                 /> 
+                            : mode === 'priority' 
+                                ? <img
+                                    src="/icons/priority/priorityW.png"
+                                    className='w-5 h-5 shrink-0'
+                                 /> 
+                                : ''}
+                        </div>
+
+                        <div>
+                            {mode === 'focus' ? 'Focus Mode Activated.' : mode === 'priority' ? 'Priority Mode Activated.' : 'Mode Deactivated.'}
+                        </div>
+                    </div>
+                    
                 </motion.div>
             )}
         </AnimatePresence>

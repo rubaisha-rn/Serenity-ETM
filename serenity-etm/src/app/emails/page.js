@@ -1,18 +1,15 @@
 'use client';
 
-import Header from "@/components/header";
-import Image from "next/image";
 import AppShell from "@/shells/appShell";
 import ThinFooter from "@/components/footers/thinFooter";
-import PrototypeTag from '@/components/prototypeTag';
 import useStore from "@/store/useStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useEmailStore } from "@/store/emailStore";
 import EmailReader from "@/components/emails/emailReader";
-import ModeBanner from "@/components/modeBanner";
 import BreakPopup from "@/components/breakPopup";
 import CalmOverlay from "@/components/calmOverlay";
+import ModeBanner from "@/components/modeBanner";
 
 export default function EmailsPage () {
 
@@ -127,27 +124,14 @@ export default function EmailsPage () {
     }, [emails, showEmails, focusMode, priorityMode, emotionValue]);
 
     return (
-        <div className={`bg-[var(--bg-main)] relative h-screen`}>
-            
-            <Header
-                title="Serenity ETM"
-                logo={<Image
-                    src="/logo/logo.png"
-                    alt='Serenity ETM Logo'
-                    width={18}
-                    height={18}
-                    priority
-                />}
-                sticky
-            />
+        <div className="bg-[var(--bg-main)] relative h-screen">
 
-            <PrototypeTag/>
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
 
-            {readEmailCount >= 5 && emotionValue >= 70 && (
+            {/* {readEmailCount >= 5 && emotionValue >= 70 && ( */}
+            {readEmailCount >= 1 && emotionValue >= 0 && (
                 <BreakPopup
                     scenario= 'emails'
-                    durationMs={20000}
                     onAcknowledge={() => setReadEmailCount(0)}
                 />
             )}
@@ -160,7 +144,7 @@ export default function EmailsPage () {
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
                         transition={{ duration: 0.6, ease: 'easeInOut'}}
-                        className="fixed inset-0 bg-black bg-opacity-40 z-[9999] pointer-events-auto"
+                        className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
                     >
                         <div className="absolute inset-0 pointer-events-none">
                             <CalmOverlay />
@@ -184,8 +168,8 @@ export default function EmailsPage () {
                     }}
                     style={{marginLeft: contentMargin}}
                 >
-                    <div className={`w-full flex-1 px-4 py-6 ${cardClasses[theme][stressPalette]} shadow-xl relative rounded-lg`}>
-                        <h1 className={`${textCClasses[theme]} font-Roboto font-bold my-2`}>My Emails</h1>
+                    <div className="w-full flex-1 px-4 py-6 bg-[var(--cardA-main)] shadow-xl relative rounded-lg">
+                        <h1 className={`text-[var(--text-a)] font-Roboto font-bold my-2`}>My Emails</h1>
 
                         <AnimatePresence>
                             {filtered.map((mail) => (
