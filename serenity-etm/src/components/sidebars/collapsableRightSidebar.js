@@ -79,7 +79,7 @@ export default function CollapsableRightSidebar() {
                         />
 
                         <span className={`text-[var(--text-a)] text-sm whitespace-nowrap transition-all duration-150 ${expanded? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
-                            Smart Focus Mode
+                            Focus Mode
                         </span>
 
                     </motion.button>
