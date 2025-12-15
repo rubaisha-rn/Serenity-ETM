@@ -13,7 +13,7 @@ export const useTaskStore = create((set) => ({
         },
         {
             id: '2',
-            title: "Clean Inbox Demonstration",
+            title: "Complete Work Tasks",
             created: '10-12-2025',
             due: '02-01-2026',
             priority: 'low',
@@ -21,7 +21,7 @@ export const useTaskStore = create((set) => ({
         },
         {
             id: '3',
-            title: "Testing Task",
+            title: "Complete Color Scheme",
             created: '10-12-2025',
             due: '05-01-2026',
             priority: 'medium',
@@ -29,7 +29,7 @@ export const useTaskStore = create((set) => ({
         },
         {
             id: '4',
-            title: "Finish Prototype's UI",
+            title: "Finish Prototype",
             created: '10-12-2025',
             due: '15-12-2025',
             priority: 'high',
@@ -37,7 +37,7 @@ export const useTaskStore = create((set) => ({
         },
         {
             id: '5',
-            title: "Clean Inbox Demonstration",
+            title: "Develop Strategy Plan",
             created: '01-12-2025',
             due: '10-01-2026',
             priority: 'low',
@@ -45,7 +45,7 @@ export const useTaskStore = create((set) => ({
         },
         {
             id: '6',
-            title: "Testing Task",
+            title: "Write Literature Review",
             created: '10-12-2025',
             due: '12-01-2026',
             priority: 'medium',
@@ -53,7 +53,7 @@ export const useTaskStore = create((set) => ({
         },
         {
             id: '7',
-            title: "Finish Prototype's UI",
+            title: "Finish Course",
             created: '10-12-2025',
             due: '12-12-2025',
             priority: 'medium',
@@ -61,7 +61,7 @@ export const useTaskStore = create((set) => ({
         },
         {
             id: '8',
-            title: "Clean Inbox Demonstration",
+            title: "Make Presentation",
             created: '10-12-2025',
             due: '12-12-2025',
             priority: 'high',
