@@ -88,8 +88,7 @@ export default function TasksPage() {
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
             
-            {/* {completedTasksCount >= 3 && emotionValue >= 70 && ( */}
-            {completedTasksCount >= 1 && emotionValue >= 0 && (
+            {completedTasksCount >= 3 && emotionValue >= 70 && (
                 <BreakPopup
                     scenario= 'tasks'
                     onAcknowledge={() => setCompletedTasksCount(0)}

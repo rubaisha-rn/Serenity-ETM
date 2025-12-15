@@ -19,7 +19,7 @@ const SCENARIOS = {
 export default function BreakPopup({
     scenario = 'emails',
     message,
-    durationMs = 30*60*1000, //15000
+    durationMs = 15000, //15000
     onAcknowledge
 }) {
     const [open, setOpen] = useState(false);
@@ -83,7 +83,7 @@ export default function BreakPopup({
                             
                             <button
                                 onClick={handleClose}
-                                className="p-2 rounded-xl bg-[var(--success)] transition"
+                                className="p-2 rounded-xl bg-[var(--successL)] hover:bg-[var(--successM)] transition"
                             >
                                 <img
                                     src="/icons/accept.png"
@@ -93,7 +93,7 @@ export default function BreakPopup({
 
                             <button
                                 onClick={handleClose}
-                                className="p-2 rounded-xl bg-[var(--b-main)] transition"
+                                className="p-2 rounded-xl bg-[var(--icons-main)] hover:bg-[var(--iconsHover-main)] transition"
                             >
                                 <img
                                     src="/icons/dismiss.png"

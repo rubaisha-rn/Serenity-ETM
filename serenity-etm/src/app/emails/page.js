@@ -85,8 +85,7 @@ export default function EmailsPage () {
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
 
-            {/* {readEmailCount >= 5 && emotionValue >= 70 && ( */}
-            {readEmailCount >= 1 && emotionValue >= 0 && (
+            {readEmailCount >= 5 && emotionValue >= 70 && (
                 <BreakPopup
                     scenario= 'emails'
                     onAcknowledge={() => setReadEmailCount(0)}
