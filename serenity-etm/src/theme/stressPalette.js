@@ -2,15 +2,15 @@ export const STRESS_PALETTE = {
     light: {
         low: {
             bg: '#f8f8f8',
-            cardA: '#f6f2f0',
-            cardB: '#eae6e0',
+            cardA: '#f4f4f4',
+            cardB: '#edeaf0',
             blankCard: '#ffffff',
-            a: '#d2b5a9',
-            aHover: '#a98f89',
+            a: '#d5c9e0',
+            aHover: '#c4b7cf',
             icons: '#ffffff',
             iconsHover: '#d4d4d4',
-            acc: '#8f787c',
-            accHover: '#766266',
+            acc: '#7e788f',
+            accHover: '#6d6276',
         },
         mid: {
             bg: '#f4f2f5',
