@@ -103,7 +103,7 @@ export default function TasksPage() {
                         initial={{opacity: 0}}
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
-                        transition={{ duration: 0.6, ease: 'easeInOut'}}
+                        transition={{ duration: 0.4, ease: 'easeInOut'}}
                         className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
                     >
                         <div className="absolute inset-0 pointer-events-none">
