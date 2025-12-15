@@ -92,22 +92,24 @@ export default function EmailsPage () {
                 />
             )}
 
-            <AnimatePresence>
-                {calmMode && (
-                    <motion.div
-                        key='calm-overlay-wrapper'
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
-                        transition={{ duration: 0.4, ease: 'easeInOut'}}
-                        className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
-                    >
-                        <div className="absolute inset-0 pointer-events-none">
-                            <CalmOverlay />
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {emotionValue > 85 && (
+                <AnimatePresence>
+                    {calmMode && (
+                        <motion.div
+                            key='calm-overlay-wrapper'
+                            initial={{opacity: 0}}
+                            animate={{opacity: 1}}
+                            exit={{opacity: 0}}
+                            transition={{ duration: 0.4, ease: 'easeInOut'}}
+                            className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
+                        >
+                            <div className="absolute inset-0 pointer-events-none">
+                                <CalmOverlay />
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            )}
             
             <AppShell>
                 
