@@ -84,7 +84,7 @@ export default function TasksPage() {
     }, []);
 
     return (
-        <div className={`bg-[var(--bg-main)] relative h-screen`}>
+        <div className={`bg-[var(--cardA-main)] relative h-screen`}>
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
             
@@ -129,7 +129,7 @@ export default function TasksPage() {
                     style={{marginLeft: contentMargin}}
                 >
                     <div className="flex flex-row gap-4 justify-center items-center">
-                        <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--text-d)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
+                        <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--blankCard-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
                             Search Tasks
                         </div>
 
@@ -138,7 +138,7 @@ export default function TasksPage() {
                         </div>
                     </div>
 
-                    <div className={`w-full flex-1 px-2 py-4 mt-4 bg-[var(--cardA-main)] shadow-lg relative rounded-lg`}>
+                    <div className={`w-full flex-1 px-2 py-4 mt-4 bg-[var(--cardB-main)] relative rounded-lg`}>
 
                         <div className="grid grid-cols-[40px_3fr_100px_100px] gap-4 text-left">
                             <div>
@@ -176,7 +176,7 @@ export default function TasksPage() {
                                         }}
                                         exit={{opacity: 0, y: -10}}
                                         transition={{duration: 0.3}}
-                                        className={`p-2 rounded-lg shadow grid grid-cols-[40px_3fr_100px_100px] gap-4 mb-1 items-center text-left ${task.completed ? 'bg-[var(--bg-main)]' : 'bg-[var(--blankCard-main)]'}`}
+                                        className={`p-2 rounded-lg shadow grid grid-cols-[40px_3fr_100px_100px] gap-4 mb-1 items-center text-left ${task.completed ? 'bg-[var(--cardB-main)]' : 'bg-[var(--blankCard-main)]'}`}
                                     >
 
                                         <div>
@@ -202,9 +202,9 @@ export default function TasksPage() {
                                             </p>
                                         </div>
                                         <div className={`rounded-sm text-[var(--text-b)] text-sm p-0.5 text-center 
-                                            ${task.priority === 'high' ? 'bg-red-500 bg-opacity-30' : ''}
-                                            ${task.priority === 'medium' ? 'bg-yellow-300 bg-opacity-30' : ''}
-                                            ${task.priority === 'low' ? 'bg-green-300 bg-opacity-30' : ''}`}>
+                                            ${task.priority === 'high' ? 'bg-[var(--dangerL)]' : ''}
+                                            ${task.priority === 'medium' ? 'bg-[var(--warningL)]' : ''}
+                                            ${task.priority === 'low' ? 'bg-[var(--successL)]' : ''}`}>
                                             <p className={`font-medium ${task.completed ? 'line-through text-[var(--text-c)]' : ''}`}>
                                                 {task.priority}
                                             </p>

@@ -81,7 +81,7 @@ export default function EmailsPage () {
     }, [emails, showEmails, focusMode, priorityMode, emotionValue]);
 
     return (
-        <div className="bg-[var(--bg-main)] relative h-screen">
+        <div className="bg-[var(--cardA-main)] relative h-screen">
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
 
@@ -126,11 +126,11 @@ export default function EmailsPage () {
                     style={{marginLeft: contentMargin}}
                 >
 
-                    <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--text-d)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
+                    <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--blankCard-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
                         Search Emails
                     </div>
 
-                    <div className="w-full flex-1 px-2 py-4 mt-4 bg-[var(--cardA-main)] relative rounded-lg">
+                    <div className="w-full flex-1 p-2 mt-4 bg-[var(--cardB-main)] relative rounded-lg">
 
                         <AnimatePresence>
                             {filtered.map((mail) => (
@@ -141,7 +141,7 @@ export default function EmailsPage () {
                                     initial={{opacity: 0, y:10}}
                                     animate={{opacity: 1, y: 0,}}
                                     transition={{duration: 0.3}}
-                                    className={`p-1.5 shadow grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 mb-1 items-center text-left ${mail.read ? 'bg-[var(--bg-main)]' : 'bg-[var(--text-d)]'}`}
+                                    className={`p-1.5 shadow grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 mb-1 items-center text-left rounded-sm ${mail.read ? 'bg-[var(--cardB-main)]' : 'bg-[var(--blankCard-main)]'}`}
                                     onClick={() => {
                                         setSelectedEmail(mail)
                                         markAsRead(mail.id)
@@ -170,9 +170,9 @@ export default function EmailsPage () {
                                         <p className="text-xs text-[var(--text-c)]">{mail.body}</p>
                                     </div>
 
-                                    <div className={`rounded-sm text-[var(--text-b)] text-sm p-0.5 text-center
-                                        ${mail.priority === 'high' ? 'bg-red-500 bg-opacity-30' : ''}
-                                        ${mail.priority === 'normal' ? 'bg-yellow-300 bg-opacity-30' : ''}`}>
+                                    <div className={`rounded-sm text-[var(--text-b)] py-0.5 px-4 text-center
+                                        ${mail.priority === 'high' ? 'bg-[var(--dangerL)] px-6' : ''}
+                                        ${mail.priority === 'normal' ? 'bg-[var(--warningL)]' : ''}`}>
                                         <p className="text-sm font-semibold">{mail.priority}</p>
                                     </div>
                                 </motion.div>

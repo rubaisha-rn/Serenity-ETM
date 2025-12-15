@@ -13,7 +13,7 @@ export default function ThinFooter() {
     }, []);
 
     return(
-        <div className={`z-0 w-full flex flex-col items-center justify-center p-4 relative bg-[var(--bg-main)]`}
+        <div className={`z-10 w-full flex flex-col items-center justify-center p-4 relative bg-[var(--blankCard-main)]`}
         >
             <p className={`font-Roboto text-[0.6rem] text-center text-[var(--text-c)]`}>© 2025, Serenity ETM. All right reserved.</p>
         </div>

@@ -47,7 +47,7 @@ export default function CollapsableLeftSidebar() {
                 initial={{width: 40}}
                 animate={{width: expandedMain? 220 : 40}}
                 transition={{type: 'spring', stiffness: 260, damping: 20}}
-                className={`fixed top-0 left-0 z-30 bg-[var(--bg-main)] shadow-lg flex flex-col justify-between h-screen overflow-hidden py-4 pt-0`}
+                className={`fixed top-0 left-0 z-20 bg-[var(--bg-main)] shadow-lg flex flex-col justify-between h-screen overflow-hidden py-4 pt-0`}
                 style={{ overflow: 'clip' }}
             >
                 <div className='flex flex-col items-center w-full p-4 gap-3'>

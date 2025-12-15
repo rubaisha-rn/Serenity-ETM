@@ -44,7 +44,7 @@ export default function CollapsableRightSidebar() {
                 animate={{right: expanded ? 202 : 22}}
                 transition={{duration: 0.25, ease: 'easeInOut'}}
                 onClick={() => setExpanded(!expanded)}
-                className={`fixed bottom-2 z-10 bg-[var(--acc-main)] hover:bg-[var(--accHover-main)] shadow-xl p-1.5 pr-6 rounded-full`}
+                className={`fixed bottom-2 z-20 bg-[var(--acc-main)] hover:bg-[var(--accHover-main)] shadow-xl p-1.5 pr-6 rounded-full`}
             >
                 <img
                     src='/icons/backw.png'
@@ -59,7 +59,7 @@ export default function CollapsableRightSidebar() {
                 initial={{width: 40}}
                 animate={{width: expanded ? 220 : 40}}
                 transition={{type: 'spring', stiffness: 260, damping: 20}}
-                className={`fixed top-0 right-0 z-30 bg-[var(--bg-main)] shadow-lg flex flex-col justify-between h-screen overflow-hidden py-4 pt-0`}
+                className={`fixed top-0 right-0 z-20 bg-[var(--bg-main)] shadow-lg flex flex-col justify-between h-screen overflow-hidden py-4 pt-0`}
                 style={{ overflow: 'clip' }}
             >
                 <div className={`flex flex-col items-center w-full p-4 gap-3`}>
