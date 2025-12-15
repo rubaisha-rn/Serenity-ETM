@@ -5,7 +5,7 @@ export const STRESS_PALETTE = {
             cardA: '#f6f2f0',
             cardB: '#eae6e0',
             blankCard: '#ffffff',
-            a: '#c9b4ac',
+            a: '#d2b5a9',
             aHover: '#a98f89',
             icons: '#ffffff',
             iconsHover: '#d4d4d4',
