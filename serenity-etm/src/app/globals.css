@@ -19,15 +19,15 @@
 :root {
     --bg-main: #f8f8f8;
 
-    --cardA-main: #f9f5f5;
-    --cardB-main: #f5efef;
+    --cardA-main: #f6f2f0;
+    --cardB-main: #eae6e0;
 
     --blankCard-main: #ffffff;
 
-    --a-main: #e1d5d0;
-    --aHover-main: #d4c0bb;
+    --a-main: #c9b4ac;
+    --aHover-main: #a98f89;
 
-    --icons-main: #e6e6e6;
+    --icons-main: #ffffff;
     --iconsHover-main: #d4d4d4;
 
     --acc-main: #8f787c;

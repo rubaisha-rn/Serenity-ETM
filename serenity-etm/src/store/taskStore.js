@@ -31,7 +31,7 @@ export const useTaskStore = create((set) => ({
             id: '4',
             title: "Finish Prototype",
             created: '10-12-2025',
-            due: '15-12-2025',
+            due: '16-12-2025',
             priority: 'high',
             completed: false,
         },

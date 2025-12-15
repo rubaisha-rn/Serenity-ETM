@@ -33,10 +33,10 @@ export default function SecondarySidebar() {
 
                         <img
                             src="/logo/logo.png"
-                            className="w-6 h-6 shrink-0 opacity-60"
+                            className="w-6 h-6 shrink-0 opacity-80"
                         />
 
-                        <h1 className={`font-AbrilFatface text-md text-[var(--text-c)] opacity-70`}>
+                        <h1 className={`font-AbrilFatface text-md text-[var(--text-a)] opacity-70`}>
                             {screen === 'emails' ? 'Email Manager' : 'Task Manager'}
                         </h1>
 
