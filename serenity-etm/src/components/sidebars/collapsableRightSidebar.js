@@ -156,7 +156,7 @@ export default function CollapsableRightSidebar() {
                             className='w-full overflow-hidden'
                             style={{pointerEvents: expanded ? 'auto' : 'none'}}
                         >
-                            <label className={`text-[0.6rem] font-semibold text-[var(--text-b)]`}>Stress Level: {emotionValue}</label>
+                            <label className={`text-[0.6rem] font-semibold text-[var(--text-b)]`}>Your Stress Level: {emotionValue}</label>
                             <input
                                 type='range'
                                 min={0}
@@ -166,6 +166,10 @@ export default function CollapsableRightSidebar() {
                                 onChange={(e) => setEmotionValue(Number(e.target.value))}
                                 className={`w-full mt-2 accent-[var(--text-b)]`}
                             />
+                            <div className='flex flex-row justify-between text-[0.6rem]'>
+                                <p>Lowest</p>
+                                <p>Highest</p>
+                            </div>
                         </motion.div>
                     </div>  
                 </div>

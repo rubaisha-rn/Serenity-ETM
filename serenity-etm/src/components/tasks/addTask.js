@@ -10,19 +10,42 @@ export default function AddTask() {
     const {setTheme} = useStore();
     const {addTask} = useTaskStore();
 
+    const [open, setOpen] = useState(false);
+    const [title, setTitle] = useState('');
+    const [due, setDue] = useState('');
+    const [priority, setPriority] = useState('low');
+    const [error, setError] = useState('');
+
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
 
-    const [open, setOpen] = useState(false);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = today.toISOString().split('T')[0];
 
-    const [title, setTitle] = useState('');
-    const [due, setDue] = useState('');
-    const [priority, setPriority] = useState('low');
+    const isValidDate = (dateStr) => {
+        if(!dateStr) return false;
+        
+        const selected = new Date(dateStr);
+        selected.setHours(0, 0, 0, 0);
+
+        if (isNaN(selected.getTime())) return false;
+
+        return selected >= today;
+    }
 
     const submitTask = () => {
-        if (!title.trim()) return;
+        if (!title.trim()) {
+            setError('Task title is required.');
+            return;
+        };
+
+        if(isValidDate(due)) {
+            setError('Due date must be today or later.');
+            return;
+        }
 
         addTask({
             title, 
@@ -83,6 +106,7 @@ export default function AddTask() {
                                 <input
                                     type="date"
                                     value={due}
+                                    min={new Date().toISOString().split('T')[0]}
                                     onChange={(e) => setDue(e.target.value)}
                                     placeholder="Task Title"
                                     className="w-full p-2 text-sm rounded-md border focus:outline-none"
@@ -98,6 +122,10 @@ export default function AddTask() {
                                     <option value='high'>High Priority</option>
                                 </select>
                             </div>
+
+                            {error && (
+                                <p className="text-xs text-[var(--danger)] mt-1">{error}</p>
+                            )}
 
                             <div className="flex justify-end gap-3 mt-5">
                                 

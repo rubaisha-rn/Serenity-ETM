@@ -191,12 +191,12 @@ export default function TasksPage() {
                                             />
                                         </div>
                                         <div>
-                                            <p className={`text-sm ${task.completed ? 'line-through text-[var(--text-c)]' : ''}`}>
+                                            <p className={`text-sm`}>
                                                 {task.title}
                                             </p>
                                         </div>
                                         <div>
-                                            <p className={`text-sm ${task.completed ? 'line-through text-[var(--text-c)]' : ''}`}>
+                                            <p className={`text-sm`}>
                                                 {formattedDate}
                                             </p>
                                         </div>
@@ -204,7 +204,7 @@ export default function TasksPage() {
                                             ${task.priority === 'high' ? 'bg-[var(--dangerL)]' : ''}
                                             ${task.priority === 'medium' ? 'bg-[var(--warningL)]' : ''}
                                             ${task.priority === 'low' ? 'bg-[var(--successL)]' : ''}`}>
-                                            <p className={`font-medium ${task.completed ? 'line-through text-[var(--text-c)]' : ''}`}>
+                                            <p className={`font-medium`}>
                                                 {task.priority}
                                             </p>
                                         </div>

@@ -131,6 +131,21 @@ export default function EmailsPage () {
 
                     <div className="w-full flex-1 p-2 mt-4 bg-[var(--cardB-main)] relative rounded-lg">
 
+                        <div className="grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 text-left">
+                            <div>
+                                <p className="text-xs">Starred</p>
+                            </div>
+                            <div>
+                                <p className="text-xs">From/Timestamp</p>
+                            </div>
+                            <div>
+                                <p className="text-xs">Subject/Body</p>
+                            </div>
+                            <div>
+                                <p className="text-xs">Priority</p>
+                            </div>
+                        </div>
+
                         <AnimatePresence>
                             {filtered.map((mail) => (
                                 <motion.div
@@ -172,7 +187,7 @@ export default function EmailsPage () {
                                     <div className={`rounded-sm text-[var(--text-b)] py-0.5 px-4 text-center
                                         ${mail.priority === 'high' ? 'bg-[var(--dangerL)] px-6' : ''}
                                         ${mail.priority === 'normal' ? 'bg-[var(--warningL)]' : ''}`}>
-                                        <p className="text-sm font-semibold">{mail.priority}</p>
+                                        <p className="text-sm">{mail.priority}</p>
                                     </div>
                                 </motion.div>
                             ))}
