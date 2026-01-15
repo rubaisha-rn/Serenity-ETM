@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import useStore from "@/store/useStore";
 
-const LICENSE_KEY = '';
+const LICENSE_KEY = process.env.NEXT_PUBLIC_MY_SDK_KEY;
 
 const MIN_INTERVAL_MS = 1 * 60 * 1000; // 1min
 const MAX_INTERVAL_MS = 5 * 60 * 1000; // 5min
@@ -115,7 +115,7 @@ export default function useStressDetector() {
                             disgust * 0.6 +
                             sad * 0.5 +
                             surprise * 0.3 -
-                            happy * 0.7;
+                            happy * 0.7; // assigning weighted values to different emotions
 
                         latestSignalsRef.current.emotionBias = Math.min(Math.max(emotionStress, 0), 1);
 

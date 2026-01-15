@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import useStore from '@/store/useStore';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/lib/supabaseClient';
 
 const IMG = {
     email: '/icons/email.png',
@@ -22,6 +23,11 @@ export default function CollapsableLeftSidebar() {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+        router.push('login')
+    }
 
     return (
         <>
@@ -130,7 +136,7 @@ export default function CollapsableLeftSidebar() {
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
-                        onClick={() => router.push('/')}
+                        onClick={handleLogout}
                         className={`flex items-center 
                             ${expandedMain ? 'gap-3 w-full h-9 px-3 rounded-lg justify-start' : 'gap-0 p-0.5 justify-center rounded-full p-1.5 rounded-md'} bg-[var(--icons-main)] hover:bg-[var(--iconsHover-main)]`}
                     >

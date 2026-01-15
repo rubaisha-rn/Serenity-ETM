@@ -11,10 +11,27 @@ import ModeBanner from "@/components/modeBanner";
 import BreakPopup from "@/components/breakPopup";
 import CalmOverlay from "@/components/calmOverlay";
 
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
+
 export default function TasksPage() {
 
+    const router = useRouter()
+
+    useEffect(() => {
+        const checkSession = async () => {
+            const {data} = await supabase.auth.getSession()
+
+            if (!data.session) {
+                router.push('/login')
+            }
+        }
+
+        checkSession()
+    }, [])
+
     const {tasks, toggleComplete, completedTasksCount, setCompletedTasksCount} = useTaskStore();
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks, calmMode, setTheme, setScreen} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks, calmMode, sdkActive, setCalmMode, setTheme, setScreen} = useStore();
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
@@ -71,6 +88,8 @@ export default function TasksPage() {
         results = [...results].sort((a,b) => sortTasks(a, b, priorityMode));
         setSorted(results);
         setScreen('tasks');
+
+        if (emotionValue > 85 && sdkActive) setCalmMode(true);
     
     }, [tasks, showTasks, focusMode, priorityMode, emotionValue]);
 
@@ -95,24 +114,22 @@ export default function TasksPage() {
                 />
             )}
 
-            {emotionValue > 85 && (
-                <AnimatePresence>
-                    {calmMode && (
-                        <motion.div
-                            key='calm-overlay-wrapper'
-                            initial={{opacity: 0}}
-                            animate={{opacity: 1}}
-                            exit={{opacity: 0}}
-                            transition={{ duration: 0.4, ease: 'easeInOut'}}
-                            className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
-                        >
-                            <div className="absolute inset-0 pointer-events-none">
-                                <CalmOverlay />
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            )}
+            <AnimatePresence>
+                {calmMode && (
+                    <motion.div
+                        key='calm-overlay-wrapper'
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{ duration: 0.4, ease: 'easeInOut'}}
+                        className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
+                    >
+                        <div className="absolute inset-0 pointer-events-none">
+                            <CalmOverlay />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <AppShell>
 
@@ -241,14 +258,14 @@ function sortTasks(a, b, priorityMode) {
     // priority mode on
     if(priorityMode) {
 
-        if (pA !== pB) return pB - pA;
-        if (dateA !== dateB) return dateA - dateB;
+        if (pA !== pB) return pB - pA; // sort by priority 
+        if (dateA !== dateB) return dateA - dateB; // sort by date
         return 0;
     } 
     else {
         
-        if (dateA !== dateB) return dateA - dateB;
-        if (pA !== pB) return pB - pA;
+        if (dateA !== dateB) return dateA - dateB; // sort by date
+        if (pA !== pB) return pB - pA; // sort by priority
         return 0;
     }
 }

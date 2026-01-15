@@ -11,11 +11,28 @@ import BreakPopup from "@/components/breakPopup";
 import CalmOverlay from "@/components/calmOverlay";
 import ModeBanner from "@/components/modeBanner";
 
+import { supabase } from "@/lib/supabaseClient";
+import { useRouter } from "next/navigation";
+
 export default function EmailsPage () {
+
+    const router = useRouter()
+
+    useEffect(() => {
+        const checkSession = async () => {
+            const {data} = await supabase.auth.getSession()
+
+            if (!data.session) {
+                router.push('/login')
+            }
+        }
+
+        checkSession()
+    }, [])
 
     const {emails, showEmails, toggleStar, setSelectedEmail, markAsRead, readEmailCount, setReadEmailCount} = useEmailStore();
 
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, calmMode, setScreen, setTheme} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, sdkActive, calmMode, setCalmMode, setScreen, setTheme} = useStore();
 
     const mainWidth = expandedMain ? 220 : 40;
     const secondaryWidth = expandedSecondary ? 200 : 40;
@@ -78,6 +95,8 @@ export default function EmailsPage () {
         setFiltered(results);
         setScreen('emails');
 
+        if(emotionValue > 85 && sdkActive) setCalmMode(true);
+
     }, [emails, showEmails, focusMode, priorityMode, emotionValue]);
 
     return (
@@ -92,24 +111,22 @@ export default function EmailsPage () {
                 />
             )}
 
-            {emotionValue > 85 && (
-                <AnimatePresence>
-                    {calmMode && (
-                        <motion.div
-                            key='calm-overlay-wrapper'
-                            initial={{opacity: 0}}
-                            animate={{opacity: 1}}
-                            exit={{opacity: 0}}
-                            transition={{ duration: 0.4, ease: 'easeInOut'}}
-                            className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
-                        >
-                            <div className="absolute inset-0 pointer-events-none">
-                                <CalmOverlay />
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            )}
+            <AnimatePresence>
+                {calmMode && (
+                    <motion.div
+                        key='calm-overlay-wrapper'
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{ duration: 0.4, ease: 'easeInOut'}}
+                        className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
+                    >
+                        <div className="absolute inset-0 pointer-events-none">
+                            <CalmOverlay />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
             
             <AppShell>
                 
@@ -212,14 +229,14 @@ export default function EmailsPage () {
 
 export function sortEmails(a, b, priorityMode=false){
     if(priorityMode) {
-        if(a.priority === 'high' && b.priority !== 'high') return -1;
+        if(a.priority === 'high' && b.priority !== 'high') return -1; // sort by priority
         if(b.priority === 'high' && a.priority !== 'high') return 1;
 
-        if(a.starred && !b.starred) return -1;
+        if(a.starred && !b.starred) return -1; // sort by starred status
         if(b.starred && !a.starred) return 1;
     }
 
-    const timeA = new Date(a.timestamp).getTime();
+    const timeA = new Date(a.timestamp).getTime(); // sort by timestamps
     const timeB = new Date(b.timestamp).getTime();
 
     if(timeB !== timeA) return timeB - timeA;

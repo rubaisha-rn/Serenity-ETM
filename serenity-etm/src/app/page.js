@@ -105,7 +105,7 @@ export default function IntroPage() {
                                     ? "bg-[var(--acc-main)] hover:bg-[var(--accHover-main)] border-[var(--a-main)] border-2 text-[var(--text-d)] cursor-pointer"
                                     : "bg-[var(--acc-main)] border-[var(--a-main)] border-2 text-[var(--text-d)] opacity-40 pointer-events-none cursor-not-allowed"
                                 }`}
-                                onClick={() => router.push('/emails')}
+                                onClick={() => router.push('/login')}
                             >
                                 Enter Serenity Workplace
                             </button>

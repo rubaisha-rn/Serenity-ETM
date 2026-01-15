@@ -42,11 +42,6 @@ export default function AddTask() {
             return;
         };
 
-        if(isValidDate(due)) {
-            setError('Due date must be today or later.');
-            return;
-        }
-
         addTask({
             title, 
             due,
