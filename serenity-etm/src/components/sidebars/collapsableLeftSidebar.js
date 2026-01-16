@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
 import useStore from '@/store/useStore';
 import { useRouter } from 'next/navigation';
@@ -26,9 +26,15 @@ export default function CollapsableLeftSidebar() {
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
-        router.push('login')
+        router.push('/login')
     }
 
+    const [mounted, setMounted] = useState(false)
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    if (!mounted) return null
     return (
         <>
             {/* toggle button */}

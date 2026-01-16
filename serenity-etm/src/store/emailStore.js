@@ -1,218 +1,294 @@
 import { create } from "zustand";
+import { supabase } from "@/lib/supabaseClient";
+import { time } from "framer-motion";
 
-export const useEmailStore = create((set) => ({
-    emails: [
-        {
-            id: '1',
-            from: 'university@example.com',
-            to: 'me@example.com',
-            subject: 'Final Project Submission',
-            body: 'Remember to submit your CM3070 final project before the deadline.',
-            starred: false,
-            priority: 'high',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T18:38:35.124Z',
-        },
-        {
-            id: '2',
-            from: 'boss@example.com',
-            to: 'me@example.com',
-            subject: 'Urgent: Presentation tomorrow',
-            body: 'Make sure your slides are ready for the meeting tomorrow morning.',
-            starred: true,
-            priority: 'high',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '3',
-            from: 'manager@example.com',
-            to: 'me@example.com',
-            subject: 'Urgent: Meeting tomorrow',
-            body: 'Meeting at 8am with the national head.',
-            starred: true,
-            priority: 'normal',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '4',
-            from: 'advert@example.com',
-            to: 'me@example.com',
-            subject: 'New Marketing Deal!',
-            body: 'Try our new deal at a 30% discount!',
-            starred: false,
-            priority: 'normal',
-            folder: 'archive',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '5',
-            from: 'me@example.com',
-            to: 'boss@example.com',
-            subject: 'Presentation',
-            body: 'Please find the presentation attached below.',
-            starred: false,
-            priority: 'normal',
-            folder: 'sent',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '6',
-            from: 'me@example.com',
-            to: 'manager@example.com',
-            subject: 'Drafts test',
-            body: "I've completed the presentations.",
-            starred: false,
-            priority: 'normal',
-            folder: 'drafts',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '7',
-            from: 'university@example.com',
-            to: 'me@example.com',
-            subject: 'Final Project Submission',
-            body: 'Remember to submit your CM3070 final project before the deadline.',
-            starred: false,
-            priority: 'high',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T18:38:35.124Z',
-        },
-        {
-            id: '9',
-            from: 'manager@example.com',
-            to: 'me@example.com',
-            subject: 'Urgent: Meeting tomorrow',
-            body: 'Meeting at 8am with the national head.',
-            starred: true,
-            priority: 'normal',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '11',
-            from: 'me@example.com',
-            to: 'boss@example.com',
-            subject: 'Presentation',
-            body: 'Please find the presentation attached below.',
-            starred: false,
-            priority: 'normal',
-            folder: 'sent',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '14',
-            from: 'boss@example.com',
-            to: 'me@example.com',
-            subject: 'Urgent: Presentation tomorrow',
-            body: 'Make sure your slides are ready for the meeting tomorrow morning.',
-            starred: true,
-            priority: 'high',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '16',
-            from: 'advert@example.com',
-            to: 'me@example.com',
-            subject: 'New Marketing Deal!',
-            body: 'Try our new deal at a 30% discount!',
-            starred: false,
-            priority: 'normal',
-            folder: 'archive',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '18',
-            from: 'me@example.com',
-            to: 'manager@example.com',
-            subject: 'Drafts test',
-            body: "I've completed the presentations.",
-            starred: false,
-            priority: 'normal',
-            folder: 'drafts',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-        {
-            id: '19',
-            from: 'university@example.com',
-            to: 'me@example.com',
-            subject: 'Final Project Submission',
-            body: 'Remember to submit your CM3070 final project before the deadline.',
-            starred: false,
-            priority: 'high',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T18:38:35.124Z',
-        },
-        {
-            id: '20',
-            from: 'boss@example.com',
-            to: 'me@example.com',
-            subject: 'Urgent: Presentation tomorrow',
-            body: 'Make sure your slides are ready for the meeting tomorrow morning.',
-            starred: false,
-            priority: 'normal',
-            folder: 'inbox',
-            read: false,
-            timestamp: '2025-01-12T23:38:59.124Z',
-        },
-    ],
+export const useEmailStore = create((set, get) => ({
 
+    classifyMissingEmails: async () => {
+
+        const {data: sessionData} = await supabase.auth.getSession()
+        if (!sessionData.session) return
+
+        const emails = get().emails
+
+        const unclassified = emails.filter(
+            e => e.priority_src === 'ai'
+        )
+
+        for (const email of unclassified) {
+            const res = await fetch('/api/classify', {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    text: `${email.subject} ${email.body}`
+                })
+            })
+
+            const result = await res.json()
+
+            await supabase
+                .from('emails')
+                .update({
+                    priority: result.priority
+                })
+                .eq('id', email.id)
+        }
+
+        get().loadEmails()
+    },
+
+    loadEmails : async () => {
+
+        const {data: sessionData} = await supabase.auth.getSession()
+        if (!sessionData.session) return
+
+        const userId = sessionData.session.user.id
+
+        const {data: rows, error} = await supabase
+            .from('emails')
+            .select(`
+                *,
+                sender:sender_id(
+                email,
+                first_name,
+                last_name
+                ),
+                receiver:receiver_id(
+                email,
+                first_name,
+                last_name
+                )
+            `)
+            .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
+            .order('created_at', {ascending: false})
+
+        if (!error) {
+            const normalised = rows.map(e => {
+
+                const isSender = e.sender_id === userId
+                const isReceiver = e.receiver_id === userId
+
+                const senderName = e.sender
+                    ? `${e.sender.first_name || ''} ${e.sender.last_name || ''}`.trim()
+                    : ''
+
+                const receiverName = e.receiver
+                    ? `${e.receiver.first_name || ''} ${e.receiver.last_name || ''}`.trim()
+                    : ''
+
+                let folder = e.folder || 'inbox'
+                if (e.sender_id === userId && folder != 'drafts') {
+                    folder = 'sent'
+                }
+
+                return {
+                    ...e,
+
+                    from_email: e.sender?.email || '',
+                    from_name: senderName,
+
+                    to_email: e.receiver?.email || '',
+                    to_name: receiverName,
+
+                    isSender,
+                    isReceiver,
+
+                    read: e.read ?? e.is_read,
+                    timestamp: e.timestamp || e.created_at,
+
+                    folder,
+                    
+                    starred: e.starred ?? false,
+                    priority: e.priority,
+                    priority_src: e.priority_src,
+                }
+            })
+
+            set({emails: normalised})
+        }
+        else {
+            console.error('Email fetch error:', error)
+        }
+    },
+
+    emails: [],
     selectedEmail: null,
-    setSelectedEmail: (email) => set({selectedEmail: email}),
-
-    moveToFolder: (id, folder) => 
-        set((state) => ({
-            emails: state.emails.map((e) => 
-                e.id === id ? {...e, folder} : e    
-            ),
-        })),
-
-    toggleStar: (id) => 
-        set((state) => ({
-            emails: state.emails.map((e) =>
-                e.id === id ? {...e, starred: !e.starred} : e
-            ),
-        })),
-
-    markAsRead: (id) =>
-        set((state => ({
-            emails: state.emails.map((e) => 
-                e.id === id ? {...e, read: true} : e
-            ),
-        }))),
-
     showEmails: 'inbox',
-    setShowEmails: (folder) => set({showEmails: folder}),
-
-    sendEmail: (data) => 
-        set((state) => ({
-            emails: [
-                ...state.emails,
-                {
-                    id: crypto.randomUUID(),
-                    ...data,
-                    date: new Date().toISOString().split('T')[0],
-                    read: true,
-                    folder: 'sent',
-                },
-            ],
-        })),
-
     readEmailCount: 0,
+
+    setSelectedEmail: (email) => set({selectedEmail: email}),
+    setShowEmails: (folder) => set({showEmails: folder}),
     setReadEmailCount: (count) => set({readEmailCount: count}),
+
+    toggleStar: async (id) => {
+
+        const email = get().emails.find(e => e.id === id)
+
+        if (!email) return
+
+        await supabase
+            .from('emails')
+            .update({starred: !email.starred})
+            .eq('id', id)
+
+        get().loadEmails()
+    },
+
+    markAsRead: async (id, read=true) => {
+
+        await supabase
+            .from('emails')
+            .update({is_read: read})
+            .eq('id', id)
+
+        get().loadEmails()
+    },
+
+    moveToFolder: async (id, newfolder='inbox') => {
+
+        await supabase
+            .from('emails')
+            .update({ folder: newfolder })
+            .eq('id', id)
+
+        get().loadEmails()
+    },
+    
+    sendEmail: async (data) => {
+
+        const {data: sessionData} = await supabase.auth.getSession()
+        if (!sessionData.session) return
+
+        const {data: rows, error} = await supabase
+            .from('emails')
+            .insert([{
+                
+                ...data,
+
+                sender_id: sessionData.session.user.id,
+                receiver_id: data.receiver_id,
+
+                preview: data.body.length > 70 
+                    ? data.body.slice(0, 70) + '...'
+                    : data.body,
+
+                folder: 'inbox',
+                is_read: false,
+
+                priority: 'normal',
+                priority_src: 'ai',
+            }])
+
+        if (error) {
+            console.error('Send email failed:', error)
+            return 
+        }
+
+        get().loadEmails()
+    },
+
+    cyclePriority: async (id) => {
+        
+        const email = get().emails.find(e => e.id === id)
+        if (!email) return
+
+        const order = ['normal', 'high']
+        const currentIndex = order.indexOf(email.priority || 'normal')
+        const nextPriority = order[(currentIndex+1) % order.length]
+
+        await supabase
+            .from('emails')
+            .update({
+                priority: nextPriority,
+                priority_src: 'user'
+            })
+            .eq('id', id)
+
+        get().loadEmails()
+    },
+
+    saveDraft: async (data) => {
+        
+        const {data: sessionData} = await supabase.auth.getSession()
+        if (!sessionData.session) return
+
+        if (!data.subject && !data.body) return
+
+        const {data: rows, error} = await supabase
+            .from('emails')
+            .insert([{
+                
+                sender_id: sessionData.session.user.id,
+                receiver_id: null,
+                reply_to: data.reply_to || null,
+
+                subject: data.subject || '(No Subject)',
+                body: data.body || '',
+
+                preview: data.body.length > 70 
+                    ? data.body.slice(0, 70) + '...'
+                    : data.body,
+
+                folder: 'drafts',
+                is_read: true,
+
+                priority: 'normal',
+                priority_src: 'ai',
+        }])
+
+        if (error) {
+            console.error('Send email failed:', error)
+            return 
+        }
+
+        get().loadEmails()
+    },
+
+    sendDraft: async (draftId, receiverId, subject, body) => {
+        
+        const {data: sessionData} = await supabase.auth.getSession()
+        if (!sessionData.session) return
+
+        const preview = body.length > 70
+            ? body.slice(0, 70) + '...'
+            : body
+
+        const {error} = await supabase
+            .from('emails')
+            .update({
+                receiver_id: receiverId,
+                subject,
+                preview,
+                body,
+
+                folder: 'inbox',
+                is_read: false,
+                
+                priority: 'normal',
+                priority_src: 'ai',
+
+                created_at: new Date().toISOString(),
+            })
+            .eq('id', draftId)
+
+        if (error) {
+            console.error('Send email failed:', error)
+            return 
+        }
+
+        get().loadEmails()
+    },
+
+    updateDraft: async (id, subject, body) => {
+        await supabase
+            .from('emails')
+            .update({
+                subject,
+                body,
+                preview: body.slice(0, 70)
+            })
+            .eq('id', id)
+
+        get().loadEmails()
+    }
 }))

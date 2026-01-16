@@ -17,20 +17,25 @@ import { useRouter } from "next/navigation";
 export default function TasksPage() {
 
     const router = useRouter()
+    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, completedTasksCount, setCompletedTasksCount} = useTaskStore();
 
     useEffect(() => {
-        const checkSession = async () => {
+        const init = async () => {
             const {data} = await supabase.auth.getSession()
 
             if (!data.session) {
                 router.push('/login')
+                return
             }
+
+            await loadTasks()
+            await classifyMissingTasks()
         }
 
-        checkSession()
+        init()
     }, [])
 
-    const {tasks, toggleComplete, completedTasksCount, setCompletedTasksCount} = useTaskStore();
+    
     const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks, calmMode, sdkActive, setCalmMode, setTheme, setScreen} = useStore();
     const [sorted, setSorted] = useState([]);
 
@@ -65,7 +70,7 @@ export default function TasksPage() {
             
             if (showTasks === 'today') {
                 results = results.filter((t) => {
-                    const taskDate = parseDDMMYYYY(t.due);
+                    const taskDate = t.due ? new Date(t.due) : null;
                     if(!taskDate) return false;
                     return taskDate >= today && taskDate < tomorrow;
                 });
@@ -78,8 +83,9 @@ export default function TasksPage() {
             }
             else if (showTasks === 'upcoming') {
                 results = results.filter((t) => {
-                    const taskDate = parseDDMMYYYY(t.due);
+                    const taskDate = t.due ? new Date(t.due) : null;
                     if(!taskDate) return false;
+                    if (t.completed) return false;
                     return taskDate >= today;
                 });
             }
@@ -174,13 +180,16 @@ export default function TasksPage() {
                         <AnimatePresence>
                             {sorted.map((task) => {
                                 
-                                const formattedDate = (() => {
-                                    if (!task.due) return '';
-                                    const [day, month, year] = task.due.split('-');
-                                    if (!day || !month || !year) return '';
-                                    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                                    return `${monthNames[parseInt(month, 10) -1]} ${parseInt(day, 10)}`
-                                })();
+                                const formattedDate = task.due
+                                    ? new Date(task.due).toLocaleString(undefined, {
+                                        day: '2-digit',
+                                        month: 'short',
+                                        year: 'numeric',
+                                        hour: 'numeric',
+                                        minute: '2-digit',
+                                        hour12: true
+                                    }) 
+                                    : '';
 
                                 return (
                                     <motion.div
@@ -204,7 +213,8 @@ export default function TasksPage() {
                                                 checked={task.completed}
                                                 onChange={() => {
                                                     toggleComplete(task.id)
-                                                    setCompletedTasksCount(completedTasksCount+1)
+                                                    if (!task.completed){
+                                                    setCompletedTasksCount(completedTasksCount+1)}
                                                 }}
                                                 className='w-4 h-4 accent-blue-500'
                                             />
@@ -248,8 +258,8 @@ function sortTasks(a, b, priorityMode) {
     if (a.completed !== b.completed) return a.completed ? 1 : -1;
 
     // parse sort
-    const dateA = parseDDMMYYYY(a.due)?.getTime() ?? Infinity;
-    const dateB = parseDDMMYYYY(b.due)?.getTime() ?? Infinity;
+    const dateA = a.due ? new Date(a.due).getTime() : Infinity;
+    const dateB = b.due ? new Date(b.due).getTime() : Infinity;
 
     // priority numbers
     const pA = priorityOrder[a.priority] || 0;
@@ -268,25 +278,4 @@ function sortTasks(a, b, priorityMode) {
         if (pA !== pB) return pB - pA; // sort by priority
         return 0;
     }
-}
-
-function parseDDMMYYYY(dateStr) {
-    if (!dateStr) return null;
-
-    const clean = dateStr.trim();
-    const parts = clean.split('-');
-
-    if(parts.length !== 3) return null;
-
-    let [day, month, year] = parts.map(p => p.trim());
-
-    if (year.length === 2) {
-        year = '20' + year;
-    }
-
-    day = Number(day);
-    month = Number(month);
-    year = Number(year);
-
-    return new Date(year, month-1, day);
 }

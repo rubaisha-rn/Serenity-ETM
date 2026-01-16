@@ -1,93 +1,117 @@
 import { create } from "zustand";
+import { supabase } from "@/lib/supabaseClient";
+import { complex } from "framer-motion";
 
-export const useTaskStore = create((set) => ({
-    
-    tasks: [
-        {
-            id: '1',
-            title: "Finish Prototype's UI",
-            created: '10-12-2025',
-            due: '07-12-2025',
-            priority: 'high',
-            completed: false,
-        },
-        {
-            id: '2',
-            title: "Complete Work Tasks",
-            created: '10-12-2025',
-            due: '02-01-2026',
-            priority: 'low',
-            completed: false,
-        },
-        {
-            id: '3',
-            title: "Complete Color Scheme",
-            created: '10-12-2025',
-            due: '05-01-2026',
-            priority: 'medium',
-            completed: true,
-        },
-        {
-            id: '4',
-            title: "Finish Prototype",
-            created: '10-12-2025',
-            due: '16-12-2025',
-            priority: 'high',
-            completed: false,
-        },
-        {
-            id: '5',
-            title: "Develop Strategy Plan",
-            created: '01-12-2025',
-            due: '10-01-2026',
-            priority: 'low',
-            completed: false,
-        },
-        {
-            id: '6',
-            title: "Write Literature Review",
-            created: '10-12-2025',
-            due: '12-01-2026',
-            priority: 'medium',
-            completed: true,
-        },
-        {
-            id: '7',
-            title: "Finish Course",
-            created: '10-12-2025',
-            due: '12-12-2025',
-            priority: 'medium',
-            completed: false,
-        },
-        {
-            id: '8',
-            title: "Make Presentation",
-            created: '10-12-2025',
-            due: '12-12-2025',
-            priority: 'high',
-            completed: false,
-        },
-    ],
+export const useTaskStore = create((set, get) => ({
 
-    addTask: (task) => 
-        set ((state) => ({
-            tasks: [...state.tasks, task],
-        })),
-
-    toggleComplete: (id) => 
-        set((state) => ({
-            tasks: state.tasks.map((t) => 
-                t.id === id ? {...t, completed: !t.completed } : t
-            ),
-        })),
-
-    updateTask: (id, updated) =>
-        set((state) => ({
-            tasks: state.tasks.map((t) =>
-                t.id === id ? {...t, ...updated} : t
-            ),
-        })),
-
+    tasks: [],
     completedTasksCount: 0,
+
+    classifyMissingTasks: async () => {
+
+        const tasks = get().tasks
+        const unclassified = tasks.filter(
+            t => t.priority_src == 'ai'
+        )
+
+        for (const task of unclassified) {
+            const res = await fetch('/api/classify', {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    text: `$task$ ${task.title} ${task.description}`
+                })
+            })
+
+            const result = await res.json()
+
+            await supabase
+                .from('tasks')
+                .update({
+                    priority: result.priority
+                })
+                .eq('id', task.id)
+        }
+
+        get().loadTasks()
+    },
+
+    loadTasks : async () => {
+        const {data, error} = await supabase
+            .from('tasks')
+            .select('*')
+            .order('due_date', {ascending: false})
+
+        if (!error) {
+            const normalised = data.map(t => ({
+                ...t,
+
+                completed: t.completed ?? false,
+                timestamp: t.timestamp || t.created_at,
+                priority: t.priority || 'low',
+                due: t.due_date,
+                due_display: t.due_date 
+                    ? formatToDDMMYY(t.due_date)
+                    : null,
+            }))
+
+            set({tasks: normalised})
+        }
+        else {
+            console.error('Task fetch error:', error)
+        }
+    },
+    
+    addTask: async (task) => {
+
+        const {data: sessionData} = await supabase.auth.getSession()
+        if (!sessionData.session) return
+        
+        await supabase
+            .from('tasks')
+            .insert([{
+                user_id: sessionData.session.user.id,
+                ...task,
+                completed: false,
+                
+                priority: null,
+                priority_src: 'ai',
+            }])
+
+        get().loadTasks()
+    },
+
+    toggleComplete: async (id) => {
+
+        const task = get().tasks.find(t => t.id === id)
+        if (!task) return
+        
+        await supabase
+            .from('tasks')
+            .update({
+                completed: !task.completed
+            })
+            .eq('id', id)
+
+        get().loadTasks()
+    },
+
+    updateTask: async (id, updated) => {
+
+        await supabase
+            .from('tasks')
+            .update({
+                updated
+            })
+            .eq('id', id)
+
+        get().loadTasks()
+    },
+
     setCompletedTasksCount: (count) => set({completedTasksCount: count}),
 }));
+
+function formatToDDMMYY(dateStr) {
+    const [year, month, day] = dateStr.split('-')
+    return `${day}-${month}-${year}`
+}

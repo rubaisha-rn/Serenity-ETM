@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useEmailStore } from "@/store/emailStore";
 import EmailReader from "@/components/emails/emailReader";
+import EmailSend from "@/components/emails/emailSend";
 import BreakPopup from "@/components/breakPopup";
 import CalmOverlay from "@/components/calmOverlay";
 import ModeBanner from "@/components/modeBanner";
@@ -17,20 +18,23 @@ import { useRouter } from "next/navigation";
 export default function EmailsPage () {
 
     const router = useRouter()
+    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, toggleStar, setSelectedEmail, markAsRead, moveToFolder, readEmailCount, setReadEmailCount} = useEmailStore();
 
     useEffect(() => {
-        const checkSession = async () => {
+        const init = async () => {
             const {data} = await supabase.auth.getSession()
 
             if (!data.session) {
                 router.push('/login')
+                return
             }
+
+            await loadEmails()
+            await classifyMissingEmails()
         }
 
-        checkSession()
+        init()
     }, [])
-
-    const {emails, showEmails, toggleStar, setSelectedEmail, markAsRead, readEmailCount, setReadEmailCount} = useEmailStore();
 
     const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, sdkActive, calmMode, setCalmMode, setScreen, setTheme} = useStore();
 
@@ -72,7 +76,7 @@ export default function EmailsPage () {
             }
 
             if(showEmails === 'inbox') {
-                results = results.filter(e => e.folder === 'inbox');
+                results = results.filter(e => e.folder === 'inbox' || (e.isSender && e.isReceiver));
             }
             else if(showEmails === 'drafts') {
                 results = results.filter(e => e.folder === 'drafts');
@@ -87,7 +91,7 @@ export default function EmailsPage () {
                 results = results.filter(e => e.starred);
             }
             else if(showEmails === 'priority') {
-                results = results.filter(e => e.priority === 'high');
+                results = results.filter(e => e.priority === 'high' && e.folder != 'archive' && e.folder != 'drafts');
             }
         }
 
@@ -98,6 +102,8 @@ export default function EmailsPage () {
         if(emotionValue > 85 && sdkActive) setCalmMode(true);
 
     }, [emails, showEmails, focusMode, priorityMode, emotionValue]);
+
+    const [showComposer, setShowComposer] = useState(false)
 
     return (
         <div className="bg-[var(--cardA-main)] relative h-screen">
@@ -148,6 +154,16 @@ export default function EmailsPage () {
                         Search Emails
                     </div>
 
+                    <button 
+                        onClick={() => setShowComposer(!showComposer)}
+                    >
+                        Compose Button
+                    </button>
+
+                    {showComposer && (
+                        <EmailSend onClose={() => setShowComposer(false)} />
+                    )}
+
                     <div className="w-full flex-1 p-2 mt-4 bg-[var(--cardB-main)] relative rounded-lg">
 
                         <div className="grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 text-left">
@@ -155,7 +171,7 @@ export default function EmailsPage () {
                                 <p className="text-xs">Starred</p>
                             </div>
                             <div>
-                                <p className="text-xs">From/Timestamp</p>
+                                <p className="text-xs">{showEmails == 'sent' ? 'To/Timestamp' : 'From/Timestamp'}</p>
                             </div>
                             <div>
                                 <p className="text-xs">Subject/Body</p>
@@ -174,7 +190,7 @@ export default function EmailsPage () {
                                     initial={{opacity: 0, y:10}}
                                     animate={{opacity: 1, y: 0,}}
                                     transition={{duration: 0.3}}
-                                    className={`p-1.5 shadow grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 mb-1 items-center text-left rounded-sm ${mail.read ? 'bg-[var(--cardB-main)]' : 'bg-[var(--blankCard-main)]'}`}
+                                    className={`p-1.5 shadow grid grid-cols-[0.05fr_0.05fr_0.05fr_0.05fr_1fr_1.5fr_0.25fr] gap-4 mb-1 items-center text-left rounded-sm ${mail.read ? 'bg-[var(--cardB-main)]' : 'bg-[var(--blankCard-main)]'}`}
                                     onClick={() => {
                                         setSelectedEmail(mail)
                                         markAsRead(mail.id)
@@ -194,20 +210,70 @@ export default function EmailsPage () {
                                     </div>
 
                                     <div>
-                                        <p className="text-sm font-semibold text-[var(--text-b)]">{mail.from}</p>
+                                        <button
+                                            className={`px-1 py-0.5 text-md rounded-md`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                markAsRead(mail.id, false);
+                                            }}
+                                        >
+                                            R
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        <button
+                                            className={`px-1 py-0.5 text-md rounded-md`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                moveToFolder(mail.id, mail.folder != 'archive' ? 'archive' : 'inbox');
+                                            }}
+                                            disabled={!mail.isReceiver || mail.folder === 'sent' || mail.folder === 'drafts'}
+                                        >
+                                            A
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        <button
+                                            className={`px-1 py-0.5 text-md rounded-md`}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                moveToFolder(mail.id, 'delete');
+                                            }}
+                                            disabled={!mail.isReceiver || mail.folder === 'sent'}
+                                        >
+                                            D
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        <p className="text-sm font-semibold text-[var(--text-b)]">
+                                            {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</p>
                                         <p className="text-xs text-[var(--text-c)]">{new Date(mail.timestamp).toLocaleString()}</p>
                                     </div>
 
                                     <div>
                                         <p className="text-sm font-semibold text-[var(--text-a)]">{mail.subject}</p>
-                                        <p className="text-xs text-[var(--text-c)]">{mail.body}</p>
+                                        <p className="text-xs text-[var(--text-c)]">{mail.preview}</p>
                                     </div>
 
-                                    <div className={`rounded-sm text-[var(--text-b)] py-0.5 px-4 text-center
+                                    <button 
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        cyclePriority(mail.id)
+                                    }}
+                                    disabled={!mail.isReceiver || mail.folder === 'sent'}
+                                    className={`rounded-sm text-[var(--text-b)] py-0.5 px-4 text-center
                                         ${mail.priority === 'high' ? 'bg-[var(--dangerL)] px-6' : ''}
                                         ${mail.priority === 'normal' ? 'bg-[var(--warningL)]' : ''}`}>
                                         <p className="text-sm">{mail.priority}</p>
-                                    </div>
+                                        {/* priority src */}
+                                        <span className="text-[10px] opacity-70 block">
+                                            {mail.priority_src === 'ai' ? 'AI' : 'You'}
+                                        </span>
+                                    </button>
+
                                 </motion.div>
                             ))}
 
