@@ -4,6 +4,57 @@ import { time } from "framer-motion";
 
 export const useEmailStore = create((set, get) => ({
 
+    selectedIds: [],
+
+    toggleSelect: (id) =>
+        set(state => ({
+            selectedIds: state.selectedIds.includes(id)
+                ? state.selectedIds.filter(x => x !== id)
+                : [...state.selectedIds, id]
+        })),
+
+    clearSelection: () => set({selectedIds: []}),
+
+    selectAllVisible: (ids) => set({selectedIds: ids}),
+
+    markManyRead: async (ids, read=true) => {
+        if (!ids.length) return
+
+        await supabase
+            .from('emails')
+            .update({is_read: read})
+            .in('id', ids)
+
+        get().clearSelection()
+        get().loadEmails()
+    },
+
+    archiveMany: async (ids) => {
+        
+        if (!ids.length) return
+
+        await supabase
+            .from('emails')
+            .update({folder: 'archive'})
+            .in('id', ids)
+
+        get().clearSelection()
+        get().loadEmails()
+    },
+
+    deleteMany: async (ids) => {
+   
+        if (!ids.length) return
+
+        await supabase
+            .from('emails')
+            .update({folder: 'delete'})
+            .in('id', ids)
+
+        get().clearSelection()
+        get().loadEmails()
+    },
+
     classifyMissingEmails: async () => {
 
         const {data: sessionData} = await supabase.auth.getSession()

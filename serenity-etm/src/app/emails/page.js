@@ -18,7 +18,10 @@ import { useRouter } from "next/navigation";
 export default function EmailsPage () {
 
     const router = useRouter()
-    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, toggleStar, setSelectedEmail, markAsRead, moveToFolder, readEmailCount, setReadEmailCount} = useEmailStore();
+    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, toggleStar, setSelectedEmail, markAsRead, moveToFolder, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, deleteMany} = useEmailStore();
+
+    const [searchQuery, setSearchQuery] = useState([])
+    const [searchResults, setSearchResults] = useState('')
 
     useEffect(() => {
         const init = async () => {
@@ -35,6 +38,26 @@ export default function EmailsPage () {
 
         init()
     }, [])
+
+    useEffect(() => {
+
+        if (searchQuery.length < 1) {
+            setSearchResults([])
+            return
+        }
+        
+        const q = searchQuery.toLowerCase()
+            
+        const matches = emails.filter(e => (
+            e.subject?.toLowerCase().includes(q) ||
+            e.body?.toLowerCase().includes(q) ||
+            e.from_name.toLowerCase().includes(q) ||
+            e.from_email.toLowerCase().includes(q) ||
+            e.priority.toLowerCase().includes(q)
+        ))
+
+        setSearchResults(matches.slice(0, 12))
+    }, [searchQuery, emails])
 
     const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, sdkActive, calmMode, setCalmMode, setScreen, setTheme} = useStore();
 
@@ -105,6 +128,18 @@ export default function EmailsPage () {
 
     const [showComposer, setShowComposer] = useState(false)
 
+    useEffect(() => {
+        const close = () => setSearchQuery('')
+
+        if (searchQuery) {
+            window.addEventListener('click', close)
+        }
+
+        return () => {
+            window.removeEventListener('click', close)
+        }
+    }, [searchQuery])
+
     return (
         <div className="bg-[var(--cardA-main)] relative h-screen">
 
@@ -149,9 +184,41 @@ export default function EmailsPage () {
                     }}
                     style={{marginLeft: contentMargin}}
                 >
+                    <div className="relative">
+                        <input
+                            value={searchQuery}
+                            onChange={(e) => {
+                                e.stopPropagation()
+                                setSearchQuery(e.target.value)
+                            }}
+                            placeholder="Search mail, sender, priority..."
+                            className="flex-1 border-2 border-[var(--a-main)] bg-[var(--blankCard-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)] outline-none"
+                        />
 
-                    <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--blankCard-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
-                        Search Emails
+                        {searchQuery && searchResults.length > 0 && (
+                            <div className="absolute top-full mt-2 w-full bg-[var(--blankCard-main)] shadow-xl rounded-lg z-50 max-h-[400px] overflow-auto">
+                                {searchResults.map(mail => (
+                                    <div
+                                        key={mail.id}
+                                        onClick={() => {
+                                            setSelectedEmail(mail)
+                                            setSearchQuery('')
+                                        }}
+                                        className="p-3 border-b hover:bg-[var(--cardB-main)] cursor-pointer"
+                                    >
+                                        <p className="text-sm font-semibold">
+                                            {mail.subject}
+                                        </p>
+                                        <p className="text-sm opacity-70">
+                                            {mail.from_name || mail.from_email}
+                                        </p>
+                                        <p className="text-xs">
+                                            {mail.preview}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     <button 
@@ -164,12 +231,40 @@ export default function EmailsPage () {
                         <EmailSend onClose={() => setShowComposer(false)} />
                     )}
 
+                    {selectedIds.length > 0 && (
+                        <div className="flex gap-3 mb-2 p-2 bg-[var-(--blankCard-main)] rounded shadow">
+                            <button onClick={() => markManyRead(selectedIds, true)}>
+                                Mark Read
+                            </button>
+                            <button onClick={() => markManyRead(selectedIds, false)}>
+                                Mark Unread
+                            </button>
+                            <button onClick={() => archiveMany(selectedIds)}>
+                                Archive
+                            </button>
+                            <button onClick={() => deleteMany(selectedIds)}>
+                                Delete
+                            </button>
+                            <button onClick={() => {
+                                if (selectedIds.length === filtered.length) {
+                                    clearSelection()
+                                }
+                                else {
+                                    selectAllVisible(filtered.map(e => e.id))
+                                }
+                            }}>
+                                {
+                                    selectedIds.length === filtered.length 
+                                    ? 'Unselect All'
+                                    : 'Select All'
+                                }
+                            </button>
+                        </div>
+                    )}
+
                     <div className="w-full flex-1 p-2 mt-4 bg-[var(--cardB-main)] relative rounded-lg">
 
-                        <div className="grid grid-cols-[0.25fr_1fr_1.5fr_0.25fr] gap-4 text-left">
-                            <div>
-                                <p className="text-xs">Starred</p>
-                            </div>
+                        <div className="grid grid-cols-[0.05fr_0.05fr_0.05fr] gap-4 text-left pl-40">
                             <div>
                                 <p className="text-xs">{showEmails == 'sent' ? 'To/Timestamp' : 'From/Timestamp'}</p>
                             </div>
@@ -190,13 +285,20 @@ export default function EmailsPage () {
                                     initial={{opacity: 0, y:10}}
                                     animate={{opacity: 1, y: 0,}}
                                     transition={{duration: 0.3}}
-                                    className={`p-1.5 shadow grid grid-cols-[0.05fr_0.05fr_0.05fr_0.05fr_1fr_1.5fr_0.25fr] gap-4 mb-1 items-center text-left rounded-sm ${mail.read ? 'bg-[var(--cardB-main)]' : 'bg-[var(--blankCard-main)]'}`}
-                                    onClick={() => {
-                                        setSelectedEmail(mail)
-                                        markAsRead(mail.id)
-                                        setReadEmailCount(readEmailCount+1)
-                                    }}
+                                    className={`p-1.5 shadow grid grid-cols-[0.05fr_0.05fr_0.05fr_0.05fr_0.05fr_2.5fr_0.25fr] gap-4 mb-1 items-center text-left rounded-sm ${mail.read ? 'bg-[var(--cardB-main)]' : 'bg-[var(--blankCard-main)]'}`}
                                 >
+                                    <div>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedIds.includes(mail.id)}
+                                            onChange={(e) => {
+                                                e.stopPropagation()
+                                                toggleSelect(mail.id)
+                                            }}
+                                            className="w-4 h-4"
+                                        />
+                                    </div>
+                                    
                                     <div>
                                         <button
                                             className={`px-1 py-0.5 text-2xl rounded-md`}
@@ -247,16 +349,25 @@ export default function EmailsPage () {
                                         </button>
                                     </div>
 
-                                    <div>
-                                        <p className="text-sm font-semibold text-[var(--text-b)]">
-                                            {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</p>
-                                        <p className="text-xs text-[var(--text-c)]">{new Date(mail.timestamp).toLocaleString()}</p>
-                                    </div>
+                                    <motion.div
+                                        onClick={() => {
+                                            setSelectedEmail(mail)
+                                            markAsRead(mail.id)
+                                            setReadEmailCount(readEmailCount+1)
+                                        }}
+                                        className='cursor-pointer grid grid-cols-[1fr_2fr] gap-4 mb-1 items-center text-left rounded-sm'
+                                    >
+                                        <div>
+                                            <p className="text-sm font-semibold text-[var(--text-b)]">
+                                                {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</p>
+                                            <p className="text-xs text-[var(--text-c)]">{new Date(mail.timestamp).toLocaleString()}</p>
+                                        </div>
 
-                                    <div>
-                                        <p className="text-sm font-semibold text-[var(--text-a)]">{mail.subject}</p>
-                                        <p className="text-xs text-[var(--text-c)]">{mail.preview}</p>
-                                    </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-[var(--text-a)]">{mail.subject}</p>
+                                            <p className="text-xs text-[var(--text-c)]">{mail.preview}</p>
+                                        </div>
+                                    </motion.div>
 
                                     <button 
                                     onClick={(e) => {
