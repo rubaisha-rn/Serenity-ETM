@@ -24,7 +24,7 @@ export default function SecondarySidebar() {
             initial={{width: 0, left: 40}}
             animate={{width: expandedSecondary ? 200 : 40, left: mainLeft}}
             transition={{type: 'spring', stiffness: 300, damping: 30}}
-            className={`fixed top-0 z-10 border-r overflow-hidden shadow-sm items-center justify-center ${expandedSecondary ? 'p-2 pt-3' : 'p-1.5 pt-4'} bg-[var(--cardB-main)] h-screen`}
+            className={`ml-20 fixed top-0 z-10 border-r overflow-hidden shadow-sm items-center justify-center ${expandedSecondary ? 'p-2 pt-3' : 'p-1.5 pt-4'} bg-[var(--cardB-main)] h-screen`}
         >
             <div className="flex flex-col gap-3">
 
