@@ -184,48 +184,52 @@ export default function EmailsPage () {
                     }}
                     style={{marginLeft: contentMargin}}
                 >
-                    <div className="relative">
-                        <input
-                            value={searchQuery}
-                            onChange={(e) => {
-                                e.stopPropagation()
-                                setSearchQuery(e.target.value)
-                            }}
-                            placeholder="Search mail, sender, priority..."
-                            className="flex-1 border-2 border-[var(--a-main)] bg-[var(--blankCard-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)] outline-none"
-                        />
+                    <div className="flex flex-row justify-between">
+                        <div className="relative">
+                            <input
+                                value={searchQuery}
+                                onChange={(e) => {
+                                    e.stopPropagation()
+                                    setSearchQuery(e.target.value)
+                                }}
+                                placeholder="Search mail, sender, priority..."
+                                className="flex-1 border-2 border-[var(--a-main)] bg-[var(--blankCard-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)] outline-none"
+                                style={{width:600}}
+                            />
 
-                        {searchQuery && searchResults.length > 0 && (
-                            <div className="absolute top-full mt-2 w-full bg-[var(--blankCard-main)] shadow-xl rounded-lg z-50 max-h-[400px] overflow-auto">
-                                {searchResults.map(mail => (
-                                    <div
-                                        key={mail.id}
-                                        onClick={() => {
-                                            setSelectedEmail(mail)
-                                            setSearchQuery('')
-                                        }}
-                                        className="p-3 border-b hover:bg-[var(--cardB-main)] cursor-pointer"
-                                    >
-                                        <p className="text-sm font-semibold">
-                                            {mail.subject}
-                                        </p>
-                                        <p className="text-sm opacity-70">
-                                            {mail.from_name || mail.from_email}
-                                        </p>
-                                        <p className="text-xs">
-                                            {mail.preview}
-                                        </p>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                            {searchQuery && searchResults.length > 0 && (
+                                <div className="absolute top-full mt-2 w-full bg-[var(--blankCard-main)] shadow-xl rounded-lg z-50 max-h-[400px] overflow-auto">
+                                    {searchResults.map(mail => (
+                                        <div
+                                            key={mail.id}
+                                            onClick={() => {
+                                                setSelectedEmail(mail)
+                                                setSearchQuery('')
+                                            }}
+                                            className="p-3 border-b hover:bg-[var(--cardB-main)] cursor-pointer"
+                                        >
+                                            <p className="text-sm font-semibold">
+                                                {mail.subject}
+                                            </p>
+                                            <p className="text-sm opacity-70">
+                                                {mail.from_name || mail.from_email}
+                                            </p>
+                                            <p className="text-xs">
+                                                {mail.preview}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <button 
+                            className="border-2 bg-[var(--a-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-a)] outline-none"
+                            onClick={() => setShowComposer(!showComposer)}
+                        >
+                            Compose Button
+                        </button>
                     </div>
-
-                    <button 
-                        onClick={() => setShowComposer(!showComposer)}
-                    >
-                        Compose Button
-                    </button>
 
                     {showComposer && (
                         <EmailSend onClose={() => setShowComposer(false)} />
