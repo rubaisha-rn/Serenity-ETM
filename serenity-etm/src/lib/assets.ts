@@ -6,5 +6,7 @@ export const ICONS = {
         email: `${SUPABASE_ASSET_URL}/icons/lightMode/emailManager.png`,
         task: `${SUPABASE_ASSET_URL}/icons/lightMode/taskManager.png`,
         profileSettings: `${SUPABASE_ASSET_URL}/icons/lightMode/profileSettings.png`,
+        settings: `${SUPABASE_ASSET_URL}/icons/lightMode/settings.png`,
+        signout: `${SUPABASE_ASSET_URL}/icons/lightMode/signout.png`,
     },
 }

@@ -23,9 +23,6 @@ const useStore = create((set) => ({
     screen: 'emails',
     setScreen: (screen) => set({screen}),
 
-    expandedMain: false,
-    setExpandedMain: (expandedMain) => set({expandedMain}), 
-
     expandedSecondary: true, 
     setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}), 
 
@@ -34,6 +31,18 @@ const useStore = create((set) => ({
 
     sdkActive: false, // true
     setSdkActive: (value) => set({ sdkActive: value }),
+
+    fontScale: 12,
+    setFontScale: (value) => set({ fontScale: value }),
+
+    highContrast: false,
+    setHighContrast: (value) => set({ highContrast: value }),
+
+    reducedMotion: false, // on, off, system
+    setReducedMotion: (value) => set({ reducedMotion: value }),
+
+    colorBlindMode: 'none', // deuteranopia / protanopia / none
+    setColorBlindMode: (value) => set({ colorBlindMode: value }),
 }));
 
 export default useStore;

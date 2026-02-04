@@ -38,10 +38,6 @@ export default function UseStressColorProvider({children}) {
 
             const root = document.documentElement;
 
-            root.style.setProperty('--baseAcc-main', palette.baseAcc);
-            root.style.setProperty('--baseAcc2-main', palette.baseAcc2);
-            root.style.setProperty('--baseAcc3-main', palette.baseAcc3);
-
             root.style.setProperty(
                 '--bg-main',
                 lerpColor(hexToRgb(from.bg), hexToRgb(to.bg), t)

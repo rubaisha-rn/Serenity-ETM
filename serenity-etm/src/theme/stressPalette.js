@@ -36,10 +36,6 @@ export const STRESS_PALETTE = {
             acc: '#66706f',
             accHover: '#545d5f',
         },
-
-        baseAcc: '#111111',
-        baseAcc2: '#373737',
-        baseAcc3: '#585858',
     },
     
     dark: {
@@ -79,7 +75,5 @@ export const STRESS_PALETTE = {
             acc: '#66706f',
             accHover: '#545d5f',
         },
-
-        baseAcc: '#ececec',
     },
 };

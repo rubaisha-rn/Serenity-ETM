@@ -33,6 +33,10 @@
     --acc-main: #8f787c;
     --accHover-main: #766266;
 
+    --baseAcc-a: #131313;
+    --baseAcc-b: #424242;
+    --baseAcc-c: #666666;
+
     --text-a: #000000;
     --text-b: #363636;
     --text-c: #585858;
@@ -66,4 +70,35 @@ body {
 
 button {
     transition: background-color 300ms ease;
+}
+
+@layer components {
+    .leftmain-sidebar-btn {
+        @apply
+            flex items-center justify-center
+            rounded-md
+            py-1 px-1.5
+            min-w-[30px] min-h-[30px]
+            hover:bg-[var(--baseAcc-c)]
+            focus:outline-none
+            focus-visible:ring-2
+            focus-visible:ring-offset-2
+            focus-visible:ring-blue-500
+            transition-colors;
+    }
+
+    .leftmain-menuitem {
+        @apply
+            w-full
+            flex items-center gap-3 
+            p-1.5
+            rounded-md
+            min-h-[32px]
+            hover:bg-[var(--baseAcc-b)]
+            focus:outline-none
+            focus-visible:ring-2
+            focus-visible:ring-offset-2
+            focus-visible:ring-blue-500
+            motion-safe:transition-colors;
+    }
 }
