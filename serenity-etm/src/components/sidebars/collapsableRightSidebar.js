@@ -52,7 +52,11 @@ export default function CollapsableRightSidebar() {
                 onClick={() => setExpanded(!expanded)}
                 onKeyDown={(e) => activate(e, () => setExpanded(!expanded))}
                 className={`fixed bottom-[5rem] z-30 bg-[var(--baseAcc-b)] hover:bg-[var(--baseAcc-c)] shadow-xl rounded-full p-2 py-1.5
-                ${expanded ? 'pr-1.5' : 'pl-1.5'}`}
+                ${expanded ? 'pr-1.5' : 'pl-1.5'}
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500`}
             >
                 <img
                     src='/icons/backw.png'
