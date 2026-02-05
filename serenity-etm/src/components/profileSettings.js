@@ -53,16 +53,15 @@ export default function ProfileSettingsMenu() {
     const motionConfig = prefersRecuedMotion
         ? {}
         : {
-            initial: {opacity: 0, y: 4},
-            animate: {opacity: 1, y: 0},
-            exit: {opacity: 0, y: 4},
-            transition: {duration: 0.15}
+            initial: {opacity: 0},
+            animate: {opacity: 1},
+            exit: {opacity: 0},
+            transition: {duration: 0.12}
         }
 
     return (
-        <div
-            className='relative z-50'
-        >
+        <div className='relative z-50'>
+            
             {/* profile button */}
             <motion.button 
                 ref={buttonRef}
@@ -80,7 +79,7 @@ export default function ProfileSettingsMenu() {
                         setOpen((v) => !v);
                     }
                 }}
-                className={`leftmain-sidebar-btn ml-0.5
+                className={`leftmain-sidebar-btn ml-[0.07rem] p-0.5 sm:p-1 sm:px-1.5 sm:ml-0.5
                     ${open ? 'bg-[var(--baseAcc-b)]' : ''}`}>
                 <img
                     src={ICONS[theme].profileSettings}
@@ -98,21 +97,21 @@ export default function ProfileSettingsMenu() {
                         ref={menuRef}
                         role='menu'
                         aria-label='Profile Settings Menu'
-                        className='absolute bottom-0 left-full ml-3 w-48 rounded-lg bg-[var(--baseAcc-a)] shadow-xl p-1.5 z-50 text-[var(--text-d)] text-sm font-normal font-Sans'
+                        className='absolute bottom-0 left-full ml-3 w-48 rounded-md bg-[var(--baseAcc-b)] shadow-xl p-0.5 z-50 text-[var(--text-d)] text-[0.85rem] font-thin shadow-xl'
                     >
                         {/* settings */}
                         <button
                             role='menuitem'
-                            className='leftmain-menuitem'
+                            className='leftmain-menuitem border-b-[0.02rem] border-b-[var(--baseAcc-c)]'
                             onClick={() => {}}
                         >
+                            Profile Settings
                             <img
                                 src={ICONS[theme].settings}
                                 className='w-5 h-5'
                                 aria-hidden="true"
                                 alt=''
                             />
-                            Profile Settings
                         </button>
 
                         {/* sign out */}
@@ -121,13 +120,13 @@ export default function ProfileSettingsMenu() {
                             className='leftmain-menuitem'
                             onClick={handleSignOut}
                         >
+                            Sign Out
                             <img
                                 src={ICONS[theme].signout}
                                 className='w-5 h-5'
                                 aria-hidden="true"
                                 alt=''
                             />
-                            Sign Out
                         </button>
                     </motion.div>
                 )}

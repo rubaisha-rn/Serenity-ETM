@@ -33,9 +33,16 @@
     --acc-main: #8f787c;
     --accHover-main: #766266;
 
-    --baseAcc-a: #131313;
-    --baseAcc-b: #424242;
-    --baseAcc-c: #666666;
+    /* left side main panel */
+    --baseAcc-a: #101010;
+    --baseAcc-b: #303030;
+    --baseAcc-c: #4c4c4c;
+
+    /* right side panel */
+    --baseAcc-d: #aaaaaa;
+    --baseAcc-e: #c1c1c1;
+    --baseAcc-f: #ececec;
+    --baseAcc-g: #ffffff;
 
     --text-a: #000000;
     --text-b: #363636;
@@ -90,15 +97,54 @@ button {
     .leftmain-menuitem {
         @apply
             w-full
-            flex items-center gap-3 
-            p-1.5
-            rounded-md
+            flex items-center
+            justify-between 
+            p-1.5 px-3
             min-h-[32px]
-            hover:bg-[var(--baseAcc-b)]
+            hover:bg-[var(--baseAcc-c)]
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2
             focus-visible:ring-blue-500
             motion-safe:transition-colors;
+    }
+
+    .right-sidebar-btn {
+        @apply
+            flex items-center justify-center
+            rounded-md
+            py-0.5 px-1.5
+            min-w-[30px] min-h-[30px]
+            bg-[var(--baseAcc-f)]
+            hover:bg-[var(--baseAcc-d)]
+            focus:outline-none
+            focus-visible:ring-2
+            focus-visible:ring-offset-2
+            focus-visible:ring-blue-500
+            transition-colors;    
+    }
+
+    .right-sidebar-btn.expanded {
+        @apply gap-2 w-full h-9 px-3 justify-start rounded-lg;
+    }
+
+    .right-sidebar-btn.collapsed {
+        @apply gap-0 py-0.5 px-1.5 justify-center rounded-md;
+    }
+
+    .right-sidebar-label {
+        @apply text-[var(--text-a)] text-sm whitespace-nowrap transition-all duration-150;
+    }
+
+    .right-sidebar-label.hide {
+        @apply opacity-0 w-0 overflow-hidden;
+    }
+
+    .right-sidebar-label.show {
+        @apply opacity-100;
+    }
+
+    .right-sidebar-help {
+        @apply flex gap-1 text-[0.6rem] transition-all duration-150 text-[var(--text-b)] leading-tight;
     }
 }

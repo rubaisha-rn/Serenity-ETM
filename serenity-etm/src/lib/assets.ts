@@ -8,5 +8,9 @@ export const ICONS = {
         profileSettings: `${SUPABASE_ASSET_URL}/icons/lightMode/profileSettings.png`,
         settings: `${SUPABASE_ASSET_URL}/icons/lightMode/settings.png`,
         signout: `${SUPABASE_ASSET_URL}/icons/lightMode/signout.png`,
+        focus: `${SUPABASE_ASSET_URL}/icons/lightMode/focus.png`,
+        priority: `${SUPABASE_ASSET_URL}/icons/lightMode/priority.png`,
+        stress: `${SUPABASE_ASSET_URL}/icons/lightMode/stress.png`,
+        calm: `${SUPABASE_ASSET_URL}/icons/lightMode/calm.png`,
     },
 }

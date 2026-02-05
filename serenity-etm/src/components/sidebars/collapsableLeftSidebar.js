@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
-import { motion, scale, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import useStore from '@/store/useStore';
 import { useRouter } from 'next/navigation';
 import { ICONS } from '@/lib/assets';
