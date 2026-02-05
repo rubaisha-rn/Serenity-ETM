@@ -10,16 +10,11 @@ export default function CollapsableRightSidebar() {
 
     const [expanded, setExpanded] = useState(false);
 
-    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode, theme, setTheme, fontScale, reducedMotion} = useStore();
+    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode, theme, setTheme, fontScale} = useStore();
 
-    const systemPrefersRecuedMotion = useReducedMotion()
+    const prefersReducedMotion = useReducedMotion()
 
-    const finalReducedMotion = useMemo(() => {
-        if (reducedMotion === 'system') return systemPrefersRecuedMotion;
-        return reducedMotion === 'on';
-    }, [reducedMotion, systemPrefersRecuedMotion])
-
-    const motionConfig = finalReducedMotion
+    const motionConfig = prefersReducedMotion
         ? {}
         : {
             whileHover: {scale: 1.05},
@@ -48,7 +43,7 @@ export default function CollapsableRightSidebar() {
             {/* toggle button */}
             <motion.button
                 {...motionConfig}
-                animate={{right: expanded ? 210 : 34}}
+                animate={{right: expanded ? 200 : 34}}
                 transition={{duration: 0.25, ease: 'easeInOut'}}
                 type='button'
                 aria-label={expanded ? 'Collapse adaptive workspace settings panel' : 'Expand adaptive workspace settings panel'}
@@ -72,7 +67,7 @@ export default function CollapsableRightSidebar() {
             <motion.nav
                 aria-label='Adaptive workspace settings panel'
                 initial={{width: 46}}
-                animate={{width: expanded ? 220 : 46}}
+                animate={{width: expanded ? 210 : 46}}
                 transition={{type: 'spring', stiffness: 260, damping: 36}}
                 className={`fixed top-1 right-1 z-20 bg-[var(--baseAcc-g)] shadow-xl flex flex-col justify-between rounded-lg h-[calc(100vh-0.5rem)] overflow-hidden py-2 px-1 w-10 sm:w-12
                 ${expanded ? 'px-2' : ''}`}
@@ -100,11 +95,9 @@ export default function CollapsableRightSidebar() {
                                 aria-hidden='true'
                                 className='w-6 h-6 opacity-90'
                             />
-
                             <span className={`right-sidebar-label ${expanded? 'show' : 'hide'}`}>
                                 Focus Mode
                             </span>
-
                         </motion.button>
 
                         {expanded && (
@@ -133,7 +126,6 @@ export default function CollapsableRightSidebar() {
                                 aria-hidden="true"
                                 className='w-6 h-6 opacity-90'
                             />
-                            
                             <span className={`right-sidebar-label ${expanded? 'show' : 'hide'}`}>
                                 Priority Mode
                             </span>
@@ -155,8 +147,7 @@ export default function CollapsableRightSidebar() {
                                 role='menuitemcheckbox'
                                 aria-label='Toggle stress detection'
                                 title='Stress Detection'
-                                onClick={() => {                            setSdkActive(!sdkActive)
-                                }}
+                                onClick={() => {setSdkActive(!sdkActive)}}
                                 onKeyDown={(e) => activate(e, () => setSdkActive(!sdkActive))}
                                 className={`right-sidebar-btn ${expanded ? 'expanded' : 'collpased'}
                                 ${sdkActive ? 'bg-[var(--baseAcc-e)]' : ''}`}
@@ -167,7 +158,6 @@ export default function CollapsableRightSidebar() {
                                     aria-hidden='true'
                                     className='w-6 h-6 opacity-90'
                                 />
-                                
                                 <span className={`right-sidebar-label ${expanded? 'show' : 'hide'}`}>
                                     Stress Detection
                                 </span>
@@ -232,7 +222,6 @@ export default function CollapsableRightSidebar() {
                             aria-hidden='true'
                             className='w-6 h-6 opacity-90 shrink-0'
                         />
-                        
                         <span className={`right-sidebar-label ${expanded? 'show' : 'hide'}`}>
                             Calm Overlay
                         </span>

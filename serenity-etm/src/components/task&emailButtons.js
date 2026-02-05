@@ -3,24 +3,95 @@
 import React from "react";
 import TasksSidebarButton from '../components/tasks/sidebarButtons';
 import EmailsSidebarButton from "./emails/sidebarButtons";
+import { ICONS } from "@/lib/assets";
+import useStore from "@/store/useStore";
+
+const theme = useStore.getState().theme;
+
+const taskGroups = [
+    {
+        label: 'Overview',
+        buttons: [
+            {label: 'All Tasks', key: 'all', icon: ICONS[theme].tasks, shortcut: '1'},
+        ],
+    },
+    {
+        label: 'Schedule',
+        buttons: [
+            {label: 'Today', key: 'today', icon: ICONS[theme].today, shortcut: '2'},
+            {label: 'Upcoming', key: 'upcoming', icon: ICONS[theme].upcoming, shortcut: '3'},
+        ],
+    },
+    {
+        label: 'Priority',
+        buttons: [
+            {label: 'Important', key: 'priority', icon: ICONS[theme].priority, shortcut: '4'},
+        ],
+    },
+    {
+        label: 'Status',
+        buttons: [
+            {label: 'Completed', key: 'completed', icon: ICONS[theme].completed, shortcut: '5'},
+        ],
+    },
+]
 
 export const TaskButtons = React.memo(({expandedSecondary, setShowTasks}) => (
-    <>
-        <TasksSidebarButton label='All Tasks' shortLabel='all' icon='/icons/tasks.png' expanded={expandedSecondary} onClick={() => setShowTasks('all')} />
-        <TasksSidebarButton label='Today' shortLabel='today' icon='/icons/tasks/today.png' expanded={expandedSecondary} onClick={() => setShowTasks('today')} />
-        <TasksSidebarButton label='Upcoming' shortLabel='upcoming' icon='/icons/tasks/upcoming.png' expanded={expandedSecondary} onClick={() => setShowTasks('upcoming')} />
-        <TasksSidebarButton label='High Priority' shortLabel='priority' icon='/icons/tasks/priority.png' expanded={expandedSecondary} onClick={() => setShowTasks('priority')} />
-        <TasksSidebarButton label='Completed' shortLabel='completed' icon='/icons/tasks/completed.png' expanded={expandedSecondary} onClick={() => setShowTasks('completed')} />
-    </>
+    <div className={`flex flex-col ${expandedSecondary ? 'gap-6' : 'gap-2'}`}>
+        {taskGroups.map((group) => (
+            <div key={group.label} className={`flex flex-col gap-1`}>
+                {expandedSecondary && (    
+                    <div className="group-label">
+                        {group.label}
+                    </div>
+                )}
+
+                {group.buttons.map((btn) => (
+                    <TasksSidebarButton key={btn.key} label={btn.label} shortLabel={btn.key} icon={btn.icon} shortcut={btn.shortcut} expanded={expandedSecondary} onClick={() => setShowTasks(btn.key)} />
+                ))}
+            </div>
+        ))}
+    </div>
 ));
 
+const emailGroups = [
+    {
+        label: 'Incoming',
+        buttons: [
+            {label: 'Inbox', key: 'inbox', icon: ICONS[theme].inbox, shortcut: '1'},
+            {label: 'Starred', key: 'starred', icon: ICONS[theme].starred, shortcut: '2'},
+            {label: 'Important', key: 'priority', icon: ICONS[theme].priority, shortcut: '3'},
+        ],
+    },
+    {
+        label: 'Outgoing',
+        buttons: [
+            {label: 'Sent', key: 'sent', icon: ICONS[theme].sent, shortcut: '4'},
+            {label: 'Drafts', key: 'drafts', icon: ICONS[theme].draft, shortcut: '5'},
+        ],
+    },
+    {
+        label: 'Archived',
+        buttons: [
+            {label: 'Archive', key: 'archive', icon: ICONS[theme].archive, shortcut: '6'},
+        ],
+    },
+]
+
 export const EmailButtons = React.memo(({expandedSecondary, setShowEmails}) => (
-    <>
-        <EmailsSidebarButton label='Inbox' shortLabel='inbox' icon='/icons/email.png' expanded={expandedSecondary} onClick={() => setShowEmails('inbox')} />
-        <EmailsSidebarButton label='Starred' shortLabel='starred' icon='/icons/emails/starred.png' expanded={expandedSecondary} onClick={() => setShowEmails('starred')} />
-        <EmailsSidebarButton label='High Priority' shortLabel='priority' icon='/icons/tasks/priority.png' expanded={expandedSecondary} onClick={() => setShowEmails('priority')} />
-        <EmailsSidebarButton label='Sent' shortLabel='sent' icon='/icons/emails/sent.png' expanded={expandedSecondary} onClick={() => setShowEmails('sent')} />
-        <EmailsSidebarButton label='Drafts' shortLabel='drafts' icon='/icons/emails/draft.png' expanded={expandedSecondary} onClick={() => setShowEmails('drafts')} />
-        <EmailsSidebarButton label='Archive' shortLabel='archive' icon='/icons/emails/archive.png' expanded={expandedSecondary} onClick={() => setShowEmails('archive')} />
-    </>
+    <div className={`flex flex-col ${expandedSecondary ? 'gap-6' : 'gap-2'}`}>
+        {emailGroups.map((group) => (
+            <div key={group.label} className={`flex flex-col gap-1`}>
+                {expandedSecondary && (
+                    <div className="group-label">
+                        {group.label}
+                    </div>
+                )}
+
+                {group.buttons.map((btn) => (
+                    <EmailsSidebarButton key={btn.key} label={btn.label} shortLabel={btn.key} icon={btn.icon} shortcut={btn.shortcut} expanded={expandedSecondary} onClick={() => setShowEmails(btn.key)} />
+                ))}
+            </div>
+        ))}
+    </div>
 ));

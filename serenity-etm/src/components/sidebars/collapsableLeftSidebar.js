@@ -11,27 +11,22 @@ export default function CollapsableLeftSidebar() {
 
     const router = useRouter();
 
-    const {screen, setScreen, theme, setTheme, expandedSecondary, setExpandedSecondary, fontScale, reducedMotion} = useStore();
+    const {screen, setScreen, theme, setTheme, expandedSecondary, setExpandedSecondary, fontScale} = useStore();
 
     const [mounted, setMounted] = useState(false);
 
-    const systemPrefersRecuedMotion = useReducedMotion()
+    const prefersReducedMotion = useReducedMotion()
 
-    const finalReducedMotion = useMemo(() => {
-        if (reducedMotion === 'system') return systemPrefersRecuedMotion;
-        return reducedMotion === 'on';
-    }, [reducedMotion, systemPrefersRecuedMotion])
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
-
-    const motionConfig = finalReducedMotion
+    const motionConfig = prefersReducedMotion
         ? {}
         : {
             whileHover: {scale: 1.05},
             whileTap: {scale: 0.95},
-        };
+    };
+    
+    useEffect(() => {
+        setMounted(true)
+    }, [])
 
     // keyboard activation helper
     const activate = (e, action) => {

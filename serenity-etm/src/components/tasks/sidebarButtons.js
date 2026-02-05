@@ -1,20 +1,56 @@
 'use client';
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import useStore from "@/store/useStore";
 
-export default function TasksSidebarButton({label, shortLabel, icon, expanded, onClick}) {
+export default function TasksSidebarButton({label, shortLabel, icon, expanded, onClick, shortcut}) {
 
     const {showTasks} = useStore();
+    const prefersReducedMotion = useReducedMotion();
+
+    const motionConfig = prefersReducedMotion
+        ? {}
+        : {
+            whileHover: {scale: 1.02},
+            whileTap: {scale: 0.95}
+        };
+
+    const isActive = showTasks === shortLabel;
+
+    const activate = (e) => {
+        const key = e.key || e.code;
+
+        if (key === 'Enter' || key === ' ') {
+            e.preventDefault();
+            onClick?.();
+        }
+
+        if (shortcut && key.toLowerCase() === shortcut.toLowerCase()) {
+            e.preventDefault();
+            onClick?.();
+        }
+    };
 
     return (
         <motion.button
-            whileHover={{scale: 1.05}}
-            whileTap={{scale: 0.95}}
-            className={`flex items-center w-full rounded-md ${expanded ? 'gap-3 w-full h-8 px-3 rounded-lg justify-start' : 'gap-0 justify-center rounded-md'} ${showTasks === shortLabel ? 'bg-[var(--a-main)] hover:bg-[var(--aHover-main)]' : 'bg-[var(--icons-main)] hover:bg-[var(--iconsHover-main)]'}`}
+            {...motionConfig}
+            type="button"
+            role="menuitem"
+            aria-label={label}
+            aria-current={isActive ? label : undefined}
+            title={!expanded ? label : undefined}
             onClick={onClick}
+            onKeyDown={activate}
+            className={`flex items-center w-full rounded hover:bg-[var(--baseAcc-e)] opacity-none
+            ${expanded ? 'h-7 px-1 gap-3 justify-start' : 'gap-0 justify-center rounded-md'} 
+            ${showTasks === shortLabel ? 'bg-[var(--baseAcc-g)] shadow-2xl shadow-black' : ''}`}
         >
-            <img src={icon} className="w-5 h-5 opacity-80 shrink-0 m-1.5" />
+            <img 
+                src={icon} 
+                className="w-5 h-5 opacity-70 shrink-0 m-1.5" 
+                alt=""
+                aria-hidden='true'
+            />
             <span className={`text-[var(--text-a)] text-sm whitespace-nowrap transition-all duration-150 ${expanded ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                 {label}
             </span>

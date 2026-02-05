@@ -36,7 +36,7 @@ export default function TasksPage() {
     }, [])
 
     
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, showTasks, calmMode, sdkActive, setCalmMode, setTheme, setScreen} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, setExpandedSecondary, expandedMain, setShowTasks, showTasks, calmMode, sdkActive, setCalmMode, setTheme, setScreen} = useStore();
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
@@ -106,6 +106,41 @@ export default function TasksPage() {
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
+    }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const tag = e.target.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+                
+                switch (e.key.toLowerCase()) {
+                    case '1':
+                        setShowTasks('all')
+                        break;
+                    
+                    case '2':
+                        setShowTasks('today')
+                        break;
+                    
+                    case '3':
+                        setShowTasks('upcoming')
+                        break;
+
+                    case '4':
+                        setShowTasks('priority')
+                        break;
+                    
+                    case '5':
+                        setShowTasks('completed')
+                        break;
+                    
+                    default:
+                        break;
+                }
+            };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
     return (

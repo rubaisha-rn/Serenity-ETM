@@ -60,7 +60,7 @@ export default function ProfileSettingsMenu() {
         }
 
     return (
-        <div className='relative z-50'>
+        <div className='relative z-30'>
             
             {/* profile button */}
             <motion.button 
@@ -90,14 +90,14 @@ export default function ProfileSettingsMenu() {
             </motion.button>
 
             {/* menu */}
-            <AnimatePresence>
+            <AnimatePresence className='z-30'>
                 {open && (
                     <motion.div
                         {...motionConfig}
                         ref={menuRef}
                         role='menu'
                         aria-label='Profile Settings Menu'
-                        className='absolute bottom-0 left-full ml-3 w-48 rounded-md bg-[var(--baseAcc-b)] shadow-xl p-0.5 z-50 text-[var(--text-d)] text-[0.85rem] font-thin shadow-xl'
+                        className='absolute bottom-0 left-full ml-3 w-48 rounded-md bg-[var(--baseAcc-b)] shadow-xl p-0.5 z-50 text-[var(--text-d)] text-[0.85rem] font-thin shadow-xl z-30'
                     >
                         {/* settings */}
                         <button
@@ -105,13 +105,13 @@ export default function ProfileSettingsMenu() {
                             className='leftmain-menuitem border-b-[0.02rem] border-b-[var(--baseAcc-c)]'
                             onClick={() => {}}
                         >
-                            Profile Settings
                             <img
                                 src={ICONS[theme].settings}
                                 className='w-5 h-5'
                                 aria-hidden="true"
                                 alt=''
                             />
+                            Profile Settings
                         </button>
 
                         {/* sign out */}
@@ -120,13 +120,13 @@ export default function ProfileSettingsMenu() {
                             className='leftmain-menuitem'
                             onClick={handleSignOut}
                         >
-                            Sign Out
                             <img
                                 src={ICONS[theme].signout}
                                 className='w-5 h-5'
                                 aria-hidden="true"
                                 alt=''
                             />
+                            Sign Out
                         </button>
                     </motion.div>
                 )}

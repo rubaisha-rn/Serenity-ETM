@@ -98,8 +98,8 @@ button {
         @apply
             w-full
             flex items-center
-            justify-between 
-            p-1.5 px-3
+            justify-start 
+            p-1.5 px-2.5 gap-3
             min-h-[32px]
             hover:bg-[var(--baseAcc-c)]
             focus:outline-none
@@ -111,7 +111,7 @@ button {
 
     .right-sidebar-btn {
         @apply
-            flex items-center justify-center
+            flex items-center
             rounded-md
             py-0.5 px-1.5
             min-w-[30px] min-h-[30px]
@@ -125,7 +125,7 @@ button {
     }
 
     .right-sidebar-btn.expanded {
-        @apply gap-2 w-full h-9 px-3 justify-start rounded-lg;
+        @apply gap-2 w-full h-9 px-3 gap-3 justify-start rounded-lg;
     }
 
     .right-sidebar-btn.collapsed {
@@ -146,5 +146,9 @@ button {
 
     .right-sidebar-help {
         @apply flex gap-1 text-[0.6rem] transition-all duration-150 text-[var(--text-b)] leading-tight;
+    }
+
+    .group-label {
+        @apply text-[0.65rem] text-[var(--text-c)] leading-tight font-Roboto;
     }
 }

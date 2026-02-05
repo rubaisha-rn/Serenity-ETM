@@ -1,46 +1,71 @@
 'use client';
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import useStore from "@/store/useStore";
 import { useEmailStore } from "@/store/emailStore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
-    const {screen, setTheme, expandedSecondary, expandedMain, setShowTasks,} = useStore();
+    const {screen, setTheme, expandedSecondary, setShowTasks, fontScale} = useStore();
 
     const {setShowEmails} = useEmailStore();
 
+    const prefersRecuedMotion = useReducedMotion()
+    const sidebarRef = useRef(null);
+
+    // resolve motion safety
+    const motionTransition = useMemo(
+        () => 
+            prefersRecuedMotion
+                ? {duration: 0}
+                : {type: 'spring', stiffness: 260, damping: 38},
+        [prefersRecuedMotion]
+    );
+
+    // theme sync
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
 
-    const mainLeft = expandedMain ? 220 : 40;
+    // focus management when expanding
+    useEffect(() => {
+        if (expandedSecondary && sidebarRef.current) {
+            const firstButton = sidebarRef.current.querySelector('button');
+            firstButton?.focus();
+        }
+    }, [expandedSecondary]);
+
+    const headingText = 
+        screen === 'emails'
+         ? 'Email Manager'
+         : screen === 'tasks'
+         ? 'Task Manager'
+         : 'Dashboard';
 
     return (
+
         <motion.div
-            initial={{width: 0, left: 40}}
-            animate={{width: expandedSecondary ? 200 : 40, left: mainLeft}}
-            transition={{type: 'spring', stiffness: 300, damping: 30}}
-            className={`ml-20 fixed top-0 z-10 border-r overflow-hidden shadow-sm items-center justify-center ${expandedSecondary ? 'p-2 pt-3' : 'p-1.5 pt-4'} bg-[var(--cardB-main)] h-screen`}
+            ref={sidebarRef}
+            aria-label="Secondary navigation panel"
+            aria-expanded={expandedSecondary}
+            initial={{width: 0, left: 56}}
+            animate={{width: expandedSecondary ? 210 : 46, left: 56}}
+            transition={motionTransition}
+            className={`bg-none fixed top-1 z-10 overflow-hidden items-center justify-center h-[calc(100vh-0.5rem)] rounded-lg
+            motion-safe:transition-colors
+            ${expandedSecondary ? 'p-2 pt-3' : 'p-1 py-2 shadow-xl'}`}
         >
-            <div className="flex flex-col gap-3">
+            <div role="menu" aria-label={`${headingText} options`} className="flex flex-col gap-3">
 
                 {expandedSecondary && (
-                    <div className="flex flex-row gap-2 items-center p-2">
-
-                        <img
-                            src="/logo/logo.png"
-                            className="w-6 h-6 shrink-0 opacity-80"
-                        />
-
-                        <h1 className={`font-AbrilFatface text-md text-[var(--text-a)] opacity-70`}>
-                            {screen === 'emails' ? 'Email Manager' : 'Task Manager'}
-                        </h1>
-
-                    </div>
+                    <h1
+                        id="secondary-sidebar-heading"
+                        className={`font-Roboto text-[0.95rem] font-semibold text-[var(--text-a)]`}>
+                        {screen === 'emails' ? 'Email Manager' : screen === 'tasks' ? 'Task Manager' : 'Dashboard'}
+                    </h1>
                 )}
 
                 {screen === 'tasks' && (

@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 export default function EmailsPage () {
 
     const router = useRouter()
-    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, toggleStar, setSelectedEmail, markAsRead, moveToFolder, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, deleteMany} = useEmailStore();
+    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, markAsRead, moveToFolder, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, deleteMany} = useEmailStore();
 
     const [searchQuery, setSearchQuery] = useState([])
     const [searchResults, setSearchResults] = useState('')
@@ -59,7 +59,7 @@ export default function EmailsPage () {
         setSearchResults(matches.slice(0, 12))
     }, [searchQuery, emails])
 
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedMain, sdkActive, calmMode, setCalmMode, setScreen, setTheme} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, setExpandedSecondary, expandedMain, sdkActive, calmMode, setCalmMode, screen, setScreen, setTheme} = useStore();
 
     const mainWidth = expandedMain ? 220 : 40;
     const secondaryWidth = expandedSecondary ? 200 : 40;
@@ -138,10 +138,50 @@ export default function EmailsPage () {
         return () => {
             window.removeEventListener('click', close)
         }
-    }, [searchQuery])
+    }, [searchQuery]);
+
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const tag = e.target.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+                
+                switch (e.key.toLowerCase()) {
+                    case '1':
+                        setShowEmails('inbox')
+                        break;
+                    
+                    case '2':
+                        setShowEmails('starred')
+                        break;
+                    
+                    case '3':
+                        setShowEmails('priority')
+                        break;
+
+                    case '4':
+                        setShowEmails('sent')
+                        break;
+                    
+                    case '5':
+                        setShowEmails('drafts')
+                        break;
+                    
+                    case '6':
+                        setShowEmails('archive')
+                        router.push('/emails')
+                        break;
+                    
+                    default:
+                        break;
+                }
+            };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     return (
-        <div className="bg-[var(--cardA-main)] relative h-screen">
+        <div className="bg-[var(--baseAcc-g)] relative h-screen ml-80 mr-20 my-2 shadow-xl rounded-lg">
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
 

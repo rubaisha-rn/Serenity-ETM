@@ -38,9 +38,6 @@ const useStore = create((set) => ({
     highContrast: false,
     setHighContrast: (value) => set({ highContrast: value }),
 
-    reducedMotion: false, // on, off, system
-    setReducedMotion: (value) => set({ reducedMotion: value }),
-
     colorBlindMode: 'none', // deuteranopia / protanopia / none
     setColorBlindMode: (value) => set({ colorBlindMode: value }),
 }));
