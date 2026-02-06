@@ -24,7 +24,14 @@
 
     --blankCard-main: #ffffff;
 
-    --a-main: #c9b4ac;
+    --a-main: #101010;
+    --b-main: #303030;
+    --c-main: #4c4c4c;
+    --d-main: #aaaaaa;
+    --e-main: #c1c1c1;
+    --f-main: #ececec;
+    --g-main: #ffffff;
+    
     --aHover-main: #a98f89;
 
     --icons-main: #ffffff;
@@ -88,7 +95,7 @@ button {
             rounded-md
             py-1 px-1.5
             min-w-[30px] min-h-[30px]
-            hover:bg-[var(--baseAcc-c)]
+            hover:bg-[var(--c-main)]
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2
@@ -103,7 +110,7 @@ button {
             justify-start 
             p-1.5 px-2.5 gap-3
             min-h-[32px]
-            hover:bg-[var(--baseAcc-c)]
+            hover:bg-[var(--c-main)]
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2
@@ -117,8 +124,8 @@ button {
             rounded-md
             py-0.5 px-1.5
             min-w-[30px] min-h-[30px]
-            bg-[var(--baseAcc-f)]
-            hover:bg-[var(--baseAcc-d)]
+            bg-[var(--f-main)]
+            hover:bg-[var(--e-main)]
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2

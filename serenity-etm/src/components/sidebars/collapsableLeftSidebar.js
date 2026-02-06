@@ -75,7 +75,7 @@ export default function CollapsableLeftSidebar() {
                     onClick={() => router.push('/')}
                     onKeyDown={(e) => activate(e, () => router.push('/'))}
                     className={`leftmain-sidebar-btn 
-                        ${screen==='' ? 'bg-[var(--baseAcc-b)]' : ''}`}
+                        ${screen==='' ? 'bg-[var(--b-main)]' : ''}`}
                 >
                     <img
                         src={ICONS[theme].dashboard}
@@ -117,7 +117,7 @@ export default function CollapsableLeftSidebar() {
                         })
                     }
                     className={`leftmain-sidebar-btn 
-                        ${screen==='emails' ? 'bg-[var(--baseAcc-b)]' : ''}`}
+                        ${screen==='emails' ? 'bg-[var(--b-main)]' : ''}`}
                 >
                     <img
                         src={ICONS[theme].email}
@@ -159,7 +159,7 @@ export default function CollapsableLeftSidebar() {
                         })
                     }
                     className={`leftmain-sidebar-btn 
-                        ${screen==='tasks' ? 'bg-[var(--baseAcc-b)]' : ''}`}
+                        ${screen==='tasks' ? 'bg-[var(--b-main)]' : ''}`}
                 >
                     <img
                         src={ICONS[theme].task}

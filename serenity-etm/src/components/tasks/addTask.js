@@ -65,7 +65,7 @@ export default function AddTask() {
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
                 onClick={() => setOpen(true)}
-                className={`bg-[var(--baseAcc-b)] border-[0.1rem] border-[var(--baseAcc-c)] flex flex-row gap-2 items-center justify-center rounded-md hover:bg-[var(--baseAcc-c)] text-[var(--text-d)] text-sm h-8 px-3 pl-2 shadow-lg font-Roboto
+                className={`bg-[var(--b-main)] border-[0.1rem] border-[var(--c-main)] flex flex-row gap-2 items-center justify-center rounded-md hover:bg-[var(--c-main)] text-[var(--text-d)] text-sm h-8 px-3 pl-2 shadow-lg font-Roboto
                 focus:outline-none
                 focus-visible:ring-2
                 focus-visible:ring-offset-2

@@ -51,7 +51,7 @@ export default function CollapsableRightSidebar() {
                 title='Expand Adaptive Workspace Panel'
                 onClick={() => setExpanded(!expanded)}
                 onKeyDown={(e) => activate(e, () => setExpanded(!expanded))}
-                className={`fixed bottom-[5rem] z-30 bg-[var(--baseAcc-b)] hover:bg-[var(--baseAcc-c)] shadow-xl rounded-full p-2 py-1.5
+                className={`fixed bottom-[5rem] z-30 bg-[var(--b-main)] hover:bg-[var(--c-main)] shadow-xl rounded-full p-2 py-1.5
                 ${expanded ? 'pr-1.5' : 'pl-1.5'}
                 focus:outline-none
                 focus-visible:ring-2
@@ -91,7 +91,7 @@ export default function CollapsableRightSidebar() {
                             onClick={() => setFocusMode(!focusMode)}
                             onKeyDown={(e) => activate(e, () => setFocusMode(!focusMode))}
                             className={`right-sidebar-btn ${expanded ? 'expanded' : 'collapsed'}
-                            ${focusMode ? 'bg-[var(--baseAcc-e)]' : ''}`}
+                            ${focusMode ? 'bg-[var(--e-main)]' : ''}`}
                         >
                             <img
                                 src={ICONS[theme].focus}
@@ -122,7 +122,7 @@ export default function CollapsableRightSidebar() {
                             onClick={() => setPriorityMode(!priorityMode)}
                             onKeyDown={(e) => activate(e, () => setPriorityMode(!priorityMode))}
                             className={`right-sidebar-btn ${expanded ? 'expanded' : 'collapsed'}
-                            ${priorityMode ? 'bg-[var(--baseAcc-e)]' : ''}`}
+                            ${priorityMode ? 'bg-[var(--e-main)]' : ''}`}
                         >
                             <img
                                 src={ICONS[theme].priority}
@@ -154,7 +154,7 @@ export default function CollapsableRightSidebar() {
                                 onClick={() => {setSdkActive(!sdkActive)}}
                                 onKeyDown={(e) => activate(e, () => setSdkActive(!sdkActive))}
                                 className={`right-sidebar-btn ${expanded ? 'expanded' : 'collpased'}
-                                ${sdkActive ? 'bg-[var(--baseAcc-e)]' : ''}`}
+                                ${sdkActive ? 'bg-[var(--e-main)]' : ''}`}
                             >
                                 <img
                                     src={ICONS[theme].stress}
@@ -218,7 +218,7 @@ export default function CollapsableRightSidebar() {
                         onClick={() => setCalmMode(!calmMode)}
                         onKeyDown={(e) => activate(e, () => setCalmMode(!calmMode))}
                         className={`right-sidebar-btn ${expanded ? 'expanded' : 'collapsed'}
-                        ${calmMode ? 'bg-[var(--baseAcc-e)]' : ''}`}
+                        ${calmMode ? 'bg-[var(--e-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].calm}
