@@ -43,7 +43,7 @@ export default function TasksSidebarButton({label, shortLabel, icon, expanded, o
             onKeyDown={activate}
             className={`flex items-center w-full rounded hover:bg-[var(--baseAcc-e)] opacity-none
             ${expanded ? 'h-7 px-1 gap-3 justify-start' : 'gap-0 justify-center rounded-md'} 
-            ${showTasks === shortLabel ? 'bg-[var(--baseAcc-g)] shadow-2xl shadow-black' : ''}
+            ${showTasks === shortLabel ? 'bg-[var(--baseAcc-g)] shadow-md' : ''}
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2

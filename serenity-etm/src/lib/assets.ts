@@ -25,5 +25,10 @@ export const ICONS = {
         today: `${SUPABASE_ASSET_URL}/icons/lightMode/today.png`,
         upcoming: `${SUPABASE_ASSET_URL}/icons/lightMode/upcoming.png`,
         completed: `${SUPABASE_ASSET_URL}/icons/lightMode/completed.png`,
+
+        add: `${SUPABASE_ASSET_URL}/icons/lightMode/add.png`,
+        redflag: `${SUPABASE_ASSET_URL}/icons/lightMode/redflag.png`,
+        yellowflag: `${SUPABASE_ASSET_URL}/icons/lightMode/yelloflag.png`,
+        greenflag: `${SUPABASE_ASSET_URL}/icons/lightMode/greenflag.png`,
     },
 }

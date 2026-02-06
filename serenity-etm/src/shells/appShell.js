@@ -49,7 +49,7 @@ export default function AppShell({children, rightSidebar}){
             <CollapsableLeftSidebar/>
             <SecondarySidebar/>
             
-            <main className="flex-1 p-8 overflow-auto">{children}</main>
+            <main className="flex-1 overflow-auto p-8 py-1">{children}</main>
 
             <CollapsableRightSidebar />
         </div>

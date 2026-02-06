@@ -33,6 +33,8 @@
     --acc-main: #8f787c;
     --accHover-main: #766266;
 
+    --bg: #e8e8e8;
+
     /* left side main panel */
     --baseAcc-a: #101010;
     --baseAcc-b: #303030;
@@ -50,10 +52,10 @@
     --text-d: #ffffff;
 
     --danger: #b91c1c;
-    --dangerL: #fac7c7;
+    --dangerL: #ffd8d8;
 
-    --warning: #ffcc00;
-    --warningL: #fef2ca;
+    --warning: #cba615;
+    --warningL: #fff4d5;
 
     --neutral: #0062ff;
 

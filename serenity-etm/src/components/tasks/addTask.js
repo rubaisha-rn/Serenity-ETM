@@ -4,10 +4,11 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import useStore from "@/store/useStore";
 import { useTaskStore } from "@/store/taskStore";
+import { ICONS } from "@/lib/assets";
 
 export default function AddTask() {
 
-    const {setTheme} = useStore();
+    const {setTheme, theme} = useStore();
     const {addTask} = useTaskStore();
 
     const [open, setOpen] = useState(false);
@@ -64,9 +65,19 @@ export default function AddTask() {
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
                 onClick={() => setOpen(true)}
-                className={`px-4 py-1.5 rounded-lg bg-[var(--acc-main)] hover:bg-[var(--accHover-main)] border-2 border-[var(--a-main)] text-sm text-[var(--text-d)]`}
+                className={`bg-[var(--baseAcc-b)] border-[0.1rem] border-[var(--baseAcc-c)] flex flex-row gap-2 items-center justify-center rounded-md hover:bg-[var(--baseAcc-c)] text-[var(--text-d)] text-sm h-8 px-3 pl-2 shadow-lg font-Roboto
+                focus:outline-none
+                focus-visible:ring-2
+                focus-visible:ring-offset-2
+                focus-visible:ring-blue-500`}
             >
-                + Add Task
+                <img
+                    src={ICONS[theme].add}
+                    className="w-3 h-3 shrink-0"
+                    alt=""
+                    aria-hidden='true'
+                />
+                Add Task
             </motion.button>
 
             {/* modal */}

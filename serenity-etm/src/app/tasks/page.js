@@ -11,6 +11,7 @@ import ModeBanner from "@/components/modeBanner";
 import BreakPopup from "@/components/breakPopup";
 import CalmOverlay from "@/components/calmOverlay";
 
+import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
@@ -36,7 +37,7 @@ export default function TasksPage() {
     }, [])
 
     
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, setExpandedSecondary, expandedMain, setShowTasks, showTasks, calmMode, sdkActive, setCalmMode, setTheme, setScreen} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, setExpandedSecondary, expandedMain, setShowTasks, showTasks, calmMode, sdkActive, setCalmMode, theme, setTheme, setScreen} = useStore();
     const [sorted, setSorted] = useState([]);
 
     useEffect(() => {
@@ -99,9 +100,8 @@ export default function TasksPage() {
     
     }, [tasks, showTasks, focusMode, priorityMode, emotionValue]);
 
-    const mainWidth = expandedMain ? 220 : 40;
-    const secondaryWidth = expandedSecondary ? 200 : 40;
-    const contentMargin = mainWidth + secondaryWidth;
+    const secondaryWidth = expandedSecondary ? 210 : 54;
+    const contentMargin = 38 + secondaryWidth;
 
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
@@ -144,7 +144,7 @@ export default function TasksPage() {
     }, []);
 
     return (
-        <div className={`bg-[var(--cardA-main)] relative h-screen`}>
+        <div className={`relative h-screen`}>
 
             <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
             
@@ -172,113 +172,121 @@ export default function TasksPage() {
                 )}
             </AnimatePresence>
 
-            <AppShell>
+            <div className="bg-[var(--bg)]">
+                <AppShell>
 
-                <motion.div className='space y-3 transition-all duration-300 mr-10'
-                    initial='hidden'
-                    animate='visible'
-                    variants={{
-                        hidden: {},
-                        visible: {
-                            transition: {
-                                staggerChildren: 0.05,
+                    <motion.div className='transition-all duration-300 mr-10 p-2 flex flex-col'
+                        initial='hidden'
+                        animate='visible'
+                        variants={{
+                            hidden: {},
+                            visible: {
+                                transition: {
+                                    staggerChildren: 0.05,
+                                },
                             },
-                        },
-                    }}
-                    style={{marginLeft: contentMargin}}
-                >
-                    <div className="flex flex-row gap-4 justify-center items-center">
-                        <div className="flex-1 border-2 border-[var(--a-main)] bg-[var(--blankCard-main)] text-sm px-4 py-1.5 rounded-lg text-[var(--text-c)]">
-                            Search Tasks
+                        }}
+                        style={{marginLeft: contentMargin}}
+                    >
+                        <div className="flex flex-row justify-between">
+                            <div className="relative">
+                                <div className="flex-1 border-[0.1rem] border-[var(--baseAcc-e)] bg-[var(--baseAcc-g)] text-sm px-4 py-1 rounded-md text-[var(--text-a)] outline-none w-[50vw] shadow
+                                    focus:outline-none
+                                    focus-visible:ring-2
+                                    focus-visible:ring-offset-2
+                                    focus-visible:ring-blue-500">
+                                    Search Tasks
+                                </div>
+                            </div>
+
+                            <AddTask/>
                         </div>
 
-                        <div>
-                            <AddTask />
+                        <div className="my-2 rounded-md shadow min-h-screen bg-[var(--baseAcc-g)] py-2">
+
+                            <div className="w-full flex-1 bg-none justify-start grid grid-cols-[0.20fr_1.8fr_0.35fr_0.35fr] gap-4 text-left">
+                                <div/>
+                                <div>
+                                    <p className="group-label">Tasks</p>
+                                </div>
+                                <div>
+                                    <p className="group-label">Due Date</p>
+                                </div>
+                                <div>
+                                    <p className="group-label">Priority</p>
+                                </div>
+                            </div>
+
+                            <AnimatePresence>
+                                {sorted.map((task) => {
+                                    
+                                    const formattedDate = task.due
+                                        ? new Date(task.due).toLocaleString(undefined, {
+                                            day: '2-digit',
+                                            month: 'short',
+                                            year: 'numeric',
+                                            hour: 'numeric',
+                                            minute: '2-digit',
+                                            hour12: true
+                                        }) 
+                                        : '';
+
+                                    return (
+                                        <motion.div
+                                            key={task.id}
+                                            layout
+                                            layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
+                                            initial={{opacity: 0, y:10}}
+                                            animate={{opacity: 1, 
+                                                y: 0,
+                                            }}
+                                            exit={{opacity: 0, y: -10}}
+                                            transition={{duration: 0.3}}
+                                            className={`px-4 py-0.5 grid grid-cols-[0.20fr_1.8fr_0.35fr_0.35fr] border-t-[0.05rem] border-b-[0.05rem] border-[var(--baseAcc-f)] gap-4 items-center justify-start ${task.completed ? 'bg-[var(--bg)]' : ''}`}
+                                        >
+
+                                            <div>
+                                                <input
+                                                    type='checkbox'
+                                                    id='accept'
+                                                    checked={task.completed}
+                                                    onChange={() => {
+                                                        toggleComplete(task.id)
+                                                        if (!task.completed){
+                                                        setCompletedTasksCount(completedTasksCount+1)}
+                                                    }}
+                                                    className='w-3.5 h-3.5 accent-blue-500'
+                                                />
+                                            </div>
+                                            <div>
+                                                <p className={`text-sm`}>
+                                                    {task.title}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <p className={`text-sm`}>
+                                                    {formattedDate}
+                                                </p>
+                                            </div>
+                                            <div className={`rounded-sm p-0.5 w-full flex flex-row justify-center items-center gap-1 border-[0.05rem] border-[var(--baseAcc-f)] 
+                                                ${task.priority === 'high' ? 'bg-[var(--dangerL)] text-[var(--danger)]' : 
+                                                task.priority === 'medium' ? 'bg-[var(--warningL)] text-[var(--warning)]' : 'bg-[var(--successL)] text-[var(--success)]'}`}>
+                                                    <img
+                                                        src={task.priority === 'high' ? ICONS[theme].redflag : task.priority === 'medium' ? ICONS[theme].yellowflag : ICONS[theme].greenflag}
+                                                        className="w-3 h-3 shrink-0"
+                                                    />
+                                                <p className={`text-xs text-left`}>
+                                                    {task.priority === 'high' ? 'High' : task.priority === 'medium' ? 'Medium' : 'Low'}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    )
+                                })}
+                            </AnimatePresence>  
                         </div>
-                    </div>
-
-                    <div className={`w-full flex-1 px-2 py-4 mt-4 bg-[var(--cardB-main)] relative rounded-lg`}>
-
-                        <div className="grid grid-cols-[40px_3fr_100px_100px] gap-4 text-left">
-                            <div>
-                                <p className="text-xs">Tasks</p>
-                            </div>
-                            <div/>
-                            <div>
-                                <p className="text-xs">Due Date</p>
-                            </div>
-                            <div>
-                                <p className="text-xs">Priority</p>
-                            </div>
-                        </div>
-
-                        <AnimatePresence>
-                            {sorted.map((task) => {
-                                
-                                const formattedDate = task.due
-                                    ? new Date(task.due).toLocaleString(undefined, {
-                                        day: '2-digit',
-                                        month: 'short',
-                                        year: 'numeric',
-                                        hour: 'numeric',
-                                        minute: '2-digit',
-                                        hour12: true
-                                    }) 
-                                    : '';
-
-                                return (
-                                    <motion.div
-                                        key={task.id}
-                                        layout
-                                        layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
-                                        initial={{opacity: 0, y:10}}
-                                        animate={{opacity: 1, 
-                                            y: 0,
-                                            scale: task.completed ? 0.95 : 1,
-                                        }}
-                                        exit={{opacity: 0, y: -10}}
-                                        transition={{duration: 0.3}}
-                                        className={`p-2 rounded-lg shadow grid grid-cols-[40px_3fr_100px_100px] gap-4 mb-1 items-center text-left ${task.completed ? 'bg-[var(--cardB-main)]' : 'bg-[var(--blankCard-main)]'}`}
-                                    >
-
-                                        <div>
-                                            <input
-                                                type='checkbox'
-                                                id='accept'
-                                                checked={task.completed}
-                                                onChange={() => {
-                                                    toggleComplete(task.id)
-                                                    if (!task.completed){
-                                                    setCompletedTasksCount(completedTasksCount+1)}
-                                                }}
-                                                className='w-4 h-4 accent-blue-500'
-                                            />
-                                        </div>
-                                        <div>
-                                            <p className={`text-sm`}>
-                                                {task.title}
-                                            </p>
-                                        </div>
-                                        <div>
-                                            <p className={`text-sm`}>
-                                                {formattedDate}
-                                            </p>
-                                        </div>
-                                        <div className={`rounded-sm text-[var(--text-b)] text-sm p-0.5 text-center 
-                                            ${task.priority === 'high' ? 'bg-[var(--dangerL)]' : ''}
-                                            ${task.priority === 'medium' ? 'bg-[var(--warningL)]' : ''}
-                                            ${task.priority === 'low' ? 'bg-[var(--successL)]' : ''}`}>
-                                            <p className={`font-medium`}>
-                                                {task.priority}
-                                            </p>
-                                        </div>
-                                    </motion.div>
-                                )
-                            })}
-                        </AnimatePresence>  
-                    </div>
-                </motion.div>
-            </AppShell>
+                    </motion.div>
+                </AppShell>
+            </div>
 
             <ThinFooter />
 
