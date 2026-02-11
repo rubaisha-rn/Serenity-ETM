@@ -202,9 +202,9 @@ export default function EmailsPage () {
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
                         transition={{ duration: 0.4, ease: 'easeInOut'}}
-                        className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
+                        className="fixed inset-0 backdrop-blur-2xl z-[9999] pointer-events-auto"
                     >
-                        <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute inset-0">
                             <CalmOverlay />
                         </div>
                     </motion.div>

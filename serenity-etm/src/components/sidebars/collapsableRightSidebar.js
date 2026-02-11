@@ -41,6 +41,7 @@ export default function CollapsableRightSidebar() {
         <>
             {/* toggle button */}
             <motion.button
+                initial={false}
                 {...motionConfig}
                 animate={{right: expandedRight ? 200 : 34}}
                 transition={{duration: 0.25, ease: 'easeInOut'}}
