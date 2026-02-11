@@ -203,7 +203,7 @@ export default function CalmOverlay() {
                     initial={{opacity: 0, y: 6}}
                     animate={{opacity: 1, y: 0}}
                     transition={{duration: 0.2, delay: 0.1}}
-                    className='rounded-md p-0.5 px-2 bg-black/10 backdrop-blur-md text-lg text-[var(--text-d)] font-AbrilFatface'
+                    className='rounded-md p-0.5 px-2 bg-black/10 backdrop-blur-md text-lg text-[var(--text-d)] font-Sans font-semibold'
                 >
                     Let's slow things down for a moment.
                 </motion.div>
