@@ -69,7 +69,7 @@ export default function CollapsableLeftSidebar() {
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'dashboard' && (
-                        <div className='absolute left-0 h-6 w-1 bg-[var(--h-main)] rounded-full shadow'/>
+                        <div className='absolute left-0 h-6 w-1 bg-[var(--g-main)] rounded-full shadow'/>
                     )}
 
                     <motion.button
@@ -103,7 +103,7 @@ export default function CollapsableLeftSidebar() {
                             })
                         }
                         className={`leftmain-sidebar-btn 
-                            ${screen==='dashboard' ? 'bg-[var(--b-main)]' : ''}`}
+                            ${screen==='dashboard' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].dashboard}
@@ -118,7 +118,7 @@ export default function CollapsableLeftSidebar() {
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'emails' && (
-                        <div className='absolute left-0 h-6 w-1 bg-[var(--h-main)] rounded-full shadow'/>
+                        <div className='absolute left-0 h-6 w-1 bg-[var(--g-main)] rounded-full shadow'/>
                     )}
 
                     <motion.button
@@ -152,7 +152,7 @@ export default function CollapsableLeftSidebar() {
                             })
                         }
                         className={`leftmain-sidebar-btn 
-                            ${screen==='emails' ? 'bg-[var(--b-main)]' : ''}`}
+                            ${screen==='emails' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].email}
@@ -167,7 +167,7 @@ export default function CollapsableLeftSidebar() {
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'tasks' && (
-                        <div className='absolute left-0 h-6 w-1 bg-[var(--h-main)] rounded-full shadow'/>
+                        <div className='absolute left-0 h-6 w-1 bg-[var(--g-main)] rounded-full shadow'/>
                     )}
                     <motion.button
                         {...motionConfig}
@@ -200,7 +200,7 @@ export default function CollapsableLeftSidebar() {
                             })
                         }
                         className={`leftmain-sidebar-btn 
-                            ${screen==='tasks' ? 'bg-[var(--b-main)]' : ''}`}
+                            ${screen==='tasks' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].task}

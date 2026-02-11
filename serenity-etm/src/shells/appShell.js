@@ -24,6 +24,11 @@ export default function AppShell({children, rightSidebar}){
                 }
                 else {
                     switch (e.key.toLowerCase()) {
+                        case 'd':
+                            setScreen('dashboard');
+                            router.push('/dashboard');
+                            break;
+
                         case 'e':
                             setScreen('emails');
                             router.push('/emails');

@@ -50,7 +50,7 @@ export default function CollapsableRightSidebar() {
                 title='Expand Adaptive Workspace Panel'
                 onClick={() => setExpandedRight(!expandedRight)}
                 onKeyDown={(e) => activate(e, () => setExpandedRight(!expandedRight))}
-                className={`fixed bottom-[5rem] z-30 bg-[var(--b-main)] hover:bg-[var(--c-main)] shadow-xl rounded-full p-2 py-1.5
+                className={`fixed bottom-[5rem] z-30 bg-[var(--baseAcc-a)] hover:bg-[var(--a-main)] shadow-xl rounded-full p-2 py-1.5
                 ${expandedRight ? 'pr-1.5' : 'pl-1.5'}
                 focus:outline-none
                 focus-visible:ring-2
@@ -72,7 +72,7 @@ export default function CollapsableRightSidebar() {
                 initial={{width: 46}}
                 animate={{width: expandedRight ? 210 : 46}}
                 transition={{type: 'spring', stiffness: 260, damping: 36}}
-                className={`fixed top-1 right-1 z-20 bg-[var(--baseAcc-g)] shadow-xl flex flex-col justify-between rounded-lg h-[calc(100vh-0.5rem)] overflow-hidden py-2 px-1 w-10 sm:w-12
+                className={`fixed top-1 right-1 z-20 bg-[var(--baseAcc-b)] shadow-xl flex flex-col justify-between rounded-lg h-[calc(100vh-0.5rem)] overflow-hidden py-2 px-1 w-10 sm:w-12
                 ${expandedRight ? 'px-2' : ''}`}
                 style={{overflow: 'clip'}}
             >
@@ -84,7 +84,7 @@ export default function CollapsableRightSidebar() {
                     <div className='flex flex-row items-center'>
                     
                         {focusMode && (
-                            <div className={`absolute right-0 w-1 bg-[var(--h-main)] rounded-full shadow ${expandedRight ? 'h-14' : 'h-6'}`}/>
+                            <div className={`absolute right-0 w-1 bg-[var(--g-main)] rounded-full shadow ${expandedRight ? 'h-14' : 'h-6'}`}/>
                         )}
 
                         <div>    
@@ -122,7 +122,7 @@ export default function CollapsableRightSidebar() {
                     <div className='flex flex-row items-center'>
                     
                         {priorityMode && (
-                            <div className={`absolute right-0 w-1 bg-[var(--h-main)] rounded-full shadow ${expandedRight ? 'h-14' : 'h-6'}`}/>
+                            <div className={`absolute right-0 w-1 bg-[var(--g-main)] rounded-full shadow ${expandedRight ? 'h-14' : 'h-6'}`}/>
                         )}
 
                         <div>
@@ -160,7 +160,7 @@ export default function CollapsableRightSidebar() {
                     <div className='flex flex-row items-center'>
                     
                         {sdkActive && (
-                            <div className={`absolute right-0 w-1 bg-[var(--h-main)] rounded-full shadow ${expandedRight ? 'h-40' : 'h-6'}`}/>
+                            <div className={`absolute right-0 w-1 bg-[var(--g-main)] rounded-full shadow ${expandedRight ? 'h-40' : 'h-6'}`}/>
                         )}
 
                         <div>
@@ -211,7 +211,7 @@ export default function CollapsableRightSidebar() {
                                         step={1}
                                         value={emotionValue}
                                         onChange={(e) => setEmotionValue(Number(e.target.value))}
-                                        className={`w-full mt-2 accent-[var(--text-b)]`}
+                                        className={`w-full mt-2 accent-[var(--baseAcc-a)]`}
                                         aria-valuemin={0}
                                         aria-valuemax={100}
                                         aria-valuenow={emotionValue}
@@ -233,7 +233,7 @@ export default function CollapsableRightSidebar() {
                     <div className={`flex ${expandedRight ? 'flex-col' : ''} justify-center items-center gap-1`}>
                     
                         {calmMode && (
-                            <div className={`absolute right-0 w-1 bg-[var(--h-main)] rounded-full shadow ${expandedRight ? 'h-14' : 'h-6'}`}/>
+                            <div className={`absolute right-0 w-1 bg-[var(--g-main)] rounded-full shadow ${expandedRight ? 'h-14' : 'h-6'}`}/>
                         )}
 
                         <motion.button

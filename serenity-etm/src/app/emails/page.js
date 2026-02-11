@@ -296,7 +296,7 @@ export default function EmailsPage () {
                             <EmailSend onClose={() => setShowComposer(false)} />
                         )}
 
-                        <div className="my-2 rounded-md shadow min-h-screen bg-[var(--baseAcc-g)] py-2">
+                        <div className="my-2 rounded-md shadow min-h-screen bg-[var(--baseAcc-b)] py-2">
                             
                             {/* batch email functions */}
                             {selectedIds.length > 0 && (

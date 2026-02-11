@@ -80,7 +80,7 @@ export default function ProfileSettingsMenu() {
                     }
                 }}
                 className={`leftmain-sidebar-btn ml-[0.07rem] p-0.5 sm:p-1 sm:px-1.5 sm:ml-0.5
-                    ${open ? 'bg-[var(--baseAcc-b)]' : ''}`}>
+                    ${open ? 'bg-[var(--a-main)]' : ''}`}>
                 <img
                     src={ICONS[theme].profileSettings}
                     className='w-6 h-6 shrink-0'
@@ -97,12 +97,12 @@ export default function ProfileSettingsMenu() {
                         ref={menuRef}
                         role='menu'
                         aria-label='Profile Settings Menu'
-                        className='absolute bottom-0 left-full ml-3 w-48 rounded-md bg-[var(--baseAcc-b)] shadow-xl p-0.5 z-50 text-[var(--text-d)] text-[0.85rem] font-thin shadow-xl z-30'
+                        className='absolute bottom-0 left-full ml-3 w-48 rounded-md bg-[var(--baseAcc-a)] shadow-xl p-0.5 z-50 text-[var(--text-d)] text-[0.85rem] font-thin shadow-xl z-30'
                     >
                         {/* settings */}
                         <button
                             role='menuitem'
-                            className='leftmain-menuitem border-b-[0.02rem] border-b-[var(--baseAcc-c)]'
+                            className='leftmain-menuitem border-b-[0.02rem] border-b-white/20'
                             onClick={() => {}}
                         >
                             <img

@@ -17,48 +17,33 @@
 }
 
 :root {
-    --bg-main: #f8f8f8;
+    /* background color */
+    --bg: #efefef;
 
-    --cardA-main: #f6f2f0;
-    --cardB-main: #eae6e0;
+    /* darker accent support colours */
+    --a-main: #2a2c29;
+    --b-main: #444741;
+    --c-main: #5f635c;
 
-    --blankCard-main: #ffffff;
+    /* lighter accent support colours */
+    --d-main: #b7bab4;
+    --e-main: #d3d5cf;
+    --f-main: #f0f1ed;
 
-    --a-main: #101010;
-    --b-main: #303030;
-    --c-main: #4c4c4c;
-    --d-main: #aaaaaa;
-    --e-main: #c1c1c1;
-    --f-main: #ececec;
-    --g-main: #ffffff;
-    --h-main: #ffd500;
-    
-    --aHover-main: #a98f89;
+    /* accent colour */
+    --g-main: #8e918b;
 
-    --icons-main: #ffffff;
-    --iconsHover-main: #d4d4d4;
-
-    --acc-main: #8f787c;
-    --accHover-main: #766266;
-
-    --bg: #e8e8e8;
-
-    /* left side main panel */
+    /* side panel background colours */
     --baseAcc-a: #101010;
-    --baseAcc-b: #303030;
-    --baseAcc-c: #4c4c4c;
+    --baseAcc-b: #ffffff;
 
-    /* right side panel */
-    --baseAcc-d: #aaaaaa;
-    --baseAcc-e: #c1c1c1;
-    --baseAcc-f: #ececec;
-    --baseAcc-g: #ffffff;
-
+    /* text colours */
     --text-a: #000000;
     --text-b: #363636;
     --text-c: #585858;
     --text-d: #ffffff;
 
+    
     --danger: #b91c1c;
     --dangerL: #ffd8d8;
 
@@ -96,7 +81,7 @@ button {
             rounded-md
             py-1 px-1.5
             min-w-[30px] min-h-[30px]
-            hover:bg-[var(--c-main)]
+            hover:bg-[var(--b-main)]
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2
@@ -109,9 +94,10 @@ button {
             w-full
             flex items-center
             justify-start 
-            p-1.5 px-2.5 gap-3
+            p-0.5 px-2.5 gap-3
             min-h-[32px]
-            hover:bg-[var(--c-main)]
+            hover:bg-[var(--b-main)]
+            rounded
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2
@@ -126,7 +112,7 @@ button {
             py-0.5 px-1.5
             min-w-[30px] min-h-[30px]
             bg-[var(--f-main)]
-            hover:bg-[var(--e-main)]
+            hover:bg-[var(--d-main)]
             focus:outline-none
             focus-visible:ring-2
             focus-visible:ring-offset-2
