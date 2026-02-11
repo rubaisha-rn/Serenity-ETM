@@ -1,3 +1,4 @@
+// complete
 'use client';
 
 import { useEffect, useState, useMemo } from 'react';
@@ -45,7 +46,7 @@ export default function CollapsableLeftSidebar() {
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
 
-    if (!mounted) return null
+    if (!mounted) return null;
 
     return (
         <nav
@@ -65,47 +66,70 @@ export default function CollapsableLeftSidebar() {
                 /> 
 
                 {/* dashboard button */}
-                <motion.button
-                    {...motionConfig}
-                    type='button'
-                    role='menuitem'
-                    aria-label='Open dashboard'
-                    aria-current={screen==='' ? 'page' : undefined}
-                    title='Dashboard'
-                    onClick={() => router.push('/')}
-                    onKeyDown={(e) => activate(e, () => router.push('/'))}
-                    className={`leftmain-sidebar-btn 
-                        ${screen==='' ? 'bg-[var(--b-main)]' : ''}`}
-                >
-                    <img
-                        src={ICONS[theme].dashboard}
-                        className='w-6 h-6'
-                        aria-hidden="true"
-                        alt=''
-                    />
-                </motion.button>
+                <div className='flex flex-row items-center'>
+                    
+                    {screen === 'dashboard' && (
+                        <div className='absolute left-0 h-6 w-1 bg-[var(--h-main)] rounded-full shadow'/>
+                    )}
+
+                    <motion.button
+                        {...motionConfig}
+                        type='button'
+                        role='menuitem'
+                        aria-label='Open dashboard'
+                        aria-expanded={screen === 'dashboard'}
+                        aria-current={screen === 'dashboard' ? 'page' : undefined}
+                        title='Dashboard'
+                        onClick={() => {
+                            if (screen !== 'dashboard'){
+                                setScreen('dashboard')
+                                router.push('/dashboard')  
+                                setExpandedSecondary(true)
+                            }
+                            else {
+                                setExpandedSecondary(!expandedSecondary)
+                            }  
+                        }}
+                        onKeyDown={(e) => 
+                            activate(e, () => {
+                                if (screen !== 'dashboard'){
+                                    setScreen('dashboard')
+                                    router.push('/dashboard')  
+                                    setExpandedSecondary(true)
+                                }
+                                else {
+                                    setExpandedSecondary(!expandedSecondary)
+                                }
+                            })
+                        }
+                        className={`leftmain-sidebar-btn 
+                            ${screen==='dashboard' ? 'bg-[var(--b-main)]' : ''}`}
+                    >
+                        <img
+                            src={ICONS[theme].dashboard}
+                            className='w-6 h-6'
+                            aria-hidden="true"
+                            alt=''
+                        />
+                    </motion.button>
+                </div>
 
                 {/* email manager button */}
-                <motion.button
-                    {...motionConfig}
-                    type='button'
-                    role='menuitem'
-                    aria-label='Open email manager'
-                    aria-expanded={screen === 'emails'}
-                    aria-current={screen === 'emails' ? 'page' : undefined}
-                    title='Email Manager'
-                    onClick={() => {
-                        if (screen !== 'emails'){
-                            setScreen('emails')
-                            router.push('/emails')  
-                            setExpandedSecondary(true)
-                        }
-                        else {
-                            setExpandedSecondary(!expandedSecondary)
-                        }  
-                    }}
-                    onKeyDown={(e) => 
-                        activate(e, () => {
+                <div className='flex flex-row items-center'>
+                    
+                    {screen === 'emails' && (
+                        <div className='absolute left-0 h-6 w-1 bg-[var(--h-main)] rounded-full shadow'/>
+                    )}
+
+                    <motion.button
+                        {...motionConfig}
+                        type='button'
+                        role='menuitem'
+                        aria-label='Open email manager'
+                        aria-expanded={screen === 'emails'}
+                        aria-current={screen === 'emails' ? 'page' : undefined}
+                        title='Email Manager'
+                        onClick={() => {
                             if (screen !== 'emails'){
                                 setScreen('emails')
                                 router.push('/emails')  
@@ -113,41 +137,47 @@ export default function CollapsableLeftSidebar() {
                             }
                             else {
                                 setExpandedSecondary(!expandedSecondary)
-                            }
-                        })
-                    }
-                    className={`leftmain-sidebar-btn 
-                        ${screen==='emails' ? 'bg-[var(--b-main)]' : ''}`}
-                >
-                    <img
-                        src={ICONS[theme].email}
-                        alt=''
-                        aria-hidden='true'
-                        className='w-6 h-6'
-                    />
-                </motion.button>
+                            }  
+                        }}
+                        onKeyDown={(e) => 
+                            activate(e, () => {
+                                if (screen !== 'emails'){
+                                    setScreen('emails')
+                                    router.push('/emails')  
+                                    setExpandedSecondary(true)
+                                }
+                                else {
+                                    setExpandedSecondary(!expandedSecondary)
+                                }
+                            })
+                        }
+                        className={`leftmain-sidebar-btn 
+                            ${screen==='emails' ? 'bg-[var(--b-main)]' : ''}`}
+                    >
+                        <img
+                            src={ICONS[theme].email}
+                            alt=''
+                            aria-hidden='true'
+                            className='w-6 h-6'
+                        />
+                    </motion.button>
+                </div>
 
                 {/* task manager button */}
-                <motion.button
-                    {...motionConfig}
-                    type='button'
-                    role='menuitem'
-                    aria-label='Open task manager'
-                    aria-expanded={screen==='tasks'}
-                    aria-current={screen==='tasks' ? 'page' : undefined}
-                    title='Task Manager'
-                    onClick={() => {
-                        if (screen !== 'tasks'){
-                            setScreen('tasks')
-                            router.push('/tasks')  
-                            setExpandedSecondary(true)
-                        }
-                        else {
-                            setExpandedSecondary(!expandedSecondary)
-                        }
-                    }}
-                    onKeyDown={(e) =>
-                        activate(e, () => {
+                <div className='flex flex-row items-center'>
+                    
+                    {screen === 'tasks' && (
+                        <div className='absolute left-0 h-6 w-1 bg-[var(--h-main)] rounded-full shadow'/>
+                    )}
+                    <motion.button
+                        {...motionConfig}
+                        type='button'
+                        role='menuitem'
+                        aria-label='Open task manager'
+                        aria-expanded={screen==='tasks'}
+                        aria-current={screen==='tasks' ? 'page' : undefined}
+                        title='Task Manager'
+                        onClick={() => {
                             if (screen !== 'tasks'){
                                 setScreen('tasks')
                                 router.push('/tasks')  
@@ -156,22 +186,34 @@ export default function CollapsableLeftSidebar() {
                             else {
                                 setExpandedSecondary(!expandedSecondary)
                             }
-                        })
-                    }
-                    className={`leftmain-sidebar-btn 
-                        ${screen==='tasks' ? 'bg-[var(--b-main)]' : ''}`}
-                >
-                    <img
-                        src={ICONS[theme].task}
-                        className='w-6 h-6'
-                        aria-hidden="true"
-                        alt=''
-                    />
-                </motion.button>
+                        }}
+                        onKeyDown={(e) =>
+                            activate(e, () => {
+                                if (screen !== 'tasks'){
+                                    setScreen('tasks')
+                                    router.push('/tasks')  
+                                    setExpandedSecondary(true)
+                                }
+                                else {
+                                    setExpandedSecondary(!expandedSecondary)
+                                }
+                            })
+                        }
+                        className={`leftmain-sidebar-btn 
+                            ${screen==='tasks' ? 'bg-[var(--b-main)]' : ''}`}
+                    >
+                        <img
+                            src={ICONS[theme].task}
+                            className='w-6 h-6'
+                            aria-hidden="true"
+                            alt=''
+                        />
+                    </motion.button>
+                </div>
             </div>
             
             {/* profile settings section */}
-            <ProfileSettingsMenu />
+            <ProfileSettingsMenu/>
         </nav>
     );
 }

@@ -18,7 +18,8 @@ import { useRouter } from "next/navigation";
 
 export default function EmailsPage () {
 
-    const router = useRouter()
+    const router = useRouter();
+
     const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, markAsRead, moveToFolder, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, deleteMany} = useEmailStore();
 
     const [searchQuery, setSearchQuery] = useState([])
@@ -60,10 +61,12 @@ export default function EmailsPage () {
         setSearchResults(matches.slice(0, 12))
     }, [searchQuery, emails])
 
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, setExpandedSecondary, expandedMain, sdkActive, calmMode, setCalmMode, screen, setScreen, theme, setTheme} = useStore();
+    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, expandedRight, sdkActive, calmMode, setCalmMode, setScreen, theme, setTheme} = useStore();
 
     const secondaryWidth = expandedSecondary ? 210 : 54;
-    const contentMargin = 38 + secondaryWidth;
+    const contentMarginLeft = 38 + secondaryWidth;
+
+    const contentMarginRight = expandedRight ? 205 : 38;
 
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
@@ -223,7 +226,7 @@ export default function EmailsPage () {
                                 },
                             },
                         }}
-                        style={{marginLeft: contentMargin}}
+                        style={{marginLeft: contentMarginLeft, marginRight: contentMarginRight}}
                     >
                         <div className="flex flex-row justify-between">
                             
@@ -284,7 +287,7 @@ export default function EmailsPage () {
                                     alt=""
                                     aria-hidden='true'
                                 />
-                                New Email
+                                Compose
                             </button>
                         </div>
 

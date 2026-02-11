@@ -54,9 +54,9 @@ export default function SecondarySidebar() {
             initial={{width: 0, left: 56}}
             animate={{width: expandedSecondary ? 210 : 46, left: 56}}
             transition={motionTransition}
-            className={`bg-none backdrop-blur-xl fixed top-1 z-10 overflow-hidden items-center justify-center h-[calc(100vh-0.5rem)] rounded-lg
+            className={`bg-none fixed top-1 z-10 overflow-hidden items-center justify-center h-[calc(100vh-0.5rem)] rounded-lg
             motion-safe:transition-colors
-            ${expandedSecondary ? 'p-2 pt-3' : 'p-1 py-2 shadow-xl'}`}
+            ${expandedSecondary ? 'p-2 pt-3' : 'p-1 py-2 shadow-xl backdrop-blur-xl'}`}
         >
             <div role="menu" aria-label={`${headingText} options`} className="flex flex-col gap-3">
 

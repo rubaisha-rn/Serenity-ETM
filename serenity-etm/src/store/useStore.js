@@ -20,8 +20,11 @@ const useStore = create((set) => ({
     calmMode: false,
     setCalmMode: (value) => set({ calmMode: value }),
 
-    screen: 'emails',
+    screen: 'dashboard',
     setScreen: (screen) => set({screen}),
+
+    expandedRight: false, 
+    setExpandedRight: (expandedRight) => set({expandedRight}),
 
     expandedSecondary: true, 
     setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}), 

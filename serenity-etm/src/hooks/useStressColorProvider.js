@@ -83,6 +83,10 @@ export default function UseStressColorProvider({children}) {
                 lerpColor(hexToRgb(from.g), hexToRgb(to.g), t)
             );
             root.style.setProperty(
+                '--h-main',
+                lerpColor(hexToRgb(from.h), hexToRgb(to.h), t)
+            );
+            root.style.setProperty(
                 '--aHover-main',
                 lerpColor(hexToRgb(from.aHover), hexToRgb(to.aHover), t)
             );

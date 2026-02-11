@@ -26,7 +26,7 @@ export default function LoginPage() {
             setError(error.message)
         }
         else {
-            router.push('/emails')
+            router.push('/dashboard')
         }
 
         setLoading(false)
