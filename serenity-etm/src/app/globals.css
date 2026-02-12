@@ -1,3 +1,4 @@
+/* tokens (fonts + variables) */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,6 +17,7 @@
     font-style: normal;
 }
 
+/* design tokens */
 :root {
     /* background color */
     --bg: #efefef;
@@ -43,8 +45,8 @@
     --text-c: #585858;
     --text-d: #ffffff;
 
-    
     --danger: #b91c1c;
+    --dangerH: #871111;
     --dangerL: #ffd8d8;
 
     --warning: #cba615;
@@ -55,6 +57,11 @@
     --success: #00ad45;
     --successM: #b6d7c1;
     --successL: #dbfae6;
+
+    /* fluid spacing */
+    --space-sm: clamp(0.5rem, 1vw, 0.75rem);
+    --space-md: clamp(0.75rem, 1.5vw, 1rem);
+    --space-lg: clamp(1rem, 2vw, 1.5rem);
 }
 
 .dark {
@@ -62,89 +69,140 @@
     --text-b: #b3b3b3;
 }
 
-body {
-    background-color: var(--bg-main);
-    color: var(--text-a);
-    transition: background-color 1200ms ease-in-out;
-    font-family: Arial, Helvetica, sans-serif;
-    overflow-x: hidden;
+/* base layer */
+@layer base {
+    
+    html, body {
+        font-family: system-ui, sans-serif;
+    }
+
+    body {
+        background-color: var(--bg);
+        color: var(--text-a);
+        overflow-x: hidden;
+    }
+
+    button { @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500; }
+
+    /* typography */
+    h1 { @apply text-2xl font-bold; } 
+    h2 { @apply text-xl font-semibold; }
+    h3 { @apply text-lg font-semibold; }
+    p { @apply text-sm; }
 }
 
-button {
-    transition: background-color 300ms ease;
-}
-
+/* layout primitives define mobile-first defaults */
 @layer components {
-    .leftmain-sidebar-btn {
-        @apply
-            flex items-center justify-center
-            rounded-md
-            py-1 px-1.5
-            min-w-[30px] min-h-[30px]
-            hover:bg-[var(--b-main)]
-            focus:outline-none
-            focus-visible:ring-2
-            focus-visible:ring-offset-2
-            focus-visible:ring-blue-500
-            transition-colors;
+
+    /* for vertical layering */
+    .stack {
+        @apply flex flex-col gap-2;
     }
 
-    .leftmain-menuitem {
-        @apply
-            w-full
-            flex items-center
-            justify-start 
-            p-0.5 px-2.5 gap-3
-            min-h-[32px]
-            hover:bg-[var(--b-main)]
-            rounded
-            focus:outline-none
-            focus-visible:ring-2
-            focus-visible:ring-offset-2
-            focus-visible:ring-blue-500
-            motion-safe:transition-colors;
+    /* horizontal wrapping */
+    .cluster {
+        @apply flex flex-wrap items-center gap-2;
     }
 
-    .right-sidebar-btn {
-        @apply
-            flex items-center
-            rounded-md
-            py-0.5 px-1.5
-            min-w-[30px] min-h-[30px]
-            bg-[var(--f-main)]
-            hover:bg-[var(--d-main)]
-            focus:outline-none
-            focus-visible:ring-2
-            focus-visible:ring-offset-2
-            focus-visible:ring-blue-500
-            transition-colors;    
+    /* responsive grid */
+    .responsive-grid {
+        @apply grid grid-cols-1 gap-4;
     }
-
-    .right-sidebar-btn.expanded {
-        @apply gap-2 w-full h-9 px-3 gap-3 justify-start rounded-lg;
-    }
-
-    .right-sidebar-btn.collapsed {
-        @apply gap-0 py-0.5 px-1.5 justify-center rounded-md;
-    }
-
-    .right-sidebar-label {
-        @apply text-[var(--text-a)] text-sm whitespace-nowrap transition-all duration-150;
-    }
-
-    .right-sidebar-label.hide {
-        @apply opacity-0 w-0 overflow-hidden;
-    }
-
-    .right-sidebar-label.show {
-        @apply opacity-100;
-    }
-
-    .right-sidebar-help {
-        @apply flex gap-1 text-[0.6rem] transition-all duration-150 text-[var(--text-b)] leading-tight;
-    }
-
+    
+    /* styling */
     .group-label {
         @apply text-[0.65rem] text-[var(--text-c)] leading-tight font-Roboto;
     }
+
+    /* completed components */
+    .app-shell { 
+        @apply grid h-screen w-full 
+        transition-[grid-template-columns] 
+        duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]; 
+        grid-template-columns: 
+            var(--left, 100px)
+            1fr
+            var(--right, 50px);
+        grid-template-rows: 1fr rows;
+    }
+    .side-panel { 
+        @apply flex flex-col overflow-hidden; 
+    }
+    .side-bar { @apply fixed top-1 flex flex-col justify-between shadow-xl z-20; }
+    .side-bar-btn {@apply items-center gap-1.5; }
+    .side-bar-btn-active {@apply absolute bg-[var(--g-main)] rounded-full shadow; }
+    .side-bar-btn-style {@apply flex items-center justify-center transition-colors; }
+    .side-bar-menu {@apply absolute bottom-0 left-full bg-[var(--baseAcc-a)] shadow-xl text-[var(--text-d)] shadow-xl; }
+    .side-bar-menuitem {@apply w-full flex items-center justify-start hover:bg-[var(--b-main)] rounded motion-safe:transition-colors; }
+    .side-bar-toggle {@apply fixed bg-[var(--baseAcc-a)] hover:bg-[var(--a-main)] shadow-xl rounded-full z-30; }
+    .side-bar-btn-style.expanded {@apply justify-start; }
+    .side-bar-btn-style.collapsed {@apply justify-center; }
+    .side-bar-label {@apply text-[var(--text-a)] whitespace-nowrap transition-all duration-150; }
+    .side-bar-label.hide {@apply opacity-0 w-0 overflow-hidden; }
+    .side-bar-label.show {@apply opacity-100; }
+    .side-bar-help {@apply flex transition-all duration-150 text-[var(--text-b)] leading-tight; }
+    .side-bar-info {@apply shrink-0; }
+    .prototype { @apply fixed -bottom-2 right-1 bg-[var(--danger)] hover:bg-[var(--dangerH)] text-[var(--text-d)] shadow-black/50 shadow z-[9999] transition-opacity duration-100; }
+}
+
+/* responsiveness */
+@layer utilities {
+
+    /* 640px large phones/small tablets */
+    @screen sm {}
+
+    /* 768px tablets */
+    @screen md {}
+
+    /* 1024px laptops (mine) */
+    @screen lg {
+        h1 { @apply text-2xl font-bold; } 
+        h2 { @apply text-xl font-semibold; }
+        h3 { @apply text-lg font-semibold; }
+        h6 { @apply text-[0.85rem] font-thin; }
+        p { @apply text-[0.7rem]; }
+
+        /* completed components */
+        .app-shell { 
+            @apply grid h-screen w-full 
+            transition-[grid-template-columns] 
+            duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]; 
+            grid-template-columns: 
+                var(--left, 100px)
+                1fr
+                var(--right, 50px);
+            grid-template-rows: 1fr rows;
+        }
+        .side-panel { @apply flex flex-col; }
+        .main-panel { @apply p-1; }
+        .footer { @apply col-span-3; }
+        .side-bar { @apply px-1 py-2 w-12 h-[calc(100vh-0.5rem)] rounded-lg; }
+        .side-bar-btn {@apply gap-1.5; }
+        .side-bar-btn-active {@apply h-6 w-1; }
+        .side-bar-btn-style {@apply rounded-md py-1 px-1.5 min-w-[30px] min-h-[30px]; }
+        .side-bar-menu {@apply ml-3 w-40 rounded-md p-0.5; }
+        .side-bar-menuitem {@apply p-0.5 px-2 gap-3 min-h-[28px]; }
+        .side-bar-toggle {@apply bottom-[5rem] p-2 py-1.5; }
+        .side-bar-btn-style.expanded {@apply gap-2 w-full h-9 px-3 gap-3 rounded-lg; }
+        .side-bar-btn-style.collapsed {@apply gap-0 py-0.5 px-1.5 rounded-md; }
+        .side-bar-label {@apply text-sm; }
+        .side-bar-help {@apply gap-1 text-[0.6rem]; }
+        .side-bar-info {@apply w-2 h-2 mt-0.5; }
+        .prototype { @apply px-4 py-0.5 pb-2.5 rounded-md; }
+
+        /* incomplete */
+        .main-content { @apply min-w-0 overflow-auto; }
+        
+        .stack { @apply flex flex-col gap-2; }
+        .cluster { @apply flex flex-wrap items-center gap-2; }
+        .responsive-grid { @apply grid grid-cols-1 gap-4; }
+        
+        .group-label { @apply text-[0.65rem] text-[var(--text-c)] leading-tight font-Roboto; }
+    }
+
+    /* 1280px desktops */
+    @screen xl {}
+
+    /* 1536px large monitors */
+    @screen 2xl {}
 }

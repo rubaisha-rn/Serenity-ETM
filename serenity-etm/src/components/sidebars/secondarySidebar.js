@@ -51,12 +51,12 @@ export default function SecondarySidebar() {
             ref={sidebarRef}
             aria-label="Secondary navigation panel"
             aria-expanded={expandedSecondary}
-            initial={{width: 0, left: 56}}
-            animate={{width: expandedSecondary ? 210 : 46, left: 56}}
+            initial={{width: 0, left: 50}}
+            animate={{width: expandedSecondary ? 210 : 46, left: 50}}
             transition={motionTransition}
-            className={`bg-none fixed top-1 z-10 overflow-hidden items-center justify-center h-[calc(100vh-0.5rem)] rounded-lg
-            motion-safe:transition-colors
-            ${expandedSecondary ? 'p-2 pt-3' : 'p-1 py-2 shadow-xl backdrop-blur-xl'}`}
+            className={`bg-none fixed top-1 z-10 ml-1 overflow-hidden items-center justify-center h-[calc(100vh-0.5rem)] rounded-lg
+            motion-safe:transition-colors shadow-xl backdrop-blur-xl bg-blue-500 z-10
+            ${expandedSecondary ? 'p-2 pt-3' : 'p-1 py-2'}`}
         >
             <div role="menu" aria-label={`${headingText} options`} className="flex flex-col gap-3">
 

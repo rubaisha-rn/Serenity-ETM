@@ -7,14 +7,14 @@ import useStore from '@/store/useStore';
 import { ICONS } from '@/lib/assets';
 
 const Palettes = [
-    ['#0d7470', '#a8d8eb', '#295f9d'],
-    ['#295f9d', '#0d7470', '#a8d8eb'],
-    ['#a8d8eb', '#295f9d', '#0d7470'],
+    ['#3e7170', '#a8d8eb', '#456992'],
+    ['#456992', '#3e7170', '#a8d8eb'],
+    ['#a8d8eb', '#456992', '#3e7170'],
 ];
 
 const OVERLAY_DURATION = 10000; // 10 secs
-const BLOB_COUNT = 10;
-const BLOB_BLUR = 40;
+const BLOB_COUNT = 8;
+const BLOB_BLUR = 80;
 
 export default function CalmOverlay() {
 
@@ -115,7 +115,7 @@ export default function CalmOverlay() {
                 <filter id={filterId}>
                     <feGaussianBlur 
                         in='SourceGraphic' 
-                        stdDeviation='60' 
+                        stdDeviation='80' 
                         result='blur' 
                     />
                     <feColorMatrix

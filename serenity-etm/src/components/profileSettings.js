@@ -1,6 +1,7 @@
+// add image sizes according to window
 'use client'
 
-import {motion, AnimatePresence, useReducedMotion} from 'framer-motion'
+import {motion, AnimatePresence} from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
@@ -10,8 +11,7 @@ import useStore from '@/store/useStore'
 export default function ProfileSettingsMenu() {
 
     const router = useRouter()
-    const {theme, fontScale, reducedMotion} = useStore();
-    const prefersRecuedMotion = useReducedMotion();
+    const {theme} = useStore();
 
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
@@ -50,17 +50,8 @@ export default function ProfileSettingsMenu() {
         return () => document.removeEventListener('keydown', handler);
     }, []);
 
-    const motionConfig = prefersRecuedMotion
-        ? {}
-        : {
-            initial: {opacity: 0},
-            animate: {opacity: 1},
-            exit: {opacity: 0},
-            transition: {duration: 0.12}
-        }
-
     return (
-        <div className='relative z-30'>
+        <div className='relative z-20'>
             
             {/* profile button */}
             <motion.button 
@@ -68,10 +59,10 @@ export default function ProfileSettingsMenu() {
                 type='button'
                 aria-haspopup="menu"
                 aria-expanded={open}
-                aria-label='Open Profile settings menu'
-                title='Profile Settings'
-                whileHover={prefersRecuedMotion ? {} : {scale: 1.05}}
-                whileTap={prefersRecuedMotion ? {} : {scale: 0.95}}
+                aria-label='Open Profile menu'
+                title='Profile'
+                whileHover={{scale: 1.05}}
+                whileTap={{scale: 0.95}}
                 onClick={() => setOpen((v) => !v)}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -79,54 +70,60 @@ export default function ProfileSettingsMenu() {
                         setOpen((v) => !v);
                     }
                 }}
-                className={`leftmain-sidebar-btn ml-[0.07rem] p-0.5 sm:p-1 sm:px-1.5 sm:ml-0.5
-                    ${open ? 'bg-[var(--a-main)]' : ''}`}>
+                className={`side-bar-btn-style hover:bg-[var(--b-main)] p-0.5 ml-0.5 ${open ? 'bg-[var(--a-main)]' : ''}`}>
                 <img
                     src={ICONS[theme].profileSettings}
-                    className='w-6 h-6 shrink-0'
+                    className='lg:w-6 aspect-square'
                     alt=''
                     aria-hidden="true"
                 />
             </motion.button>
 
             {/* menu */}
-            <AnimatePresence className='z-30'>
+            <AnimatePresence>
                 {open && (
                     <motion.div
-                        {...motionConfig}
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{duration: 0.12}}
                         ref={menuRef}
                         role='menu'
-                        aria-label='Profile Settings Menu'
-                        className='absolute bottom-0 left-full ml-3 w-48 rounded-md bg-[var(--baseAcc-a)] shadow-xl p-0.5 z-50 text-[var(--text-d)] text-[0.85rem] font-thin shadow-xl z-30'
+                        aria-label='Profile Menu'
+                        className='side-bar-menu'
                     >
                         {/* settings */}
                         <button
                             role='menuitem'
-                            className='leftmain-menuitem border-b-[0.02rem] border-b-white/20'
+                            className='side-bar-menuitem border-b-[0.02rem] border-b-white/15'
                             onClick={() => {}}
                         >
                             <img
                                 src={ICONS[theme].settings}
-                                className='w-5 h-5'
+                                className='lg:w-4 aspect-square'
                                 aria-hidden="true"
                                 alt=''
                             />
-                            Profile Settings
+                            <h6>
+                                Settings
+                            </h6>
                         </button>
 
                         {/* sign out */}
                         <button
                             role='menuitem'
-                            className='leftmain-menuitem'
+                            className='side-bar-menuitem'
                             onClick={handleSignOut}
                         >
                             <img
                                 src={ICONS[theme].signout}
-                                className='w-5 h-5'
+                                className='lg:w-4 aspect-square'
                                 aria-hidden="true"
                                 alt=''
                             />
-                            Sign Out
+                            <h6>
+                                Sign out
+                            </h6>
                         </button>
                     </motion.div>
                 )}

@@ -1,8 +1,8 @@
-// complete
+// add image sizes according to window
 'use client';
 
-import { useEffect, useState, useMemo } from 'react';
-import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
 import useStore from '@/store/useStore';
 import { useRouter } from 'next/navigation';
 import { ICONS } from '@/lib/assets';
@@ -11,19 +11,9 @@ import ProfileSettingsMenu from '../profileSettings';
 export default function CollapsableLeftSidebar() {
 
     const router = useRouter();
-
-    const {screen, setScreen, theme, setTheme, expandedSecondary, setExpandedSecondary, fontScale} = useStore();
+    const {screen, setScreen, theme, setTheme, expandedSecondary, setExpandedSecondary} = useStore();
 
     const [mounted, setMounted] = useState(false);
-
-    const prefersReducedMotion = useReducedMotion()
-
-    const motionConfig = prefersReducedMotion
-        ? {}
-        : {
-            whileHover: {scale: 1.05},
-            whileTap: {scale: 0.95},
-    };
     
     useEffect(() => {
         setMounted(true)
@@ -51,29 +41,30 @@ export default function CollapsableLeftSidebar() {
     return (
         <nav
             aria-label='Primary Navigation'
-            className='fixed top-1 left-1 z-20 bg-[var(--baseAcc-a)] shadow-xl flex flex-col justify-between rounded-lg px-1 py-2 w-10 sm:w-12 h-[calc(100vh-0.5rem)]'
-            style={{fontSize: `${fontScale}rem`}}
+            className='side-bar left-1 bg-[var(--baseAcc-a)]'
         >
             {/* navigation buttons */}
-            <div role='menu' className='flex flex-col items-center gap-1.5'>
+            <div role='menu' className='side-bar-btn flex flex-col'>
                 
                 {/* brand logo */}
                 <img
                     src='/logo/logo.png'
                     alt='Serenity ETM'
-                    className="w-7 h-7"
+                    className="lg:w-7 aspect-square"
                     draggable={false}
                 /> 
 
                 {/* dashboard button */}
                 <div className='flex flex-row items-center'>
-                    
+
+                    {/* active bar indicator */}
                     {screen === 'dashboard' && (
-                        <div className='absolute left-0 h-6 w-1 bg-[var(--g-main)] rounded-full shadow'/>
+                        <div className='side-bar-btn-active left-0'/>
                     )}
 
                     <motion.button
-                        {...motionConfig}
+                        whileHover={{scale: 1.05}}
+                        whileTap={{scale: 0.95}}
                         type='button'
                         role='menuitem'
                         aria-label='Open dashboard'
@@ -102,12 +93,11 @@ export default function CollapsableLeftSidebar() {
                                 }
                             })
                         }
-                        className={`leftmain-sidebar-btn 
-                            ${screen==='dashboard' ? 'bg-[var(--a-main)]' : ''}`}
+                        className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='dashboard' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].dashboard}
-                            className='w-6 h-6'
+                            className='lg:w-6 aspect-square'
                             aria-hidden="true"
                             alt=''
                         />
@@ -118,11 +108,12 @@ export default function CollapsableLeftSidebar() {
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'emails' && (
-                        <div className='absolute left-0 h-6 w-1 bg-[var(--g-main)] rounded-full shadow'/>
+                        <div className='side-bar-btn-active left-0'/>
                     )}
 
                     <motion.button
-                        {...motionConfig}
+                        whileHover={{scale: 1.05}}
+                        whileTap={{scale: 0.95}}
                         type='button'
                         role='menuitem'
                         aria-label='Open email manager'
@@ -151,14 +142,13 @@ export default function CollapsableLeftSidebar() {
                                 }
                             })
                         }
-                        className={`leftmain-sidebar-btn 
-                            ${screen==='emails' ? 'bg-[var(--a-main)]' : ''}`}
+                        className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='emails' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].email}
                             alt=''
                             aria-hidden='true'
-                            className='w-6 h-6'
+                            className='lg:w-6 aspect-square'
                         />
                     </motion.button>
                 </div>
@@ -167,10 +157,11 @@ export default function CollapsableLeftSidebar() {
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'tasks' && (
-                        <div className='absolute left-0 h-6 w-1 bg-[var(--g-main)] rounded-full shadow'/>
+                        <div className='side-bar-btn-active left-0'/>
                     )}
                     <motion.button
-                        {...motionConfig}
+                        whileHover={{scale: 1.05}}
+                        whileTap={{scale: 0.95}}
                         type='button'
                         role='menuitem'
                         aria-label='Open task manager'
@@ -199,12 +190,11 @@ export default function CollapsableLeftSidebar() {
                                 }
                             })
                         }
-                        className={`leftmain-sidebar-btn 
-                            ${screen==='tasks' ? 'bg-[var(--a-main)]' : ''}`}
+                        className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='tasks' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].task}
-                            className='w-6 h-6'
+                            className='lg:w-6 aspect-square'
                             aria-hidden="true"
                             alt=''
                         />
@@ -214,6 +204,7 @@ export default function CollapsableLeftSidebar() {
             
             {/* profile settings section */}
             <ProfileSettingsMenu/>
+            
         </nav>
     );
 }

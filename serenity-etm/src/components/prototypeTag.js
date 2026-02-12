@@ -1,7 +1,18 @@
+// complete
+import { useState } from "react"
+
 export default function PrototypeTag() {
+    
+    const [hidden, setHidden] = useState(false);
+
     return (
-        <div className="fixed -bottom-2 right-2 bg-[var(--danger)] text-[var(--text-d)] px-5 py-1 pb-2.5 rounded-md text-xs z-[9999]">
-            Prototype
-        </div>
+        <button 
+            type="button"
+            aria-label="Dismiss prototype build tag"
+            onClick={() => setHidden(true)}
+            className={`prototype ${hidden ? 'opacity-0 pointer-events-none' : ''}`}
+        >
+            <p>Prototype Build</p>
+        </button>
     )
 }

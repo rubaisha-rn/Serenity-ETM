@@ -1,3 +1,4 @@
+// set widths according to screen sizes
 'use client';
 
 import { useEffect } from "react";
@@ -6,10 +7,12 @@ import useStore from "@/store/useStore";
 import CollapsableLeftSidebar from "@/components/sidebars/collapsableLeftSidebar";
 import CollapsableRightSidebar from "@/components/sidebars/collapsableRightSidebar";
 import SecondarySidebar from "@/components/sidebars/secondarySidebar";
+import PrototypeTag from "@/components/prototypeTag";
+import ThinFooter from "@/components/footers/thinFooter";
 
-export default function AppShell({children, rightSidebar}){
+export default function AppShell({children}){
     
-    const {expandedSecondary, setExpandedSecondary, setScreen, screen} = useStore();
+    const {expandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen} = useStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -50,13 +53,29 @@ export default function AppShell({children, rightSidebar}){
     }, []);
 
     return (
-        <div className="flex min-h-screen w-full">
-            <CollapsableLeftSidebar/>
-            <SecondarySidebar/>
+        <div className="app-shell"
+            style={{
+                "--left": expandedSecondary ? '264px' : '100px',
+                "--right": expandedRight ? '214px' : '50px',
+            }}
+        >
+            <aside className="side-panel">
+                <CollapsableLeftSidebar />
+                <SecondarySidebar />
+            </aside>
             
-            <main className="flex-1 overflow-auto p-8 py-1">{children}</main>
+            <main className="main-panel">
+                <PrototypeTag />
+                {children}
+            </main>
 
-            <CollapsableRightSidebar />
+            <aside className="side-panel">
+                <CollapsableRightSidebar />
+            </aside>
+
+            <footer className="footer">
+                <ThinFooter />
+            </footer>
         </div>
     );
 }
