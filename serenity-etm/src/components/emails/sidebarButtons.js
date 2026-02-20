@@ -1,19 +1,12 @@
+// add image sizes, widths, and other things according to window
 'use client';
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEmailStore } from "@/store/emailStore";
 
 export default function EmailsSidebarButton({label, shortLabel, icon, expanded, onClick, shortcut}) {
 
     const {showEmails} = useEmailStore();
-    const prefersReducedMotion = useReducedMotion();
-
-    const motionConfig = prefersReducedMotion
-        ? {}
-        : {
-            whileHover: {scale: 1.02},
-            whileTap: {scale: 0.95}
-        };
 
     const isActive = showEmails === shortLabel;
 
@@ -33,7 +26,8 @@ export default function EmailsSidebarButton({label, shortLabel, icon, expanded, 
 
     return (
         <motion.button
-            {...motionConfig}
+            whileHover={{scale: 1.05}}
+            whileTap={{scale: 0.95}}
             type="button"
             role="menuitem"
             aria-label={label}
@@ -41,21 +35,17 @@ export default function EmailsSidebarButton({label, shortLabel, icon, expanded, 
             title={!expanded ? label : undefined}
             onClick={onClick}
             onKeyDown={activate}
-            className={`flex items-center w-full rounded hover:bg-[var(--e-main)] opacity-none
-            ${expanded ? 'h-7 px-1 gap-3 justify-start' : 'gap-0 justify-center rounded-md'} 
-            ${showEmails === shortLabel ? 'bg-[var(--baseAcc-b)] shadow-md' : ''}
-            focus:outline-none
-            focus-visible:ring-2
-            focus-visible:ring-offset-2
-            focus-visible:ring-blue-500`}
+            className={`secondary-side-bar-btn hover:bg-[var(--e-main)]
+            ${expanded ? 'expanded' : 'collapsed'} 
+            ${showEmails === shortLabel ? 'bg-[var(--baseAcc-b)] shadow-md' : ''}`}
         >
             <img 
                 src={icon} 
-                className="w-5 h-5 opacity-70 shrink-0 m-1.5" 
+                className="lg:w-5 aspect-square opacity-80 m-1.5" 
                 alt=""
                 aria-hidden='true'
             />
-            <span className={`text-[var(--text-a)] text-sm whitespace-nowrap transition-all duration-150 ${expanded ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+            <span className={`secondary-side-bar-label ${expanded ? 'show' : 'hide'}`}>
                 {label}
             </span>
         </motion.button>

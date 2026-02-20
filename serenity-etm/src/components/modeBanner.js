@@ -9,7 +9,7 @@ export default function ModeBanner({mode}) {
     useEffect(() => {
         if(mode) {
             setShow(true);
-            const timer = setTimeout(() => setShow(false), 2000); // 2 secs
+            const timer = setTimeout(() => setShow(false), 3000); // 3 secs
             return () => clearTimeout(timer);
         }
     }, [mode]);
@@ -39,7 +39,7 @@ export default function ModeBanner({mode}) {
                             : ''}
                         </div>
 
-                        <div>
+                        <div className="bg-blue-500">
                             {mode === 'focus' ? 'Focus Mode Activated.' : mode === 'priority' ? 'Priority Mode Activated.' : 'Mode Deactivated.'}
                         </div>
                     </div>

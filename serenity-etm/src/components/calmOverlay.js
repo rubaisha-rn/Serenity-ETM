@@ -96,15 +96,16 @@ export default function CalmOverlay() {
     }, [calmMode]);
 
     return(
-        <div 
+        <motion.div 
             ref={overlayRef}
             role='dialog'
             aria-modal='true'
             aria-label='Calming break overlay'
-            className='fixed inset-0 z-[999] 
-            focus:outline-none focus-visible:ring-2
-            focus-visible:ring-offset-2
-            focus-visible:ring-blue-500'    
+            className='fixed inset-0 z-[999]'
+            initial={{opacity:0, backdropFilter: "blur(0px)"}}
+            animate={{opacity:1, backdropFilter: "blur(20px)"}}
+            exit={{opacity:0, backdropFilter: "blur(0px)"}}
+            transition={{duration: 0.6, ease: 'easeOut'}}    
         >
             {/* screen reader live countdown */}
             <div className='sr-only' aria-live='polite'>
@@ -162,6 +163,9 @@ export default function CalmOverlay() {
             
             {/* blobs */}
             <div
+                initial={{opacity: 0, scale:0.8}}
+                animate={{opactiy:1, scale:1}}
+                transition={{duration:0.12, ease:"easeOut"}}
                 className='absolute inset-0 pointer-events-none'
                 style={{filter: `url(#${filterId})`}}
                 aria-hidden='true'
@@ -200,14 +204,15 @@ export default function CalmOverlay() {
             {/* message */}
             <div className='absolute inset-0 flex items-center justify-center'>
                 <motion.div
-                    initial={{opacity: 0, y: 6}}
-                    animate={{opacity: 1, y: 0}}
-                    transition={{duration: 0.2, delay: 0.1}}
+                    initial={{opacity: 0, y: 12, scale: 0.96}}
+                    animate={{opacity: 1, y: 0, scale: 1}}
+                    exit={{opacity:0, y:8, scale:0.98}}
+                    transition={{duration: 0.2, ease: [0.22, 1, 0.36, 1]}}
                     className='rounded-md p-0.5 px-2 bg-black/10 backdrop-blur-md text-lg text-[var(--text-d)] font-Sans font-semibold'
                 >
                     Let's slow things down for a moment.
                 </motion.div>
             </div>
-        </div> 
+        </motion.div> 
     );
 }

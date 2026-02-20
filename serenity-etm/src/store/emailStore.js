@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
-import { time } from "framer-motion";
 
 export const useEmailStore = create((set, get) => ({
 
@@ -42,13 +41,26 @@ export const useEmailStore = create((set, get) => ({
         get().loadEmails()
     },
 
+    unarchiveMany: async (ids) => {
+        
+        if (!ids.length) return
+
+        await supabase
+            .from('emails')
+            .update({folder: 'inbox'})
+            .in('id', ids)
+
+        get().clearSelection()
+        get().loadEmails()
+    },
+
     deleteMany: async (ids) => {
    
         if (!ids.length) return
 
         await supabase
             .from('emails')
-            .update({folder: 'delete'})
+            .update({is_delete: true})
             .in('id', ids)
 
         get().clearSelection()
@@ -57,38 +69,73 @@ export const useEmailStore = create((set, get) => ({
 
     classifyMissingEmails: async () => {
 
-        const {data: sessionData} = await supabase.auth.getSession()
-        if (!sessionData.session) return
+        const {data: sessionData} = await supabase.auth.getSession();
+        if (!sessionData.session) return;
 
-        const emails = get().emails
+        const emails = get().emails;
 
         const unclassified = emails.filter(
-            e => e.priority_src === 'ai'
+            e => (e.priority_src === 'rules' || e.priority === null)
         )
 
-        for (const email of unclassified) {
-            const res = await fetch('/api/classify', {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    text: `${email.subject} ${email.body}`
-                })
-            })
+        if (unclassified.length === 0) return;
 
-            const result = await res.json()
+        try {
+            const results = await Promise.all(
+                unclassified.map(async (email) => {
+                    try {
+                        const res = await fetch('/api/classify', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                text: `${email.subject ?? ""} ${email.body ?? ""}`
+                            })
+                        });
 
-            await supabase
-                .from('emails')
-                .update({
-                    priority: result.priority
+                        const data = await res.json();
+
+                        return {
+                            id: email.id,
+                            priority: data.priority,
+                            priority_src: 'rules'
+                        };
+                    }
+                    catch {
+                        return null;
+                    }
                 })
-                .eq('id', email.id)
+            );
+
+            const validUpdates = results.filter(Boolean);
+
+            if (validUpdates.length === 0) return;
+
+            // safe db update - not overwriting user
+            for (const update of validUpdates) {
+                await supabase
+                    .from('emails')
+                    .update({
+                        priority: update.priority,
+                        priority_src: update.priority_src
+                    })
+                    .eq('id', update.id)
+                    .is('priority', null);
+            }
+
+            // update local state
+            const updatedEmails = emails.map(email => {
+                const match = validUpdates.find(u => u.id === email.id);
+                return match ? {...email, ...match} : email;
+            });
+
+            set({emails: updatedEmails});
         }
-
-        get().loadEmails()
+        catch (err) {
+            console.log("Classification failed.", err);
+        }
     },
 
-    loadEmails : async () => {
+    loadEmails: async () => {
 
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
@@ -128,10 +175,7 @@ export const useEmailStore = create((set, get) => ({
                     : ''
 
                 let folder = e.folder || 'inbox'
-                if (e.sender_id === userId && folder != 'drafts') {
-                    folder = 'sent'
-                }
-
+                
                 return {
                     ...e,
 
@@ -213,21 +257,13 @@ export const useEmailStore = create((set, get) => ({
         const {data: rows, error} = await supabase
             .from('emails')
             .insert([{
-                
                 ...data,
-
                 sender_id: sessionData.session.user.id,
                 receiver_id: data.receiver_id,
-
-                preview: data.body.length > 70 
-                    ? data.body.slice(0, 70) + '...'
-                    : data.body,
-
                 folder: 'inbox',
                 is_read: false,
-
                 priority: 'normal',
-                priority_src: 'ai',
+                priority_src: 'rules',
             }])
 
         if (error) {
@@ -240,14 +276,25 @@ export const useEmailStore = create((set, get) => ({
 
     cyclePriority: async (id) => {
         
-        const email = get().emails.find(e => e.id === id)
-        if (!email) return
+        const emails = get().emails;
+        const email = emails.find(e => e.id === id);
+        if (!email) return;
 
-        const order = ['normal', 'high']
-        const currentIndex = order.indexOf(email.priority || 'normal')
-        const nextPriority = order[(currentIndex+1) % order.length]
+        const order = ['low', 'normal', 'high'];
+        const current = email.priority ?? 'normal';
+        const currentIndex = order.indexOf(current);
 
-        await supabase
+        const nextPriority = order[(currentIndex + 1) % order.length];
+
+        set({
+            emails: emails.map(e =>
+                e.id === id
+                ? {...e, priority: nextPriority, priority_src: 'user'}
+                : e
+            )
+        });
+
+        const {error} = await supabase
             .from('emails')
             .update({
                 priority: nextPriority,
@@ -255,7 +302,10 @@ export const useEmailStore = create((set, get) => ({
             })
             .eq('id', id)
 
-        get().loadEmails()
+        if (error) {
+            console.log('Priority update failed.', error);
+            set({emails});
+        }
     },
 
     saveDraft: async (data) => {
@@ -263,28 +313,23 @@ export const useEmailStore = create((set, get) => ({
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
 
-        if (!data.subject && !data.body) return
+        if (!data.subject && !data.body && !data.receiver_id) return
 
         const {data: rows, error} = await supabase
             .from('emails')
-            .insert([{
-                
+            .insert([{        
                 sender_id: sessionData.session.user.id,
-                receiver_id: null,
+                receiver_id: data.receiver_id,
                 reply_to: data.reply_to || null,
 
                 subject: data.subject || '(No Subject)',
                 body: data.body || '',
 
-                preview: data.body.length > 70 
-                    ? data.body.slice(0, 70) + '...'
-                    : data.body,
-
                 folder: 'drafts',
                 is_read: true,
 
                 priority: 'normal',
-                priority_src: 'ai',
+                priority_src: 'rules',
         }])
 
         if (error) {
@@ -300,24 +345,16 @@ export const useEmailStore = create((set, get) => ({
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
 
-        const preview = body.length > 70
-            ? body.slice(0, 70) + '...'
-            : body
-
         const {error} = await supabase
             .from('emails')
             .update({
                 receiver_id: receiverId,
                 subject,
-                preview,
                 body,
-
                 folder: 'inbox',
                 is_read: false,
-                
                 priority: 'normal',
-                priority_src: 'ai',
-
+                priority_src: 'rules',
                 created_at: new Date().toISOString(),
             })
             .eq('id', draftId)
@@ -336,7 +373,6 @@ export const useEmailStore = create((set, get) => ({
             .update({
                 subject,
                 body,
-                preview: body.slice(0, 70)
             })
             .eq('id', id)
 

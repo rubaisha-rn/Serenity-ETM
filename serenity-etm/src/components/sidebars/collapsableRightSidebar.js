@@ -35,7 +35,7 @@ export default function CollapsableRightSidebar() {
                 initial={false}
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
-                animate={{right: expandedRight ? 200 : 34}}
+                animate={{right: expandedRight ? 210 : 34}}
                 transition={{duration: 0.25, ease: 'easeInOut'}}
                 type='button'
                 aria-label={expandedRight ? 'Collapse adaptive workspace settings panel' : 'Expand adaptive workspace settings panel'}
@@ -49,7 +49,7 @@ export default function CollapsableRightSidebar() {
                     src='/icons/backw.png'
                     alt='close arrow'
                     aria-hidden='true'
-                    className={`lg:w-4 aspect-square ${expandedRight ? 'rotate-180' : ''}`}
+                    className={`lg:w-4 aspect-square ${expandedRight ? 'rotate-180 ml-0.5' : 'mr-0.5'}`}
                 /> 
 
             </motion.button>
@@ -58,7 +58,7 @@ export default function CollapsableRightSidebar() {
             <motion.nav
                 aria-label='Adaptive workspace settings panel'
                 initial={{width: 46}}
-                animate={{width: expandedRight ? 210 : 46}}
+                animate={{width: expandedRight ? 220 : 46}}
                 transition={{type: 'spring', stiffness: 260, damping: 36}}
                 className={`side-bar right-1 bg-[var(--baseAcc-b)]
                 ${expandedRight ? 'px-2' : ''}`}

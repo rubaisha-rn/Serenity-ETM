@@ -2,6 +2,8 @@
 'use client';
 
 import { useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import CalmOverlay from "@/components/calmOverlay";
 import { useRouter } from "next/navigation";
 import useStore from "@/store/useStore";
 import CollapsableLeftSidebar from "@/components/sidebars/collapsableLeftSidebar";
@@ -9,10 +11,11 @@ import CollapsableRightSidebar from "@/components/sidebars/collapsableRightSideb
 import SecondarySidebar from "@/components/sidebars/secondarySidebar";
 import PrototypeTag from "@/components/prototypeTag";
 import ThinFooter from "@/components/footers/thinFooter";
+import ModeBanner from "@/components/modeBanner";
 
 export default function AppShell({children}){
     
-    const {expandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen} = useStore();
+    const {expandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, priorityMode} = useStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -53,29 +56,49 @@ export default function AppShell({children}){
     }, []);
 
     return (
-        <div className="app-shell"
-            style={{
-                "--left": expandedSecondary ? '264px' : '100px',
-                "--right": expandedRight ? '214px' : '50px',
-            }}
-        >
-            <aside className="side-panel">
-                <CollapsableLeftSidebar />
-                <SecondarySidebar />
-            </aside>
-            
-            <main className="main-panel">
-                <PrototypeTag />
-                {children}
-            </main>
+        <>
+            <AnimatePresence>
+                {calmMode && (
+                    <motion.div
+                        key='calm-overlay-wrapper'
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{ duration: 0.4, ease: 'easeInOut'}}
+                        className="fixed inset-0 z-[9999] pointer-events-auto"
+                    >
+                        <div className="absolute inset-0">
+                            <CalmOverlay />
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-            <aside className="side-panel">
-                <CollapsableRightSidebar />
-            </aside>
+            <div className="app-shell"
+                style={{
+                    "--left": expandedSecondary ? '264px' : '100px',
+                    "--right": expandedRight ? '225px' : '50px',
+                }}
+            >
+                <aside className="side-panel">
+                    <CollapsableLeftSidebar />
+                    <SecondarySidebar />
+                </aside>
+                
+                <main className="main-panel">
+                    <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
+                    {/* <PrototypeTag /> */}
+                    {children}
+                </main>
 
-            <footer className="footer">
-                <ThinFooter />
-            </footer>
-        </div>
+                <aside className="side-panel">
+                    <CollapsableRightSidebar />
+                </aside>
+
+                <footer className="footer">
+                    <ThinFooter />
+                </footer>
+            </div>
+        </>
     );
 }

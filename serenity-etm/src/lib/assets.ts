@@ -12,13 +12,23 @@ export const ICONS = {
         priority: `${SUPABASE_ASSET_URL}/icons/lightMode/priority.png`,
         stress: `${SUPABASE_ASSET_URL}/icons/lightMode/stress.png`,
         calm: `${SUPABASE_ASSET_URL}/icons/lightMode/calm.png`,
+        dismiss: `${SUPABASE_ASSET_URL}/icons/lightMode/dismiss.png`,
+        warning: `${SUPABASE_ASSET_URL}/icons/lightMode/warn.png`,
         
         // email categories
-        archive: `${SUPABASE_ASSET_URL}/icons/lightMode/archive.png`,
+        archive: `${SUPABASE_ASSET_URL}/icons/lightMode/archiveo.png`,
+        archiveo: `${SUPABASE_ASSET_URL}/icons/lightMode/archiveo.png`,
+        unarchive: `${SUPABASE_ASSET_URL}/icons/lightMode/unarchive.png`,
         inbox: `${SUPABASE_ASSET_URL}/icons/lightMode/inbox.png`,
         sent: `${SUPABASE_ASSET_URL}/icons/lightMode/sentmail.png`,
+        send: `${SUPABASE_ASSET_URL}/icons/lightMode/send.png`,
         starred: `${SUPABASE_ASSET_URL}/icons/lightMode/starred.png`,
         draft: `${SUPABASE_ASSET_URL}/icons/lightMode/draft.png`,
+        reply: `${SUPABASE_ASSET_URL}/icons/lightMode/reply.png`,
+
+        // email group functions
+        unread: `${SUPABASE_ASSET_URL}/icons/lightMode/unread.png`,
+        delete: `${SUPABASE_ASSET_URL}/icons/lightMode/delete.png`,
 
         // tasks categories
         tasks: `${SUPABASE_ASSET_URL}/icons/lightMode/tasks.png`,
@@ -29,6 +39,6 @@ export const ICONS = {
         add: `${SUPABASE_ASSET_URL}/icons/lightMode/add.png`,
         redflag: `${SUPABASE_ASSET_URL}/icons/lightMode/redflag.png`,
         yellowflag: `${SUPABASE_ASSET_URL}/icons/lightMode/yelloflag.png`,
-        greenflag: `${SUPABASE_ASSET_URL}/icons/lightMode/greenflag.png`,
+        greyflag: `${SUPABASE_ASSET_URL}/icons/lightMode/greyflag.png`,
     },
 }

@@ -1,13 +1,19 @@
+// add image sizes, widths, and other things according to window
 'use client';
 
 import { supabase } from "@/lib/supabaseClient";
 import { useEmailStore } from "@/store/emailStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { ICONS } from "@/lib/assets";
+import useStore from "@/store/useStore";
+import { createPortal } from "react-dom";
 
 export default function EmailReader() {
 
+    const {theme} = useStore();
     const {selectedEmail, setSelectedEmail, sendEmail, saveDraft, sendDraft} = useEmailStore();
+    const {unarchiveMany, archiveMany, deleteMany} = useEmailStore();
 
     const [replyMode, setReplyMode] = useState(false)
     const [replyBody, setReplyBody] = useState('')
@@ -18,6 +24,14 @@ export default function EmailReader() {
     const [editTo, setEditTo] = useState('')
     const [editSubject, setEditSubject] = useState('')
     const [editBody, setEditBody] = useState('')
+    const [error, setError] = useState('')
+
+    const easeTransition = {
+        type: 'spring',
+        stiffness: 180,
+        damping: 26,
+        mass: 0.9,
+    };
 
     useEffect(() => {
 
@@ -99,12 +113,12 @@ export default function EmailReader() {
     const sendDraftEmail = async () => {
 
         if (!editTo.trim()) {
-            alert('Recipient is required')
+            setError('Recipient not found.')
             return
         }
 
         if (!editBody.trim()) {
-            alert('Message body is empty')
+            setError('Message body is empty.')
             return
         }
 
@@ -115,7 +129,7 @@ export default function EmailReader() {
             .single()
 
         if (error || !profile) {
-            alert('Recipient not found.')
+            setError('Recipient not found.')
             return 
         }
         
@@ -124,144 +138,240 @@ export default function EmailReader() {
     }
 
     return (
-        <AnimatePresence>
-            <motion.div
-                key={selectedEmail.id}
-                initial={{opacity: 0, x:50}}
-                animate={{opacity: 1, x: 0}}
-                exit={{opacity: 0, x: 50}}
-                transition={{duration: 0.3}}
-                className="fixed right-0 top-0 h-full w-[500px] bg-[var(--blankCard-main)] shadow-2xl p-6 overflow-auto z-50"
-            >
+        <div className="send-email-container h-full flex flex-col min-h-0 w-full">
+
+            {/* toolbar */}
+            <div className="flex flex-row justify-between">
                 <button
-                    className="mb-4 p-2 py-1 bg-[var(--icons-main)] hover:bg-[var(--iconsHover-main)] rounded"
-                    onClick={() => setSelectedEmail(null)}
+                    className="p-1 bg-[var(--f-main)] rounded lg:w-[1.9rem]"
+                    onClick={() => {replyMode ? handleReplyClose() : setSelectedEmail(null)}}
                 >
                     <img
-                        src="/icons/dismiss.png"
-                        className='w-5 h-5 shrink-0 object-contain'
+                        src={ICONS[theme].dismiss}
+                        className="lg:w-[1.5rem] aspect-square"
+                        alt=""
+                        aria-hidden='true'
                     />
                 </button>
+                
+                <div className="flex flex-row gap-2 items-center justify-center">
+                    
+                    {(selectedEmail.folder !== 'drafts' && selectedEmail.folder !== 'archive') && (
+                        <>
+                            <button
+                                onClick={() => {
+                                    setReplyMode(true)
+                                    setReplyBody('')
+                                }}
+                                className="batch-func-btn-hover"
+                            >
+                                <img
+                                    src={ICONS[theme].reply}
+                                    className="lg:w-[1.5rem] aspect-square"
+                                    alt=""
+                                    aria-hidden='true'
+                                />
+                            </button>
+                        
+                            <button 
+                                className="batch-func-btn-hover"
+                                onClick={() => {
+                                    archiveMany([selectedEmail.id])
+                                    setSelectedEmail(null)
+                                }}>
+                                <img
+                                    src={ICONS[theme].archive}
+                                    className="lg:w-[1.2rem] aspect-square"
+                                    alt=""
+                                    aria-hidden='true'
+                                />
+                            </button>
+                        </>
+                    )}   
 
-                <button
-                    onClick={() => {
-                        setReplyMode(true)
-                        setReplyBody('')
-                    }}
-                    className="mb-4 ml-2 p-2 py-1 bg-[var(--icons-main)] hover:bg-[var(--iconsHover-main)] rounded"
-                >
-                    Reply
-                </button>
+                    {(selectedEmail.folder === 'archive') && (
+                        <button 
+                            className="batch-func-btn-hover"
+                            onClick={() => {
+                                unarchiveMany([selectedEmail.id])
+                                setSelectedEmail(null)
+                            }}>
+                            <img
+                                src={ICONS[theme].unarchive}
+                                className="lg:w-[1.1rem] aspect-square"
+                                alt=""
+                                aria-hidden='true'
+                            />
+                        </button>
+                    )}  
 
+                    <button 
+                        className="batch-func-btn-hover"
+                        onClick={() => {
+                            deleteMany([selectedEmail.id])
+                            setSelectedEmail(null)
+                        }}>
+                        <img
+                            src={ICONS[theme].delete}
+                            className="lg:w-[1.25rem] aspect-square"
+                            alt=""
+                            aria-hidden='true'
+                        />
+                    </button>
+
+                    {(isDraft || replyMode) && (
+                        <button 
+                            onClick={isDraft ? sendDraftEmail : sendReply}
+                            className="p-2 bg-[var(--a-main)] rounded"
+                        >
+                            <img
+                                src={ICONS[theme].send}
+                                className="lg:w-[1rem] aspect-square"
+                                alt=""
+                                aria-hidden='true'
+                            />
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
                 {/* email */}
-
                 {isDraft ? (
                     <>
-                        <input
-                            value={editTo}
-                            onChange={e => setEditTo(e.target.value)}
-                            placeholder="To"
-                            className="w-full p-2 mb-2 border rounded"
-                        />
+                        {error && (
+                            <div className="error-message">
+                                <div className="flex flex-row items-center justify-center gap-1">
+                                    <img
+                                        src={ICONS[theme].warning}
+                                        className="lg:h-[1rem] aspect-square bg-[var(--baseAcc-b)] rounded-full lg:p-0.5"
+                                        alt=""
+                                        aria-hidden='true'
+                                    />
+                                    <p className="font-bold">Error!</p>
+                                    <p className="text-[var(--text-a)]">{error}</p>
+                                </div>
+                                <button
+                                    onClick={() => setError('')}
+                                >
+                                    <img
+                                        src={ICONS[theme].dismiss}
+                                        className="lg:w-[1rem] aspect-square opacity-70"
+                                        alt=""
+                                        aria-hidden='true'
+                                    />
+                                </button>
+                            </div>
+                        )}
+                        
+                        <div 
+                            initial={{opacity:0}}
+                            animate={{opacity:1}}
+                            exit={{opacity:0, scale:0.98, position: 'absolute', inset: 0}}
+                            transition={easeTransition}
+                            className="min-h-0 h-full overflow-hidden pb-6"
+                        >
+                            <input
+                                className="send-email-container input"
+                                placeholder="To: janedoe@example.com"
+                                value={editTo}
+                                onChange={e => setEditTo(e.target.value)}
+                            />
 
-                        <input
-                            value={editSubject}
-                            onChange={e => setEditSubject(e.target.value)}
-                            placeholder="Subject"
-                            className="w-full p-2 mb-2 border rounded"
-                        />
+                            <input
+                                className="send-email-container input"
+                                placeholder="Subject"
+                                value={editSubject}
+                                onChange={e => setEditSubject(e.target.value)}
+                            />
 
-                        <textarea
-                            value={editBody}
-                            onChange={e => setEditBody(e.target.value)}
-                            placeholder="Write your email..."
-                            className="w-full h-48 p-2 mb-2 border rounded resize-none"
-                        />
-
-                        <div className="flex justify-end gap-2">
-                            <button 
-                                onClick={() => setSelectedEmail(null)}
-                                className="px-3 py-1 rounded bg-gray-300"
-                            >
-                                Close
-                            </button>
-
-                            <button 
-                                onClick={sendDraftEmail}
-                                className="px-3 py-1 rounded bg-gray-300"
-                            >
-                                Send
-                            </button>
+                            <textarea
+                                className="send-email-container input flex-1 min-h-[320px] overflow-y-auto"
+                                placeholder="Compose email"
+                                value={editBody}
+                                onChange={e => setEditBody(e.target.value)}
+                            />
                         </div>
                     </>
-                   ) : (
-                   <>
-                        <h2 className="text-xl font-bold text-[var(--text-a)]">{selectedEmail.subject}</h2>
-                        <p className="text-sm mt-2 text-[var(--text-c)]">From: {selectedEmail.isSender ? 'Me' : selectedEmail.from_name || selectedEmail.from_email}</p>
-                        <p className="text-sm mt-2 text-[var(--text-c)]">To: {selectedEmail.isReceiver ? 'Me' : selectedEmail.to_name || selectedEmail.to_email}</p>
-                        <p className="text-xs mb-4 text-[var(--text-c)]">{new Date(selectedEmail.timestamp).toLocaleString()}</p>
-                        <p className="text-base leading-relaxed whitespace-pre-wrap text-[var(--text-a)]">{selectedEmail.body}</p>
-                    </>
+                    ) : (
+                    <div 
+                        initial={{opacity:0}}
+                        animate={{opacity:1}}
+                        exit={{opacity:0, scale:0.98, position: 'absolute', inset: 0}}
+                        transition={easeTransition}
+                        className="flex flex-col gap-1 pb-6"
+                    >
+                        <h3>{selectedEmail.subject}</h3>
+                        <p>From: {selectedEmail.isSender ? 'Me' : selectedEmail.from_name || selectedEmail.from_email}</p>
+                        <p>To: {selectedEmail.isReceiver ? 'Me' : selectedEmail.to_name || selectedEmail.to_email}</p>
+                        <p>Date: {new Date(selectedEmail.timestamp).toLocaleDateString()} at {new Date(selectedEmail.timestamp).toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true,
+                            })}</p>
+                        <p className="text-sm">{selectedEmail.body}</p>
+                    </div>
                 )}
 
                 {replyMode && (
-                    <div className="mt-6 border-t pt-4">
-                        <p className="text-sm mb-2 text-[var(--text-c)]">
+                    <div 
+                        initial={{opacity:0}}
+                        animate={{opacity:1}}
+                        exit={{opacity:0, scale:0.98, position: 'absolute', inset: 0}}
+                        transition={easeTransition}
+                        className="flex flex-col flex-1 min-h-0 mt-4 border-t pt-4"
+                    >
+                        <p>
                             Replying to {selectedEmail.from_name || selectedEmail.from_email} 
                         </p>
 
                         <textarea
                             value={replyBody}
                             onChange={(e) => setReplyBody(e.target.value)}
-                            placeholder="Type your reply..."
-                            className="w-full h-32 p-2 rounded bg-[var(--cardB-main)] text-sm resize-none outline-none"
+                            className="send-email-container input flex-1 min-h-[320px] overflow-y-auto"
+                            placeholder="Type your reply"
                         />
-
-                        <div className="flex justify-end gap-2 mt-2">
-                            <button
-                                onClick={handleReplyClose}
-                                className="px-3 py-1 rounded bg-[var(--icons-main)]"
-                            >
-                                Close
-                            </button>
-                            <button
-                                onClick={sendReply}
-                                className="px-3 py-1 rounded bg-[var(--acc-main)] text-white"
-                            >
-                                Send
-                            </button>
-                            
-                        </div>
                     </div>
                 )}
+            </div>
 
-                {showConfirm && (
-                    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-                        <div className="bg-[var(--blankCard-main)] p-5 rounded-lg w-[320px] shadow-xl">
-                            <p className="text-sm mb-4 text-[var(--text-a)]">
-                                Save this reply as draft?
+            {showConfirm && (
+                createPortal(
+                    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999]">
+                        <div className="error-popup">
+                            <img
+                                src={ICONS[theme].warning}
+                                className="lg:w-[2.2rem] aspect-square"
+                                alt=""
+                                aria-hidden='true'
+                            />
+                            <h6 className="font-bold text-[var(--text-a)]">
+                                Close Email Reply Composer
+                            </h6>
+                            <p>
+                                You're going to delete the composed reply. Do you want to save it as a draft?
                             </p>
-                            <div className="flex justify-end gap-3">
-                                <button
-                                    onClick={discardReply}
-                                    disabled={loading}
-                                    className="px-3 py-1 rounded bg-gray-300"
-                                >
-                                    Discard
-                                </button>
+                            <div className="flex gap-2">
                                 <button
                                     onClick={confirmSaveDraft}
                                     disabled={loading}
-                                    className="px-3 py-1 rounded bg-gray-300"
+                                    className="error-popup-btn a"
                                 >
-                                    Save Draft
+                                    <h6 className="font-semibold">Keep draft</h6>
+                                </button>
+                                <button
+                                    onClick={discardReply}
+                                    disabled={loading}
+                                    className="error-popup-btn b"
+                                >
+                                    <h6 className="font-semibold">Delete</h6>
                                 </button>
                             </div>
                         </div>
-                    </div>
-                )}
-
-            </motion.div>
-        </AnimatePresence>
+                    </div>,
+                    document.body
+                )
+            )}
+        </div>
     );
 }

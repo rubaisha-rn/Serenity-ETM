@@ -1,28 +1,18 @@
+// add image sizes, widths, and other things according to window
 'use client';
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import useStore from "@/store/useStore";
 import { useEmailStore } from "@/store/emailStore";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
     const {screen, setTheme, expandedSecondary, setShowTasks, fontScale} = useStore();
-
     const {setShowEmails} = useEmailStore();
 
-    const prefersRecuedMotion = useReducedMotion()
     const sidebarRef = useRef(null);
-
-    // resolve motion safety
-    const motionTransition = useMemo(
-        () => 
-            prefersRecuedMotion
-                ? {duration: 0}
-                : {type: 'spring', stiffness: 260, damping: 38},
-        [prefersRecuedMotion]
-    );
 
     // theme sync
     useEffect(() => {
@@ -53,19 +43,18 @@ export default function SecondarySidebar() {
             aria-expanded={expandedSecondary}
             initial={{width: 0, left: 50}}
             animate={{width: expandedSecondary ? 210 : 46, left: 50}}
-            transition={motionTransition}
-            className={`bg-none fixed top-1 z-10 ml-1 overflow-hidden items-center justify-center h-[calc(100vh-0.5rem)] rounded-lg
-            motion-safe:transition-colors shadow-xl backdrop-blur-xl bg-blue-500 z-10
-            ${expandedSecondary ? 'p-2 pt-3' : 'p-1 py-2'}`}
+            transition={{type: 'spring', stiffness: 260, damping: 36}}
+            className={`${expandedSecondary ? 'secondary-side-bar' : 'side-bar ml-1 pt-0.5'}`}
         >
-            <div role="menu" aria-label={`${headingText} options`} className="flex flex-col gap-3">
+            <div role="menu" aria-label={`${headingText} options`} className="flex flex-col lg:gap-1">
 
                 {expandedSecondary && (
-                    <h1
+                    <h5
                         id="secondary-sidebar-heading"
-                        className={`font-Roboto text-[0.95rem] font-semibold text-[var(--text-a)]`}>
+                        className="text-[var(--text-a)]"
+                    >
                         {screen === 'emails' ? 'Email Manager' : screen === 'tasks' ? 'Task Manager' : 'Dashboard'}
-                    </h1>
+                    </h5>
                 )}
 
                 {screen === 'tasks' && (
@@ -74,12 +63,14 @@ export default function SecondarySidebar() {
                         setShowTasks={setShowTasks}
                     />
                 )}
+
                 {screen === 'emails' && (
                     <EmailButtons
                         expandedSecondary={expandedSecondary}
                         setShowEmails={setShowEmails}
                     />
                 )}
+
             </div>
         </motion.div>
     );

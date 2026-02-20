@@ -51,7 +51,7 @@ export default function ProfileSettingsMenu() {
     }, []);
 
     return (
-        <div className='relative z-20'>
+        <div className='relative'>
             
             {/* profile button */}
             <motion.button 

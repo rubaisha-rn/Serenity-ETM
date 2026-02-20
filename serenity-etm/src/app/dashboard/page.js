@@ -9,12 +9,14 @@ export default function EmailsPage () {
 
     return (
         <AppShell>
-            <div className="flex flex-col p-10 bg-blue-500 gap-2">
-                <div className="p-10 bg-yellow-200"/>
-                <div className="p-10 bg-yellow-200"/>
-                <div className="p-10 bg-yellow-200"/>
-                <div className="p-10 bg-yellow-200"/>
-                <div className="p-10 bg-yellow-200"/>
+            <div className="main-content">
+                <div className="bg-blue-900 p-10"/>
+                <div className="bg-blue-900 p-10"/>
+                <div className="bg-blue-900 p-10"/>
+                <div className="bg-blue-900 p-10"/>
+                <div className="bg-blue-900 p-10"/>
+                <div className="bg-blue-900 p-10"/>
+                <div className="bg-blue-900 p-10"/>
             </div>
         </AppShell>    
     );
