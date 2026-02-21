@@ -15,8 +15,29 @@ import ModeBanner from "@/components/modeBanner";
 
 export default function AppShell({children}){
     
-    const {expandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, priorityMode} = useStore();
+    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, setFocusMode, priorityMode} = useStore();
     const router = useRouter();
+
+    // focus mode hysteresis
+    useEffect(() => {
+        if (emotionValue > 69 && !focusMode) {
+            setFocusMode(true);
+        }
+        else if (emotionValue < 40 && focusMode) {
+            setFocusMode(false);
+        }
+    }, [emotionValue]);
+
+    // focus mode ui complexity reduction
+    useEffect(() => {
+        if (focusMode) {
+            setExpandedRight(false);
+            setExpandedSecondary(false);
+        }
+        else if (!focusMode) {
+            setExpandedSecondary(true);
+        }
+    }, [focusMode]);
 
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -86,8 +107,8 @@ export default function AppShell({children}){
                 </aside>
                 
                 <main className="main-panel">
-                    <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
-                    {/* <PrototypeTag /> */}
+                    <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} />
+                    <PrototypeTag />
                     {children}
                 </main>
 

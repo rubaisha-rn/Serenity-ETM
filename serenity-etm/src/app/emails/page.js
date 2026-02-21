@@ -30,10 +30,8 @@ export default function EmailsPage () {
     const [showComposer, setShowComposer] = useState(false);
 
     const easeTransition = {
-        type: 'spring',
-        stiffness: 180,
-        damping: 26,
-        mass: 0.9,
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1]
     };
 
     // session init
@@ -79,19 +77,6 @@ export default function EmailsPage () {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
-
-    // focus mode hysteresis
-    useEffect(() => {
-        if (emotionValue > 69 && !focusMode) {
-            setFocusMode(true);
-            setExpandedRight(false);
-            setExpandedSecondary(false);
-        }
-        else if (emotionValue < 40 && focusMode) {
-            setFocusMode(false);
-            setExpandedSecondary(true);
-        }
-    }, [emotionValue]);
 
     // main filter + sorting pipeline
     useEffect(() => {
@@ -393,12 +378,12 @@ export default function EmailsPage () {
             <motion.div 
                 layout
                 transition={easeTransition}
-                className={`main-content grid gap-2`}
-                style={{
+                className="main-content grid gap-2"
+                animate={{
                     gridTemplateColumns:
                         selectedEmail || showComposer
                             ? "1fr 2.5fr"
-                            : "1fr"  
+                            : "1fr 0fr"  
                 }}
             >
 
@@ -410,7 +395,7 @@ export default function EmailsPage () {
                             className="min-w-0"
                         >
                             {(filtered.length > 0 && selectedIds.length <= 0) && (
-                                <div className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} email-grid`}>
+                                <div className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} email-grid border-b-[0.005rem] border-[var(--e-main)]`}>
                                         <div /><div />
                                         <p>{showEmails == 'sent' ? 'To' : 'From'}</p>
                                         <p>Subject / Preview</p>
@@ -426,8 +411,8 @@ export default function EmailsPage () {
                                     <motion.div
                                         layout
                                         key={mail.id}
-                                        className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} border-y-[0.01rem] border-[var(--e-main)] email-grid ${mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'}
-                                        `}
+                                        className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} border-b-[0.005rem] border-[var(--e-main)] email-grid ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]
+                                        `}   
                                     >
                                         <div className="flex items-center justify-center">
                                             <input
@@ -505,7 +490,7 @@ export default function EmailsPage () {
                                         markAsRead(mail.id)
                                         setReadEmailCount(readEmailCount+1)
                                     }}
-                                    className={`border-y-[0.01rem] border-[var(--e-main)] email-grid px-1 ${mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'}`}
+                                    className={`border-y-[0.005rem] border-[var(--e-main)] email-grid px-1 ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]`}
                                 >
                                     <div className="flex flex-row justify-between items-center">
                                         <div className="flex flex-row items-center gap-1">
@@ -549,9 +534,9 @@ export default function EmailsPage () {
                         <motion.div
                             layout
                             key={showComposer ? 'composer' : 'reader'}
-                            initial={{opacity:0}}
-                            animate={{opacity:1}}
-                            exit={{opacity:0, scale:0.98, position: 'absolute', inset: 0}}
+                            initial={{opacity:0, x:80}}
+                            animate={{opacity:1, x:0}}
+                            exit={{opacity:0, x:80}}
                             transition={easeTransition}
                             className="min-w-0 min-h-0 h-full flex flex-col overflow-hidden"
                         >

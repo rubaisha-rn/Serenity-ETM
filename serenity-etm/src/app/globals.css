@@ -76,6 +76,10 @@
     --priorityLowc: #e6e6e6;
     --priorityLowt: #525252;
 
+    --focusMode: #04766b;
+    --priorityMode: #b68030;
+    --disabledMode: #272727;
+
     /* fluid spacing */
     --space-sm: clamp(0.5rem, 1vw, 0.75rem);
     --space-md: clamp(0.75rem, 1.5vw, 1rem);

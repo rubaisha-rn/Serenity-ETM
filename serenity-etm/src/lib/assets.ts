@@ -9,11 +9,14 @@ export const ICONS = {
         settings: `${SUPABASE_ASSET_URL}/icons/lightMode/settings.png`,
         signout: `${SUPABASE_ASSET_URL}/icons/lightMode/signout.png`,
         focus: `${SUPABASE_ASSET_URL}/icons/lightMode/focus.png`,
+        focusW: `${SUPABASE_ASSET_URL}/icons/lightMode/focusW.png`,
         priority: `${SUPABASE_ASSET_URL}/icons/lightMode/priority.png`,
+        priorityW: `${SUPABASE_ASSET_URL}/icons/lightMode/priorityW.png`,
         stress: `${SUPABASE_ASSET_URL}/icons/lightMode/stress.png`,
         calm: `${SUPABASE_ASSET_URL}/icons/lightMode/calm.png`,
         dismiss: `${SUPABASE_ASSET_URL}/icons/lightMode/dismiss.png`,
         warning: `${SUPABASE_ASSET_URL}/icons/lightMode/warn.png`,
+        info: `${SUPABASE_ASSET_URL}/icons/lightMode/info.png`,
         
         // email categories
         archive: `${SUPABASE_ASSET_URL}/icons/lightMode/archiveo.png`,
