@@ -77,7 +77,11 @@
     --priorityLowt: #525252;
 
     --focusMode: #04766b;
+    --focusModeHover: #02574e;
+   
     --priorityMode: #b68030;
+    --priorityModeHover: #9b6719;
+
     --disabledMode: #272727;
 
     /* fluid spacing */
@@ -172,7 +176,7 @@
     .secondary-side-bar-label.show {@apply opacity-100; }
     .secondary-side-bar-label.hide {@apply opacity-0 w-0 overflow-hidden; }
     .group-label {@apply text-[var(--text-b)] leading-tight; }
-    .prototype { @apply fixed -bottom-2 right-1 bg-[var(--danger)] hover:bg-[var(--dangerH)] text-[var(--text-d)] shadow-black/50 shadow z-[9999] transition-opacity duration-100; }
+    .prototype { @apply fixed -bottom-2 right-14 bg-[var(--danger)] hover:bg-[var(--dangerH)] text-[var(--text-d)] shadow-black/50 shadow z-[9999] transition-opacity duration-100; }
     .search-bar {@apply flex-1 border-[var(--d-main)] bg-[var(--baseAcc-b)] text-[var(--text-a)] outline-none shadow shadow-black/10 items-center; }
     .search-bar-results {@apply absolute top-full w-full leading-tight border-[var(--d-main)] bg-[var(--baseAcc-b)] shadow-lg z-30 overflow-auto; }
     .search-bar-results-show {@apply border-b border-[var(--d-main)] hover:bg-[var(--f-main)] cursor-pointer; }
@@ -187,7 +191,7 @@
     .error-popup-btn {@apply items-center; }
     .error-popup-btn.a {@apply bg-[var(--d-main)] border-[var(--c-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]; }
     .error-popup-btn.b {@apply bg-[var(--dangerH)] border-[var(--danger)] hover:bg-[var(--danger)] text-[var(--text-d)]; }
-    .priority-tag {@apply w-[5.5vw] flex flex-row justify-center items-center; }
+    .priority-tag {@apply flex flex-row justify-center items-center; }
 }
 
 /* responsiveness */
@@ -252,7 +256,7 @@
         .error-message {@apply p-0.5 px-2 rounded; }
         .error-popup {@apply p-8 rounded-md w-[22rem] shadow-xl gap-2; }
         .error-popup-btn {@apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
-        .priority-tag {@apply rounded-sm p-0.5 gap-1 border-[0.05rem]; }
+        .priority-tag {@apply w-[5.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
 
         /* incomplete */        
         .stack { @apply flex flex-col gap-2; }
