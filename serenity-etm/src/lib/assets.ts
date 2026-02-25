@@ -17,6 +17,7 @@ export const ICONS = {
         dismiss: `${SUPABASE_ASSET_URL}/icons/lightMode/dismiss.png`,
         warning: `${SUPABASE_ASSET_URL}/icons/lightMode/warn.png`,
         info: `${SUPABASE_ASSET_URL}/icons/lightMode/info.png`,
+        calender: `${SUPABASE_ASSET_URL}/icons/lightMode/calender.png`,
         
         // email categories
         archive: `${SUPABASE_ASSET_URL}/icons/lightMode/archiveo.png`,

@@ -10,25 +10,16 @@ export default function ModeBanner({mode}) {
     const {screen, theme, setFocusMode, setPriorityMode} = useStore();
     const [show, setShow] = useState(false);
     const prevMode = useRef(mode);
-    const isFirstRender = useRef(true);
 
     useEffect(() => {
-        
-        // skip first render
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            prevMode.current = false;
-            return;
-        }
 
         // only run when mode changes
-        if(prevMode.current != mode) {
+        if(prevMode.current !== mode) {
             setShow(true);
             const timer = setTimeout(() => setShow(false), 4000); // 4 secs
+            prevMode.current = mode;
             return () => clearTimeout(timer);
         }
-
-        prevMode.current = mode;
     }, [mode]);
 
     return (

@@ -1,25 +1,38 @@
 'use client';
 
 import AppShell from "@/shells/appShell";
-import ThinFooter from "@/components/footers/thinFooter";
 import { useTaskStore } from "@/store/taskStore";
 import useStore from "@/store/useStore";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
-import ModeBanner from "@/components/modeBanner";
 import BreakPopup from "@/components/breakPopup";
-import CalmOverlay from "@/components/calmOverlay";
 
 import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
+const getPriority = (p) => p ?? 'normal';
+
 export default function TasksPage() {
 
     const router = useRouter()
-    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, completedTasksCount, setCompletedTasksCount} = useTaskStore();
+    
+    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress} = useTaskStore();
+    const {emotionValue, focusMode, priorityMode, setShowTasks, showTasks, sdkActive, setCalmMode, theme, setTheme, setScreen} = useStore();
 
+    const [filtered, setFiltered] = useState([]);
+    const [grid, setGrid] = useState(false);
+
+    const [searchQuery, setSearchQuery] = useState([]);
+    const [searchResults, setSearchResults] = useState('');
+
+    const easeTransition = {
+        duration: 0.65,
+        ease: [0.16, 1, 0.3, 1]
+    };
+
+    // session init
     useEffect(() => {
         const init = async () => {
             const {data} = await supabase.auth.getSession()
@@ -36,78 +49,147 @@ export default function TasksPage() {
         init()
     }, [])
 
-    
-    const {emotionValue, focusMode, setFocusMode, priorityMode, expandedSecondary, setExpandedSecondary, expandedMain, setShowTasks, showTasks, calmMode, sdkActive, setCalmMode, theme, setTheme, setScreen} = useStore();
-    const [sorted, setSorted] = useState([]);
+    // search
+    useEffect(() => {
+
+        if (searchQuery.length < 1) {
+            setSearchResults([]);
+            return;
+        }
+        
+        const q = searchQuery.toLowerCase();
+            
+        const matches = tasks.filter(t => (
+            t.title?.toLowerCase().includes(q) ||
+            t.description?.toLowerCase().includes(q) ||
+            t.due.toLowerCase().includes(q) ||
+            t.progress.toLowerCase().includes(q) ||
+            t.priority.toLowerCase().includes(q)
+        ));
+
+        setSearchResults(matches.slice(0, 12));
+    }, [searchQuery, tasks]);
+
+    // close search query block on outside click
+    useEffect(() => {
+        const close = () => setSearchQuery('')
+        if (searchQuery) {
+            window.addEventListener('click', close)
+        }
+        return () => {
+            window.removeEventListener('click', close)
+        }
+    }, [searchQuery]);
 
     useEffect(() => {
 
-        let results = tasks;
+        if (emotionValue > 85 && sdkActive) setCalmMode(true);
+        
+        let results = [...tasks];
 
-        if(emotionValue > 70) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-            setFocusMode(true);
-            results = results.filter((t) => t.priority === 'high').slice(0,3);
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1);
 
-        } else {
+        // category filtering
+        if (showTasks === 'today') {
+            results = results.filter(t => {
+                if (!t.due) return false;
+                const taskDate = new Date(t.due);
+                return taskDate >= today && taskDate < tomorrow && !t.completed;
+            });
+        }
+        else if (showTasks === 'completed') {
+            results = results.filter(t => t.completed);
+        }
+        else if (showTasks === 'priority') {
+            results = results.filter(t => t.priority === 'high' && !t.completed);
+        }
+        else if (showTasks === 'upcoming') {
+            results = results.filter(t => {
+                if (!t.due || t.completed) return false;
+                const taskDate = new Date(t.due);
+                return taskDate >= today;
+            });
+        } 
 
-            if (priorityMode) {
-                results = [...results].sort((a,b) => sortTasks(a, b, priorityMode));
-            }
+        // remove deleted
+        results = results.filter(t => !t.is_delete);
 
-            if (emotionValue >= 50 && emotionValue <= 70) {
-                results = results.filter((t) => t.priority != 'low');
-            }
-
-            if (focusMode) {
-                results = results.filter((t) => t.priority === 'high').slice(0,3);
-            }
-
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
-            
-            if (showTasks === 'today') {
-                results = results.filter((t) => {
-                    const taskDate = t.due ? new Date(t.due) : null;
-                    if(!taskDate) return false;
-                    return taskDate >= today && taskDate < tomorrow;
-                });
-            }
-            else if (showTasks === 'completed') {
-                results = results.filter((t) => t.completed);
-            }
-            else if (showTasks === 'priority') {
-                results = results.filter((t) => t.priority === 'high');
-            }
-            else if (showTasks === 'upcoming') {
-                results = results.filter((t) => {
-                    const taskDate = t.due ? new Date(t.due) : null;
-                    if(!taskDate) return false;
-                    if (t.completed) return false;
-                    return taskDate >= today;
-                });
-            }
+        // medium stress -> remove low priority
+        if (!focusMode && emotionValue >= 40 && emotionValue <= 70) {
+            results = results.filter(t => getPriority(t.priority) !== 'low');
         }
 
-        results = [...results].sort((a,b) => sortTasks(a, b, priorityMode));
-        setSorted(results);
-        setScreen('tasks');
+        // sorting
+        results = results.sort((a, b) => sortTasks(a, b, focusMode || priorityMode));
 
-        if (emotionValue > 85 && sdkActive) setCalmMode(true);
+        // focus mode limit
+        if (focusMode) results = results.slice(0, 3);
+        
+        setFiltered(results);
+        setScreen('tasks');
     
     }, [tasks, showTasks, focusMode, priorityMode, emotionValue]);
 
-    const secondaryWidth = expandedSecondary ? 210 : 54;
-    const contentMargin = 38 + secondaryWidth;
+    // sorting function
+    function sortTasks(a, b, prioritySort = false) {
+        const rank = {
+            high: 3,
+            normal: 2, 
+            low: 1,
+        };
 
+        // incomplete tasks first
+        if (a.completed !== b.completed) {
+            return a.completed ? 1 : -1;
+        }
+
+        // priority sort
+        if (prioritySort) {
+            
+            const pa = rank[getPriority(a.priority)];
+            const pb = rank[getPriority(b.priority)];
+
+            // priority first
+            if (pa !== pb) return pb - pa;
+        }
+
+        // overdue tasks float to the top
+        const now = Date.now();
+
+        // due date sort (earliest first, undated last)
+        const timeA = a.due ? new Date(a.due).getTime() : Infinity;
+        const timeB = b.due ? new Date(b.due).getTime() : Infinity;
+
+        const overdueA = timeA < now;
+        const overdueB = timeB < now;
+
+        if (overdueA !== overdueB) return overdueA ? -1 : 1;
+
+        // secondary priority when not in priority mode
+        if (!prioritySort) {
+
+            const pa = rank[getPriority(a.priority)];
+            const pb = rank[getPriority(b.priority)];
+
+            // priority first
+            if (pa !== pb) return pb - pa;
+        }
+
+        // final stable fallback
+        return a.id.localeCompare(b.id);
+    }
+
+    // theme sync
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
 
+    // keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e) => {
             const tag = e.target.tagName;
@@ -143,182 +225,239 @@ export default function TasksPage() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
+    // date format
+    function formatTaskDate(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+
+        const isThisYear = date.getFullYear() === now.getFullYear();
+
+        const options = {
+            day: 'numeric',
+            month: 'short',
+        }; 
+
+        if (!isThisYear) {
+            options.year = 'numeric';
+        }
+
+        return date.toLocaleDateString(undefined, options);
+    }
+
     return (
-        <div className={`relative h-screen`}>
+        <AppShell>
 
-            <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : null} />
-            
-            {completedTasksCount >= 3 && emotionValue >= 70 && (
-                <BreakPopup
-                    scenario= 'tasks'
-                    onAcknowledge={() => setCompletedTasksCount(0)}
-                />
-            )}
+            {/* top row: search bar + add task button */}
+            <div className="flex flex-row justify-between">
 
-            <AnimatePresence>
-                {calmMode && (
-                    <motion.div
-                        key='calm-overlay-wrapper'
-                        initial={{opacity: 0}}
-                        animate={{opacity: 1}}
-                        exit={{opacity: 0}}
-                        transition={{ duration: 0.4, ease: 'easeInOut'}}
-                        className="fixed inset-0 backdrop-blur-md z-[9999] pointer-events-auto"
-                    >
-                        <div className="absolute inset-0 pointer-events-none">
-                            <CalmOverlay />
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                {/* search bar */}
+                <div className="relative">
 
-            <div className="bg-[var(--bg)]">
-                <AppShell>
-
-                    <motion.div className='transition-all duration-300 mr-10 p-2 flex flex-col'
-                        initial='hidden'
-                        animate='visible'
-                        variants={{
-                            hidden: {},
-                            visible: {
-                                transition: {
-                                    staggerChildren: 0.05,
-                                },
-                            },
+                    {/* search bar input */}
+                    <input
+                        value={searchQuery}
+                        onChange={(t) => {
+                            t.stopPropagation()
+                            setSearchQuery(t.target.value)
                         }}
-                        style={{marginLeft: contentMargin}}
+                        placeholder="Search task"
+                        className="search-bar"
+                    />
+                    
+                    {/* search bar results */}
+                    {searchQuery && searchResults.length > 0 && (
+                        <div className="search-bar-results">
+                            {searchResults.map(task => (
+                                <motion.div
+                                    key={task.id}
+                                    onClick={() => {
+                                        // setSelectedEmail(task)
+                                        setSearchQuery('')
+                                    }}
+                                    className="search-bar-results-show"
+                                >
+                                    <div className="flex flex-row justify-between">
+                                        <h6 className="font-semibold">{task.title}</h6>
+                                        <p>{formatTaskDate(task.due)}</p>
+                                    </div>
+                                    <div className="w-full">
+                                        <p className="truncate">{task.description}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <div className="flex flex-row gap-2">
+                    <button
+                        className="bg-red-900 hover:bg-700 rounded-md px-2 py-1 text-white"
+                        onClick={() => setGrid(!grid)}
                     >
-                        <div className="flex flex-row justify-between">
-                            <div className="relative">
-                                <div className="flex-1 border-[0.1rem] border-[var(--baseAcc-e)] bg-[var(--baseAcc-g)] text-sm px-4 py-1 rounded-md text-[var(--text-a)] outline-none w-[50vw] shadow
-                                    focus:outline-none
-                                    focus-visible:ring-2
-                                    focus-visible:ring-offset-2
-                                    focus-visible:ring-blue-500">
-                                    Search Tasks
-                                </div>
-                            </div>
+                        <p>{grid ? 'Grid' : 'Rows'}</p>
+                    </button>
 
-                            <AddTask/>
-                        </div>
-
-                        <div className="my-2 rounded-md shadow min-h-screen bg-[var(--baseAcc-g)] py-2">
-
-                            <div className="w-full flex-1 bg-none justify-start grid grid-cols-[0.20fr_1.8fr_0.35fr_0.35fr] gap-4 text-left">
-                                <div/>
-                                <div>
-                                    <p className="group-label">Tasks</p>
-                                </div>
-                                <div>
-                                    <p className="group-label">Due Date</p>
-                                </div>
-                                <div>
-                                    <p className="group-label">Priority</p>
-                                </div>
-                            </div>
-
-                            <AnimatePresence>
-                                {sorted.map((task) => {
-                                    
-                                    const formattedDate = task.due
-                                        ? new Date(task.due).toLocaleString(undefined, {
-                                            day: '2-digit',
-                                            month: 'short',
-                                            year: 'numeric',
-                                            hour: 'numeric',
-                                            minute: '2-digit',
-                                            hour12: true
-                                        }) 
-                                        : '';
-
-                                    return (
-                                        <motion.div
-                                            key={task.id}
-                                            layout
-                                            layoutTransition={{type: 'spring', stiffness: 500, damping: 40}}
-                                            initial={{opacity: 0, y:10}}
-                                            animate={{opacity: 1, 
-                                                y: 0,
-                                            }}
-                                            exit={{opacity: 0, y: -10}}
-                                            transition={{duration: 0.3}}
-                                            className={`px-4 py-0.5 grid grid-cols-[0.20fr_1.8fr_0.35fr_0.35fr] border-t-[0.05rem] border-b-[0.05rem] border-[var(--baseAcc-f)] gap-4 items-center justify-start ${task.completed ? 'bg-[var(--bg)]' : ''}`}
-                                        >
-
-                                            <div>
-                                                <input
-                                                    type='checkbox'
-                                                    id='accept'
-                                                    checked={task.completed}
-                                                    onChange={() => {
-                                                        toggleComplete(task.id)
-                                                        if (!task.completed){
-                                                        setCompletedTasksCount(completedTasksCount+1)}
-                                                    }}
-                                                    className='w-3.5 h-3.5 accent-blue-500'
-                                                />
-                                            </div>
-                                            <div>
-                                                <p className={`text-sm`}>
-                                                    {task.title}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <p className={`text-sm`}>
-                                                    {formattedDate}
-                                                </p>
-                                            </div>
-                                            <div className={`rounded-sm p-0.5 w-full flex flex-row justify-center items-center gap-1 border-[0.05rem] border-[var(--baseAcc-f)] 
-                                                ${task.priority === 'high' ? 'bg-[var(--dangerL)] text-[var(--danger)]' : 
-                                                task.priority === 'medium' ? 'bg-[var(--warningL)] text-[var(--warning)]' : 'bg-[var(--successL)] text-[var(--success)]'}`}>
-                                                    <img
-                                                        src={task.priority === 'high' ? ICONS[theme].redflag : task.priority === 'medium' ? ICONS[theme].yellowflag : ICONS[theme].greenflag}
-                                                        className="w-3 h-3 shrink-0"
-                                                    />
-                                                <p className={`text-xs text-left`}>
-                                                    {task.priority === 'high' ? 'High' : task.priority === 'medium' ? 'Medium' : 'Low'}
-                                                </p>
-                                            </div>
-                                        </motion.div>
-                                    )
-                                })}
-                            </AnimatePresence>  
-                        </div>
-                    </motion.div>
-                </AppShell>
+                    {/* add task button */}
+                    <AddTask />
+                </div>
             </div>
 
-            <ThinFooter />
+            {/* main section with tasks listed */}
+            <motion.div 
+                layout
+                transition={easeTransition}
+                className="main-content overflow-y-visible"
+            >
+                {/* header */}
+                {!grid && filtered.length > 0 && (
+                    <motion.div 
+                        layout
+                        transition={easeTransition}
+                        className={`${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.4fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.4fr]'} border-b-[0.005rem] border-[var(--e-main)] email-grid`}
+                    >
+                            <div />
+                            <p>Task</p>
+                            <p>Description</p>
+                            <p className="text-center">Due</p>
+                            {showTasks !== 'completed' && (    
+                                <p className="text-center">Progress</p>
+                            )}
+                            <p className="text-center">Priority</p>
+                    </motion.div>
+                )}
 
-        </div>
+                {/* container morphs */}
+                <motion.div
+                    layout
+                    transition={easeTransition}
+                    className={
+                        grid
+                        ? 'grid grid-cols-3 gap-2 my-2 rounded-lg'
+                        : 'flex flex-col'
+                    }
+                >
+                    {filtered.map((task) => (
+                        <motion.div
+                            key={task.id}
+                            layout
+                            transition={easeTransition}
+                            className="bg-[var(--baseAcc-b)]"
+                        >
+                            {/* content morphs */}
+                            <motion.div
+                                layout
+                                className={
+                                    grid
+                                    ? 'flex flex-col gap-2 p-4 rounded-lg shadow-md h-full' 
+                                    : `${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.4fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.4fr]'} email-grid px-1 py-1.5 border-y-[0.005rem] border-[var(--e-main)]`
+                                }
+                            >
+                                {!grid && (
+                                    <input 
+                                        type="checkbox"
+                                        className="lg:w-[0.85rem] aspect-square accent-blue-500" 
+                                    />
+                                )}
+
+                                <div className={grid ? 'flex flex-row justify-between' : ''}>
+                                    {!grid 
+                                    ? <p className="font-semibold">{task.title}</p>
+                                    : <h6 className="font-semibold">{task.title}</h6>
+                                    }
+                                    {grid && <button><h5 className="rotate-90 font-bold">...</h5></button>}
+                                </div>
+
+                                <p className="truncate">{task.description}</p>
+
+                                <div className={grid ? 'flex flex-row gap-2 items-center' : 'text-center'}>
+                                    {grid &&
+                                        <img
+                                            src={ICONS[theme].calender}
+                                            className="lg:w-4 aspect-square"
+                                        />
+                                    }
+                                    <p>{formatTaskDate(task.due)}</p>
+                                </div>
+
+                                {grid && (
+                                    <div className="w-full h-1 bg-black/10 rounded-full my-2">
+                                        <div className={`h-1 bg-blue-500 rounded-full ${
+                                            task.progress === 'Not started'
+                                            ? 'w-1'
+                                            : task.progress === 'In progress'
+                                            ? 'w-1/2'
+                                            : 'w-11/12'
+                                        }`} />
+                                    </div>
+                                )}
+
+                                {showTasks !== 'completed' &&
+                                    <div className={grid ? 'flex flex-row gap-2 items-center' : ''}>
+                                        {grid && (
+                                            <p className="group-label">Progress</p>
+                                        )}
+                                    <div className="flex items-center justify-center">
+                                            <button 
+                                                onClick={(e) => {
+                                                    e.stopPropagation()
+                                                    cycleProgress(task.id)
+                                                }}
+                                                className={`progress-tag 
+                                                ${task.progress === 'Not started' ? 'bg-[var(--progressNotc)] hover:bg-[var(--progressNotb)] border-[var(--progressNota)] text-[var(--progressNott)]' :
+                                                task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostc)] hover:bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)] text-[var(--progressAlmostt)]'
+                                                : 'bg-[var(--progressInc)] hover:bg-[var(--progressInb)] border-[var(--progressIna)] text-[var(--progressInt)]'}
+                                                transform transition-transform duration-300 ease-out hover:scale-105`}
+                                            >
+                                                    <div className={`rounded-full p-[0.12rem] border-[0.1rem] ${task.progress === 'Not started' ? 'bg-[var(--progressNotb)] border-[var(--progressNota)]' :
+                                                    task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)]' : 'bg-[var(--progressInb)] border-[var(--progressIna)]'}`} />
+                                                    <p className="text-xs text-left whitespace-nowrap">{task.progress === 'Not started' ? 'Not started' : task.progress === 'Almost complete' ? 'Almost complete' : 'In progress'}</p>
+                                            </button>
+                                        </div> 
+                                    </div>
+                                }
+                                
+                                <div className={grid ? 'flex flex-row gap-4 items-center' : ''}>
+                                    {grid && (
+                                        <p className="group-label">Priority</p>
+                                    )}
+                                    <div className="flex items-center justify-center">
+                                        <button 
+                                            onClick={(e) => {
+                                                e.stopPropagation()
+                                                cyclePriority(task.id)
+                                            }}
+                                            className={`priority-tag
+                                            ${task.priority === 'high' ? 'bg-[var(--priorityHighc)] hover:bg-[var(--priorityHighb)] border-[var(--priorityHigha)] text-[var(--priorityHight)]' :
+                                            task.priority === 'low' ? 'bg-[var(--priorityLowc)] hover:bg-[var(--priorityLowb)] border-[var(--priorityLowa)] text-[var(--priorityLowt)]'
+                                            : 'bg-[var(--priorityNormalc)] hover:bg-[var(--priorityNormalb)] border-[var(--priorityNormala)] text-[var(--priorityNormalt)]'}
+                                            transform transition-transform duration-300 ease-out hover:scale-105`}
+                                        >
+                                                <img
+                                                    src={task.priority === 'high' ? ICONS[theme].redflag :
+                                                    task.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
+                                                    className="lg:w-3 aspect-square"
+                                                />
+                                                <p className="text-xs text-left">{task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}</p>
+                                        </button>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    ))}
+                </motion.div>
+
+                {filtered.length === 0 && (
+                    <motion.div 
+                        key="empty"
+                        initial={{opacity:0}}
+                        animate={{opacity:1}}
+                        exit={{opacity:0}}
+                        className="overflow-hidden">
+                        <p className="text-center m-4">No tasks found.</p>
+                    </motion.div>
+                )}
+
+           </motion.div>
+        </AppShell>
     );
-}
-
-function sortTasks(a, b, priorityMode) {
-    const priorityOrder = {high: 3, medium: 2, low: 1};
-
-    // completed status
-    if (a.completed !== b.completed) return a.completed ? 1 : -1;
-
-    // parse sort
-    const dateA = a.due ? new Date(a.due).getTime() : Infinity;
-    const dateB = b.due ? new Date(b.due).getTime() : Infinity;
-
-    // priority numbers
-    const pA = priorityOrder[a.priority] || 0;
-    const pB = priorityOrder[b.priority] || 0;
-
-    // priority mode on
-    if(priorityMode) {
-
-        if (pA !== pB) return pB - pA; // sort by priority 
-        if (dateA !== dateB) return dateA - dateB; // sort by date
-        return 0;
-    } 
-    else {
-        
-        if (dateA !== dateB) return dateA - dateB; // sort by date
-        if (pA !== pB) return pB - pA; // sort by priority
-        return 0;
-    }
 }

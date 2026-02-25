@@ -76,6 +76,21 @@
     --priorityLowc: #e6e6e6;
     --priorityLowt: #525252;
 
+    --progressNota: #ea8e42;
+    --progressNotb: #ffe0c0;
+    --progressNotc: #ffebd1;
+    --progressNott: #b9551c;
+
+    --progressIna: #2f98d4;
+    --progressInb: #c1e1ff;
+    --progressInc: #d6ecff;
+    --progressInt: #1061ad;
+
+    --progressAlmosta: #49996a;
+    --progressAlmostb: #cdfde1;
+    --progressAlmostc: #d9fae9;
+    --progressAlmostt: #375947;
+
     --focusMode: #04766b;
     --focusModeHover: #02574e;
    
@@ -192,6 +207,7 @@
     .error-popup-btn.a {@apply bg-[var(--d-main)] border-[var(--c-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]; }
     .error-popup-btn.b {@apply bg-[var(--dangerH)] border-[var(--danger)] hover:bg-[var(--danger)] text-[var(--text-d)]; }
     .priority-tag {@apply flex flex-row justify-center items-center; }
+    .progress-tag {@apply flex flex-row justify-center items-center; }
 }
 
 /* responsiveness */
@@ -227,6 +243,7 @@
         .side-panel { @apply flex flex-col; }
         .main-panel { @apply flex flex-col h-full min-h-0 m-1 mx-2 gap-1; }
         .footer { grid-column: 1 / -1; }
+        .main-content { @apply mb-6; }
         .side-bar { @apply px-1 py-2 w-12 h-[calc(100vh-0.5rem)] rounded-lg; }
         .side-bar-btn {@apply gap-1.5; }
         .side-bar-btn-active {@apply h-6 w-1; }
@@ -257,6 +274,7 @@
         .error-popup {@apply p-8 rounded-md w-[22rem] shadow-xl gap-2; }
         .error-popup-btn {@apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
         .priority-tag {@apply w-[5.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
+        .progress-tag {@apply w-[9.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
 
         /* incomplete */        
         .stack { @apply flex flex-col gap-2; }

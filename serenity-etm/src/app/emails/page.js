@@ -412,7 +412,8 @@ export default function EmailsPage () {
                                         layout
                                         key={mail.id}
                                         className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} border-b-[0.005rem] border-[var(--e-main)] email-grid ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]
-                                        `}   
+                                        `}
+                                        transition={{layout:easeTransition}}   
                                     >
                                         <div className="flex items-center justify-center">
                                             <input
@@ -483,7 +484,7 @@ export default function EmailsPage () {
                     ) : (
                         <AnimatePresence className="overflow-hidden">
                             {filtered.map((mail) => (
-                                <div
+                                <motion.div
                                     key={mail.id}
                                     onClick={() => {
                                         setSelectedEmail(mail)
@@ -491,6 +492,7 @@ export default function EmailsPage () {
                                         setReadEmailCount(readEmailCount+1)
                                     }}
                                     className={`border-y-[0.005rem] border-[var(--e-main)] email-grid px-1 ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]`}
+                                    transition={{layout:easeTransition}}
                                 >
                                     <div className="flex flex-row justify-between items-center">
                                         <div className="flex flex-row items-center gap-1">
@@ -509,7 +511,7 @@ export default function EmailsPage () {
                                         </div>
                                     </div>
                                 
-                                </div>
+                                </motion.div>
                             ))}
                         </AnimatePresence>
                     )}

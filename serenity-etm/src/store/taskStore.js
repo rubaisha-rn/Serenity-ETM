@@ -1,6 +1,5 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
-import { complex } from "framer-motion";
 
 export const useTaskStore = create((set, get) => ({
 
@@ -9,31 +8,70 @@ export const useTaskStore = create((set, get) => ({
 
     classifyMissingTasks: async () => {
 
-        const tasks = get().tasks
+        const {data: sessionData} = await supabase.auth.getSession();
+        if (!sessionData.session) return;
+
+        const tasks = get().tasks;
+
         const unclassified = tasks.filter(
-            t => t.priority_src == 'ai'
-        )
+            t => (t.priority_src === 'rules' || t.priority === 'null')
+        );
 
-        for (const task of unclassified) {
-            const res = await fetch('/api/classify', {
-                method: "POST",
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    text: `$task$ ${task.title} ${task.description}`
+        if (unclassified.length === 0) return;
+
+        try {
+            const results = await Promise.all(
+                unclassified.map(async (task) => {
+                    try {
+                        const res = await fetch('/api/classify', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                text: `${task.title ?? ""} ${task.description ?? ""}`
+                            })
+                        });
+
+                        const data = await res.json();
+
+                        return {
+                            id: task.id,
+                            priority: data.priority,
+                            priority_src: 'rules'
+                        };
+                    }
+                    catch {
+                        return null;
+                    }
                 })
-            })
+            );
 
-            const result = await res.json()
+            const validUpdates = results.filter(Boolean);
 
-            await supabase
-                .from('tasks')
-                .update({
-                    priority: result.priority
-                })
-                .eq('id', task.id)
+            if (validUpdates.length === 0) return;
+
+            // safe db update - not overwriting user
+            for (const update of validUpdates) {
+                await supabase
+                    .from('tasks')
+                    .update({
+                        priority: update.priority,
+                        priority_src: update.priority_src
+                    })
+                    .eq('id', update.id)
+                    .is('priority', null);
+            }
+
+            // update local state
+            const updatedTasks = tasks.map(task => {
+                const match = validUpdates.find(u => u.id === task.id);
+                return match ? {...task, ...match} : task;
+            });
+
+            set({tasks: updatedTasks});
         }
-
-        get().loadTasks()
+        catch (err) {
+            console.log("Classification failed.", err);
+        }
     },
 
     loadTasks : async () => {
@@ -53,6 +91,7 @@ export const useTaskStore = create((set, get) => ({
                 due_display: t.due_date 
                     ? formatToDDMMYY(t.due_date)
                     : null,
+                is_deleted: t.is_deleted ?? false
             }))
 
             set({tasks: normalised})
@@ -75,7 +114,7 @@ export const useTaskStore = create((set, get) => ({
                 completed: false,
                 
                 priority: null,
-                priority_src: 'ai',
+                priority_src: 'rules',
             }])
 
         get().loadTasks()
@@ -106,6 +145,73 @@ export const useTaskStore = create((set, get) => ({
             .eq('id', id)
 
         get().loadTasks()
+    },
+
+    cyclePriority: async (id) => {
+        
+        const tasks = get().tasks;
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
+
+        const order = ['low', 'normal', 'high'];
+        const current = task.priority ?? 'normal';
+        const currentIndex = order.indexOf(current);
+
+        const nextPriority = order[(currentIndex + 1) % order.length];
+
+        set({
+            tasks: tasks.map(t =>
+                t.id === id
+                ? {...t, priority: nextPriority, priority_src: 'user'}
+                : t
+            )
+        });
+
+        const {error} = await supabase
+            .from('tasks')
+            .update({
+                priority: nextPriority,
+                priority_src: 'user'
+            })
+            .eq('id', id)
+
+        if (error) {
+            console.log('Priority update failed.', error);
+            set({tasks});
+        }
+    },
+
+    cycleProgress: async (id) => {
+        
+        const tasks = get().tasks;
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
+
+        const order = ['Not started', 'In progress', 'Almost complete'];
+        const current = task.progress ?? 'Not started';
+        const currentIndex = order.indexOf(current);
+
+        const nextProgress = order[(currentIndex + 1) % order.length];
+
+        set({
+            tasks: tasks.map(t =>
+                t.id === id
+                ? {...t, progress: nextProgress}
+                : t
+            )
+        });
+
+        const {error} = await supabase
+            .from('tasks')
+            .update({
+                progress: nextProgress
+            })
+            .eq('id', id)
+
+        if (error) {
+            console.log('Progress update failed.', error);
+            set({tasks});
+        }
     },
 
     setCompletedTasksCount: (count) => set({completedTasksCount: count}),
