@@ -262,10 +262,10 @@
         .secondary-side-bar-label {@apply text-[0.8rem]; }
         .group-label {@apply text-[0.65rem]; }
         .prototype { @apply px-4 py-0.5 pb-2.5 rounded-md; }
-        .search-bar {@apply border-[0.08rem] text-sm px-3 py-0.5 rounded-md w-[40rem] h-[1.9rem]; }
+        .search-bar {@apply border-[0.08rem] text-sm px-3 py-0.5 rounded-md w-[38rem] h-[1.9rem]; }
         .search-bar-results {@apply mt-1 rounded-md w-[40rem] max-h-[400px]; }
         .search-bar-results-show {@apply px-3 py-1 border-b-[0.08rem]; }
-        .new-button {@apply w-[6.5rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
+        .new-button {@apply w-[6.5rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md transform transition-transform duration-300 ease-out hover:scale-105; }
         .batch-func {@apply gap-3 mx-1; }
         .email-grid {@apply gap-2; }
         .send-email-container {@apply p-2 px-4 gap-1 rounded-md; }
@@ -275,6 +275,7 @@
         .error-popup-btn {@apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
         .priority-tag {@apply w-[5.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
         .progress-tag {@apply w-[9.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
+        .layout-button {@apply w-auto;}
 
         /* incomplete */        
         .stack { @apply flex flex-col gap-2; }

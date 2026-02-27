@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
 import BreakPopup from "@/components/breakPopup";
+import TaskFunctionsMenu from "@/components/gridTaskFunctions";
 
 import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
@@ -18,14 +19,16 @@ export default function TasksPage() {
 
     const router = useRouter()
     
-    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress} = useTaskStore();
+    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, toggleDelete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress, selectedIds, toggleSelect, clearSelection, markManyComplete, deleteMany, selectAllVisible} = useTaskStore();
     const {emotionValue, focusMode, priorityMode, setShowTasks, showTasks, sdkActive, setCalmMode, theme, setTheme, setScreen} = useStore();
 
     const [filtered, setFiltered] = useState([]);
-    const [grid, setGrid] = useState(false);
+    const [grid, setGrid] = useState(true);
 
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
+
+    const [popup, setPopup] = useState(false);
 
     const easeTransition = {
         duration: 0.65,
@@ -98,22 +101,25 @@ export default function TasksPage() {
             results = results.filter(t => {
                 if (!t.due) return false;
                 const taskDate = new Date(t.due);
-                return taskDate >= today && taskDate < tomorrow && !t.completed;
+                return taskDate >= today && taskDate < tomorrow;
             });
         }
         else if (showTasks === 'completed') {
             results = results.filter(t => t.completed);
         }
         else if (showTasks === 'priority') {
-            results = results.filter(t => t.priority === 'high' && !t.completed);
+            results = results.filter(t => t.priority === 'high');
         }
         else if (showTasks === 'upcoming') {
             results = results.filter(t => {
-                if (!t.due || t.completed) return false;
+                if (!t.due) return false;
                 const taskDate = new Date(t.due);
                 return taskDate >= today;
             });
-        } 
+        }
+
+        // only show incomplete tasks in all other categories
+        if (showTasks !== 'completed') results = results.filter(t => !t.completed); 
 
         // remove deleted
         results = results.filter(t => !t.is_delete);
@@ -136,6 +142,7 @@ export default function TasksPage() {
 
     // sorting function
     function sortTasks(a, b, prioritySort = false) {
+        
         const rank = {
             high: 3,
             normal: 2, 
@@ -145,16 +152,6 @@ export default function TasksPage() {
         // incomplete tasks first
         if (a.completed !== b.completed) {
             return a.completed ? 1 : -1;
-        }
-
-        // priority sort
-        if (prioritySort) {
-            
-            const pa = rank[getPriority(a.priority)];
-            const pb = rank[getPriority(b.priority)];
-
-            // priority first
-            if (pa !== pb) return pb - pa;
         }
 
         // overdue tasks float to the top
@@ -167,16 +164,22 @@ export default function TasksPage() {
         const overdueA = timeA < now;
         const overdueB = timeB < now;
 
-        if (overdueA !== overdueB) return overdueA ? -1 : 1;
-
-        // secondary priority when not in priority mode
-        if (!prioritySort) {
-
+        // priority sort on priority mode
+        if (prioritySort) {
+            
             const pa = rank[getPriority(a.priority)];
             const pb = rank[getPriority(b.priority)];
 
             // priority first
             if (pa !== pb) return pb - pa;
+        }
+
+        // overdue first
+        if (overdueA !== overdueB) return overdueA ? -1 : 1;
+
+        // earlier due date first
+        if (timeA !== timeB) {
+            return timeA - timeB;
         }
 
         // final stable fallback
@@ -289,18 +292,71 @@ export default function TasksPage() {
                     )}
                 </div>
 
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-1">
                     <button
-                        className="bg-red-900 hover:bg-700 rounded-md px-2 py-1 text-white"
+                        className="new-button layout-button"
                         onClick={() => setGrid(!grid)}
                     >
-                        <p>{grid ? 'Grid' : 'Rows'}</p>
+                        <img
+                            src={grid ? ICONS[theme].rows : ICONS[theme].grid}
+                            className="lg:w-5 aspect-square"
+                        />
                     </button>
 
                     {/* add task button */}
                     <AddTask />
                 </div>
             </div>
+
+            {/* batch functions section */}
+            {(selectedIds.length > 0) && (
+                <div className="batch-func">
+                    <button 
+                        className="batch-func-btn-hover "
+                        onClick={() => {
+                        if (selectedIds.length === filtered.length) {
+                            clearSelection()
+                        }
+                        else {
+                            selectAllVisible(filtered.map(t => t.id))
+                        }
+                    }}>
+                        <input
+                            type="checkbox"
+                            readOnly
+                            checked={selectedIds.length === filtered.length && filtered.length > 0}
+                            className="lg:w-[0.85rem] aspect-square accent-blue-500"
+                        />
+                    </button>
+
+                    {showTasks !== 'completed' ? 
+                        <button
+                            className="batch-func-btn-hover"
+                            onClick={() => markManyComplete(selectedIds)}
+                        >
+                            <p>Complete</p>
+                        </button>
+                        : 
+                        <button
+                            className="batch-func-btn-hover"
+                            onClick={() => markManyComplete(selectedIds, false)}
+                        >
+                            <p>Incomplete</p>
+                        </button>
+                    }
+
+                    <button 
+                        className="batch-func-btn-hover"
+                        onClick={() => deleteMany(selectedIds)}>
+                        <img
+                            src={ICONS[theme].delete}
+                            className="lg:w-[1.05rem] aspect-square"
+                            alt=""
+                            aria-hidden='true'
+                        />
+                    </button>
+                </div>
+            )}
 
             {/* main section with tasks listed */}
             <motion.div 
@@ -348,13 +404,19 @@ export default function TasksPage() {
                                 layout
                                 className={
                                     grid
-                                    ? 'flex flex-col gap-2 p-4 rounded-lg shadow-md h-full' 
-                                    : `${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.4fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.4fr]'} email-grid px-1 py-1.5 border-y-[0.005rem] border-[var(--e-main)]`
+                                    ? `flex flex-col gap-2 p-4 rounded-lg shadow-md h-full ${(new Date(task.due).getTime() < Date.now()) ? 'border-[0.2rem] border-[var(--priorityHigha)]' : ''}` 
+                                    : `${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.4fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.4fr]'} email-grid px-1 py-1.5 border-y-[0.005rem] border-[var(--e-main)] 
+                                    ${(new Date(task.due).getTime() < Date.now()) ? 'border-[0.2rem] border-[var(--priorityHigha)]' : ''}`
                                 }
                             >
                                 {!grid && (
                                     <input 
                                         type="checkbox"
+                                        checked={selectedIds.includes(task.id)}
+                                        onChange={(t) => {
+                                            t.stopPropagation()
+                                            toggleSelect(task.id)
+                                        }}
                                         className="lg:w-[0.85rem] aspect-square accent-blue-500" 
                                     />
                                 )}
@@ -364,17 +426,20 @@ export default function TasksPage() {
                                     ? <p className="font-semibold">{task.title}</p>
                                     : <h6 className="font-semibold">{task.title}</h6>
                                     }
-                                    {grid && <button><h5 className="rotate-90 font-bold">...</h5></button>}
+                                    {grid && <TaskFunctionsMenu
+                                        onComplete={() => toggleComplete(task.id)}
+                                        onDelete={() => toggleDelete(task.id)}
+                                    />}
                                 </div>
 
                                 <p className="truncate">{task.description}</p>
 
-                                <div className={grid ? 'flex flex-row gap-2 items-center' : 'text-center'}>
+                                <div className={grid ? `flex flex-row gap-2 items-center` : `text-center ${(new Date(task.due).getTime() < Date.now()) ? 'bg-[var(--priorityHighb)] rounded-sm' : ''}`}>
                                     {grid &&
-                                        <img
-                                            src={ICONS[theme].calender}
-                                            className="lg:w-4 aspect-square"
-                                        />
+                                            <img
+                                                src={ICONS[theme].calender}
+                                                className="lg:w-4 aspect-square"
+                                            />
                                     }
                                     <p>{formatTaskDate(task.due)}</p>
                                 </div>

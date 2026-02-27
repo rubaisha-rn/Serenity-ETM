@@ -3,6 +3,44 @@ import { supabase } from "@/lib/supabaseClient";
 
 export const useTaskStore = create((set, get) => ({
 
+    selectedIds: [],
+
+    toggleSelect: (id) =>
+        set(state => ({
+            selectedIds: state.selectedIds.includes(id)
+                ? state.selectedIds.filter(x => x !== id)
+                : [...state.selectedIds, id]
+        })),
+
+    clearSelection: () => set({selectedIds: []}),
+
+    selectAllVisible: (ids) => set({selectedIds: ids}),
+
+    markManyComplete: async (ids, complete=true) => {
+        if (!ids.length) return
+
+        await supabase
+            .from('tasks')
+            .update({completed: complete})
+            .in('id', ids)
+
+        get().clearSelection()
+        get().loadTasks()
+    },
+
+    deleteMany: async (ids) => {
+   
+        if (!ids.length) return
+
+        await supabase
+            .from('tasks')
+            .update({is_delete: true})
+            .in('id', ids)
+
+        get().clearSelection()
+        get().loadTasks()
+    },
+
     tasks: [],
     completedTasksCount: 0,
 
@@ -91,7 +129,7 @@ export const useTaskStore = create((set, get) => ({
                 due_display: t.due_date 
                     ? formatToDDMMYY(t.due_date)
                     : null,
-                is_deleted: t.is_deleted ?? false
+                is_delete: t.is_delete ?? false
             }))
 
             set({tasks: normalised})
@@ -129,6 +167,21 @@ export const useTaskStore = create((set, get) => ({
             .from('tasks')
             .update({
                 completed: !task.completed
+            })
+            .eq('id', id)
+
+        get().loadTasks()
+    },
+
+    toggleDelete: async (id) => {
+
+        const task = get().tasks.find(t => t.id === id)
+        if (!task) return
+        
+        await supabase
+            .from('tasks')
+            .update({
+                is_delete: true
             })
             .eq('id', id)
 

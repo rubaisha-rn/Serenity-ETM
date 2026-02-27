@@ -18,6 +18,8 @@ export const ICONS = {
         warning: `${SUPABASE_ASSET_URL}/icons/lightMode/warn.png`,
         info: `${SUPABASE_ASSET_URL}/icons/lightMode/info.png`,
         calender: `${SUPABASE_ASSET_URL}/icons/lightMode/calender.png`,
+        grid: `${SUPABASE_ASSET_URL}/icons/lightMode/grid.png`,
+        rows: `${SUPABASE_ASSET_URL}/icons/lightMode/rows.png`,
         
         // email categories
         archive: `${SUPABASE_ASSET_URL}/icons/lightMode/archiveo.png`,
