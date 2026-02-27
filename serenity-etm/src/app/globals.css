@@ -138,21 +138,6 @@
 /* layout primitives define mobile-first defaults */
 @layer components {
 
-    /* for vertical layering */
-    .stack {
-        @apply flex flex-col gap-2;
-    }
-
-    /* horizontal wrapping */
-    .cluster {
-        @apply flex flex-wrap items-center gap-2;
-    }
-
-    /* responsive grid */
-    .responsive-grid {
-        @apply grid grid-cols-1 gap-4;
-    }
-
     /* completed components */
     .app-shell { 
         @apply grid h-screen w-full
@@ -164,11 +149,10 @@
             var(--right, 50px);
         grid-template-rows: 1fr auto;
     }
-    .side-panel { 
-        @apply flex flex-col overflow-hidden; 
-    }
+    .side-panel { @apply flex flex-col overflow-hidden; }
     .footer {@apply z-0; }
     .main-content { @apply flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0; }
+    .prototype { @apply fixed -bottom-2 right-1 px-4 py-0.5 pb-2.5 rounded-md bg-[var(--danger)] hover:bg-[var(--dangerH)] text-[var(--text-d)] shadow-black/50 shadow z-[9999] transition-opacity duration-100; }
     .side-bar { @apply fixed top-1 flex flex-col justify-between shadow-xl z-20; }
     .side-bar-btn {@apply items-center gap-1.5; }
     .side-bar-btn-active {@apply absolute bg-[var(--g-main)] rounded-full shadow; }
@@ -191,11 +175,10 @@
     .secondary-side-bar-label.show {@apply opacity-100; }
     .secondary-side-bar-label.hide {@apply opacity-0 w-0 overflow-hidden; }
     .group-label {@apply text-[var(--text-b)] leading-tight; }
-    .prototype { @apply fixed -bottom-2 right-14 bg-[var(--danger)] hover:bg-[var(--dangerH)] text-[var(--text-d)] shadow-black/50 shadow z-[9999] transition-opacity duration-100; }
     .search-bar {@apply flex-1 border-[var(--d-main)] bg-[var(--baseAcc-b)] text-[var(--text-a)] outline-none shadow shadow-black/10 items-center; }
     .search-bar-results {@apply absolute top-full w-full leading-tight border-[var(--d-main)] bg-[var(--baseAcc-b)] shadow-lg z-30 overflow-auto; }
     .search-bar-results-show {@apply border-b border-[var(--d-main)] hover:bg-[var(--f-main)] cursor-pointer; }
-    .new-button {@apply bg-[var(--a-main)] border-[var(--a-main)] flex flex-row items-center justify-center hover:bg-[var(--c-main)] text-[var(--text-d)]; }
+    .new-button {@apply bg-[var(--a-main)] border-[var(--a-main)] flex flex-row items-center justify-center hover:bg-[var(--c-main)] text-[var(--text-d)] transform transition-transform duration-300 ease-out hover:scale-105; }
     .batch-func {@apply flex flex-row; }
     .batch-func-btn-hover {@apply opacity-80 hover:opacity-60; }
     .email-grid {@apply justify-start items-center text-left; }
@@ -214,10 +197,63 @@
 @layer utilities {
 
     /* 640px large phones/small tablets */
-    @screen sm {}
+    @screen sm {
+        h1 { @apply text-lg font-bold; } 
+        h2 { @apply text-base font-semibold; }
+        h3 { @apply text-[0.95rem] font-semibold; }
+        h4 { @apply text-[0.85rem] font-semibold; }
+        h5 { @apply text-[0.75rem] font-semibold; }
+        h6 { @apply text-[0.65rem] font-thin; }
+        p { @apply text-[0.55rem]; }
+        img {@apply w-2 aspect-square; }
+
+        .side-bar,
+        .secondary-side-bar,
+        .side-bar-toggle {
+            @apply hidden;
+        }
+        
+        .app-shell {
+            grid-template-columns: 0px 1fr 0px;
+        }
+        .main-panel {
+            @apply m-0 mx-2 gap-2;
+        }
+        .main-content {
+            @apply mb-2;
+        }
+    }
 
     /* 768px tablets */
-    @screen md {}
+    @screen md {
+        h1 { @apply text-xl font-bold; } 
+        h2 { @apply text-lg font-semibold; }
+        h3 { @apply text-base font-semibold; }
+        h4 { @apply text-[0.95rem] font-semibold; }
+        h5 { @apply text-[0.85rem] font-semibold; }
+        h6 { @apply text-[0.75rem] font-thin; }
+        p { @apply text-[0.65rem]; }
+        img {@apply w-3 aspect-square; }
+
+        .side-bar,
+        .secondary-side-bar,
+        .side-bar-toggle {
+            @apply block;
+        }
+
+        .app-shell {
+            grid-template-columns: 
+                var(--left, 100px)
+                1fr
+                0px;
+        }
+        .main-panel {
+            @apply mx-3 gap-2;
+        }
+        .main-content {
+            @apply mb-4;
+        }
+    }
 
     /* 1024px laptops (mine) */
     @screen lg {
@@ -228,6 +264,17 @@
         h5 { @apply text-[0.98rem] font-semibold; }
         h6 { @apply text-[0.85rem] font-thin; }
         p { @apply text-[0.7rem]; }
+        img {@apply w-6 aspect-square; }
+
+        .side-bar,
+        .secondary-side-bar,
+        .side-bar-toggle {
+            @apply block;
+        }
+
+        .side-bar { 
+            @apply flex flex-col justify-between;
+        }
 
         /* completed components */
         .app-shell { 
@@ -240,10 +287,10 @@
                 var(--right, 50px);
             grid-template-rows: 1fr auto;
         }
-        .side-panel { @apply flex flex-col; }
         .main-panel { @apply flex flex-col h-full min-h-0 m-1 mx-2 gap-1; }
         .footer { grid-column: 1 / -1; }
         .main-content { @apply mb-6; }
+        
         .side-bar { @apply px-1 py-2 w-12 h-[calc(100vh-0.5rem)] rounded-lg; }
         .side-bar-btn {@apply gap-1.5; }
         .side-bar-btn-active {@apply h-6 w-1; }
@@ -261,11 +308,10 @@
         .secondary-side-bar-btn.collapsed {@apply gap-0 rounded-md; }
         .secondary-side-bar-label {@apply text-[0.8rem]; }
         .group-label {@apply text-[0.65rem]; }
-        .prototype { @apply px-4 py-0.5 pb-2.5 rounded-md; }
         .search-bar {@apply border-[0.08rem] text-sm px-3 py-0.5 rounded-md w-[38rem] h-[1.9rem]; }
         .search-bar-results {@apply mt-1 rounded-md w-[40rem] max-h-[400px]; }
         .search-bar-results-show {@apply px-3 py-1 border-b-[0.08rem]; }
-        .new-button {@apply w-[6.5rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md transform transition-transform duration-300 ease-out hover:scale-105; }
+        .new-button {@apply w-[6.5rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
         .batch-func {@apply gap-3 mx-1; }
         .email-grid {@apply gap-2; }
         .send-email-container {@apply p-2 px-4 gap-1 rounded-md; }
@@ -276,11 +322,6 @@
         .priority-tag {@apply w-[5.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
         .progress-tag {@apply w-[9.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
         .layout-button {@apply w-auto;}
-
-        /* incomplete */        
-        .stack { @apply flex flex-col gap-2; }
-        .cluster { @apply flex flex-wrap items-center gap-2; }
-        .responsive-grid { @apply grid grid-cols-1 gap-4; }
     }
 
     /* 1280px desktops */

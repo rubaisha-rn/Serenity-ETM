@@ -73,7 +73,7 @@ export default function ProfileSettingsMenu() {
                 className={`side-bar-btn-style hover:bg-[var(--b-main)] p-0.5 ml-0.5 ${open ? 'bg-[var(--a-main)]' : ''}`}>
                 <img
                     src={ICONS[theme].profileSettings}
-                    className='lg:w-6 aspect-square'
+                    className='aspect-square'
                     alt=''
                     aria-hidden="true"
                 />
@@ -100,7 +100,7 @@ export default function ProfileSettingsMenu() {
                         >
                             <img
                                 src={ICONS[theme].settings}
-                                className='lg:w-4 aspect-square'
+                                className='aspect-square'
                                 aria-hidden="true"
                                 alt=''
                             />
@@ -117,7 +117,7 @@ export default function ProfileSettingsMenu() {
                         >
                             <img
                                 src={ICONS[theme].signout}
-                                className='lg:w-4 aspect-square'
+                                className='aspect-square'
                                 aria-hidden="true"
                                 alt=''
                             />

@@ -1,12 +1,12 @@
+// complete
 'use client';
 
 import AppShell from "@/shells/appShell";
 import { useTaskStore } from "@/store/taskStore";
 import useStore from "@/store/useStore";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
-import BreakPopup from "@/components/breakPopup";
 import TaskFunctionsMenu from "@/components/gridTaskFunctions";
 
 import { ICONS } from "@/lib/assets";
@@ -299,7 +299,6 @@ export default function TasksPage() {
                     >
                         <img
                             src={grid ? ICONS[theme].rows : ICONS[theme].grid}
-                            className="lg:w-5 aspect-square"
                         />
                     </button>
 
@@ -325,7 +324,14 @@ export default function TasksPage() {
                             type="checkbox"
                             readOnly
                             checked={selectedIds.length === filtered.length && filtered.length > 0}
-                            className="lg:w-[0.85rem] aspect-square accent-blue-500"
+                            className="
+                                aspect-square accent-blue-500
+                                sm:w-[0.65rem]
+                                md:w-[0.75rem]
+                                lg:w-[0.85rem]
+                                xl:w-[0.85rem]
+                                2xl:w-[0.95rem]
+                            "
                         />
                     </button>
 
@@ -350,7 +356,6 @@ export default function TasksPage() {
                         onClick={() => deleteMany(selectedIds)}>
                         <img
                             src={ICONS[theme].delete}
-                            className="lg:w-[1.05rem] aspect-square"
                             alt=""
                             aria-hidden='true'
                         />
@@ -379,6 +384,7 @@ export default function TasksPage() {
                                 <p className="text-center">Progress</p>
                             )}
                             <p className="text-center">Priority</p>
+
                     </motion.div>
                 )}
 
@@ -417,7 +423,14 @@ export default function TasksPage() {
                                             t.stopPropagation()
                                             toggleSelect(task.id)
                                         }}
-                                        className="lg:w-[0.85rem] aspect-square accent-blue-500" 
+                                        className="
+                                            aspect-square accent-blue-500
+                                            sm:w-[0.65rem]
+                                            md:w-[0.75rem]
+                                            lg:w-[0.85rem]
+                                            xl:w-[0.85rem]
+                                            2xl:w-[0.95rem]
+                                        " 
                                     />
                                 )}
 
@@ -438,7 +451,6 @@ export default function TasksPage() {
                                     {grid &&
                                             <img
                                                 src={ICONS[theme].calender}
-                                                className="lg:w-4 aspect-square"
                                             />
                                     }
                                     <p>{formatTaskDate(task.due)}</p>
@@ -500,7 +512,6 @@ export default function TasksPage() {
                                                 <img
                                                     src={task.priority === 'high' ? ICONS[theme].redflag :
                                                     task.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
-                                                    className="lg:w-3 aspect-square"
                                                 />
                                                 <p className="text-xs text-left">{task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}</p>
                                         </button>
@@ -518,7 +529,14 @@ export default function TasksPage() {
                         animate={{opacity:1}}
                         exit={{opacity:0}}
                         className="overflow-hidden">
-                        <p className="text-center m-4">No tasks found.</p>
+                        <p className="
+                            text-center 
+                            sm:m-1
+                            md:m-2
+                            lg:m-4
+                            xl:m-4
+                            2xl:m-4
+                        ">No tasks found.</p>
                     </motion.div>
                 )}
 

@@ -1,9 +1,8 @@
-// add image sizes, widths, and other things according to window
+// complete
 'use client';
 
 import { supabase } from "@/lib/supabaseClient";
 import { useEmailStore } from "@/store/emailStore";
-import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { ICONS } from "@/lib/assets";
 import useStore from "@/store/useStore";
@@ -143,12 +142,16 @@ export default function EmailReader() {
             {/* toolbar */}
             <div className="flex flex-row justify-between">
                 <button
-                    className="p-1 bg-[var(--f-main)] rounded lg:w-[1.9rem]"
+                    className="p-1 bg-[var(--f-main)] rounded aspect-square 
+                    sm:w-[1rem]
+                    md:w-[1.2rem]
+                    lg:w-[1.9rem]
+                    xl:w-[1.9rem]
+                    2xl:w-[2rem]"
                     onClick={() => {replyMode ? handleReplyClose() : setSelectedEmail(null)}}
                 >
                     <img
                         src={ICONS[theme].dismiss}
-                        className="lg:w-[1.5rem] aspect-square"
                         alt=""
                         aria-hidden='true'
                     />
@@ -167,7 +170,6 @@ export default function EmailReader() {
                             >
                                 <img
                                     src={ICONS[theme].reply}
-                                    className="lg:w-[1.5rem] aspect-square"
                                     alt=""
                                     aria-hidden='true'
                                 />
@@ -181,7 +183,6 @@ export default function EmailReader() {
                                 }}>
                                 <img
                                     src={ICONS[theme].archive}
-                                    className="lg:w-[1.2rem] aspect-square"
                                     alt=""
                                     aria-hidden='true'
                                 />
@@ -198,7 +199,6 @@ export default function EmailReader() {
                             }}>
                             <img
                                 src={ICONS[theme].unarchive}
-                                className="lg:w-[1.1rem] aspect-square"
                                 alt=""
                                 aria-hidden='true'
                             />
@@ -213,7 +213,6 @@ export default function EmailReader() {
                         }}>
                         <img
                             src={ICONS[theme].delete}
-                            className="lg:w-[1.25rem] aspect-square"
                             alt=""
                             aria-hidden='true'
                         />
@@ -226,7 +225,6 @@ export default function EmailReader() {
                         >
                             <img
                                 src={ICONS[theme].send}
-                                className="lg:w-[1rem] aspect-square"
                                 alt=""
                                 aria-hidden='true'
                             />
@@ -244,7 +242,7 @@ export default function EmailReader() {
                                 <div className="flex flex-row items-center justify-center gap-1">
                                     <img
                                         src={ICONS[theme].warning}
-                                        className="lg:h-[1rem] aspect-square bg-[var(--baseAcc-b)] rounded-full lg:p-0.5"
+                                        className="bg-[var(--baseAcc-b)] rounded-full p-0.5"
                                         alt=""
                                         aria-hidden='true'
                                     />
@@ -256,7 +254,7 @@ export default function EmailReader() {
                                 >
                                     <img
                                         src={ICONS[theme].dismiss}
-                                        className="lg:w-[1rem] aspect-square opacity-70"
+                                        className="opacity-70"
                                         alt=""
                                         aria-hidden='true'
                                     />

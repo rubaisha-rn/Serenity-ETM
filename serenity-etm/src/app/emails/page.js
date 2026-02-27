@@ -1,3 +1,4 @@
+// complete
 'use client';
 
 import AppShell from "@/shells/appShell";
@@ -7,7 +8,6 @@ import { useEffect, useState } from "react";
 import { useEmailStore } from "@/store/emailStore";
 import EmailReader from "@/components/emails/emailReader";
 import EmailSend from "@/components/emails/emailSend";
-import BreakPopup from "@/components/breakPopup";
 
 import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
@@ -22,7 +22,7 @@ export default function EmailsPage () {
 
     const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany} = useEmailStore();
 
-    const {emotionValue, focusMode, setFocusMode, priorityMode, sdkActive, setCalmMode, setScreen, theme, setTheme, setExpandedRight, setExpandedSecondary} = useStore();
+    const {emotionValue, focusMode, priorityMode, sdkActive, setCalmMode, setScreen, theme, setTheme} = useStore();
 
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
@@ -281,7 +281,6 @@ export default function EmailsPage () {
                 >
                     <img
                         src={ICONS[theme].add}
-                        className="lg:w-3 aspect-square"
                         alt=""
                         aria-hidden='true'
                     />
@@ -306,7 +305,14 @@ export default function EmailsPage () {
                             type="checkbox"
                             readOnly
                             checked={selectedIds.length === filtered.length && filtered.length > 0}
-                            className="lg:w-[0.85rem] aspect-square accent-blue-500"
+                            className="
+                                aspect-square accent-blue-500
+                                sm:w-[0.65rem]
+                                md:w-[0.75rem]
+                                lg:w-[0.85rem]
+                                xl:w-[0.85rem]
+                                2xl:w-[0.95rem]
+                            "
                         />
                     </button>
 
@@ -317,7 +323,6 @@ export default function EmailsPage () {
                                 onClick={() => markManyRead(selectedIds, true)}>
                                 <img
                                     src={ICONS[theme].draft}
-                                    className="lg:w-[1.1rem] aspect-square"
                                     alt=""
                                     aria-hidden='true'
                                 />
@@ -327,7 +332,6 @@ export default function EmailsPage () {
                                 onClick={() => markManyRead(selectedIds, false)}>
                                 <img
                                     src={ICONS[theme].unread}
-                                    className="lg:w-[1.3rem] aspect-square"
                                     alt=""
                                     aria-hidden='true'
                                 />
@@ -339,7 +343,6 @@ export default function EmailsPage () {
                                     onClick={() => archiveMany(selectedIds)}>
                                     <img
                                         src={ICONS[theme].archiveo}
-                                        className="lg:w-[1.1rem] aspect-square"
                                         alt=""
                                         aria-hidden='true'
                                     />
@@ -352,7 +355,6 @@ export default function EmailsPage () {
                                     onClick={() => unarchiveMany(selectedIds)}>
                                     <img
                                         src={ICONS[theme].unarchive}
-                                        className="lg:w-[1.1rem] aspect-square"
                                         alt=""
                                         aria-hidden='true'
                                     />
@@ -366,7 +368,6 @@ export default function EmailsPage () {
                         onClick={() => deleteMany(selectedIds)}>
                         <img
                             src={ICONS[theme].delete}
-                            className="lg:w-[1.05rem] aspect-square"
                             alt=""
                             aria-hidden='true'
                         />
@@ -423,18 +424,25 @@ export default function EmailsPage () {
                                                     e.stopPropagation()
                                                     toggleSelect(mail.id)
                                                 }}
-                                                className="lg:w-[0.85rem] aspect-square accent-blue-500"
+                                                className="
+                                                    aspect-square accent-blue-500
+                                                    sm:w-[0.65rem]
+                                                    md:w-[0.75rem]
+                                                    lg:w-[0.85rem]
+                                                    xl:w-[0.85rem]
+                                                    2xl:w-[0.95rem]
+                                                "
                                             />
                                         </div>
                                         
                                         <button
-                                            className='flex items-center justify-center lg:text-2xl text-[var(--text-b)]'
+                                            className='flex items-center justify-center text-[var(--text-b)]'
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 toggleStar(mail.id);
                                             }}
                                         >
-                                            {mail.starred ? '★' : '☆'}
+                                            <h2 className="font-normal">{mail.starred ? '★' : '☆'}</h2>
                                         </button>
 
                                         <h6 className={`${mail.read ? 'font-thin' : 'font-semibold'}`}>
@@ -471,9 +479,8 @@ export default function EmailsPage () {
                                                         <img
                                                             src={mail.priority === 'high' ? ICONS[theme].redflag :
                                                             mail.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
-                                                            className="lg:w-3 aspect-square"
                                                         />
-                                                        <p className="text-xs text-left">{mail.priority === 'high' ? 'High' : mail.priority === 'low' ? 'Low' : 'Normal'}</p>
+                                                        <p className="lg:text-xs text-left">{mail.priority === 'high' ? 'High' : mail.priority === 'low' ? 'Low' : 'Normal'}</p>
                                                 </button>
                                             </div>
                                         )}
@@ -496,7 +503,14 @@ export default function EmailsPage () {
                                 >
                                     <div className="flex flex-row justify-between items-center">
                                         <div className="flex flex-row items-center gap-1">
-                                            <div className={`${mail.priority === 'high' ? 'bg-[var(--priorityHigha)]' : mail.priority === 'low' ? 'bg-[var(--priorityLowa)]' : 'bg-[var(--priorityNormala)]'} rounded-full w-[0.5rem] h-[0.5rem]`} />
+                                            <div className={`
+                                                ${mail.priority === 'high' ? 'bg-[var(--priorityHigha)]' : mail.priority === 'low' ? 'bg-[var(--priorityLowa)]' : 'bg-[var(--priorityNormala)]'} rounded-full 
+                                                sm:w-[0.25rem] sm:h-[0.25rem]
+                                                md:w-[0.35rem] md:h-[0.35rem]
+                                                lg:w-[0.5rem] lg:h-[0.5rem]
+                                                xl:w-[0.5rem] xl:h-[0.5rem]
+                                                2xl:w-[0.65rem] 2xl:h-[0.65rem]
+                                            `} />
                                             <p className={`${mail.read ? '' : 'font-semibold'}`}>
                                             {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</p>
                                         </div>
@@ -524,7 +538,14 @@ export default function EmailsPage () {
                                 animate={{opacity:1}}
                                 exit={{opacity:0}}
                                 className="overflow-hidden">
-                                <p className="text-center m-4">No emails found.</p>
+                                <p className="
+                                    text-center
+                                    sm:m-1
+                                    md:m-2
+                                    lg:m-4
+                                    xl:m-4
+                                    2xl:m-4
+                                ">No emails found.</p>
                             </motion.div>
                         )}
                     </AnimatePresence>

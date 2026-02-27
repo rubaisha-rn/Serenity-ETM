@@ -1,4 +1,4 @@
-// add image sizes, widths, and other things according to window
+// complete
 'use client';
 
 import { useEffect } from 'react';
@@ -49,7 +49,7 @@ export default function CollapsableRightSidebar() {
                     src='/icons/backw.png'
                     alt='close arrow'
                     aria-hidden='true'
-                    className={`lg:w-4 aspect-square ${expandedRight ? 'rotate-180 ml-0.5' : 'mr-0.5'}`}
+                    className={expandedRight ? 'rotate-180 ml-0.5' : 'mr-0.5'}
                 /> 
 
             </motion.button>
@@ -91,7 +91,6 @@ export default function CollapsableRightSidebar() {
                                     src={ICONS[theme].focus}
                                     alt=''
                                     aria-hidden='true'
-                                    className='lg:w-6 aspect-square'
                                 />
                                 <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
                                     Focus Mode
@@ -130,7 +129,6 @@ export default function CollapsableRightSidebar() {
                                     src={ICONS[theme].priority}
                                     alt=''
                                     aria-hidden="true"
-                                    className='lg:w-6 aspect-square'
                                 />
                                 <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
                                     Priority Mode
@@ -170,7 +168,6 @@ export default function CollapsableRightSidebar() {
                                         src={ICONS[theme].stress}
                                         alt=''
                                         aria-hidden='true'
-                                        className='lg:w-6 aspect-square'
                                     />
                                     <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
                                         Stress Detection
@@ -220,7 +217,7 @@ export default function CollapsableRightSidebar() {
                 </div>
 
                 {/* calm button */}
-                <div className='flex flex-row items-center'>
+                <div className='flex flex-row items-center justify-center'>
                     <div className={`flex ${expandedRight ? 'flex-col' : ''} justify-center items-center gap-1`}>
                     
                         {calmMode && (
@@ -242,7 +239,6 @@ export default function CollapsableRightSidebar() {
                                 src={ICONS[theme].calm}
                                 alt=''
                                 aria-hidden='true'
-                                className='lg:w-6 aspect-square'
                             />
                             <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
                                 Calm Overlay

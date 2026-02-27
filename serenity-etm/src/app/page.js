@@ -6,7 +6,7 @@ import useStore from '@/store/useStore';
 import Header from '@/components/header';
 import Image from 'next/image';
 import PrototypeTag from '@/components/prototypeTag';
-import Footer from '@/components/footers/footer';
+import ThinFooter from '@/components/footers/thinFooter';
 
 export default function IntroPage() {
     
@@ -113,7 +113,7 @@ export default function IntroPage() {
                     </div>
                 </div>
 
-                <Footer />
+                <ThinFooter />
 
             </main>
         </div>

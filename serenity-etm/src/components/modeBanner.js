@@ -1,3 +1,4 @@
+// complete
 'use client';
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -44,7 +45,6 @@ export default function ModeBanner({mode}) {
                                     ? ICONS[theme].priorityW
                                     : ICONS[theme].info
                                 }
-                                className="lg:w-5 aspect-square"
                             />
                             <div>
                                 <h6 className="font-semibold">
@@ -79,7 +79,7 @@ export default function ModeBanner({mode}) {
                             >
                                 <img
                                     src={ICONS[theme].add}
-                                    className="lg:w-4 aspect-square rotate-45 hover:opacity-70"
+                                    className="rotate-45 hover:opacity-70"
                                 />
                             </button>
                         </div>

@@ -1,4 +1,4 @@
-// add image sizes, widths, and other things according to window
+// complete
 'use client';
 
 import { useState } from "react";
@@ -113,11 +113,10 @@ export default function EmailSend({onClose}) {
                 <button 
                         onClick={handleClose}
                         disabled={loading}
-                        className="p-1 bg-[var(--f-main)] rounded"
+                        className="p-1 aspect-square items-center justify-center bg-[var(--f-main)] rounded"
                     >
                         <img
                             src={ICONS[theme].dismiss}
-                            className="lg:w-[1.5rem] aspect-square"
                             alt=""
                             aria-hidden='true'
                         />
@@ -129,7 +128,6 @@ export default function EmailSend({onClose}) {
                 >
                     <img
                         src={ICONS[theme].send}
-                        className="lg:w-[1rem] aspect-square"
                         alt=""
                         aria-hidden='true'
                     />

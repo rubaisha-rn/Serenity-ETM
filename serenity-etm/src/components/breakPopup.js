@@ -19,10 +19,10 @@ const SCENARIOS = {
 export default function BreakPopup({
     scenario = 'emails',
     message,
-    durationMs = 15000000000, //15000
+    durationMs = 15000, //15000
     onAcknowledge
 }) {
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
     const data = SCENARIOS[scenario] ?? SCENARIOS.emails;
 
     useEffect(() => {

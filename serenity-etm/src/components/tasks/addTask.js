@@ -67,7 +67,6 @@ export default function AddTask() {
             >
                 <img
                     src={ICONS[theme].add}
-                    className="lg:w-3 aspect-square"
                     alt=""
                     aria-hidden='true'
                 />

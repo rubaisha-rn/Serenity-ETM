@@ -1,4 +1,4 @@
-// add image sizes, widths, and other things according to window
+// complete
 'use client';
 
 import { motion } from "framer-motion";
@@ -9,7 +9,7 @@ import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
-    const {screen, setTheme, expandedSecondary, setShowTasks, fontScale} = useStore();
+    const {screen, setTheme, expandedSecondary, setShowTasks} = useStore();
     const {setShowEmails} = useEmailStore();
 
     const sidebarRef = useRef(null);
@@ -46,7 +46,7 @@ export default function SecondarySidebar() {
             transition={{type: 'spring', stiffness: 260, damping: 36}}
             className={`${expandedSecondary ? 'secondary-side-bar' : 'side-bar ml-1 pt-0.5'}`}
         >
-            <div role="menu" aria-label={`${headingText} options`} className="flex flex-col lg:gap-1">
+            <div role="menu" aria-label={`${headingText} options`} className="flex flex-col gap-1">
 
                 {expandedSecondary && (
                     <h5

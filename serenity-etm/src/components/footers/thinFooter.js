@@ -1,3 +1,4 @@
+// complete
 'use client'; 
 
 import useStore from '@/store/useStore';
@@ -13,9 +14,16 @@ export default function ThinFooter() {
     }, []);
 
     return(
-        <div className={`w-full flex flex-col items-center justify-center p-4 relative bg-[var(--bg)]`}
+        <div className='w-full flex flex-col items-center justify-center p-2 relative bg-[var(--bg)]'
         >
-            <p className={`font-Sans text-[0.6rem] text-center text-[var(--text-c)]`}>© 2025, Serenity ETM. All right reserved.</p>
+            <p className="
+                font-Sans text-center text-[var(--text-c)]
+                sm:text-[0.4rem]
+                md:text-[0.5rem]
+                lg:text-[0.6rem]
+                xl:text-[0.6rem]
+                2xl:text-[0.7rem]
+            ">© 2025, Serenity ETM. All right reserved.</p>
         </div>
     );
 }

@@ -78,7 +78,7 @@ export default function AppShell({children}){
     }, []);
 
     return (
-        <>
+        <div className="min-h-screen max-w-[1400px] mx-auto relative">
             <AnimatePresence>
                 {calmMode && (
                     <motion.div
@@ -110,7 +110,7 @@ export default function AppShell({children}){
                 <main className="main-panel">
                     <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} />
                     <PrototypeTag />
-                    <BreakPopup />
+                    {/* <BreakPopup /> */}
                     {children}
                 </main>
 
@@ -122,6 +122,6 @@ export default function AppShell({children}){
                     <ThinFooter />
                 </footer>
             </div>
-        </>
+        </div>
     );
 }

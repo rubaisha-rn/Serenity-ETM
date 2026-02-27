@@ -1,4 +1,4 @@
-// add image sizes, widths, and other things according to window
+// complete
 'use client';
 
 import { motion } from "framer-motion";
@@ -41,7 +41,7 @@ export default function EmailsSidebarButton({label, shortLabel, icon, expanded, 
         >
             <img 
                 src={icon} 
-                className="lg:w-5 aspect-square opacity-80 m-1.5" 
+                className="opacity-80 m-1.5" 
                 alt=""
                 aria-hidden='true'
             />

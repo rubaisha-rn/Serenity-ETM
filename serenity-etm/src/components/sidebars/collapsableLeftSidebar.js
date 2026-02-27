@@ -1,4 +1,4 @@
-// add image sizes according to window
+// complete
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -50,7 +50,6 @@ export default function CollapsableLeftSidebar() {
                 <img
                     src='/logo/logo.png'
                     alt='Serenity ETM'
-                    className="lg:w-7 aspect-square"
                     draggable={false}
                 /> 
 
@@ -97,7 +96,6 @@ export default function CollapsableLeftSidebar() {
                     >
                         <img
                             src={ICONS[theme].dashboard}
-                            className='lg:w-6 aspect-square'
                             aria-hidden="true"
                             alt=''
                         />
@@ -148,7 +146,6 @@ export default function CollapsableLeftSidebar() {
                             src={ICONS[theme].email}
                             alt=''
                             aria-hidden='true'
-                            className='lg:w-6 aspect-square'
                         />
                     </motion.button>
                 </div>
@@ -194,7 +191,6 @@ export default function CollapsableLeftSidebar() {
                     >
                         <img
                             src={ICONS[theme].task}
-                            className='lg:w-6 aspect-square'
                             aria-hidden="true"
                             alt=''
                         />
