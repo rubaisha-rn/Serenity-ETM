@@ -264,19 +264,23 @@
         h5 { @apply text-[0.98rem] font-semibold; }
         h6 { @apply text-[0.85rem] font-thin; }
         p { @apply text-[0.7rem]; }
-        img {@apply w-6 aspect-square; }
+        
+        img {@apply w-3 aspect-square; }
+        .batch-func img { @apply w-3.5 aspect-square; }
+        .side-bar-menu button img { @apply w-4 aspect-square; }
+        .secondary-side-bar img, .layout-button img { @apply w-5 aspect-square; }
+        .side-bar img { @apply w-6 aspect-square; }
 
         .side-bar,
         .secondary-side-bar,
         .side-bar-toggle {
             @apply block;
         }
-
+        
         .side-bar { 
             @apply flex flex-col justify-between;
         }
 
-        /* completed components */
         .app-shell { 
             @apply grid h-screen w-full
             transition-[grid-template-columns] 
@@ -287,6 +291,7 @@
                 var(--right, 50px);
             grid-template-rows: 1fr auto;
         }
+        
         .main-panel { @apply flex flex-col h-full min-h-0 m-1 mx-2 gap-1; }
         .footer { grid-column: 1 / -1; }
         .main-content { @apply mb-6; }
@@ -295,32 +300,44 @@
         .side-bar-btn {@apply gap-1.5; }
         .side-bar-btn-active {@apply h-6 w-1; }
         .side-bar-btn-style {@apply rounded-md py-1 px-1.5 min-w-[30px] min-h-[30px]; }
+        
         .side-bar-menu {@apply ml-3 w-40 rounded-md p-0.5; }
         .side-bar-menuitem {@apply p-0.5 px-2 gap-3 min-h-[28px]; }
+        
         .side-bar-toggle {@apply bottom-[5rem] p-1.5; }
         .side-bar-btn-style.expanded {@apply gap-2 w-[13rem] h-9 m-0.5 px-3 gap-3 rounded-lg; }
         .side-bar-btn-style.collapsed {@apply gap-0 py-0.5 px-1.5 rounded-md; }
         .side-bar-label {@apply text-sm; }
         .side-bar-help {@apply gap-1 text-[0.6rem]; }
         .side-bar-info {@apply w-2 h-2 mt-0.5; }
+        
         .secondary-side-bar {@apply p-2 pt-3 ml-1 h-[calc(100vh-0.5rem)] rounded-lg; }
         .secondary-side-bar-btn.expanded {@apply h-7 px-1 gap-3; }
         .secondary-side-bar-btn.collapsed {@apply gap-0 rounded-md; }
         .secondary-side-bar-label {@apply text-[0.8rem]; }
+        
         .group-label {@apply text-[0.65rem]; }
+        
         .search-bar {@apply border-[0.08rem] text-sm px-3 py-0.5 rounded-md w-[38rem] h-[1.9rem]; }
         .search-bar-results {@apply mt-1 rounded-md w-[40rem] max-h-[400px]; }
         .search-bar-results-show {@apply px-3 py-1 border-b-[0.08rem]; }
+        
         .new-button {@apply w-[6.5rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
+        
         .batch-func {@apply gap-3 mx-1; }
+        
         .email-grid {@apply gap-2; }
+        
         .send-email-container {@apply p-2 px-4 gap-1 rounded-md; }
         .send-email-container.input {@apply p-1 mb-2 text-sm rounded; }
+        
         .error-message {@apply p-0.5 px-2 rounded; }
         .error-popup {@apply p-8 rounded-md w-[22rem] shadow-xl gap-2; }
         .error-popup-btn {@apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
+        
         .priority-tag {@apply w-[5.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
         .progress-tag {@apply w-[9.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
+        
         .layout-button {@apply w-auto;}
     }
 

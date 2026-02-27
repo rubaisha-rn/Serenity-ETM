@@ -100,7 +100,6 @@ export default function ProfileSettingsMenu() {
                         >
                             <img
                                 src={ICONS[theme].settings}
-                                className='aspect-square'
                                 aria-hidden="true"
                                 alt=''
                             />
@@ -117,7 +116,6 @@ export default function ProfileSettingsMenu() {
                         >
                             <img
                                 src={ICONS[theme].signout}
-                                className='aspect-square'
                                 aria-hidden="true"
                                 alt=''
                             />
