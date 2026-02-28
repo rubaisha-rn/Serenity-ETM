@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, easeInOut } from "framer-motion";
 import useStore from "@/store/useStore";
 import { useTaskStore } from "@/store/taskStore";
 import { ICONS } from "@/lib/assets";
@@ -13,6 +13,7 @@ export default function AddTask() {
 
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [due, setDue] = useState('');
     const [priority, setPriority] = useState('low');
     const [error, setError] = useState('');
@@ -22,39 +23,39 @@ export default function AddTask() {
         setTheme(darkModeEnabled ? 'dark' : 'light');
     }, []);
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const todayStr = today.toISOString().split('T')[0];
+    const now = new Date();
+    const nowStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
-    const isValidDate = (dateStr) => {
-        if(!dateStr) return false;
-        
-        const selected = new Date(dateStr);
-        selected.setHours(0, 0, 0, 0);
-
-        if (isNaN(selected.getTime())) return false;
-
-        return selected >= today;
+    const isValidDueDateTime = (value) => {
+        if(!value) return false;
+        return new Date(value).getTime() >= Date.now();
     }
 
     const submitTask = () => {
+
         if (!title.trim()) {
             setError('Task title is required.');
             return;
-        };
+        }
+
+        if (!isValidDueDateTime(due)) {
+            setError('Please select a future date & time.');
+            return;
+        }
 
         addTask({
-            title, 
-            due,
-            created: new Date().toISOString().split('T')[0],
-            priority,
+            title,
+            description, 
+            due_date: new Date(due).toISOString(),
+            priority: priority || null,
             completed: false,
-            id: crypto.randomUUID(),
         });
 
         setTitle('');
+        setDescription('');
         setDue('');
-        setPriority('low');
+        setPriority('');
+        setError('');
         setOpen(false);
     };
 
@@ -70,14 +71,14 @@ export default function AddTask() {
                     alt=""
                     aria-hidden='true'
                 />
-                <h6 className="font-semibold">Add Task</h6>
+                <h6 className="font-semibold">Create</h6>
             </button>
 
             {/* modal */}
             <AnimatePresence>
                 {open && (
                     <motion.div
-                        className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50"
+                        className="fixed inset-0 bg-black/60 flex items-center justify-center z-[999]"
                         initial={{opacity: 0}}
                         animate={{opacity: 1}}
                         exit={{opacity: 0}}
@@ -86,64 +87,101 @@ export default function AddTask() {
                             initial={{scale: 0.8, opacity: 0}}
                             animate={{scale: 1, opacity: 1}}
                             exit={{scale: 0.8, opacity: 0}}
-                            transition={{type:'spring', stiffness: 200, damping: 20}}
-                            className={`p-6 rounded-xl w-80 shadow-xl bg-[var(--bg-main)]`}
+                            transition={{duration: 0.25, ease: 'easeInOut'}}
+                            className='p-8 rounded-md w-[22rem] shadow-xl gap-2 bg-[var(--baseAcc-b)] flex flex-col items-center'
                         >
-                            <h2 className={`text-lg font-semi-bold mb-4 text-[var(--text-a)]`}>
-                                Add New Task
-                            </h2>
+                            <h5 className='font-bold text-[var(--text-a)]'>
+                                Create Task
+                            </h5>
+
+                            {error && (
+                                <div className="error-message w-full">
+                                    <div className="flex flex-row items-center justify-center gap-1">
+                                        <img
+                                            src={ICONS[theme].warning}
+                                            className="bg-[var(--baseAcc-b)] rounded-full lg:p-0.5"
+                                            alt=""
+                                            aria-hidden='true'
+                                        />
+                                        <p className="font-bold">Error!</p>
+                                        <p className="text-[var(--text-a)]">{error}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setError('')}
+                                    >
+                                        <img
+                                            src={ICONS[theme].close}
+                                            className="lg:w-[1rem] aspect-square opacity-70"
+                                            alt=""
+                                            aria-hidden='true'
+                                        />
+                                    </button>
+                                </div>
+                            )}
 
                             <div className="space-y-3">
+                                
                                 <input
                                     type="text"
                                     value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
+                                    onChange={(e) => {
+                                        setTitle(e.target.value)
+                                        setError('');
+                                    }}
                                     placeholder="Task Title"
-                                    className="w-full text-sm p-2 rounded-md border focus:outline-none"
+                                    className="w-full text-sm p-2 rounded border"
                                 />
 
-                                <input
-                                    type="date"
-                                    value={due}
-                                    min={new Date().toISOString().split('T')[0]}
-                                    onChange={(e) => setDue(e.target.value)}
-                                    placeholder="Task Title"
-                                    className="w-full p-2 text-sm rounded-md border focus:outline-none"
+                                <textarea
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    placeholder="Short description (optional)"
+                                    rows={2}
+                                    className="w-full text-sm p-2 rounded border resize-none"
                                 />
 
-                                <select
-                                    value={priority}
-                                    onChange={(e) => setPriority(e.target.value)}
-                                    className="w-full p-2 text-sm rounded-md border focus:outline-none"
-                                >
-                                    <option value='low'>Low Priority</option>
-                                    <option value='medium'>Medium Priority</option>
-                                    <option value='high'>High Priority</option>
-                                </select>
+                                <div className="flex flex-row justify-between gap-2">
+                                    <input
+                                        type="datetime-local"
+                                        value={due}
+                                        min={nowStr}
+                                        onChange={(e) => {
+                                            setDue(e.target.value);
+                                            setError('');
+                                        }}
+                                        className="w-full p-2 text-sm rounded border"
+                                    />
+                                    
+                                    {/* optional priority */}
+                                    <select
+                                        value={priority}
+                                        onChange={(e) => setPriority(e.target.value)}
+                                        className="w-full p-2 text-sm rounded border"
+                                    >
+                                        <option value=''>No Priority</option>
+                                        <option value='low'>Low Priority</option>
+                                        <option value='normal'>Normal Priority</option>
+                                        <option value='high'>High Priority</option>
+                                    </select>
+                                </div>
                             </div>
 
-                            {error && (
-                                <p className="text-xs text-[var(--danger)] mt-1">{error}</p>
-                            )}
-
-                            <div className="flex justify-end gap-3 mt-5">
+                            <div className="flex justify-between gap-3 mt-5">
                                 
                                 <button
-                                    className="px-3 py-1 text-sm bg-[var(--icons-main)] hover:bg-[var(--iconsHover-main)] rounded-md"
+                                    className="error-popup-btn bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] border-[var(--f-main)] text-[var(--text-a)]"
                                     onClick={() => setOpen(false)}
                                 >
-                                    Cancel
+                                    <h6 className="font-semibold">Close</h6>
                                 </button>
 
                                 <button
-                                    className="px-3 py-1 text-sm bg-[var(--a-main)] hover:bg-[var(--aHover-main)] rounded-md"
+                                    className="error-popup-btn bg-[var(--baseAcc-a)] hover:bg-[var(--b-main)] border-[var(--b-main)] text-[var(--text-d)]"
                                     onClick={submitTask}
                                 >
-                                    Add
+                                    <h6 className="font-semibold">Create</h6>
                                 </button>
-
                             </div>
-
                         </motion.div>
                     </motion.div>
                 )}

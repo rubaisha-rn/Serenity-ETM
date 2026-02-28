@@ -61,36 +61,39 @@
     --successM: #b6d7c1;
     --successL: #dbfae6;
 
-    --priorityHigha: #ca5656;
-    --priorityHighb: #f6bfbf;
-    --priorityHighc: #f8dede;
-    --priorityHight: #b91c1c;
+    /* priority tabs/buttons */
+    --priorityHigha: #ff3131;
+    --priorityHighb: #e3bebe;
+    --priorityHighc: #f8e4e4;
+    --priorityHight: #ff3131;
 
-    --priorityNormala: #ffda44;
-    --priorityNormalb: #e8ddbb;
-    --priorityNormalc: #fcf6da;
-    --priorityNormalt: #ad8d10;
+    --priorityNormala: #d5af19;
+    --priorityNormalb: #f9f0d6;
+    --priorityNormalc: #fffceb;
+    --priorityNormalt: #f4c611;
 
-    --priorityLowa: #767676;
-    --priorityLowb: #bbbbbb;
-    --priorityLowc: #e6e6e6;
-    --priorityLowt: #525252;
+    --priorityLowa: #acacac;
+    --priorityLowb: #d2d2d2;
+    --priorityLowc: #f0f0f0;
+    --priorityLowt: #a6a6a6;
 
-    --progressNota: #ea8e42;
-    --progressNotb: #ffe0c0;
-    --progressNotc: #ffebd1;
-    --progressNott: #b9551c;
+    /* progress tabs/buttons */
+    --progressNota: #ff7517;
+    --progressNotb: #ffdbc2;
+    --progressNotc: #ffe7d6;
+    --progressNott: #ff7517;
 
-    --progressIna: #2f98d4;
-    --progressInb: #c1e1ff;
-    --progressInc: #d6ecff;
-    --progressInt: #1061ad;
+    --progressIna: #5170ff;
+    --progressInb: #cdd6ff;
+    --progressInc: #eaedff;
+    --progressInt: #5170ff;
 
-    --progressAlmosta: #49996a;
-    --progressAlmostb: #cdfde1;
-    --progressAlmostc: #d9fae9;
-    --progressAlmostt: #375947;
+    --progressAlmosta: #7ed957;
+    --progressAlmostb: #dbffcc;
+    --progressAlmostc: #eaffe2;
+    --progressAlmostt: #66af46;
 
+    /* mode banner */
     --focusMode: #04766b;
     --focusModeHover: #02574e;
    
@@ -98,17 +101,9 @@
     --priorityModeHover: #9b6719;
 
     --disabledMode: #272727;
-
-    /* fluid spacing */
-    --space-sm: clamp(0.5rem, 1vw, 0.75rem);
-    --space-md: clamp(0.75rem, 1.5vw, 1rem);
-    --space-lg: clamp(1rem, 2vw, 1.5rem);
 }
 
-.dark {
-    --text-a: #f0f0f0;
-    --text-b: #b3b3b3;
-}
+.dark {}
 
 /* base layer */
 @layer base {
@@ -304,7 +299,7 @@
         .side-bar-menu {@apply ml-3 w-40 rounded-md p-0.5; }
         .side-bar-menuitem {@apply p-0.5 px-2 gap-3 min-h-[28px]; }
         
-        .side-bar-toggle {@apply bottom-[5rem] p-1.5; }
+        .side-bar-toggle {@apply bottom-[5rem] p-1 py-3; }
         .side-bar-btn-style.expanded {@apply gap-2 w-[13rem] h-9 m-0.5 px-3 gap-3 rounded-lg; }
         .side-bar-btn-style.collapsed {@apply gap-0 py-0.5 px-1.5 rounded-md; }
         .side-bar-label {@apply text-sm; }

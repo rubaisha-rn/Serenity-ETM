@@ -144,16 +144,17 @@ export const useTaskStore = create((set, get) => ({
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
         
-        await supabase
+        const {data, error} = await supabase
             .from('tasks')
             .insert([{
                 user_id: sessionData.session.user.id,
                 ...task,
                 completed: false,
-                
-                priority: null,
-                priority_src: 'rules',
+                priority_src: task.priority ? 'user' : 'rules',
             }])
+            .select();
+
+        console.log('Task insertion result:', {data, error});
 
         get().loadTasks()
     },

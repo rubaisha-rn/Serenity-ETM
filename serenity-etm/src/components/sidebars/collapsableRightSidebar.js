@@ -35,7 +35,7 @@ export default function CollapsableRightSidebar() {
                 initial={false}
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
-                animate={{right: expandedRight ? 210 : 34}}
+                animate={{right: expandedRight ? 213 : 38}}
                 transition={{duration: 0.25, ease: 'easeInOut'}}
                 type='button'
                 aria-label={expandedRight ? 'Collapse adaptive workspace settings panel' : 'Expand adaptive workspace settings panel'}

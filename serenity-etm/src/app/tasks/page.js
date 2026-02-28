@@ -275,7 +275,16 @@ export default function TasksPage() {
                                     key={task.id}
                                     onClick={() => {
                                         // setSelectedEmail(task)
-                                        setSearchQuery('')
+                                        setSearchQuery('');
+
+                                        const el = document.getElementById(`task-${task.id}`);
+                                        if (el) {
+                                            el.scrollIntoView({behavior: 'smooth', block: 'center'});
+                                            el.classList.add('ring-2', 'ring-blue-500');
+                                            setTimeout(() => {
+                                               el.classList.remove('ring-2', 'ring-blue-500'); 
+                                            }, 1200);
+                                        }
                                     }}
                                     className="search-bar-results-show"
                                 >
@@ -408,6 +417,7 @@ export default function TasksPage() {
                 >
                     {filtered.map((task) => (
                         <motion.div
+                            id={`task-${task.id}`}
                             key={task.id}
                             layout
                             transition={easeTransition}
@@ -450,10 +460,11 @@ export default function TasksPage() {
                                     {grid && <TaskFunctionsMenu
                                         onComplete={() => toggleComplete(task.id)}
                                         onDelete={() => toggleDelete(task.id)}
+                                        completed={task.completed}
                                     />}
                                 </div>
 
-                                <p className="truncate">{task.description}</p>
+                                <p className={!grid ? "truncate" : ''}>{task.description}</p>
 
                                 <div className={grid ? `flex flex-row gap-2 items-center` : `text-center ${(new Date(task.due).getTime() < Date.now()) ? 'bg-[var(--priorityHighb)] rounded-sm' : ''}`}>
                                     {grid &&

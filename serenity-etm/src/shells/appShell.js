@@ -18,6 +18,7 @@ export default function AppShell({children}){
     
     const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, setFocusMode, priorityMode} = useStore();
     const router = useRouter();
+    const showSecondary = screen !== 'dashboard';
 
     // focus mode hysteresis
     useEffect(() => {
@@ -98,13 +99,16 @@ export default function AppShell({children}){
 
             <div className="app-shell"
                 style={{
-                    "--left": expandedSecondary ? '264px' : '100px',
+                    "--left": 
+                        showSecondary 
+                        ?   (expandedSecondary ? '264px' : '100px')
+                        : '50px',
                     "--right": expandedRight ? '225px' : '50px',
                 }}
             >
                 <aside className="side-panel">
                     <CollapsableLeftSidebar />
-                    <SecondarySidebar />
+                    {showSecondary && <SecondarySidebar />}
                 </aside>
                 
                 <main className="main-panel">

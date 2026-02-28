@@ -6,100 +6,116 @@ import { useState, useRef, useEffect } from 'react'
 import { ICONS } from '@/lib/assets'
 import useStore from '@/store/useStore'
 
-import { useFloating, offset, flip, shift, autoUpdate, useDismiss, useRole, useInteractions, FloatingPortal } from '@floating-ui/react'
-
-export default function TaskFunctionsMenu({onComplete, onDelete}) {
+export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
 
     const {theme} = useStore();
     const [open, setOpen] = useState(false);
+    const menuRef = useRef(null);
+    const buttonRef = useRef(null);
 
-    const {refs, floatingStyles, context} = useFloating({
-        placement: 'bottom-end',
-        open,
-        onOpenChange: setOpen,
-        whileElementsMounted: autoUpdate,
-        middleware: [
-            offset(6),
-            flip(),
-            shift({padding: 8})
-        ],
-    });
+    useEffect(() => {
+        const handler = (e) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(e.target) &&
+                !buttonRef.current.contains(e.target)
+            ) {
+                setOpen(false);
+            }
+        };
 
-    const dismiss = useDismiss(context)
-    const role = useRole(context, {role: 'menu'})
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, []);
 
-    const {getReferenceProps, getFloatingProps} = useInteractions([
-        dismiss, role
-    ])
+    // close on escape
+    useEffect(() => {
+        const handler = (e) => {
+            if (e.key === 'Escape') {
+                setOpen(false);
+                buttonRef.current?.focus();
+            }
+        };
+
+        document.addEventListener('keydown', handler);
+        return () => document.removeEventListener('keydown', handler);
+    }, []);
 
     return (
-        <>
-            {/* trigger button */}
-            <button 
-                ref={refs.setReference}
+        <div className='relative'>
+            
+            <motion.button 
+                ref={buttonRef}
                 type='button'
-                {...getReferenceProps({
-                    onClick: () => setOpen(v => !v)
-                })}
-            >
-                <span className='rotate-90 font-semibold leading-none'>...</span>
-            </button>
+                aria-haspopup="menu"
+                aria-expanded={open}
+                whileHover={{scale: 1.05}}
+                whileTap={{scale: 0.95}}
+                onClick={() => setOpen((v) => !v)}
+                onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setOpen((v) => !v);
+                    }
+                }}
+                className={`hover:bg-[var(--f-main)] p-0.5 ml-0.5 bg-none items-center justify-center`}>
+                <img
+                    src={open ? ICONS[theme].menuopen : ICONS[theme].menuclose}
+                    alt=''
+                    aria-hidden="true"
+                />
+            </motion.button>
 
             {/* menu */}
             <AnimatePresence>
                 {open && (
-                    <FloatingPortal>
-                        <motion.div
-                            ref={refs.setFloating}
-                            style={floatingStyles}
-                            {...getFloatingProps()}
-                            initial={{opacity: 0, scale: 0.96}}
-                            animate={{opacity: 1, scale: 1}}
-                            exit={{opacity: 0, scale: 0.96}}
-                            transition={{duration: 0.12}}
-                            className='bg-[var(--f-main)] z-[9999] w-44 rounded-xl'
+                    <motion.div
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1}}
+                        exit={{opacity: 0}}
+                        transition={{duration: 0.12}}
+                        ref={menuRef}
+                        role='menu'
+                        className='side-bar-menu bg-[var(--f-main)] -bottom-[60] -left-[155]'
+                    >
+                        <button
+                            role='menuitem'
+                            className='side-bar-menuitem bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] border-b-[0.02rem] border-b-black/15 text-[var(--text-a)]'
+                            onClick={() => {
+                                onComplete();
+                                setOpen(false);
+                            }}
                         >
-                            {/* settings */}
-                            <button
-                                className='side-bar-menuitem border-b-[0.02rem] border-b-black/15 bg-[var(--f-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]'
-                                onClick={() => {
-                                    onComplete()
-                                    setOpen(false)
-                                }}
-                            >
-                                <img
-                                    src={ICONS[theme].markcomplete}
-                                    className='lg:w-4 aspect-square'
-                                    aria-hidden="true"
-                                    alt=''
-                                />
-                                <h6>
-                                    Mark complete
-                                </h6>
-                            </button>
+                            <img
+                                src={completed ? ICONS[theme].markincomplete : ICONS[theme].markcomplete}
+                                aria-hidden="true"
+                                alt=''
+                            />
+                            <h6>
+                                Mark as {completed ? 'incomplete' : 'complete'}
+                            </h6>
+                        </button>
 
-                            {/* sign out */}
-                            <button
-                                className='side-bar-menuitem bg-[var(--f-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]'
-                                onClick={() => {
-                                    onDelete()
-                                    setOpen(false)
-                                }}
-                            >
-                                <img
-                                    src={ICONS[theme].delete}
-                                    className='lg:w-4 aspect-square'
-                                    aria-hidden="true"
-                                    alt=''
-                                />
-                                <h6>
-                                    Delete
-                                </h6>
-                            </button>
-                        </motion.div>
-                    </FloatingPortal>
+                        <button
+                            role='menuitem'
+                            className='side-bar-menuitem bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] text-[var(--text-a)]'
+                            onClick={() => {
+                                onDelete();
+                                setOpen(false);
+                            }}
+                        >
+                            <img
+                                src={ICONS[theme].delete}
+                                aria-hidden="true"
+                                alt=''
+                            />
+                            <h6>
+                                Delete
+                            </h6>
+                        </button>
+                    </motion.div>
                 )}
             </AnimatePresence>
-        </>
+        </div>
     )
 }
