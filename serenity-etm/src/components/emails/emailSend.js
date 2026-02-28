@@ -116,7 +116,7 @@ export default function EmailSend({onClose}) {
                         className="p-1 aspect-square items-center justify-center bg-[var(--f-main)] rounded"
                     >
                         <img
-                            src={ICONS[theme].dismiss}
+                            src={ICONS[theme].close}
                             alt=""
                             aria-hidden='true'
                         />
@@ -127,7 +127,7 @@ export default function EmailSend({onClose}) {
                     className="p-2 bg-[var(--a-main)] rounded"
                 >
                     <img
-                        src={ICONS[theme].send}
+                        src={ICONS[theme].sendo}
                         alt=""
                         aria-hidden='true'
                     />
@@ -139,7 +139,7 @@ export default function EmailSend({onClose}) {
                     <div className="flex flex-row items-center justify-center gap-1">
                         <img
                             src={ICONS[theme].warning}
-                            className="lg:h-[1rem] aspect-square bg-[var(--baseAcc-b)] rounded-full lg:p-0.5"
+                            className="bg-[var(--baseAcc-b)] rounded-full lg:p-0.5"
                             alt=""
                             aria-hidden='true'
                         />
@@ -150,7 +150,7 @@ export default function EmailSend({onClose}) {
                         onClick={() => setError('')}
                     >
                         <img
-                            src={ICONS[theme].dismiss}
+                            src={ICONS[theme].close}
                             className="lg:w-[1rem] aspect-square opacity-70"
                             alt=""
                             aria-hidden='true'

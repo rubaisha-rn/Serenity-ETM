@@ -165,7 +165,7 @@ export default function CollapsableRightSidebar() {
                                     ${sdkActive ? 'bg-[var(--e-main)]' : ''}`}
                                 >
                                     <img
-                                        src={ICONS[theme].stress}
+                                        src={ICONS[theme].stressdetect}
                                         alt=''
                                         aria-hidden='true'
                                     />

@@ -108,7 +108,7 @@ export default function AppShell({children}){
                 </aside>
                 
                 <main className="main-panel">
-                    <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} />
+                    {/* <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} /> */}
                     {/* <PrototypeTag /> */}
                     {/* <BreakPopup /> */}
                     {children}

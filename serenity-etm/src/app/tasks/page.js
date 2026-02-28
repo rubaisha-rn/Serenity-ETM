@@ -298,7 +298,7 @@ export default function TasksPage() {
                         onClick={() => setGrid(!grid)}
                     >
                         <img
-                            src={grid ? ICONS[theme].rows : ICONS[theme].grid}
+                            src={grid ? ICONS[theme].row : ICONS[theme].grid}
                         />
                     </button>
 
@@ -340,14 +340,22 @@ export default function TasksPage() {
                             className="batch-func-btn-hover"
                             onClick={() => markManyComplete(selectedIds)}
                         >
-                            <p>Complete</p>
+                            <img
+                                src={ICONS[theme].markcomplete}
+                                alt=""
+                                aria-hidden='true'
+                            />
                         </button>
                         : 
                         <button
                             className="batch-func-btn-hover"
                             onClick={() => markManyComplete(selectedIds, false)}
                         >
-                            <p>Incomplete</p>
+                            <img
+                                src={ICONS[theme].markincomplete}
+                                alt=""
+                                aria-hidden='true'
+                            />
                         </button>
                     }
 
@@ -450,7 +458,7 @@ export default function TasksPage() {
                                 <div className={grid ? `flex flex-row gap-2 items-center` : `text-center ${(new Date(task.due).getTime() < Date.now()) ? 'bg-[var(--priorityHighb)] rounded-sm' : ''}`}>
                                     {grid &&
                                             <img
-                                                src={ICONS[theme].calender}
+                                                src={ICONS[theme].date}
                                             />
                                     }
                                     <p>{formatTaskDate(task.due)}</p>

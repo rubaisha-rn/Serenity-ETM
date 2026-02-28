@@ -322,7 +322,7 @@ export default function EmailsPage () {
                                 className="batch-func-btn-hover"
                                 onClick={() => markManyRead(selectedIds, true)}>
                                 <img
-                                    src={ICONS[theme].draft}
+                                    src={ICONS[theme].read}
                                     alt=""
                                     aria-hidden='true'
                                 />
@@ -342,7 +342,7 @@ export default function EmailsPage () {
                                     className="batch-func-btn-hover"
                                     onClick={() => archiveMany(selectedIds)}>
                                     <img
-                                        src={ICONS[theme].archiveo}
+                                        src={ICONS[theme].archive}
                                         alt=""
                                         aria-hidden='true'
                                     />

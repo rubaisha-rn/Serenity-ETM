@@ -143,7 +143,7 @@ export default function CollapsableLeftSidebar() {
                         className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='emails' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
-                            src={ICONS[theme].email}
+                            src={ICONS[theme].emails}
                             alt=''
                             aria-hidden='true'
                         />
@@ -190,7 +190,7 @@ export default function CollapsableLeftSidebar() {
                         className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='tasks' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
-                            src={ICONS[theme].task}
+                            src={ICONS[theme].tasks}
                             aria-hidden="true"
                             alt=''
                         />

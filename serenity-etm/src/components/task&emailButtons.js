@@ -13,7 +13,7 @@ const taskGroups = [
     {
         label: 'Overview',
         buttons: [
-            {label: 'All Tasks', key: 'all', icon: ICONS[theme].tasks, shortcut: '1'},
+            {label: 'All Tasks', key: 'all', icon: ICONS[theme].alltasks, shortcut: '1'},
         ],
     },
     {
@@ -59,16 +59,16 @@ const emailGroups = [
     {
         label: 'Incoming',
         buttons: [
-            {label: 'Inbox', key: 'inbox', icon: ICONS[theme].inbox, shortcut: '1'},
-            {label: 'Starred', key: 'starred', icon: ICONS[theme].starred, shortcut: '2'},
+            {label: 'Inbox', key: 'inbox', icon: ICONS[theme].mail, shortcut: '1'},
+            {label: 'Starred', key: 'starred', icon: ICONS[theme].star, shortcut: '2'},
             {label: 'Important', key: 'priority', icon: ICONS[theme].priority, shortcut: '3'},
         ],
     },
     {
         label: 'Outgoing',
         buttons: [
-            {label: 'Sent', key: 'sent', icon: ICONS[theme].sent, shortcut: '4'},
-            {label: 'Drafts', key: 'drafts', icon: ICONS[theme].draft, shortcut: '5'},
+            {label: 'Sent', key: 'sent', icon: ICONS[theme].send, shortcut: '4'},
+            {label: 'Drafts', key: 'drafts', icon: ICONS[theme].drafts, shortcut: '5'},
         ],
     },
     {

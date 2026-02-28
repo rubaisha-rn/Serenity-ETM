@@ -40,9 +40,9 @@ export default function ModeBanner({mode}) {
                             <img
                                 src={
                                     mode === 'focus'
-                                    ? ICONS[theme].focusW
+                                    ? ICONS[theme].focuso
                                     : mode === 'priority'
-                                    ? ICONS[theme].priorityW
+                                    ? ICONS[theme].priorityo
                                     : ICONS[theme].info
                                 }
                             />

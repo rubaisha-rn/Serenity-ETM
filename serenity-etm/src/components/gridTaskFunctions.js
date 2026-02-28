@@ -68,7 +68,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete}) {
                                 }}
                             >
                                 <img
-                                    src={ICONS[theme].settings}
+                                    src={ICONS[theme].markcomplete}
                                     className='lg:w-4 aspect-square'
                                     aria-hidden="true"
                                     alt=''
@@ -87,7 +87,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete}) {
                                 }}
                             >
                                 <img
-                                    src={ICONS[theme].signout}
+                                    src={ICONS[theme].delete}
                                     className='lg:w-4 aspect-square'
                                     aria-hidden="true"
                                     alt=''

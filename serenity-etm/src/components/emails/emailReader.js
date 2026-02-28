@@ -151,7 +151,7 @@ export default function EmailReader() {
                     onClick={() => {replyMode ? handleReplyClose() : setSelectedEmail(null)}}
                 >
                     <img
-                        src={ICONS[theme].dismiss}
+                        src={ICONS[theme].close}
                         alt=""
                         aria-hidden='true'
                     />
@@ -224,7 +224,7 @@ export default function EmailReader() {
                             className="p-2 bg-[var(--a-main)] rounded"
                         >
                             <img
-                                src={ICONS[theme].send}
+                                src={ICONS[theme].sendo}
                                 alt=""
                                 aria-hidden='true'
                             />
@@ -253,7 +253,7 @@ export default function EmailReader() {
                                     onClick={() => setError('')}
                                 >
                                     <img
-                                        src={ICONS[theme].dismiss}
+                                        src={ICONS[theme].close}
                                         className="opacity-70"
                                         alt=""
                                         aria-hidden='true'

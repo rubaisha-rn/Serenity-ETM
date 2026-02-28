@@ -72,7 +72,7 @@ export default function ProfileSettingsMenu() {
                 }}
                 className={`side-bar-btn-style hover:bg-[var(--b-main)] p-0.5 ml-0.5 ${open ? 'bg-[var(--a-main)]' : ''}`}>
                 <img
-                    src={ICONS[theme].profileSettings}
+                    src={ICONS[theme].profile}
                     className='aspect-square'
                     alt=''
                     aria-hidden="true"
