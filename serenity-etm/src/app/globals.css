@@ -45,21 +45,11 @@
     --text-c: #585858;
     --text-d: #ffffff;
 
+    /* warning labels and prototype tag */
     --danger: #b91c1c;
     --dangerH: #871111;
     --dangerL: #ffd8d8;
     --dangerHover: #ebb2b2;
-
-    --warning: #cba615;
-    --warningL: #fff4d5;
-    --warningH: #ad8d10;
-    --warningHover: #e6d5a8;
-
-    --neutral: #0062ff;
-
-    --success: #00ad45;
-    --successM: #b6d7c1;
-    --successL: #dbfae6;
 
     /* priority tabs/buttons */
     --priorityHigha: #ff3131;
@@ -118,7 +108,14 @@
         overflow-x: hidden;
     }
 
-    /* button, input, textarea { @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500; } */
+    button, input, textarea { 
+        @apply focus:outline-none 
+        focus-visible:ring-2 
+        focus-visible:ring-blue-500/60 
+        focus-visible:ring-offset-0 
+        focus-visible:shadow-[0_0_0_3px_rgba(59,130,246,0.25)]
+        transition-all duration-150; 
+    }
 
     /* typography */
     h1 { @apply text-2xl font-bold; } 

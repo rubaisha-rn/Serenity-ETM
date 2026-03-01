@@ -271,6 +271,7 @@ export default function TasksPage() {
                             {searchResults.map(task => (
                                 <motion.div
                                     key={task.id}
+                                    role="button"
                                     onClick={() => {
                                         setSearchQuery('');
 
@@ -283,7 +284,20 @@ export default function TasksPage() {
                                             }, 1200);
                                         }
                                     }}
-                                    className="flex flex-col m-0.5 border-b border-[var(--f-main)] hover:bg-[var(--f-main)] cursor-pointer search-bar-results-show"
+                                    onKeyDown={(e) => {
+                                        if(e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault()
+                                            setSelectedEmail(mail)
+                                            setSearchQuery('')
+                                        }
+                                    }}
+                                    className="flex flex-col m-0.5 border-b border-[var(--f-main)] hover:bg-[var(--f-main)] cursor-pointer search-bar-results-show
+                                    focus:outline-none 
+                                    focus-visible:ring-2 
+                                    focus-visible:ring-blue-500/60 
+                                    focus-visible:ring-offset-0 
+                                    focus-visible:shadow-[0_0_0_3px_rgba(59,130,246,0.25)]
+                                    transition-all duration-150"
                                 >
                                     <div className="flex flex-row justify-between font-bold">
                                         <p>{task.title}</p>
