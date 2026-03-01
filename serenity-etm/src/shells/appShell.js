@@ -10,7 +10,7 @@ import CollapsableLeftSidebar from "@/components/sidebars/collapsableLeftSidebar
 import CollapsableRightSidebar from "@/components/sidebars/collapsableRightSidebar";
 import SecondarySidebar from "@/components/sidebars/secondarySidebar";
 import PrototypeTag from "@/components/prototypeTag";
-import ThinFooter from "@/components/footers/thinFooter";
+import ThinFooter from "@/components/footer/thinFooter";
 import ModeBanner from "@/components/modeBanner";
 import BreakPopup from "@/components/breakPopup";
 
@@ -112,8 +112,8 @@ export default function AppShell({children}){
                 </aside>
                 
                 <main className="main-panel">
-                    {/* <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} /> */}
-                    {/* <PrototypeTag /> */}
+                    <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} />
+                    <PrototypeTag />
                     {/* <BreakPopup /> */}
                     {children}
                 </main>

@@ -3,10 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useStore from '@/store/useStore';
-import Header from '@/components/header';
+import Header from '@/components/header/header';
 import Image from 'next/image';
 import PrototypeTag from '@/components/prototypeTag';
-import ThinFooter from '@/components/footers/thinFooter';
+import ThinFooter from '@/components/footer/thinFooter';
 
 export default function IntroPage() {
     

@@ -7,7 +7,7 @@ import useStore from "@/store/useStore";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
-import TaskFunctionsMenu from "@/components/gridTaskFunctions";
+import TaskFunctionsMenu from "@/components/tasks/gridTaskFunctions";
 
 import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
@@ -274,7 +274,6 @@ export default function TasksPage() {
                                 <motion.div
                                     key={task.id}
                                     onClick={() => {
-                                        // setSelectedEmail(task)
                                         setSearchQuery('');
 
                                         const el = document.getElementById(`task-${task.id}`);
@@ -347,7 +346,10 @@ export default function TasksPage() {
                     {showTasks !== 'completed' ? 
                         <button
                             className="batch-func-btn-hover"
-                            onClick={() => markManyComplete(selectedIds)}
+                            onClick={() => {
+                                markManyComplete(selectedIds);
+                                setCompletedTasksCount(completedTasksCount+selectedIds.length);  
+                            }}
                         >
                             <img
                                 src={ICONS[theme].markcomplete}

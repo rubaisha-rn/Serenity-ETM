@@ -5,9 +5,11 @@ import {motion, AnimatePresence} from 'framer-motion'
 import { useState, useRef, useEffect } from 'react'
 import { ICONS } from '@/lib/assets'
 import useStore from '@/store/useStore'
+import { useTaskStore } from '@/store/taskStore'
 
 export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
 
+    const {setCompletedTasksCount, completedTasksCount} = useTaskStore();
     const {theme} = useStore();
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
@@ -83,6 +85,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
                             className='side-bar-menuitem bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] border-b-[0.02rem] border-b-black/15 text-[var(--text-a)]'
                             onClick={() => {
                                 onComplete();
+                                {completed ? '' : setCompletedTasksCount(completedTasksCount+1)}
                                 setOpen(false);
                             }}
                         >
