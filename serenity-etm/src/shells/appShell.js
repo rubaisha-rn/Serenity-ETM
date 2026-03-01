@@ -12,11 +12,11 @@ import SecondarySidebar from "@/components/sidebars/secondarySidebar";
 import PrototypeTag from "@/components/prototypeTag";
 import ThinFooter from "@/components/footer/thinFooter";
 import ModeBanner from "@/components/modeBanner";
-import BreakPopup from "@/components/breakPopup";
+import MicroInterventionPopup from "@/components/microIntervention";
 
 export default function AppShell({children}){
     
-    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, setFocusMode, priorityMode} = useStore();
+    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, setFocusMode, priorityMode, sdkActive} = useStore();
     const router = useRouter();
     const showSecondary = screen !== 'dashboard';
 
@@ -113,8 +113,9 @@ export default function AppShell({children}){
                 
                 <main className="main-panel">
                     <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} />
-                    <PrototypeTag />
-                    {/* <BreakPopup /> */}
+                    {/* <PrototypeTag /> */}
+                    {/* only when sdk is active? */}
+                    <MicroInterventionPopup />
                     {children}
                 </main>
 

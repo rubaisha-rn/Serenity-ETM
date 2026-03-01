@@ -86,8 +86,6 @@ export default function TasksPage() {
 
     useEffect(() => {
 
-        if (emotionValue > 85 && sdkActive) setCalmMode(true);
-        
         let results = [...tasks];
 
         const today = new Date();

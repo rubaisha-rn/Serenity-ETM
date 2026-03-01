@@ -81,9 +81,6 @@ export default function EmailsPage () {
     // main filter + sorting pipeline
     useEffect(() => {
         
-        // calm mode logic
-        if (emotionValue > 85 && sdkActive) setCalmMode(true);
-
         let results = [...emails];
 
         // category filtering
