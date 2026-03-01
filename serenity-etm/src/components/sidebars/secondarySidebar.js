@@ -44,7 +44,7 @@ export default function SecondarySidebar() {
             initial={{width: 0, left: 50}}
             animate={{width: expandedSecondary ? 210 : 46, left: 50}}
             transition={{type: 'spring', stiffness: 260, damping: 36}}
-            className={`${expandedSecondary ? 'secondary-side-bar' : 'side-bar ml-1 pt-0.5'}`}
+            className={`${expandedSecondary ? 'fixed top-1 overflow-hidden items-center justify-center motion-safe:transition-colors shadow-xl backdrop-blur-xl z-10 secondary-side-bar' : 'fixed top-1 flex flex-col justify-between shadow-xl z-20 side-bar ml-1 pt-0.5'}`}
         >
             <div role="menu" aria-label={`${headingText} options`} className="flex flex-col gap-1">
 

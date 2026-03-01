@@ -42,7 +42,7 @@ export const TaskButtons = React.memo(({expandedSecondary, setShowTasks}) => (
         {taskGroups.map((group) => (
             <div key={group.label} className={`flex flex-col gap-1`}>
                 {expandedSecondary && (    
-                    <div className="group-label">
+                    <div className="text-[var(--text-b)] leading-tight group-label">
                         {group.label}
                     </div>
                 )}
@@ -84,7 +84,7 @@ export const EmailButtons = React.memo(({expandedSecondary, setShowEmails}) => (
         {emailGroups.map((group) => (
             <div key={group.label} className={`flex flex-col gap-1`}>
                 {expandedSecondary && (
-                    <div className="group-label">
+                    <div className="text-[var(--text-b)] leading-tight group-label">
                         {group.label}
                     </div>
                 )}

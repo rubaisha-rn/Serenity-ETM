@@ -41,10 +41,10 @@ export default function CollapsableLeftSidebar() {
     return (
         <nav
             aria-label='Primary Navigation'
-            className='side-bar left-1 bg-[var(--baseAcc-a)]'
+            className='fixed top-1 flex flex-col justify-between shadow-xl z-20 side-bar left-1 bg-[var(--baseAcc-a)]'
         >
             {/* navigation buttons */}
-            <div role='menu' className='side-bar-btn flex flex-col'>
+            <div role='menu' className='items-center side-bar-btn flex flex-col'>
                 
                 {/* brand logo */}
                 <img
@@ -58,7 +58,7 @@ export default function CollapsableLeftSidebar() {
 
                     {/* active bar indicator */}
                     {screen === 'dashboard' && (
-                        <div className='side-bar-btn-active left-0'/>
+                        <div className='absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active left-0'/>
                     )}
 
                     <motion.button
@@ -92,7 +92,7 @@ export default function CollapsableLeftSidebar() {
                                 }
                             })
                         }
-                        className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='dashboard' ? 'bg-[var(--a-main)]' : ''}`}
+                        className={`flex items-center justify-center transition-colors side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='dashboard' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].dashboard}
@@ -106,7 +106,7 @@ export default function CollapsableLeftSidebar() {
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'emails' && (
-                        <div className='side-bar-btn-active left-0'/>
+                        <div className='absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active left-0'/>
                     )}
 
                     <motion.button
@@ -140,7 +140,7 @@ export default function CollapsableLeftSidebar() {
                                 }
                             })
                         }
-                        className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='emails' ? 'bg-[var(--a-main)]' : ''}`}
+                        className={`flex items-center justify-center transition-colors side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='emails' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].emails}
@@ -154,7 +154,7 @@ export default function CollapsableLeftSidebar() {
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'tasks' && (
-                        <div className='side-bar-btn-active left-0'/>
+                        <div className='absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active left-0'/>
                     )}
                     <motion.button
                         whileHover={{scale: 1.05}}
@@ -187,7 +187,7 @@ export default function CollapsableLeftSidebar() {
                                 }
                             })
                         }
-                        className={`side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='tasks' ? 'bg-[var(--a-main)]' : ''}`}
+                        className={`flex items-center justify-center transition-colors side-bar-btn-style hover:bg-[var(--b-main)] ${screen==='tasks' ? 'bg-[var(--a-main)]' : ''}`}
                     >
                         <img
                             src={ICONS[theme].tasks}

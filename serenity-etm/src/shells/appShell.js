@@ -103,10 +103,10 @@ export default function AppShell({children}){
                         showSecondary 
                         ?   (expandedSecondary ? '264px' : '100px')
                         : '50px',
-                    "--right": expandedRight ? '225px' : '50px',
+                    "--right": expandedRight ? '214px' : '50px',
                 }}
             >
-                <aside className="side-panel">
+                <aside className="flex flex-col overflow-hidden">
                     <CollapsableLeftSidebar />
                     {showSecondary && <SecondarySidebar />}
                 </aside>
@@ -115,15 +115,15 @@ export default function AppShell({children}){
                     <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} />
                     {/* <PrototypeTag /> */}
                     {/* only when sdk is active? */}
-                    <MicroInterventionPopup />
+                    {/* <MicroInterventionPopup /> */}
                     {children}
                 </main>
 
-                <aside className="side-panel">
+                <aside className="flex flex-col overflow-hidden">
                     <CollapsableRightSidebar />
                 </aside>
 
-                <footer className="footer">
+                <footer className="z-0 footer">
                     <ThinFooter />
                 </footer>
             </div>

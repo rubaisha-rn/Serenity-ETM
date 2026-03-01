@@ -137,18 +137,14 @@ export default function EmailReader() {
     }
 
     return (
-        <div className="send-email-container h-full flex flex-col min-h-0 w-full">
+        <div className="send-email-container h-full flex flex-col min-h-0 w-full border-l-[0.008rem] border-[var(--f-main)] bg-[var(--baseAcc-b)]">
 
             {/* toolbar */}
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between h-auto mb-1 toolbar">
+                
                 <button
-                    className="p-1 bg-[var(--f-main)] rounded aspect-square 
-                    sm:w-[1rem]
-                    md:w-[1.2rem]
-                    lg:w-[1.9rem]
-                    xl:w-[1.9rem]
-                    2xl:w-[2rem]"
-                    onClick={() => {replyMode ? handleReplyClose() : setSelectedEmail(null)}}
+                    className="prim-act-btn task-layout-btn bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] border-[var(--f-main)]"
+                    onClick={() => {handleReplyClose(); setSelectedEmail(null);}}
                 >
                     <img
                         src={ICONS[theme].close}
@@ -166,7 +162,7 @@ export default function EmailReader() {
                                     setReplyMode(true)
                                     setReplyBody('')
                                 }}
-                                className="batch-func-btn-hover"
+                                className="opacity-80 hover:opacity-60 transform transition-transform duration-200 ease-out hover:scale-105"
                             >
                                 <img
                                     src={ICONS[theme].reply}
@@ -176,7 +172,7 @@ export default function EmailReader() {
                             </button>
                         
                             <button 
-                                className="batch-func-btn-hover"
+                                className="opacity-80 hover:opacity-60 transform transition-transform duration-200 ease-out hover:scale-105"
                                 onClick={() => {
                                     archiveMany([selectedEmail.id])
                                     setSelectedEmail(null)
@@ -192,7 +188,7 @@ export default function EmailReader() {
 
                     {(selectedEmail.folder === 'archive') && (
                         <button 
-                            className="batch-func-btn-hover"
+                            className="opacity-80 hover:opacity-60 transform transition-transform duration-200 ease-out hover:scale-105"
                             onClick={() => {
                                 unarchiveMany([selectedEmail.id])
                                 setSelectedEmail(null)
@@ -206,7 +202,7 @@ export default function EmailReader() {
                     )}  
 
                     <button 
-                        className="batch-func-btn-hover"
+                        className="opacity-80 hover:opacity-60 transform transition-transform duration-200 ease-out hover:scale-105"
                         onClick={() => {
                             deleteMany([selectedEmail.id])
                             setSelectedEmail(null)
@@ -221,7 +217,7 @@ export default function EmailReader() {
                     {(isDraft || replyMode) && (
                         <button 
                             onClick={isDraft ? sendDraftEmail : sendReply}
-                            className="p-2 bg-[var(--a-main)] rounded"
+                            className="prim-act-btn task-layout-btn"
                         >
                             <img
                                 src={ICONS[theme].sendo}
@@ -267,24 +263,24 @@ export default function EmailReader() {
                             animate={{opacity:1}}
                             exit={{opacity:0, scale:0.98, position: 'absolute', inset: 0}}
                             transition={easeTransition}
-                            className="min-h-0 h-full overflow-hidden pb-6"
+                            className="min-h-0 h-full overflow-hidden pb-6 flex flex-col"
                         >
                             <input
-                                className="send-email-container input"
+                                className="send-email-container input border-y"
                                 placeholder="To: janedoe@example.com"
                                 value={editTo}
                                 onChange={e => setEditTo(e.target.value)}
                             />
 
                             <input
-                                className="send-email-container input"
+                                className="send-email-container input border-y"
                                 placeholder="Subject"
                                 value={editSubject}
                                 onChange={e => setEditSubject(e.target.value)}
                             />
 
                             <textarea
-                                className="send-email-container input flex-1 min-h-[320px] overflow-y-auto"
+                                className="send-email-container input border-y flex-1 min-h-[320px] overflow-y-auto"
                                 placeholder="Compose email"
                                 value={editBody}
                                 onChange={e => setEditBody(e.target.value)}
@@ -299,15 +295,17 @@ export default function EmailReader() {
                         transition={easeTransition}
                         className="flex flex-col gap-1 pb-6"
                     >
-                        <h3>{selectedEmail.subject}</h3>
-                        <p>From: {selectedEmail.isSender ? 'Me' : selectedEmail.from_name || selectedEmail.from_email}</p>
-                        <p>To: {selectedEmail.isReceiver ? 'Me' : selectedEmail.to_name || selectedEmail.to_email}</p>
-                        <p>Date: {new Date(selectedEmail.timestamp).toLocaleDateString()} at {new Date(selectedEmail.timestamp).toLocaleTimeString('en-US', {
+                        <div className="flex flex-row justify-between">
+                            <h5>{selectedEmail.subject || '(No subject)'}</h5>
+                            <p>{new Date(selectedEmail.timestamp).toLocaleDateString()} at {new Date(selectedEmail.timestamp).toLocaleTimeString('en-US', {
                                 hour: 'numeric',
                                 minute: '2-digit',
                                 hour12: true,
                             })}</p>
-                        <p className="text-sm">{selectedEmail.body}</p>
+                        </div>
+                        <p className="text-[var(--text-b)]">From: {selectedEmail.isSender ? 'Me' : selectedEmail.from_name || selectedEmail.from_email}</p>
+                        <p className="text-[var(--text-b)]">To: {selectedEmail.isReceiver ? 'Me' : selectedEmail.to_name || selectedEmail.to_email}</p>
+                        <p className="text-xs">{selectedEmail.body || '(No body)'}</p>
                     </div>
                 )}
 
@@ -326,7 +324,7 @@ export default function EmailReader() {
                         <textarea
                             value={replyBody}
                             onChange={(e) => setReplyBody(e.target.value)}
-                            className="send-email-container input flex-1 min-h-[320px] overflow-y-auto"
+                            className="send-email-container input border-y flex-1 min-h-[320px] overflow-y-auto"
                             placeholder="Type your reply"
                         />
                     </div>

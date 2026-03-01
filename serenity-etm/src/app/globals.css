@@ -118,7 +118,7 @@
         overflow-x: hidden;
     }
 
-    button, input, textarea { @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500; }
+    /* button, input, textarea { @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500; } */
 
     /* typography */
     h1 { @apply text-2xl font-bold; } 
@@ -144,48 +144,23 @@
             var(--right, 50px);
         grid-template-rows: 1fr auto;
     }
-    .side-panel { @apply flex flex-col overflow-hidden; }
-    .footer {@apply z-0; }
-    .main-content { @apply flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0; }
-    .prototype { @apply fixed -bottom-2 right-1 px-4 py-0.5 pb-2.5 rounded-md bg-[var(--danger)] hover:bg-[var(--dangerH)] text-[var(--text-d)] shadow-black/50 shadow z-[9999] transition-opacity duration-100; }
-    .side-bar { @apply fixed top-1 flex flex-col justify-between shadow-xl z-20; }
-    .side-bar-btn {@apply items-center gap-1.5; }
-    .side-bar-btn-active {@apply absolute bg-[var(--g-main)] rounded-full shadow; }
-    .side-bar-btn-style {@apply flex items-center justify-center transition-colors; }
-    .side-bar-menu {@apply absolute bottom-0 left-full bg-[var(--baseAcc-a)] shadow-xl text-[var(--text-d)] shadow-xl z-20; }
-    .side-bar-menuitem {@apply w-full flex items-center justify-start hover:bg-[var(--b-main)] rounded motion-safe:transition-colors z-20; }
-    .side-bar-toggle {@apply fixed bg-[var(--baseAcc-a)] hover:bg-[var(--a-main)] shadow-xl rounded-full z-30; }
-    .side-bar-btn-style.expanded {@apply justify-start; }
-    .side-bar-btn-style.collapsed {@apply justify-center; }
-    .side-bar-label {@apply text-[var(--text-a)] whitespace-nowrap transition-all duration-150; }
-    .side-bar-label.hide {@apply opacity-0 w-0 overflow-hidden; }
-    .side-bar-label.show {@apply opacity-100; }
-    .side-bar-help {@apply flex transition-all duration-150 text-[var(--text-b)] leading-tight; }
-    .side-bar-info {@apply shrink-0; }
-    .secondary-side-bar {@apply fixed top-1 overflow-hidden items-center justify-center motion-safe:transition-colors shadow-xl backdrop-blur-xl z-10; }
+            
     .secondary-side-bar-btn {@apply flex items-center w-full rounded; }
     .secondary-side-bar-btn.expanded {@apply justify-start; }
     .secondary-side-bar-btn.collapsed {@apply justify-center; }
+
     .secondary-side-bar-label {@apply text-[var(--text-a)] font-semibold whitespace-nowrap transition-all duration-150; }
     .secondary-side-bar-label.show {@apply opacity-100; }
     .secondary-side-bar-label.hide {@apply opacity-0 w-0 overflow-hidden; }
-    .group-label {@apply text-[var(--text-b)] leading-tight; }
-    .search-bar {@apply flex-1 border-[var(--d-main)] bg-[var(--baseAcc-b)] text-[var(--text-a)] outline-none shadow shadow-black/10 items-center; }
-    .search-bar-results {@apply absolute top-full w-full leading-tight border-[var(--d-main)] bg-[var(--baseAcc-b)] shadow-lg z-30 overflow-auto; }
-    .search-bar-results-show {@apply border-b border-[var(--d-main)] hover:bg-[var(--f-main)] cursor-pointer; }
-    .new-button {@apply bg-[var(--a-main)] border-[var(--a-main)] flex flex-row items-center justify-center hover:bg-[var(--c-main)] text-[var(--text-d)] transform transition-transform duration-300 ease-out hover:scale-105; }
-    .batch-func {@apply flex flex-row; }
-    .batch-func-btn-hover {@apply opacity-80 hover:opacity-60; }
-    .email-grid {@apply justify-start items-center text-left; }
-    .send-email-container {@apply flex flex-col flex-1 min-h-0 bg-[var(--baseAcc-b)] z-0; }
-    .send-email-container.input {@apply w-full border-y; }
+    
+    .prim-act-btn {@apply bg-[var(--baseAcc-a)] border-[var(--a-main)] flex flex-row items-center justify-center text-[var(--text-d)] transform transition-transform duration-200 ease-out hover:scale-105 hover:bg-[var(--a-main)]; }
+        
     .error-message {@apply bg-[var(--dangerL)] flex items-center justify-between; }
     .error-popup {@apply bg-[var(--baseAcc-b)] flex flex-col items-center text-center; }
+    
     .error-popup-btn {@apply items-center; }
     .error-popup-btn.a {@apply bg-[var(--d-main)] border-[var(--c-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]; }
     .error-popup-btn.b {@apply bg-[var(--dangerH)] border-[var(--danger)] hover:bg-[var(--danger)] text-[var(--text-d)]; }
-    .priority-tag {@apply flex flex-row justify-center items-center; }
-    .progress-tag {@apply flex flex-row justify-center items-center; }
 }
 
 /* responsiveness */
@@ -262,8 +237,8 @@
         
         img {@apply w-3 aspect-square; }
         .batch-func img { @apply w-3.5 aspect-square; }
-        .side-bar-menu button img { @apply w-4 aspect-square; }
-        .secondary-side-bar img, .layout-button img { @apply w-5 aspect-square; }
+        .side-bar-menu button img, .mode-banner img { @apply w-4 aspect-square; }
+        .secondary-side-bar img, .task-layout-btn img, .toolbar img { @apply w-5 aspect-square; }
         .side-bar img { @apply w-6 aspect-square; }
 
         .side-bar,
@@ -290,6 +265,8 @@
         .main-panel { @apply flex flex-col h-full min-h-0 m-1 mx-2 gap-1; }
         .footer { grid-column: 1 / -1; }
         .main-content { @apply mb-6; }
+
+        .prototype { @apply px-4 py-0.5 pb-2.5 rounded-md; }
         
         .side-bar { @apply px-1 py-2 w-12 h-[calc(100vh-0.5rem)] rounded-lg; }
         .side-bar-btn {@apply gap-1.5; }
@@ -300,25 +277,29 @@
         .side-bar-menuitem {@apply p-0.5 px-2 gap-3 min-h-[28px]; }
         
         .side-bar-toggle {@apply bottom-[5rem] p-1 py-3; }
-        .side-bar-btn-style.expanded {@apply gap-2 w-[13rem] h-9 m-0.5 px-3 gap-3 rounded-lg; }
+
+        .side-bar-btn-style.expanded {@apply gap-2 w-[12.4rem] h-9 m-0.5 px-3 gap-3 rounded-lg justify-start; }
         .side-bar-btn-style.collapsed {@apply gap-0 py-0.5 px-1.5 rounded-md; }
+
         .side-bar-label {@apply text-sm; }
         .side-bar-help {@apply gap-1 text-[0.6rem]; }
-        .side-bar-info {@apply w-2 h-2 mt-0.5; }
+        .side-bar-info {@apply w-2 h-2 mt-0.5 mx-1; }
         
         .secondary-side-bar {@apply p-2 pt-3 ml-1 h-[calc(100vh-0.5rem)] rounded-lg; }
         .secondary-side-bar-btn.expanded {@apply h-7 px-1 gap-3; }
         .secondary-side-bar-btn.collapsed {@apply gap-0 rounded-md; }
+        
         .secondary-side-bar-label {@apply text-[0.8rem]; }
         
         .group-label {@apply text-[0.65rem]; }
         
-        .search-bar {@apply border-[0.08rem] text-sm px-3 py-0.5 rounded-md w-[38rem] h-[1.9rem]; }
-        .search-bar-results {@apply mt-1 rounded-md w-[40rem] max-h-[400px]; }
-        .search-bar-results-show {@apply px-3 py-1 border-b-[0.08rem]; }
+        .search-bar {@apply border-[0.08rem] text-sm px-3 py-1 rounded-md w-2/3 h-auto; }
+        .search-bar-results {@apply border-[0.08rem] text-sm mt-1 rounded-md w-2/3 max-h-[30rem]; }
+        .search-bar-results-show {@apply px-3 py-0.5 border-b-[0.08rem]; }
         
-        .new-button {@apply w-[6.5rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
-        
+        .prim-act-btn {@apply w-[8rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
+        .task-layout-btn {@apply w-auto;}
+
         .batch-func {@apply gap-3 mx-1; }
         
         .email-grid {@apply gap-2; }
@@ -330,10 +311,9 @@
         .error-popup {@apply p-8 rounded-md w-[22rem] shadow-xl gap-2; }
         .error-popup-btn {@apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
         
-        .priority-tag {@apply w-[5.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
-        .progress-tag {@apply w-[9.5vw] rounded-sm p-0.5 gap-1 border-[0.05rem]; }
-        
-        .layout-button {@apply w-auto;}
+        .priority-tag, .progress-tag {@apply w-full mx-2 rounded-sm py-0.5 px-3 gap-1 border-[0.08rem]; }
+
+        .mode-banner {@apply px-3 py-1 rounded-lg shadow-black/20 shadow-xl text-sm;}
     }
 
     /* 1280px desktops */

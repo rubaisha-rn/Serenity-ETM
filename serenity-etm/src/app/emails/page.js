@@ -22,7 +22,7 @@ export default function EmailsPage () {
 
     const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany} = useEmailStore();
 
-    const {emotionValue, focusMode, priorityMode, sdkActive, setCalmMode, setScreen, theme, setTheme} = useStore();
+    const {emotionValue, focusMode, priorityMode, setScreen, theme, setTheme} = useStore();
 
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
@@ -228,7 +228,7 @@ export default function EmailsPage () {
             <div className="flex flex-row justify-between">
 
                 {/* search bar */}
-                <div className="relative">
+                <div className="relative w-full">
 
                     {/* search bar input */}
                     <input
@@ -238,12 +238,12 @@ export default function EmailsPage () {
                             setSearchQuery(e.target.value)
                         }}
                         placeholder="Search mail"
-                        className="search-bar"
+                        className="flex-1 border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] outline-none shadow items-center search-bar"
                     />
                     
                     {/* search bar results */}
                     {searchQuery && searchResults.length > 0 && (
-                        <div className="search-bar-results">
+                        <div className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results">
                             {searchResults.map(mail => (
                                 <motion.div
                                     key={mail.id}
@@ -251,16 +251,14 @@ export default function EmailsPage () {
                                         setSelectedEmail(mail)
                                         setSearchQuery('')
                                     }}
-                                    className="search-bar-results-show"
+                                    className="flex flex-col m-0.5 border-b border-[var(--f-main)] hover:bg-[var(--f-main)] cursor-pointer search-bar-results-show"
                                 >
-                                    <div className="flex flex-row justify-between">
-                                        <h6 className="font-semibold">{mail.from_name || mail.from_email}</h6>
+                                    <div className="flex flex-row justify-between font-bold">
+                                        <p>{mail.from_name || mail.from_email}</p>
                                         <p>{formatMailDate(mail.timestamp)}</p>
                                     </div>
-                                    <p className="font-semibold">{mail.subject}</p>
-                                    <div className="w-full">
-                                        <p className="truncate">{mail.body}</p>
-                                    </div>
+                                    <p className="font-semibold">{mail.subject || '(No subject)'}</p>
+                                    <p className="w-full truncate">{mail.body || '(No body)'}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -274,7 +272,7 @@ export default function EmailsPage () {
                         setShowComposer(true)
                         setSelectedEmail(null)
                     }}
-                    className="new-button"
+                    className="prim-act-btn w-full"
                 >
                     <img
                         src={ICONS[theme].add}
@@ -287,9 +285,9 @@ export default function EmailsPage () {
 
             {/* batch functions section */}
             {(selectedIds.length > 0 && (!showComposer || !selectedEmail)) && (
-                <div className="batch-func">
+                <div className="flex flex-row batch-func">
                     <button 
-                        className="batch-func-btn-hover "
+                        className="opacity-80 hover:opacity-60"
                         onClick={() => {
                         if (selectedIds.length === filtered.length) {
                             clearSelection()
@@ -316,7 +314,7 @@ export default function EmailsPage () {
                     {(showEmails !== 'drafts') && ( 
                         <>                       
                             <button 
-                                className="batch-func-btn-hover"
+                                className="opacity-80 hover:opacity-60"
                                 onClick={() => markManyRead(selectedIds, true)}>
                                 <img
                                     src={ICONS[theme].read}
@@ -325,7 +323,7 @@ export default function EmailsPage () {
                                 />
                             </button>
                             <button 
-                                className="batch-func-btn-hover"
+                                className="opacity-80 hover:opacity-60"
                                 onClick={() => markManyRead(selectedIds, false)}>
                                 <img
                                     src={ICONS[theme].unread}
@@ -336,7 +334,7 @@ export default function EmailsPage () {
                             
                             {(showEmails !== 'sent' && showEmails !== 'archive') && (
                                 <button 
-                                    className="batch-func-btn-hover"
+                                    className="opacity-80 hover:opacity-60"
                                     onClick={() => archiveMany(selectedIds)}>
                                     <img
                                         src={ICONS[theme].archive}
@@ -348,7 +346,7 @@ export default function EmailsPage () {
 
                             {(showEmails === 'archive') && (
                                 <button 
-                                    className="batch-func-btn-hover"
+                                    className="opacity-80 hover:opacity-60"
                                     onClick={() => unarchiveMany(selectedIds)}>
                                     <img
                                         src={ICONS[theme].unarchive}
@@ -361,7 +359,7 @@ export default function EmailsPage () {
                     )}     
 
                     <button 
-                        className="batch-func-btn-hover"
+                        className="opacity-80 hover:opacity-60"
                         onClick={() => deleteMany(selectedIds)}>
                         <img
                             src={ICONS[theme].delete}
@@ -376,7 +374,7 @@ export default function EmailsPage () {
             <motion.div 
                 layout
                 transition={easeTransition}
-                className="main-content grid gap-2"
+                className="flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0 grid gap-2"
                 animate={{
                     gridTemplateColumns:
                         selectedEmail || showComposer
@@ -393,7 +391,7 @@ export default function EmailsPage () {
                             className="min-w-0"
                         >
                             {(filtered.length > 0 && selectedIds.length <= 0) && (
-                                <div className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} email-grid border-b-[0.005rem] border-[var(--e-main)]`}>
+                                <div className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} justify-start items-center text-left email-grid border-b-[0.005rem] border-[var(--e-main)]`}>
                                         <div /><div />
                                         <p>{showEmails == 'sent' ? 'To' : 'From'}</p>
                                         <p>Subject / Preview</p>
@@ -409,7 +407,7 @@ export default function EmailsPage () {
                                     <motion.div
                                         layout
                                         key={mail.id}
-                                        className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} border-b-[0.005rem] border-[var(--e-main)] email-grid ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]
+                                        className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} border-b-[0.005rem] border-[var(--e-main)] justify-start items-center text-left email-grid ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]
                                         `}
                                         transition={{layout:easeTransition}}   
                                     >
@@ -467,7 +465,7 @@ export default function EmailsPage () {
                                                         e.stopPropagation()
                                                         cyclePriority(mail.id)
                                                     }}
-                                                    className={`priority-tag
+                                                    className={`flex flex-row justify-center items-center priority-tag
                                                     ${mail.priority === 'high' ? 'bg-[var(--priorityHighc)] hover:bg-[var(--priorityHighb)] border-[var(--priorityHigha)] text-[var(--priorityHight)]' :
                                                     mail.priority === 'low' ? 'bg-[var(--priorityLowc)] hover:bg-[var(--priorityLowb)] border-[var(--priorityLowa)] text-[var(--priorityLowt)]'
                                                     : 'bg-[var(--priorityNormalc)] hover:bg-[var(--priorityNormalb)] border-[var(--priorityNormala)] text-[var(--priorityNormalt)]'}
@@ -495,7 +493,7 @@ export default function EmailsPage () {
                                         markAsRead(mail.id)
                                         setReadEmailCount(readEmailCount+1)
                                     }}
-                                    className={`border-y-[0.005rem] border-[var(--e-main)] email-grid px-1 ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]`}
+                                    className={`border-y-[0.005rem] border-[var(--e-main)] justify-start items-center text-left email-grid px-1 ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]`}
                                     transition={{layout:easeTransition}}
                                 >
                                     <div className="flex flex-row justify-between items-center">

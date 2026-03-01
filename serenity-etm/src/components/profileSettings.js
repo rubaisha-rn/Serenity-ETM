@@ -90,12 +90,12 @@ export default function ProfileSettingsMenu() {
                         ref={menuRef}
                         role='menu'
                         aria-label='Profile Menu'
-                        className='side-bar-menu'
+                        className='absolute bottom-0 left-full bg-[var(--baseAcc-a)] shadow-xl text-[var(--text-d)] shadow-xl z-20 side-bar-menu'
                     >
                         {/* settings */}
                         <button
                             role='menuitem'
-                            className='side-bar-menuitem border-b-[0.02rem] border-b-white/15'
+                            className='w-full flex items-center justify-start hover:bg-[var(--b-main)] rounded motion-safe:transition-colors z-20 side-bar-menuitem border-b-[0.02rem] border-b-white/15'
                             onClick={() => {}}
                         >
                             <img
@@ -111,7 +111,7 @@ export default function ProfileSettingsMenu() {
                         {/* sign out */}
                         <button
                             role='menuitem'
-                            className='side-bar-menuitem'
+                            className='w-full flex items-center justify-start hover:bg-[var(--b-main)] rounded motion-safe:transition-colors z-20 side-bar-menuitem'
                             onClick={handleSignOut}
                         >
                             <img

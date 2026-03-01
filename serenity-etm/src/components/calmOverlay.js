@@ -146,11 +146,7 @@ export default function CalmOverlay() {
                     ref={closeBtnRef}
                     onClick={() => setCalmMode(false)}
                     aria-label='Close calming overlay'
-                    className='rounded-md p-1 bg-black/20 backdrop-blur-md hover:bg-black/30 pointer-events-auto
-                    focus:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-offset-2
-                    focus-visible:ring-blue-500'
+                    className='rounded-md p-1 bg-black/20 backdrop-blur-md hover:bg-black/30 pointer-events-auto'
                 >
                     <img
                         src={ICONS[theme].add}

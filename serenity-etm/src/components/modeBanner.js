@@ -8,7 +8,7 @@ import { ICONS } from "@/lib/assets";
 
 export default function ModeBanner({mode}) {
 
-    const {screen, theme, setFocusMode, setPriorityMode} = useStore();
+    const {theme, setFocusMode, setPriorityMode} = useStore();
     const [show, setShow] = useState(false);
     const prevMode = useRef(mode);
 
@@ -31,12 +31,18 @@ export default function ModeBanner({mode}) {
                     animate={{y: 0, opacity: 1, x: '-50%'}}
                     exit={{y: -50, opacity: 0, x: '-50%'}}
                     transition={{ duration: 0.35, ease:[0.16, 1, 0.3, 1] }}
-                    className={`fixed top-1 left-1/2 transform -translate-x-1/2 text-[var(--text-d)] px-3 py-1 rounded-lg shadow-black/20 shadow-xl z-50 justify-center text-sm ${mode === 'focus' ? 'bg-[var(--focusMode)]' : mode === 'priority' ? 'bg-[var(--priorityMode)]' : 'bg-[var(--disabledMode)]'}`}
+                    className={`fixed top-1 left-1/2 transform -translate-x-1/2 text-[var(--text-d)] z-50 justify-center mode-banner ${mode === 'focus' ? 'bg-[var(--focusMode)]' : mode === 'priority' ? 'bg-[var(--priorityMode)]' : 'bg-[var(--disabledMode)]'}`}
                 >
                     <div className="flex flex-row w-[45vw] justify-between items-center">
 
                         {/* left */}
-                        <div className="flex flex-row gap-2 items-center">
+                        <div className="flex flex-row items-center
+                            sm:gap-1
+                            md:gap-1
+                            lg:gap-2
+                            xl:gap-2
+                            2xl:gap-3
+                        ">
                             <img
                                 src={
                                     mode === 'focus'
@@ -60,7 +66,12 @@ export default function ModeBanner({mode}) {
                         </div>
 
                         {/* right side */}
-                        <div className="flex flex-row gap-2">
+                        <div className="flex flex-row 
+                            sm:gap-1
+                            md:gap-1
+                            lg:gap-2
+                            xl:gap-2
+                            2xl:gap-3">
                             {mode !== 'default' && (
                                 <button
                                     onClick={() => {

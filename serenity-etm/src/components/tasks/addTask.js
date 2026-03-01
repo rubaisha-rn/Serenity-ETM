@@ -64,7 +64,7 @@ export default function AddTask() {
             {/* add task button */}
             <button
                 onClick={() => setOpen(true)}
-                className="new-button"
+                className="prim-act-btn"
             >
                 <img
                     src={ICONS[theme].add}

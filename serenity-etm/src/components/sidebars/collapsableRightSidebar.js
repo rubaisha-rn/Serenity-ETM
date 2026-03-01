@@ -35,7 +35,7 @@ export default function CollapsableRightSidebar() {
                 initial={false}
                 whileHover={{scale: 1.05}}
                 whileTap={{scale: 0.95}}
-                animate={{right: expandedRight ? 213 : 38}}
+                animate={{right: expandedRight ? 203 : 38}}
                 transition={{duration: 0.25, ease: 'easeInOut'}}
                 type='button'
                 aria-label={expandedRight ? 'Collapse adaptive workspace settings panel' : 'Expand adaptive workspace settings panel'}
@@ -43,7 +43,7 @@ export default function CollapsableRightSidebar() {
                 title='Expand Adaptive Workspace Panel'
                 onClick={() => setExpandedRight(!expandedRight)}
                 onKeyDown={(e) => activate(e, () => setExpandedRight(!expandedRight))}
-                className="side-bar-toggle"
+                className="fixed bg-[var(--baseAcc-a)] hover:bg-[var(--a-main)] shadow-xl rounded-full z-30 side-bar-toggle"
             >
                 <img
                     src='/icons/backw.png'
@@ -58,21 +58,21 @@ export default function CollapsableRightSidebar() {
             <motion.nav
                 aria-label='Adaptive workspace settings panel'
                 initial={{width: 46}}
-                animate={{width: expandedRight ? 220 : 46}}
+                animate={{width: expandedRight ? 210 : 46}}
                 transition={{type: 'spring', stiffness: 260, damping: 36}}
-                className={`side-bar right-1 bg-[var(--baseAcc-b)]
-                ${expandedRight ? 'px-2' : ''}`}
+                className={`fixed top-1 flex flex-col justify-between shadow-xl z-20 side-bar right-1 bg-[var(--baseAcc-b)]
+                ${expandedRight ? 'p-2' : ''}`}
                 style={{overflow: 'clip'}}
             >
                 {/* nav buttons */}
-                <div role='menu' className={`flex flex-col items-center
+                <div role='menu' className={`flex flex-col items-center justify-center
                 ${expandedRight ? 'gap-3' : 'gap-1.5'}`}>
 
                     {/* focus button */}
                     <div className='flex flex-row items-center'>
                     
                         {focusMode && (
-                            <div className={`${expandedRight ? '' : 'side-bar-btn-active right-0'}`}/>
+                            <div className={`${expandedRight ? '' : 'absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active right-0'}`}/>
                         )}
 
                         <div>    
@@ -84,7 +84,7 @@ export default function CollapsableRightSidebar() {
                                 title='Focus Mode'
                                 onClick={() => setFocusMode(!focusMode)}
                                 onKeyDown={(e) => activate(e, () => setFocusMode(!focusMode))}
-                                className={`side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collapsed'}
+                                className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
                                 ${focusMode ? 'bg-[var(--e-main)]' : ''}`}
                             >
                                 <img
@@ -92,14 +92,14 @@ export default function CollapsableRightSidebar() {
                                     alt=''
                                     aria-hidden='true'
                                 />
-                                <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
+                                <span className={`text-[var(--text-a)] whitespace-nowrap transition-all duration-150 side-bar-label ${expandedRight? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                                     Focus Mode
                                 </span>
                             </motion.button>
 
                             {expandedRight && (
-                                <span className={`side-bar-help`}>
-                                    <Info className='side-bar-info'/>
+                                <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
+                                    <Info className='shrink-0 side-bar-info'/>
                                     Hides non-urgent items when stress is high. You can also activate it manually. 
                                 </span>
                             )}
@@ -110,7 +110,7 @@ export default function CollapsableRightSidebar() {
                     <div className='flex flex-row items-center'>
                     
                         {priorityMode && (
-                            <div className={`${expandedRight ? '' : 'side-bar-btn-active right-0'}`}/>
+                            <div className={`${expandedRight ? '' : 'absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active right-0'}`}/>
                         )}
 
                         <div>
@@ -122,7 +122,7 @@ export default function CollapsableRightSidebar() {
                                 title='Priority Mode'
                                 onClick={() => setPriorityMode(!priorityMode)}
                                 onKeyDown={(e) => activate(e, () => setPriorityMode(!priorityMode))}
-                                className={`side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collapsed'}
+                                className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
                                 ${priorityMode ? 'bg-[var(--e-main)]' : ''}`}
                             >
                                 <img
@@ -130,14 +130,14 @@ export default function CollapsableRightSidebar() {
                                     alt=''
                                     aria-hidden="true"
                                 />
-                                <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
+                                <span className={`text-[var(--text-a)] whitespace-nowrap transition-all duration-150 side-bar-label ${expandedRight? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                                     Priority Mode
                                 </span>
                             </motion.button>
 
                             {expandedRight && (
-                                <span className={`side-bar-help`}>
-                                    <Info className='side-bar-info'/>
+                                <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
+                                    <Info className='shrink-0 side-bar-info'/>
                                     Shows your most important emails and tasks first. 
                                 </span>
                             )}
@@ -148,7 +148,7 @@ export default function CollapsableRightSidebar() {
                     <div className='flex flex-row items-center'>
                     
                         {sdkActive && (
-                            <div className={`${expandedRight ? '' : 'side-bar-btn-active right-0'}`}/>
+                            <div className={`${expandedRight ? '' : 'absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active right-0'}`}/>
                         )}
 
                         <div>
@@ -161,7 +161,7 @@ export default function CollapsableRightSidebar() {
                                     title='Stress Detection'
                                     onClick={() => {setSdkActive(!sdkActive)}}
                                     onKeyDown={(e) => activate(e, () => setSdkActive(!sdkActive))}
-                                    className={`side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collpased'}
+                                    className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collpased'}
                                     ${sdkActive ? 'bg-[var(--e-main)]' : ''}`}
                                 >
                                     <img
@@ -169,14 +169,14 @@ export default function CollapsableRightSidebar() {
                                         alt=''
                                         aria-hidden='true'
                                     />
-                                    <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
+                                    <span className={`text-[var(--text-a)] whitespace-nowrap transition-all duration-150 side-bar-label ${expandedRight? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                                         Stress Detection
                                     </span>
                                 </motion.button>
 
                                 {expandedRight && (
-                                    <span className={`side-bar-help`}>
-                                    <Info className='side-bar-info'/>
+                                    <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
+                                    <Info className='shrink-0 side-bar-info'/>
                                         Automatically estimates stress.
                                         If turned off, use the slider to set your stress level manually.
                                     </span>
@@ -186,7 +186,7 @@ export default function CollapsableRightSidebar() {
                                     initial={{ opacity: 0, height: 0 }}
                                     animate={{ height: expandedRight ? 90 : 0, opacity: expandedRight ? 1 : 0 }}
                                     transition={{duration: 0.25}}
-                                    className='w-full overflow-hidden'
+                                    className='w-[95%] overflow-hidden'
                                     style={{pointerEvents: expandedRight ? 'auto' : 'none'}}
                                 >
                                     <p>Stress Level: {emotionValue}</p>
@@ -221,7 +221,7 @@ export default function CollapsableRightSidebar() {
                     <div className={`flex ${expandedRight ? 'flex-col' : ''} justify-center items-center gap-1`}>
                     
                         {calmMode && (
-                            <div className={`${expandedRight ? '' : 'side-bar-btn-active right-0'}`}/>
+                            <div className={`${expandedRight ? '' : 'absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active right-0'}`}/>
                         )}
 
                         <motion.button
@@ -232,7 +232,7 @@ export default function CollapsableRightSidebar() {
                             title='Calm Overlay'
                             onClick={() => setCalmMode(!calmMode)}
                             onKeyDown={(e) => activate(e, () => setCalmMode(!calmMode))}
-                            className={`side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collapsed'}
+                            className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
                             ${calmMode ? 'bg-[var(--e-main)]' : ''}`}
                         >
                             <img
@@ -240,14 +240,14 @@ export default function CollapsableRightSidebar() {
                                 alt=''
                                 aria-hidden='true'
                             />
-                            <span className={`side-bar-label ${expandedRight? 'show' : 'hide'}`}>
+                            <span className={`text-[var(--text-a)] whitespace-nowrap transition-all duration-150 side-bar-label ${expandedRight? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                                 Calm Overlay
                             </span>
                         </motion.button>
 
                         {expandedRight && (
-                            <span className={`side-bar-help`}>
-                                <Info className='side-bar-info'/>
+                            <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
+                                <Info className='shrink-0 side-bar-info'/>
                                 Opens a short calming break to help you reset.
                             </span>
                         )}

@@ -252,7 +252,7 @@ export default function TasksPage() {
             <div className="flex flex-row justify-between">
 
                 {/* search bar */}
-                <div className="relative">
+                <div className="relative w-full">
 
                     {/* search bar input */}
                     <input
@@ -262,12 +262,12 @@ export default function TasksPage() {
                             setSearchQuery(t.target.value)
                         }}
                         placeholder="Search task"
-                        className="search-bar"
+                        className="flex-1 border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-c)] outline-none shadow items-center search-bar"
                     />
                     
                     {/* search bar results */}
                     {searchQuery && searchResults.length > 0 && (
-                        <div className="search-bar-results">
+                        <div className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results">
                             {searchResults.map(task => (
                                 <motion.div
                                     key={task.id}
@@ -283,15 +283,13 @@ export default function TasksPage() {
                                             }, 1200);
                                         }
                                     }}
-                                    className="search-bar-results-show"
+                                    className="flex flex-col m-0.5 border-b border-[var(--f-main)] hover:bg-[var(--f-main)] cursor-pointer search-bar-results-show"
                                 >
-                                    <div className="flex flex-row justify-between">
-                                        <h6 className="font-semibold">{task.title}</h6>
+                                    <div className="flex flex-row justify-between font-bold">
+                                        <p>{task.title}</p>
                                         <p>{formatTaskDate(task.due)}</p>
                                     </div>
-                                    <div className="w-full">
-                                        <p className="truncate">{task.description}</p>
-                                    </div>
+                                    <p className="w-full truncate">{task.description || '(No description)'}</p>
                                 </motion.div>
                             ))}
                         </div>
@@ -300,7 +298,7 @@ export default function TasksPage() {
 
                 <div className="flex flex-row gap-1">
                     <button
-                        className="new-button layout-button"
+                        className="prim-act-btn task-layout-btn"
                         onClick={() => setGrid(!grid)}
                     >
                         <img
@@ -315,9 +313,9 @@ export default function TasksPage() {
 
             {/* batch functions section */}
             {(selectedIds.length > 0) && (
-                <div className="batch-func">
+                <div className="flex flex-row batch-func">
                     <button 
-                        className="batch-func-btn-hover "
+                        className="opacity-80 hover:opacity-60 "
                         onClick={() => {
                         if (selectedIds.length === filtered.length) {
                             clearSelection()
@@ -343,7 +341,7 @@ export default function TasksPage() {
 
                     {showTasks !== 'completed' ? 
                         <button
-                            className="batch-func-btn-hover"
+                            className="opacity-80 hover:opacity-60"
                             onClick={() => {
                                 markManyComplete(selectedIds);
                                 setCompletedTasksCount(completedTasksCount+selectedIds.length);  
@@ -357,7 +355,7 @@ export default function TasksPage() {
                         </button>
                         : 
                         <button
-                            className="batch-func-btn-hover"
+                            className="opacity-80 hover:opacity-60"
                             onClick={() => markManyComplete(selectedIds, false)}
                         >
                             <img
@@ -369,7 +367,7 @@ export default function TasksPage() {
                     }
 
                     <button 
-                        className="batch-func-btn-hover"
+                        className="opacity-80 hover:opacity-60"
                         onClick={() => deleteMany(selectedIds)}>
                         <img
                             src={ICONS[theme].delete}
@@ -384,14 +382,14 @@ export default function TasksPage() {
             <motion.div 
                 layout
                 transition={easeTransition}
-                className="main-content overflow-y-visible"
+                className="flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0 overflow-y-visible"
             >
                 {/* header */}
                 {!grid && filtered.length > 0 && (
                     <motion.div 
                         layout
                         transition={easeTransition}
-                        className={`${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.4fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.4fr]'} border-b-[0.005rem] border-[var(--e-main)] email-grid`}
+                        className={`${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.6fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.6fr]'} border-b-[0.005rem] border-[var(--e-main)] justify-start items-center text-left email-grid`}
                     >
                             <div />
                             <p>Task</p>
@@ -429,7 +427,7 @@ export default function TasksPage() {
                                 className={
                                     grid
                                     ? `flex flex-col gap-2 p-4 rounded-lg shadow-md h-full ${(new Date(task.due).getTime() < Date.now()) ? 'border-[0.2rem] border-[var(--priorityHigha)]' : ''}` 
-                                    : `${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.4fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.4fr]'} email-grid px-1 py-1.5 border-y-[0.005rem] border-[var(--e-main)] 
+                                    : `${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.6fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.6fr]'} justify-start items-center text-left email-grid px-1 py-1.5 border-y-[0.005rem] border-[var(--e-main)] 
                                     ${(new Date(task.due).getTime() < Date.now()) ? 'border-[0.2rem] border-[var(--priorityHigha)]' : ''}`
                                 }
                             >
@@ -490,7 +488,7 @@ export default function TasksPage() {
                                 {showTasks !== 'completed' &&
                                     <div className={grid ? 'flex flex-row gap-2 items-center' : ''}>
                                         {grid && (
-                                            <p className="group-label">Progress</p>
+                                            <p className="text-[var(--text-b)] leading-tight group-label">Progress</p>
                                         )}
                                     <div className="flex items-center justify-center">
                                             <button 
@@ -498,13 +496,14 @@ export default function TasksPage() {
                                                     e.stopPropagation()
                                                     cycleProgress(task.id)
                                                 }}
-                                                className={`progress-tag 
+                                                className={`flex flex-row justify-center items-center progress-tag 
                                                 ${task.progress === 'Not started' ? 'bg-[var(--progressNotc)] hover:bg-[var(--progressNotb)] border-[var(--progressNota)] text-[var(--progressNott)]' :
                                                 task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostc)] hover:bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)] text-[var(--progressAlmostt)]'
                                                 : 'bg-[var(--progressInc)] hover:bg-[var(--progressInb)] border-[var(--progressIna)] text-[var(--progressInt)]'}
                                                 transform transition-transform duration-300 ease-out hover:scale-105`}
                                             >
-                                                    <div className={`rounded-full p-[0.12rem] border-[0.1rem] ${task.progress === 'Not started' ? 'bg-[var(--progressNotb)] border-[var(--progressNota)]' :
+                                                    <div className={`rounded-full p-[0.12rem] border-[0.1rem] 
+                                                    ${task.progress === 'Not started' ? 'bg-[var(--progressNotb)] border-[var(--progressNota)]' :
                                                     task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)]' : 'bg-[var(--progressInb)] border-[var(--progressIna)]'}`} />
                                                     <p className="text-xs text-left whitespace-nowrap">{task.progress === 'Not started' ? 'Not started' : task.progress === 'Almost complete' ? 'Almost complete' : 'In progress'}</p>
                                             </button>
@@ -514,7 +513,7 @@ export default function TasksPage() {
                                 
                                 <div className={grid ? 'flex flex-row gap-4 items-center' : ''}>
                                     {grid && (
-                                        <p className="group-label">Priority</p>
+                                        <p className="text-[var(--text-b)] leading-tight group-label">Priority</p>
                                     )}
                                     <div className="flex items-center justify-center">
                                         <button 
@@ -522,7 +521,7 @@ export default function TasksPage() {
                                                 e.stopPropagation()
                                                 cyclePriority(task.id)
                                             }}
-                                            className={`priority-tag
+                                            className={`flex flex-row justify-center items-center priority-tag
                                             ${task.priority === 'high' ? 'bg-[var(--priorityHighc)] hover:bg-[var(--priorityHighb)] border-[var(--priorityHigha)] text-[var(--priorityHight)]' :
                                             task.priority === 'low' ? 'bg-[var(--priorityLowc)] hover:bg-[var(--priorityLowb)] border-[var(--priorityLowa)] text-[var(--priorityLowt)]'
                                             : 'bg-[var(--priorityNormalc)] hover:bg-[var(--priorityNormalb)] border-[var(--priorityNormala)] text-[var(--priorityNormalt)]'}
