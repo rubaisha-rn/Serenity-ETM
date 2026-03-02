@@ -4,13 +4,15 @@
 import { motion } from "framer-motion";
 import useStore from "@/store/useStore";
 import { useEmailStore } from "@/store/emailStore";
+import { useTaskStore } from "@/store/taskStore";
 import { useEffect, useRef } from "react";
 import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
-    const {screen, setTheme, expandedSecondary, setShowTasks} = useStore();
+    const {screen, setTheme, expandedSecondary} = useStore();
     const {setShowEmails} = useEmailStore();
+    const {setShowTasks} = useTaskStore();
 
     const sidebarRef = useRef(null);
 

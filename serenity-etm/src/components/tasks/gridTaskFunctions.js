@@ -78,11 +78,11 @@ export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
                         transition={{duration: 0.12}}
                         ref={menuRef}
                         role='menu'
-                        className='side-bar-menu bg-[var(--f-main)] -bottom-[60] -left-[155]'
+                        className='absolute bg-[var(--f-main)] -bottom-[60] -left-[155] shadow-xl text-[var(--text-d)] shadow-xl z-20 side-bar-menu'
                     >
                         <button
                             role='menuitem'
-                            className='side-bar-menuitem bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] border-b-[0.02rem] border-b-black/15 text-[var(--text-a)]'
+                            className='w-full flex items-center justify-start bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] rounded motion-safe:transition-colors z-20 side-bar-menuitem border-b-[0.02rem] border-b-black/15 text-[var(--text-a)]'
                             onClick={() => {
                                 onComplete();
                                 {completed ? '' : setCompletedTasksCount(completedTasksCount+1)}
@@ -101,7 +101,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
 
                         <button
                             role='menuitem'
-                            className='side-bar-menuitem bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] text-[var(--text-a)]'
+                            className='w-full flex items-center justify-start bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] rounded motion-safe:transition-colors z-20 side-bar-menuitem border-b-[0.02rem] border-b-black/15 text-[var(--text-a)]'
                             onClick={() => {
                                 onDelete();
                                 setOpen(false);

@@ -2,11 +2,11 @@
 'use client';
 
 import { motion } from "framer-motion";
-import useStore from "@/store/useStore";
+import { useTaskStore } from "@/store/taskStore";
 
 export default function TasksSidebarButton({label, shortLabel, icon, expanded, onClick, shortcut}) {
 
-    const {showTasks} = useStore();
+    const {showTasks} = useTaskStore();
 
     const isActive = showTasks === shortLabel;
 

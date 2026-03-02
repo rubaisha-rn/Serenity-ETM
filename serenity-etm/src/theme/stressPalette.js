@@ -40,9 +40,9 @@ export const STRESS_PALETTE = {
             c: '#5f635c',
             d: '#b7bab4',
             e: '#d3d5cf',
-            f: '#f0f1ed',
+            f: '#e5e8e3',
             g: '#8e918b',
-            bg: '#efefef',
+            bg: '#f5f5f5',
         },
         mid: {
             a: '#2f4443',

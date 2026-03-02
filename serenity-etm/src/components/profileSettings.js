@@ -7,13 +7,16 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import { ICONS } from '@/lib/assets'
 import useStore from '@/store/useStore'
+import SettingsModal from './settings/settings'
+import { createPortal } from 'react-dom'
 
 export default function ProfileSettingsMenu() {
 
     const router = useRouter()
-    const {theme} = useStore();
+    const {theme, setTheme} = useStore();
 
     const [open, setOpen] = useState(false);
+    const [openSettings, setOpenSettings] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
 
@@ -96,7 +99,10 @@ export default function ProfileSettingsMenu() {
                         <button
                             role='menuitem'
                             className='w-full flex items-center justify-start hover:bg-[var(--b-main)] rounded motion-safe:transition-colors z-20 side-bar-menuitem border-b-[0.02rem] border-b-white/15'
-                            onClick={() => {}}
+                            onClick={() => {
+                                setOpenSettings(true)
+                                setOpen(false);
+                            }}
                         >
                             <img
                                 src={ICONS[theme].settings}
@@ -125,7 +131,10 @@ export default function ProfileSettingsMenu() {
                         </button>
                     </motion.div>
                 )}
-            </AnimatePresence>
+            </AnimatePresence>  
+
+            <SettingsModal open={openSettings} onClose={() => setOpenSettings(false)} />
+
         </div>
     )
 }

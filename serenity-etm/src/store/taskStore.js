@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabaseClient";
 export const useTaskStore = create((set, get) => ({
 
     selectedIds: [],
+    showTasks: 'all',
 
     toggleSelect: (id) =>
         set(state => ({
@@ -269,6 +270,7 @@ export const useTaskStore = create((set, get) => ({
     },
 
     setCompletedTasksCount: (count) => set({completedTasksCount: count}),
+    setShowTasks: (showTasks) => set({showTasks}),
 }));
 
 function formatToDDMMYY(dateStr) {

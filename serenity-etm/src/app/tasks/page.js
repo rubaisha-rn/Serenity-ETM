@@ -19,8 +19,8 @@ export default function TasksPage() {
 
     const router = useRouter()
     
-    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, toggleDelete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress, selectedIds, toggleSelect, clearSelection, markManyComplete, deleteMany, selectAllVisible} = useTaskStore();
-    const {emotionValue, focusMode, priorityMode, setShowTasks, showTasks, sdkActive, setCalmMode, theme, setTheme, setScreen} = useStore();
+    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, toggleDelete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress, selectedIds, toggleSelect, clearSelection, markManyComplete, deleteMany, selectAllVisible, setShowTasks, showTasks} = useTaskStore();
+    const {emotionValue, focusMode, priorityMode, sdkActive, setCalmMode, theme, setTheme, setScreen} = useStore();
 
     const [filtered, setFiltered] = useState([]);
     const [grid, setGrid] = useState(true);
@@ -560,18 +560,17 @@ export default function TasksPage() {
                         initial={{opacity:0}}
                         animate={{opacity:1}}
                         exit={{opacity:0}}
-                        className="overflow-hidden">
-                        <p className="
-                            text-center 
+                        transition={easeTransition}
+                        className="overflow-hidden
                             sm:m-1
                             md:m-2
                             lg:m-4
                             xl:m-4
                             2xl:m-4
-                        ">No tasks found.</p>
+                        ">
+                        <p className="text-center">No tasks found.</p>
                     </motion.div>
                 )}
-
            </motion.div>
         </AppShell>
     );

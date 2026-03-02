@@ -23,7 +23,7 @@ export default function ThinFooter() {
                 lg:text-[0.6rem]
                 xl:text-[0.6rem]
                 2xl:text-[0.7rem]
-            ">© 2025, Serenity ETM. All right reserved.</p>
+            ">© 2026, Serenity ETM. All right reserved.</p>
         </div>
     );
 }

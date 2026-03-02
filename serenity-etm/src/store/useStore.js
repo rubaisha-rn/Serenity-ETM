@@ -3,7 +3,7 @@ import {create} from 'zustand';
 const useStore = create((set) => ({
     
     theme: 'light',
-    setTheme: (theme) => set({theme}), // add a button to change theme
+    setTheme: (theme) => set({theme}),
 
     emotionValue: 0, // 0-100
     setEmotionValue: (value) => 
@@ -29,14 +29,8 @@ const useStore = create((set) => ({
     expandedSecondary: true, 
     setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}), 
 
-    showTasks: 'all',
-    setShowTasks: (showTasks) => set({showTasks}),
-
     sdkActive: false, // true
     setSdkActive: (value) => set({ sdkActive: value }),
-
-    fontScale: 12,
-    setFontScale: (value) => set({ fontScale: value }),
 
     highContrast: false,
     setHighContrast: (value) => set({ highContrast: value }),
