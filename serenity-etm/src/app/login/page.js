@@ -4,6 +4,7 @@ import { useState } from "react";
 import {supabase} from '@/lib/supabaseClient'
 import { useRouter } from "next/navigation";
 import useStore from '@/store/useStore';
+import Spinner from "@/components/spinner";
 
 export default function LoginPage() {
     const router = useRouter()
@@ -36,6 +37,9 @@ export default function LoginPage() {
 
     return (
         <div style={{maxWidth: 360, margin: '120px auto'}}>
+
+            {loading && <Spinner/>}
+
             <h2>Serenity ETM</h2>
 
             <form onSubmit={handleLogin}>

@@ -1,25 +1,25 @@
 'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import useStore from "@/store/useStore";
 
 const LICENSE_KEY = process.env.NEXT_PUBLIC_MY_SDK_KEY;
 
-const MIN_INTERVAL_MS = 1 * 60 * 1000; // 1min
-const MAX_INTERVAL_MS = 5 * 60 * 1000; // 5min
-const TRANSITION_MS = 500; // 5ms
-const FOCUS_DURATION_MS = 15 * 60 * 1000; // 15mins
-
 export default function useStressDetector() {
-    const sdkActive = useStore((state) => state.sdkActive);
-    const focusLockRef = useRef(false);
-    const focusTimerRef = useRef(null);
+    
+    const {sdkActive, setEmotionValue, stressDetectionDuration, stressSensitivity} = useStore();
 
-    const setStress = useStore((state) => state.setEmotionValue);
+    const CHECK_INTERVAL_MS = stressDetectionDuration; 
+    const TRANSITION_MS = stressDetectionDuration; 
+    
     const prevStressRef = useRef(0);
-    const targetStressRef = useRef(0);
+
+    const liveTargetRef = useRef(0);
+    const internalTargetRef = useRef(0);
+    
     const animationRef = useRef(null);
-    const timeoutRef = useRef(null);
+    const intervalRef = useRef(null);
+    const stopSDKRef = useRef(null);
 
     const latestSignalsRef = useRef({
         arousal: 0,
@@ -28,32 +28,23 @@ export default function useStressDetector() {
         emotionBias: 0,
     });
 
-    const stopSDKRef = useRef(null);
-    const sdkActiveRef = useState(sdkActive);
-
-    useEffect(() => {
-        sdkActiveRef.current = sdkActive;
-    }, [sdkActive]);
-
     useEffect(() => {
 
         if (!sdkActive) {
-            if(stopSDKRef.current) stopSDKRef.current();
+            stopSDKRef.current?.();
             cancelAnimationFrame(animationRef.current);
-            clearTimeout(timeoutRef.current);
-            clearTimeout(focusTimerRef.current);
+            clearTimeout(intervalRef.current);
             return;
         }
 
         if(window.__morphcastInitialized) return;
         window.__morphcastInitialized = true;
 
-        let CYInstance;
-        let stopSDK = null;
+        let stopSDK;
 
         const initSDK = async () => {
             try {
-                // wait for CY
+
                 const CY = await new Promise((resolve, reject) => {
                     let tries = 0;
                     const check = setInterval(() => {
@@ -68,8 +59,6 @@ export default function useStressDetector() {
                     }, 250);
                 });
 
-                CYInstance = CY;
-
                 const loader = await CY.loader()
                     .licenseKey(LICENSE_KEY)
                     .addModule(CY.modules().FACE_AROUSAL_VALENCE.name, { smoothness: 0.7 })
@@ -79,6 +68,7 @@ export default function useStressDetector() {
 
                     const { start, stop } = loader;
                     stopSDK = stop;
+                    stopSDKRef.current = stop;
 
                     const emotionEvent = CY.modules().FACE_EMOTION.eventName;
                     const arousalEvent = CY.modules().FACE_AROUSAL_VALENCE.eventName;
@@ -94,7 +84,7 @@ export default function useStressDetector() {
                         combinedStress *= 2.5;
                         combinedStress = Math.min(Math.max(combinedStress, 0), 1);
 
-                        targetStressRef.current = Math.round(combinedStress * 100);
+                        liveTargetRef.current = Math.round(combinedStress * 100);
                     };
 
                     const emotionHandler = (evt) => {
@@ -116,6 +106,12 @@ export default function useStressDetector() {
                             sad * 0.5 +
                             surprise * 0.3 -
                             happy * 0.7; // assigning weighted values to different emotions
+
+                        // removing negative so exponent behaves properly
+                        emotionStress = Math.max(emotionStress, 0);
+
+                        // sensitivity application
+                        emotionStress = Math.pow(emotionStress, stressSensitivity);
 
                         latestSignalsRef.current.emotionBias = Math.min(Math.max(emotionStress, 0), 1);
 
@@ -145,37 +141,28 @@ export default function useStressDetector() {
 
                     const animate = () => {
                         const prev = prevStressRef.current;
-                        const target = targetStressRef.current;
+                        const target = internalTargetRef.current;
+                        
                         const delta = target - prev;
                                 
-                        if (Math.abs(delta) > 0.5) {
+                        if (Math.abs(delta) > 0.1) {
                             const step = delta * (16 / TRANSITION_MS);
-                            prevStressRef.current = prev + step;
-                            setStress(Math.round(prev + step));
+                            const next = prev + step;
+
+                            prevStressRef.current = next;
+                            setEmotionValue(Math.round(next));
                         } else {
                             prevStressRef.current = target;
-                            setStress(target);
-                        }
-
-                        if(!focusLockRef.current && (Math.round(prevStressRef.current) > 60)) {
-                            focusLockRef.current = true;
-                            useStore.getState().setFocusMode(true);
-
-                            focusTimerRef.current = setTimeout(() => {
-                                focusLockRef.current = false;
-                                useStore.getState().setFocusMode(false);
-                            }, FOCUS_DURATION_MS);
+                            setEmotionValue(target);
                         }
 
                         animationRef.current = requestAnimationFrame(animate);
                     };
                     animationRef.current = requestAnimationFrame(animate);
 
-                    const scheduleNextCheck = () => {
-                        const interval = MIN_INTERVAL_MS + Math.random() * (MAX_INTERVAL_MS - MIN_INTERVAL_MS);
-                        timeoutRef.current = setTimeout(scheduleNextCheck, interval);
-                    };
-                    scheduleNextCheck();
+                    intervalRef.current = setInterval(() => {
+                        internalTargetRef.current = liveTargetRef.current;
+                    }, CHECK_INTERVAL_MS);
 
             } catch (err) {
                 console.log('MorphCast SDK error:', err);
@@ -186,9 +173,8 @@ export default function useStressDetector() {
 
         return () => {
             cancelAnimationFrame(animationRef.current);
-            clearTimeout(timeoutRef.current);
-            clearTimeout(focusTimerRef.current);
-            if (stopSDK) stopSDK();
+            clearTimeout(intervalRef.current);
+            stopSDK?.();
             window.__morphcastInitialized = false;
         };
     }, [sdkActive]);

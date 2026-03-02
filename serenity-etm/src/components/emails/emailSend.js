@@ -7,6 +7,7 @@ import { useEmailStore } from "@/store/emailStore";
 import { ICONS } from "@/lib/assets";
 import useStore from "@/store/useStore";
 import { createPortal } from "react-dom";
+import Spinner from "../spinner";
 
 export default function EmailSend({onClose}) {
 
@@ -108,6 +109,8 @@ export default function EmailSend({onClose}) {
 
     return (
         <div className="flex-1 flex-col flex-1 min-h-0 bg-[var(--baseAcc-b)] z-0 send-email-container">
+
+            {loading && <Spinner/>}
 
             <div className="flex flex-row justify-between h-auto mb-1">
                 <button 

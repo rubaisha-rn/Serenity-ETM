@@ -5,7 +5,7 @@ import useStore from "@/store/useStore";
 
 export default function AppearanceSettings() {
 
-    const {theme, setTheme} = useStore();
+    const {theme, setTheme, themeMode, setThemeMode} = useStore();
 
     return (
         <div className="space-y-6">
@@ -24,11 +24,9 @@ export default function AppearanceSettings() {
                             document.documentElement.classList.remove('dark');
                         }
                     }}
-                    className={`relative inline-flex h-6 w-10 items-center rounded-full transition-colors duration-300
-                    ${theme !== 'light' ? 'bg-[var(--disabledMode)]' : 'bg-[var(--priorityLowt)]'}`}
+                    className={`appearance-toggle-outer relative inline-flex items-center rounded-full transition-colors duration-300 ${theme !== 'light' ? 'bg-[var(--baseAcc-a)]' : 'bg-[var(--priorityLowt)]'}`}
                 >
-                    <span className={`inline-block w-4 aspect-square transform rounded-full bg-white shadow-lg ring-0 transition duration-300
-                    ${theme !== 'light' ? 'translate-x-5' : 'translate-x-1'}`} />
+                    <span className={`appearance-toggle-outer inline-block aspect-square transform rounded-full bg-white ring-0 transition duration-300 ${theme !== 'light' ? 'translate-x-5' : 'translate-x-1'}`} />
                 </button>
             </SettingsRow>
 
@@ -38,10 +36,13 @@ export default function AppearanceSettings() {
                 text='Choose Normal for the standard balanced appearance, High contrast for separation between elements to improve readability, or Colour-vision-friendly modes that adjusts the palette to make content clearer for people with different types of colour vision.'
             >
                 <div className="text-xs">
-                    <select className="border border-[var(--f-main)] rounded p-1 bg-[--baseAcc-b]">
-                        <option>Normal</option>
-                        <option>High contrast</option>
-                        <option>Colour-vision-friendly</option>
+                    <select 
+                        value={themeMode}
+                        onChange={(e) => setThemeMode(e.target.value)}
+                        className="border border-[var(--f-main)] rounded bg-[--baseAcc-b] sm:p-0.5 md:p-0.5 lg:p-1 xl:p-1 2xl:p-2">
+                        <option value='normal'>Normal (Default)</option>
+                        <option value='high-contrast'>High contrast</option>
+                        <option value='colour-vision-friendly'>Colour-vision-friendly</option>
                     </select>
                 </div>
             </SettingsRow>

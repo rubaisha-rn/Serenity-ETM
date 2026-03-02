@@ -5,6 +5,9 @@ const useStore = create((set) => ({
     theme: 'light',
     setTheme: (theme) => set({theme}),
 
+    themeMode: 'normal',
+    setThemeMode: (themeMode) => set({themeMode}),
+
     emotionValue: 0, // 0-100
     setEmotionValue: (value) => 
         set({
@@ -20,6 +23,9 @@ const useStore = create((set) => ({
     calmMode: false,
     setCalmMode: (value) => set({ calmMode: value }),
 
+    calmModeDuration: 10000,
+    setCalmModeDuration: (value) => set({ calmModeDuration: value }),
+
     screen: 'dashboard',
     setScreen: (screen) => set({screen}),
 
@@ -32,11 +38,14 @@ const useStore = create((set) => ({
     sdkActive: false, // true
     setSdkActive: (value) => set({ sdkActive: value }),
 
-    highContrast: false,
-    setHighContrast: (value) => set({ highContrast: value }),
+    stressDetectionDuration: 20000,
+    setStressDetectionDuration: (value) => set({ stressDetectionDuration: value }),
 
-    colorBlindMode: 'none', // deuteranopia / protanopia / none
-    setColorBlindMode: (value) => set({ colorBlindMode: value }),
+    stressSensitivity: 1.0, // 0.5 -> 1.5
+    setStressSensitivity: (value) => 
+        set({
+            stressSensitivity: 0.5 + (Math.min(10, Math.max(1, value)) - 1) * (1.0 / 9),
+        }),
 }));
 
 export default useStore;

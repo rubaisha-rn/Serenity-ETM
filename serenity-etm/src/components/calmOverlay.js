@@ -12,13 +12,14 @@ const Palettes = [
     ['#a8d8eb', '#456992', '#3e7170'],
 ];
 
-const OVERLAY_DURATION = 10000; // 10 secs
 const BLOB_COUNT = 8;
 const BLOB_BLUR = 80;
 
 export default function CalmOverlay() {
 
-    const {calmMode, setCalmMode, theme} = useStore();
+    const {calmMode, calmModeDuration, setCalmMode, theme} = useStore();
+
+    const OVERLAY_DURATION = calmModeDuration;
     
     const prefersReducedMotion = useReducedMotion();
     const overlayRef = useRef(null);

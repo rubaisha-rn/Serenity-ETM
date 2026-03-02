@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { ICONS } from "@/lib/assets";
 import useStore from "@/store/useStore";
 import { createPortal } from "react-dom";
+import Spinner from "../spinner";
 
 export default function EmailReader() {
 
@@ -138,6 +139,8 @@ export default function EmailReader() {
 
     return (
         <div className="send-email-container h-full flex flex-col min-h-0 w-full border-l-[0.008rem] border-[var(--f-main)] bg-[var(--baseAcc-b)]">
+
+            {loading && <Spinner/>}
 
             {/* toolbar */}
             <div className="flex flex-row justify-between h-auto mb-1 toolbar">

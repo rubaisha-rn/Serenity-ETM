@@ -34,7 +34,7 @@ export default function SettingsModal({open, onClose}) {
                 }}
             >
                 <div
-                    className="max-w-[60%] w-full max-h-[70%] h-full rounded-lg bg-[var(--bg)] shadow-md flex overflow-hidden p-1"
+                    className="max-w-[60%] w-full max-h-[70%] h-full bg-[var(--bg)] flex overflow-hidden settings"
                     ref={panelRef}
                     onClick={(e) => e.stopPropagation()}
                 >
@@ -57,7 +57,7 @@ export default function SettingsModal({open, onClose}) {
                     </div>
 
                     {/* content */}
-                    <div className="flex-1 p-2 my-1 overflow-y-auto">
+                    <div className="flex-1 overflow-y-auto settings-content">
                         {active === 'appearance' && <AppearanceSettings />}
                         {active === 'wellbeing' && <WellbeingSettings />}
                         {active === 'account' && <AccountSettings />}
