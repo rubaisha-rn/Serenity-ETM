@@ -64,9 +64,16 @@ const useStore = create((set, get) => ({
     }, 
     
     setTheme: (theme) => {
-        if (get().theme === theme) return
-        const prev = get().theme
-        set({theme})
+        if (get().theme === theme) return;
+        const prev = get().theme;
+        set({theme});
+
+        if (prev === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+        else {
+            document.documentElement.classList.remove('dark');
+        }
 
         get().updateProfile(
             {theme},

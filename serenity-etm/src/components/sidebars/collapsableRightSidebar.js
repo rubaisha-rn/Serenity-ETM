@@ -46,10 +46,10 @@ export default function CollapsableRightSidebar() {
                 className="fixed bg-[var(--baseAcc-a)] hover:bg-[var(--a-main)] shadow-xl rounded-full z-30 side-bar-toggle"
             >
                 <img
-                    src='/icons/backw.png'
+                    src={ICONS[theme].arrow}
                     alt='close arrow'
                     aria-hidden='true'
-                    className={expandedRight ? 'rotate-180 ml-0.5' : 'mr-0.5'}
+                    className={expandedRight ? 'rotate-180' : ''}
                 /> 
 
             </motion.button>

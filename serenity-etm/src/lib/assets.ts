@@ -1,12 +1,16 @@
 const SUPABASE_ASSET_URL = 'https://funqzsdhvrnloatkmipm.supabase.co/storage/v1/object/public/assets-ui/'
 
 export const ICONS = {
+    logo: {
+        logo: `${SUPABASE_ASSET_URL}/logo/logo.png`,
+    },
     light: {
         add: `${SUPABASE_ASSET_URL}/light-mode/add.png`,
         alltasks: `${SUPABASE_ASSET_URL}/light-mode/alltasks.png`,
         archive: `${SUPABASE_ASSET_URL}/light-mode/archive.png`,
         arrow: `${SUPABASE_ASSET_URL}/light-mode/arrow.png`,
         calm: `${SUPABASE_ASSET_URL}/light-mode/calm.png`,
+        calmo: `${SUPABASE_ASSET_URL}/light-mode/calmo.png`,
         close: `${SUPABASE_ASSET_URL}/light-mode/close.png`,
         completed: `${SUPABASE_ASSET_URL}/light-mode/completed.png`,
         dashboard: `${SUPABASE_ASSET_URL}/light-mode/dashboard.png`,
@@ -39,6 +43,7 @@ export const ICONS = {
         stressdetect: `${SUPABASE_ASSET_URL}/light-mode/stressdetection.png`,
         success: `${SUPABASE_ASSET_URL}/light-mode/success.png`,
         tasks: `${SUPABASE_ASSET_URL}/light-mode/tasks.png`,
+        tick: `${SUPABASE_ASSET_URL}/light-mode/tick.png`,
         today: `${SUPABASE_ASSET_URL}/light-mode/today.png`,
         unarchive: `${SUPABASE_ASSET_URL}/light-mode/unarchive.png`,
         unread: `${SUPABASE_ASSET_URL}/light-mode/unread.png`,
@@ -55,6 +60,7 @@ export const ICONS = {
         archive: `${SUPABASE_ASSET_URL}/light-mode/archive.png`,
         arrow: `${SUPABASE_ASSET_URL}/light-mode/arrow.png`,
         calm: `${SUPABASE_ASSET_URL}/light-mode/calm.png`,
+        calmo: `${SUPABASE_ASSET_URL}/light-mode/calmo.png`,
         close: `${SUPABASE_ASSET_URL}/light-mode/close.png`,
         completed: `${SUPABASE_ASSET_URL}/light-mode/completed.png`,
         dashboard: `${SUPABASE_ASSET_URL}/light-mode/dashboard.png`,
@@ -87,6 +93,7 @@ export const ICONS = {
         stressdetect: `${SUPABASE_ASSET_URL}/light-mode/stressdetection.png`,
         success: `${SUPABASE_ASSET_URL}/light-mode/success.png`,
         tasks: `${SUPABASE_ASSET_URL}/light-mode/tasks.png`,
+        tick: `${SUPABASE_ASSET_URL}/light-mode/tick.png`,
         today: `${SUPABASE_ASSET_URL}/light-mode/today.png`,
         unarchive: `${SUPABASE_ASSET_URL}/light-mode/unarchive.png`,
         unread: `${SUPABASE_ASSET_URL}/light-mode/unread.png`,

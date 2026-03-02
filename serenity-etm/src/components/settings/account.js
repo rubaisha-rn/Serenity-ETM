@@ -19,6 +19,30 @@ export default function AccountSettings() {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
+    const validatePassword = (password) => {
+        const minLength = 8;
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+        if (password.length < minLength) {
+            return 'Password must be at least 8 characters long.';
+        }
+        if (!hasUpper) {
+            return 'Password must include at least one uppercase letter.';
+        }
+        if (!hasLower) {
+            return 'Password must include at least one lowercase letter.';
+        }
+        if (!hasNumber) {
+            return 'Password must include at least one number.';
+        }
+        if (!hasSpecial) {
+            return 'Password must include at least one special character.';
+        }
+    }
+
     const handleChangePassword = async () => {
         setError('');
         setSuccess('');
@@ -27,7 +51,12 @@ export default function AccountSettings() {
 
         if (newPassword !== confirmPassword) return setError('New passwords do not match');
 
-        if (newPassword.length < 6) return setError('Password must be at least 6 characters long.');
+        if (currentPassword === newPassword) return setError('New password must be different from current password.');
+
+        const passwordValidationError = validatePassword(newPassword);
+        if (passwordValidationError) {
+            return setError(passwordValidationError);
+        }
 
         setLoading(true);
 
@@ -119,7 +148,12 @@ export default function AccountSettings() {
                         placeholder="New password"
                         value={newPassword}
                         autoComplete="new-password"
-                        onChange={(e) => setNewPassword(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setNewPassword(e.target.value);
+                            const validationError = validatePassword(value);
+                            setError(validationError || '');    
+                        }}
                         className="w-3/4 text-xs sm:p-0.5 md:p-1 lg:p-1.5 xl:p-1.5 2xl:p-2 rounded-lg border"
                     />
 

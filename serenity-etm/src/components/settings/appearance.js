@@ -17,11 +17,9 @@ export default function AppearanceSettings() {
                     onClick={() => {
                         if (theme === 'light') {
                             setTheme('dark');
-                            document.documentElement.classList.add('dark');
                         }
                         else {
                             setTheme('light');
-                            document.documentElement.classList.remove('dark');
                         }
                     }}
                     className={`appearance-toggle-outer relative inline-flex items-center rounded-full transition-colors duration-300 ${theme !== 'light' ? 'bg-[var(--baseAcc-a)]' : 'bg-[var(--priorityLowt)]'}`}

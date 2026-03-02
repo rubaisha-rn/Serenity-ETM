@@ -114,8 +114,7 @@ export default function AppShell({children}){
                 <main className="main-panel">
                     <ModeBanner mode={focusMode ? 'focus' : priorityMode ? 'priority' : 'default'} />
                     <PrototypeTag />
-                    {/* only when sdk is active? */}
-                    {/* <MicroInterventionPopup /> */}
+                    <MicroInterventionPopup />
                     {children}
                 </main>
 

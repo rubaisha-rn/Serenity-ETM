@@ -48,7 +48,7 @@ export default function CollapsableLeftSidebar() {
                 
                 {/* brand logo */}
                 <img
-                    src='/logo/logo.png'
+                    src={ICONS.logo.logo}
                     alt='Serenity ETM'
                     draggable={false}
                 /> 

@@ -92,9 +92,11 @@
     /* mode banner */
     --focusMode: #04766b;
     --focusModeHover: #02574e;
+    --focusModeInt: #d5e6e4;
    
     --priorityMode: #b68030;
     --priorityModeHover: #9b6719;
+    --priorityModeInt: #fff7e9;
 
     --disabledMode: #272727;
 }
@@ -173,6 +175,7 @@
     /* mode banner */
     --focusMode: #04766b;
     --focusModeHover: #02574e;
+    --focusModeInt: #a6c7c4;
    
     --priorityMode: #b68030;
     --priorityModeHover: #9b6719;
@@ -320,8 +323,9 @@
         img {@apply w-3 aspect-square; }
         .batch-func img { @apply w-3.5 aspect-square; }
         .side-bar-menu button img, .mode-banner img { @apply w-4 aspect-square; }
-        .secondary-side-bar img, .settings-side-bar img, .task-layout-btn img, .toolbar img { @apply w-5 aspect-square; }
+        .secondary-side-bar img, .settings-side-bar img, .task-layout-btn img, .toolbar img, .microintervention button img { @apply w-5 aspect-square; }
         .side-bar img { @apply w-6 aspect-square; }
+        .microintervention img { @apply w-7 aspect-square; }
 
         .side-bar,
         .secondary-side-bar,
@@ -402,6 +406,9 @@
 
         .appearance-toggle-outer {@apply h-6 w-10;}
         .appearance-toggle-inner {@apply w-4 shadow-lg;}
+
+        .microintervention.outer {@apply bottom-2 w-[28%] max-w-sm h-auto p-1 rounded-xl shadow-xl;}
+        .microintervention.inner {@pply p-2 py-3 rounded-lg gap-4 grid grid-cols-[0.2fr_1.2fr_0.1fr]; }
     }
 
     /* 1280px desktops */
