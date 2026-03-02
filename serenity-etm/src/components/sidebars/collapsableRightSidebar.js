@@ -205,6 +205,7 @@ export default function CollapsableRightSidebar() {
                                         aria-valuenow={emotionValue}
                                         aria-label='Stress Level slider'
                                         title='Stress Level Slider'
+                                        disabled={sdkActive}
                                     />
                                     <div className='flex flex-row justify-between'>
                                         <p>Lowest</p>

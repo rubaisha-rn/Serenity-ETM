@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 export default function ThinFooter() {
 
-    const setTheme = useStore((s) => s.setTheme);
+    const {setTheme} = useStore();
     
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');

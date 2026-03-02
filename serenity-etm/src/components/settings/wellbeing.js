@@ -19,7 +19,7 @@ export default function WellbeingSettings() {
                 <div className="text-xs">
                     <select 
                         value={calmModeDuration}
-                        onChange={(e) => setCalmModeDuration(e.target.value)}
+                        onChange={(e) => setCalmModeDuration(Number(e.target.value))}
                         className="border border-[var(--f-main)] rounded bg-[--baseAcc-b] sm:p-0.5 md:p-0.5 lg:p-1 xl:p-1 2xl:p-2">
                         <option value={10000}>10 secs (Default)</option>
                         <option value={30000}>30 secs</option>
@@ -37,7 +37,7 @@ export default function WellbeingSettings() {
                 <div className="text-xs">
                     <select 
                         value={stressDetectionDuration}
-                        onChange={(e) => setStressDetectionDuration(e.target.value)}
+                        onChange={(e) => setStressDetectionDuration(Number(e.target.value))}
                         className="border border-[var(--f-main)] rounded bg-[--baseAcc-b] sm:p-0.5 md:p-0.5 lg:p-1 xl:p-1 2xl:p-2">
                         <option value={10000}>10 secs (Default)</option>
                         <option value={30000}>30 secs</option>

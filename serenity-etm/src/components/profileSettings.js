@@ -13,7 +13,7 @@ import { createPortal } from 'react-dom'
 export default function ProfileSettingsMenu() {
 
     const router = useRouter()
-    const {theme, setTheme} = useStore();
+    const {theme, setTheme, setThemeMode} = useStore();
 
     const [open, setOpen] = useState(false);
     const [openSettings, setOpenSettings] = useState(false);
@@ -21,8 +21,10 @@ export default function ProfileSettingsMenu() {
     const buttonRef = useRef(null);
 
     const handleSignOut = async () => {
-        await supabase.auth.signOut()
-        router.push('/login')
+        await supabase.auth.signOut();
+        router.push('/login');
+        setTheme('light');
+        setThemeMode('normal');
     }
 
     useEffect(() => {

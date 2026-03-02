@@ -1,18 +1,117 @@
 import {create} from 'zustand';
+import { supabase } from '@/lib/supabaseClient';
 
-const useStore = create((set) => ({
-    
+const useStore = create((set, get) => ({
+
+    // hydration
+    profileLoaded: false,
     theme: 'light',
-    setTheme: (theme) => set({theme}),
-
     themeMode: 'normal',
-    setThemeMode: (themeMode) => set({themeMode}),
+    emotionValue: 0,
+    calmModeDuration: 10000,
+    sdkActive: false, // true
+    stressDetectionDuration: 20000,
+    stressSensitivity: 1.0,
 
-    emotionValue: 0, // 0-100
-    setEmotionValue: (value) => 
+    // load profile: hydration safe
+    loadProfile: async () => {
+        const {data: {session}} = await supabase.auth.getSession();
+        
+        if(!session) {
+            set({profileLoaded: true});
+            set({theme: 'light'});
+            set({themeMode: 'normal'});
+            return;
+        };
+
+        const {data, error} = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
+        
+        if (error) {
+            console.log('Profile fetch error:', error);
+            return;
+        }
+
         set({
-            emotionValue: Math.min(100, Math.max(0, value)), // stress value will always be between 0-100
-        }),
+            theme: data.theme ?? 'light',
+            themeMode: data.theme_mode ?? 'normal',
+            emotionValue: data.emotion_value ?? 0,
+            calmModeDuration: data.calm_mode_duration ?? 10000,
+            sdkActive: data.sdk_active ?? false,
+            stressDetectionDuration: data.stress_detection_duration ?? 20000,
+            stressSensitivity: data.stress_sensitivity ?? 1.0,
+            profileLoaded: true
+        })
+    },
+
+    // internal db update helper
+    updateProfile: async (patch, rollback = null) => {
+        const {data: {session}} = await supabase.auth.getSession()
+        if(!session) return
+
+        const {error} = await supabase
+            .from('profiles')
+            .update(patch)
+            .eq('id', session.user.id)
+
+        if (error) {
+            console.log('Profile update failed:', error)
+            if (rollback) rollback();
+        }
+    }, 
+    
+    setTheme: (theme) => {
+        if (get().theme === theme) return
+        const prev = get().theme
+        set({theme})
+
+        get().updateProfile(
+            {theme},
+            () => set({theme: prev})
+        )
+    },
+
+    setThemeMode: (themeMode) => {
+        if (get().themeMode === themeMode) return
+        const prev = get().themeMode
+        set({themeMode})
+
+        get().updateProfile(
+            {theme_mode: themeMode},
+            () => set({theme_mode: prev})
+        )
+    },
+
+    setEmotionValue: (value) => {
+        const bounded = Math.min(100, Math.max(0, value))
+        set({emotionValue: bounded})
+
+        get().updateProfile({emotion_value: bounded})
+    },
+
+    setCalmModeDuration: (value) => {
+        set({calmModeDuration: value})
+        get().updateProfile({calm_mode_duration: value})
+    }, 
+
+    setSdkActive: (value) => {
+        set({sdkActive: value})
+        get().updateProfile({sdk_active: value})
+    }, 
+
+    setStressDetectionDuration: (value) => {
+        set({stressDetectionDuration: value})
+        get().updateProfile({stress_detection_duration: value})
+    },
+
+    setStressSensitivity: (value) => {
+        const mapped = 0.5 + (Math.min(10, Math.max(1, value)) - 1) * (1.0 / 9)
+        set({stressSensitivity: mapped})
+        get().updateProfile({stress_sensitivity: mapped})
+    },
 
     focusMode: false,
     setFocusMode: (value) => set({ focusMode: value }),
@@ -23,9 +122,6 @@ const useStore = create((set) => ({
     calmMode: false,
     setCalmMode: (value) => set({ calmMode: value }),
 
-    calmModeDuration: 10000,
-    setCalmModeDuration: (value) => set({ calmModeDuration: value }),
-
     screen: 'dashboard',
     setScreen: (screen) => set({screen}),
 
@@ -33,19 +129,7 @@ const useStore = create((set) => ({
     setExpandedRight: (expandedRight) => set({expandedRight}),
 
     expandedSecondary: true, 
-    setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}), 
-
-    sdkActive: false, // true
-    setSdkActive: (value) => set({ sdkActive: value }),
-
-    stressDetectionDuration: 20000,
-    setStressDetectionDuration: (value) => set({ stressDetectionDuration: value }),
-
-    stressSensitivity: 1.0, // 0.5 -> 1.5
-    setStressSensitivity: (value) => 
-        set({
-            stressSensitivity: 0.5 + (Math.min(10, Math.max(1, value)) - 1) * (1.0 / 9),
-        }),
+    setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}),
 }));
 
 export default useStore;

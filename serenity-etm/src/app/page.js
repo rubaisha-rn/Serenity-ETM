@@ -13,7 +13,7 @@ export default function IntroPage() {
     const router = useRouter();
     
     const [accepted, setAccepted] = useState(false);
-    const setTheme = useStore((s) => s.setTheme);
+    const {setTheme} = useStore();
 
     useEffect(() => {
         const darkModeEnabled = document.documentElement.classList.contains('dark');

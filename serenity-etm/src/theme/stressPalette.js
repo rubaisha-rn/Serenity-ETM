@@ -42,7 +42,7 @@ export const STRESS_PALETTE = {
             e: '#d3d5cf',
             f: '#e5e8e3',
             g: '#8e918b',
-            bg: '#f5f5f5',
+            bg: '#2a2c29',
         },
         mid: {
             a: '#2f4443',
@@ -52,7 +52,7 @@ export const STRESS_PALETTE = {
             e: '#c7e6e4',
             f: '#eaf5f4',
             g: '#7fb8b6',
-            bg: '#ebedec',
+            bg: '#2a2c29',
         },
         high: {
             a: '#1c2b3a',
@@ -62,7 +62,7 @@ export const STRESS_PALETTE = {
             e: '#9fb7c8',
             f: '#e7eff5',
             g: '#2e4a66',
-            bg: '#eef0f2',
+            bg: '#2a2c29',
         },
     },
 };

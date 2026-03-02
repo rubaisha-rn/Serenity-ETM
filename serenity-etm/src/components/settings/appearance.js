@@ -26,7 +26,7 @@ export default function AppearanceSettings() {
                     }}
                     className={`appearance-toggle-outer relative inline-flex items-center rounded-full transition-colors duration-300 ${theme !== 'light' ? 'bg-[var(--baseAcc-a)]' : 'bg-[var(--priorityLowt)]'}`}
                 >
-                    <span className={`appearance-toggle-outer inline-block aspect-square transform rounded-full bg-white ring-0 transition duration-300 ${theme !== 'light' ? 'translate-x-5' : 'translate-x-1'}`} />
+                    <span className={`appearance-toggle-inner inline-block aspect-square transform rounded-full bg-white ring-0 transition duration-300 ${theme !== 'light' ? 'translate-x-5' : 'translate-x-1'}`} />
                 </button>
             </SettingsRow>
 

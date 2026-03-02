@@ -1,12 +1,15 @@
 'use client';
 
-import { useEffect, useRef } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { useEffect, useRef, useState } from "react";
 import useStore from "@/store/useStore";
 
 const LICENSE_KEY = process.env.NEXT_PUBLIC_MY_SDK_KEY;
 
 export default function useStressDetector() {
     
+    const [session, setSession] = useState(null);
+
     const {sdkActive, setEmotionValue, stressDetectionDuration, stressSensitivity} = useStore();
 
     const CHECK_INTERVAL_MS = stressDetectionDuration; 
@@ -29,16 +32,30 @@ export default function useStressDetector() {
     });
 
     useEffect(() => {
+        supabase.auth.getSession().then(({data}) => {
+            setSession(data.session);
+        });
 
-        if (!sdkActive) {
+        const {data: listener} = supabase.auth.onAuthStateChange(
+            (_event, session) => {
+                setSession(session);
+            }
+        );
+
+        console.log('SDK Active?', sdkActive)
+        return () => listener.subscription.unsubscribe();
+    }, []);
+
+    useEffect(() => {
+
+        if (!sdkActive || !session) {
             stopSDKRef.current?.();
             cancelAnimationFrame(animationRef.current);
             clearTimeout(intervalRef.current);
             return;
         }
 
-        if(window.__morphcastInitialized) return;
-        window.__morphcastInitialized = true;
+        if(!window.__morphcastInitialized) window.__morphcastInitialized = true;
 
         let stopSDK;
 
@@ -173,9 +190,9 @@ export default function useStressDetector() {
 
         return () => {
             cancelAnimationFrame(animationRef.current);
-            clearTimeout(intervalRef.current);
+            clearInterval(intervalRef.current);
             stopSDK?.();
             window.__morphcastInitialized = false;
         };
-    }, [sdkActive]);
+    }, [sdkActive, session, stressDetectionDuration, stressSensitivity]);
 }

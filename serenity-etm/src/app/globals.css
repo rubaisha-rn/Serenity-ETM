@@ -99,7 +99,86 @@
     --disabledMode: #272727;
 }
 
-.dark {}
+.dark {
+    /* background color */
+    --bg: #efefef;
+
+    /* darker accent support colours */
+    --a-main: #2a2c29;
+    --b-main: #444741;
+    --c-main: #5f635c;
+
+    /* lighter accent support colours */
+    --d-main: #b7bab4;
+    --e-main: #d3d5cf;
+    --f-main: #f0f1ed;
+
+    /* accent colour */
+    --g-main: #8e918b;
+
+    /* side panel background colours */
+    --baseAcc-a: #101010;
+    --baseAcc-b: #ffffff;
+
+    /* text colours */
+    --text-a: #000000;
+    --text-b: #363636;
+    --text-c: #585858;
+    --text-d: #ffffff;
+
+    /* warning labels and prototype tag */
+    --danger: #b91c1c;
+    --dangerH: #871111;
+    --dangerL: #ffd8d8;
+    --dangerHover: #ebb2b2;
+
+    /* success labels */
+    --success: #00bf63;
+    --successH: #006735;
+    --successL: #b3fcd9;
+    --successHover: #80d8ad;
+
+    /* priority tabs/buttons */
+    --priorityHigha: #ff3131;
+    --priorityHighb: #e3bebe;
+    --priorityHighc: #f8e4e4;
+    --priorityHight: #ff3131;
+
+    --priorityNormala: #d5af19;
+    --priorityNormalb: #f9f0d6;
+    --priorityNormalc: #fffceb;
+    --priorityNormalt: #f4c611;
+
+    --priorityLowa: #acacac;
+    --priorityLowb: #d2d2d2;
+    --priorityLowc: #f0f0f0;
+    --priorityLowt: #a6a6a6;
+
+    /* progress tabs/buttons */
+    --progressNota: #ff7517;
+    --progressNotb: #ffdbc2;
+    --progressNotc: #ffe7d6;
+    --progressNott: #ff7517;
+
+    --progressIna: #5170ff;
+    --progressInb: #cdd6ff;
+    --progressInc: #eaedff;
+    --progressInt: #5170ff;
+
+    --progressAlmosta: #7ed957;
+    --progressAlmostb: #dbffcc;
+    --progressAlmostc: #eaffe2;
+    --progressAlmostt: #66af46;
+
+    /* mode banner */
+    --focusMode: #04766b;
+    --focusModeHover: #02574e;
+   
+    --priorityMode: #b68030;
+    --priorityModeHover: #9b6719;
+
+    --disabledMode: #272727;
+}
 
 /* base layer */
 @layer base {

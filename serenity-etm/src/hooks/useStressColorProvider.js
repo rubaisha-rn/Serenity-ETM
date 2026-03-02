@@ -7,8 +7,7 @@ import { hexToRgb, lerpColor } from "@/theme/colorUtils";
 
 export default function UseStressColorProvider({children}) {
     
-    const emotionValue = useStore((s) => s.emotionValue);
-    const theme = useStore((s) => s.theme);
+    const {emotionValue, theme} = useStore();
     const visualStress = useRef(0);
 
     useEffect(() => {
