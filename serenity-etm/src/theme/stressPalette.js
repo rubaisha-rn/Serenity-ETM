@@ -32,7 +32,6 @@ export const STRESS_PALETTE = {
         },
     },
 
-    // fix this
     dark: {
         low: {  
             a: '#c5c6c3',
@@ -65,4 +64,52 @@ export const STRESS_PALETTE = {
             bg: '#1e1e20',
         },
     },
+
+    highContrast: {
+        light: {
+            a: '#000000',
+            b: '#000000',
+            c: '#222222',
+            d: '#ffffff',
+            e: '#f5f5f5',
+            f: '#ffffff',
+            g: '#000000',
+            bg: '#ffffff',
+        }, 
+
+        dark: {
+            a: '#ffffff',
+            b: '#ffffff',
+            c: '#dddddd',
+            d: '#000000',
+            e: '#111111',
+            f: '#000000',
+            g: '#ffffff',
+            bg: '#000000',
+        },
+    },
+
+    colourVisionFriendly: {
+        light: {
+            a: '#172937',
+            b: '#374151',
+            c: '#4b5563',
+            d: '#d1d5db',
+            e: '#e5e7eb',
+            f: '#f3f4f6',
+            g: '#6b7280',
+            bg: '#f7f7f7',
+        }, 
+
+        dark: {
+            a: '#f3f4f6',
+            b: '#e5e7eb',
+            c: '#d1d5db',
+            d: '#374151',
+            e: '#1f2937',
+            f: '#111827',
+            g: '#9ca3af',
+            bg: '#111827',
+        },
+    }
 };

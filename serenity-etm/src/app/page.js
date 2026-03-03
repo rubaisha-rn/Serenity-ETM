@@ -85,10 +85,10 @@ export default function IntroPage() {
     }
 
     return (
-        <div className="h-[100vh] w-[100vw] grid grid-cols-2">
+        <div className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2">
 
             <div
-                className='h-auto m-2 w-auto rounded-2xl'
+                className='signing-bg'
                 style={{
                     backgroundImage: `url(${ICONS.bg.bg})`,
                     backgroundSize: "cover",
@@ -96,14 +96,14 @@ export default function IntroPage() {
                     backgroundRepeat: "repeat-y",
                 }}
             >
-                <div className="flex items-end justify-start h-full max-w-md p-6 pt-0">
-                    <div className="max-w-md p-6 pt-0">
+                <div className="flex items-end justify-start h-full signing-title-box">
+                    <div className="signing-title-box">
                         
-                        <h1 className="text-8xl leading-none font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85">Serenity</h1>
+                        <h1 className="signing-title font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85">Serenity</h1>
                         
-                        <h1 className="text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface opacity-80">Email & Task Manager</h1>
+                        <h1 className="signing-subtitle font-AbrilFatface opacity-80">Email & Task Manager</h1>
                         
-                        <p className="pt-6 text-[var(--text-b)] font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug">Stay productive, stay calm: your stress-aware inbox.</p>
+                        <p className="signing-subsubtitle text-[var(--text-b)] font-Roboto">Stay productive, stay calm: your stress-aware inbox.</p>
                     
                     </div>
                 </div>
@@ -111,10 +111,16 @@ export default function IntroPage() {
 
             <div className='flex flex-col items-center justify-center'>
 
-                <div className='flex flex-row gap-2 my-4'>
+                <div className='flex flex-row 
+                    sm:gap-1 sm:my-1
+                    md:gap-1 md:my-2
+                    lg:gap-2 lg:my-4
+                    xl:gap-2 xl:my-4
+                    2xl:gap-3 2xl:my-6
+                '>
                     <img
                         src={ICONS['light'].logo}
-                        className='w-10 aspect-square'
+                        className='sm:w-6 md:w-8 lg:w-10 xl:w-10 2xl:w-12  aspect-square'
                     />
                     <div className='py-1 bg-black/20 px-[0.03rem]'/>
                     <h1 className='font-AbrilFatface text-[var(--text-a)]'>Sign Up</h1>
@@ -192,12 +198,12 @@ export default function IntroPage() {
                             className='w-3 h-3 accent-blue-500'
                         />
                         
-                        <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}">I agree to the&nbsp;
+                        <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto leading-snug flex flex-row gap-1"><p>I agree to the</p>
                             
                             <button
                                 className='underline hover:text-blue-400'
                                 onClick={()=> router.push('/terms')}
-                            >Terms and Conditions</button>
+                            ><p>Terms and Conditions</p></button>
                         
                         </label>
                     
@@ -211,15 +217,14 @@ export default function IntroPage() {
 
                 <div className="flex items-center space-x-2 my-1">
                     
-                    <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}">Already have an account?&nbsp;
+                    <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto leading-snug flex flex-row gap-1"><p>Already have an account?</p>
                         
                         <button
                             className='underline hover:text-blue-400'
                             onClick={()=> router.push('/login')}
-                        >Sign in</button>
+                        ><p>Sign in</p></button>
                     
                     </label>
-                
                 </div>
 
                 <PrototypeTag />

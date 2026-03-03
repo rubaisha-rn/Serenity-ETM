@@ -184,6 +184,338 @@
     --disabledMode: #dddddd;
 }
 
+.high-contrast {
+    /* background color */
+    --bg: #ffffff;
+
+    /* darker accent support colours */
+    --a-main: #000000;
+    --b-main: #000000;
+    --c-main: #222222;
+
+    /* lighter accent support colours */
+    --d-main: #ffffff;
+    --e-main: #f5f5f5;
+    --f-main: #ffffff;
+
+    /* accent colour */
+    --g-main: #000000;
+
+    /* side panel background colours */
+    --baseAcc-a: #000000;
+    --baseAcc-b: #ffffff;
+
+    /* text colours */
+    --text-a: #000000;
+    --text-b: #000000;
+    --text-c: #111111;
+    --text-d: #ffffff;
+
+    /* warning labels and prototype tag */
+    --danger: #b00020;
+    --dangerH: #7a0015;
+    --dangerL: #ffffff;
+    --dangerHover: #d0002a;
+
+    /* success labels */
+    --success: #006b2e;
+    --successH: #004d21;
+    --successL: #ffffff;
+    --successHover: #008a3a;
+
+    /* priority tabs/buttons */
+    --priorityHigha: #b00020;
+    --priorityHighb: #ffffff;
+    --priorityHighc: #ffffff;
+    --priorityHight: #b00020;
+
+    --priorityNormala: #8a6d00;
+    --priorityNormalb: #ffffff;
+    --priorityNormalc: #ffffff;
+    --priorityNormalt: #8a6d00;
+
+    --priorityLowa: #000000;
+    --priorityLowb: #ffffff;
+    --priorityLowc: #ffffff;
+    --priorityLowt: #000000;
+
+    /* progress tabs/buttons */
+    --progressNota: #c24e00;
+    --progressNotb: #ffffff;
+    --progressNotc: #ffffff;
+    --progressNott: #c24e00;
+
+    --progressIna: #0033cc;
+    --progressInb: #ffffff;
+    --progressInc: #ffffff;
+    --progressInt: #0033cc;
+
+    --progressAlmosta: #006b2e;
+    --progressAlmostb: #ffffff;
+    --progressAlmostc: #ffffff;
+    --progressAlmostt: #006b2e;
+
+    /* mode banner */
+    --focusMode: #0033cc;
+    --focusModeHover: #001f80;
+    --focusModeInt: #ffffff;
+   
+    --priorityMode: #8a6d00;
+    --priorityModeHover: #5f4b00;
+    --priorityModeInt: #ffffff;
+
+    --disabledMode: #555555;
+}
+
+.dark.high-contrast {
+    /* background color */
+    --bg: #000000;
+
+    /* darker accent support colours */
+    --a-main: #ffffff;
+    --b-main: #ffffff;
+    --c-main: #dddddd;
+
+    /* lighter accent support colours */
+    --d-main: #000000;
+    --e-main: #111111;
+    --f-main: #000000;
+
+    /* accent colour */
+    --g-main: #ffffff;
+
+    /* side panel background colours */
+    --baseAcc-a: #ffffff;
+    --baseAcc-b: #000000;
+
+    /* text colours */
+    --text-a: #ffffff;
+    --text-b: #ffffff;
+    --text-c: #e5e5e5;
+    --text-d: #000000;
+
+    /* warning labels and prototype tag */
+    --danger: #ff4d4d;
+    --dangerH: #ff8080;
+    --dangerL: #000000;
+    --dangerHover: #ff6666;
+
+    /* success labels */
+    --success: #00ff66;
+    --successH: #33ff85;
+    --successL: #000000;
+    --successHover: #00e65c;
+
+    /* priority tabs/buttons */
+    --priorityHigha: #ff4d4d;
+    --priorityHighb: #000000;
+    --priorityHighc: #111111;
+    --priorityHight: #ff4d4d;
+
+    --priorityNormala: #ffd400;
+    --priorityNormalb: #000000;
+    --priorityNormalc: #111111;
+    --priorityNormalt: #ffd400;
+
+    --priorityLowa: #ffffff;
+    --priorityLowb: #000000;
+    --priorityLowc: #111111;
+    --priorityLowt: #ffffff;
+
+    /* progress tabs/buttons */
+    --progressNota: #ff8c00;
+    --progressNotb: #000000;
+    --progressNotc: #111111;
+    --progressNott: #ff8c00;
+
+    --progressIna: #4da6ff;
+    --progressInb: #000000;
+    --progressInc: #111111;
+    --progressInt: #4da6ff;
+
+    --progressAlmosta: #00ff66;
+    --progressAlmostb: #000000;
+    --progressAlmostc: #111111;
+    --progressAlmostt: #00ff66;
+
+    /* mode banner */
+    --focusMode: #4da6ff;
+    --focusModeHover: #1a75ff;
+    --focusModeInt: #000000;
+   
+    --priorityMode: #ffd400;
+    --priorityModeHover: #e6bf00;
+    --priorityModeInt: #000000;
+
+    --disabledMode: #aaaaaa;
+}
+
+.colour-vision-friendly {
+    /* background color */
+    --bg: #f7f7f7;
+
+    /* darker accent support colours */
+    --a-main: #172937;
+    --b-main: #374151;
+    --c-main: #4b5563;
+
+    /* lighter accent support colours */
+    --d-main: #d1d5db;
+    --e-main: #e5e7eb;
+    --f-main: #f3f4f6;
+
+    /* accent colour */
+    --g-main: #6b7280;
+
+    /* side panel background colours */
+    --baseAcc-a: #111827;
+    --baseAcc-b: #ffffff;
+
+    /* text colours */
+    --text-a: #111827;
+    --text-b: #374151;
+    --text-c: #6b7280;
+    --text-d: #ffffff;
+
+    /* warning labels and prototype tag */
+    --danger: #d97706;
+    --dangerH: #b45309;
+    --dangerL: #fff7ed;
+    --dangerHover: #ea580c;
+
+    /* success labels */
+    --success: #2563eb;
+    --successH: #1d4ed8;
+    --successL: #eff6ff;
+    --successHover: #3b82f6;
+
+    /* priority tabs/buttons */
+    --priorityHigha: #d97706;
+    --priorityHighb: #ffedd5;
+    --priorityHighc: #fff7ed;
+    --priorityHight: #c2410c;
+
+    --priorityNormala: #ca8a04;
+    --priorityNormalb: #fef9c3;
+    --priorityNormalc: #fefce8;
+    --priorityNormalt: #a16207;
+
+    --priorityLowa: #6b7280;
+    --priorityLowb: #e5e7eb;
+    --priorityLowc: #f3f4f6;
+    --priorityLowt: #4b5563;
+
+    /* progress tabs/buttons */
+    --progressNota: #f97316;
+    --progressNotb: #ffedd5;
+    --progressNotc: #fff7ed;
+    --progressNott: #c2410c;
+
+    --progressIna: #2563eb;
+    --progressInb: #dbeafe;
+    --progressInc: #eff6ff;
+    --progressInt: #1d4ed8;
+
+    --progressAlmosta: #0ea5e9;
+    --progressAlmostb: #e0f2fe;
+    --progressAlmostc: #f0f9ff;
+    --progressAlmostt: #0284c7;
+
+    /* mode banner */
+    --focusMode: #2563eb;
+    --focusModeHover: #1d4ed8;
+    --focusModeInt: #eff6ff;
+   
+    --priorityMode: #ca8a04;
+    --priorityModeHover: #a16207;
+    --priorityModeInt: #fefce8;
+
+    --disabledMode: #9ca3af;
+}
+
+.dark.colour-vision-friendly {
+    /* background color */
+    --bg: #111827;
+
+    /* darker accent support colours */
+    --a-main: #f3f4f6;
+    --b-main: #e5e7eb;
+    --c-main: #d1d5db;
+
+    /* lighter accent support colours */
+    --d-main: #374151;
+    --e-main: #1f2937;
+    --f-main: #111827;
+
+    /* accent colour */
+    --g-main: #9ca3af;
+
+    /* side panel background colours */
+    --baseAcc-a: #f9fafb;
+    --baseAcc-b: #1f2937;
+
+    /* text colours */
+    --text-a: #f9fafb;
+    --text-b: #e5e7eb;
+    --text-c: #9ca3af;
+    --text-d: #111827;
+
+    /* warning labels and prototype tag */
+    --danger: #fb923c;
+    --dangerH: #f97316;
+    --dangerL: #2a1a0f;
+    --dangerHover: #fdba74;
+
+    /* success labels */
+    --success: #60a5fa;
+    --successH: #3b82f6;
+    --successL: #1e293b;
+    --successHover: #93c5fd;
+
+    /* priority tabs/buttons */
+    --priorityHigha: #fb923c;
+    --priorityHighb: #2a1a0f;
+    --priorityHighc: #3b2415;
+    --priorityHight: #fdba74;
+
+    --priorityNormala: #facc15;
+    --priorityNormalb: #3a2f00;
+    --priorityNormalc: #4a3b00;
+    --priorityNormalt: #fde047;
+
+    --priorityLowa: #9ca3af;
+    --priorityLowb: #1f2937;
+    --priorityLowc: #111827;
+    --priorityLowt: #d1d5db;
+
+    /* progress tabs/buttons */
+    --progressNota: #f97316;
+    --progressNotb: #2a1a0f;
+    --progressNotc: #3b2415;
+    --progressNott: #fb923c;
+
+    --progressIna: #60a5fa;
+    --progressInb: #1e293b;
+    --progressInc: #111827;
+    --progressInt: #93c5fd;
+
+    --progressAlmosta: #38bdf8;
+    --progressAlmostb: #0c2533;
+    --progressAlmostc: #0a1f29;
+    --progressAlmostt: #7dd3fc;
+
+    /* mode banner */
+    --focusMode: #60a5fa;
+    --focusModeHover: #3b82f6;
+    --focusModeInt: #1e293b;
+   
+    --priorityMode: #facc15;
+    --priorityModeHover: #eab308;
+    --priorityModeInt: #3a2f00;
+
+    --disabledMode: #6b7280;
+}
+
 /* base layer */
 @layer base {
     
@@ -323,7 +655,7 @@
         
         img {@apply w-3 aspect-square; }
         .batch-func img { @apply w-3.5 aspect-square; }
-        .side-bar-menu button img, .mode-banner img { @apply w-4 aspect-square; }
+        .side-bar-menu button img, .mode-banner img, .header-logo img { @apply w-4 aspect-square; }
         .secondary-side-bar img, .settings-side-bar img, .task-layout-btn img, .toolbar img, .microintervention button img { @apply w-5 aspect-square; }
         .side-bar img { @apply w-6 aspect-square; }
         .microintervention img { @apply w-7 aspect-square; }
@@ -410,6 +742,15 @@
         .appearance-toggle-inner {@apply w-4 shadow-lg;}
 
         .microintervention.outer {@apply bottom-2 w-[28%] max-w-sm h-auto p-1 rounded-xl shadow-xl;}
+
+        .header {@apply h-8 w-full grid grid-cols-3 px-12 shadow-md;}
+        .terms {@apply min-h-screen h-auto min-w-0 w-[80%] py-12 px-24 gap-6;}
+
+        .signing-bg {@apply h-auto m-2 w-auto rounded-2xl};
+        .signing-title-box {@apply max-w-md p-6 pt-0;}
+        .signing-title {@apply text-8xl leading-none;}
+        .signing-subtitle {@apply text-3xl leading-none;}
+        .signing-subsubtitle {@apply pt-6 text-base leading-snug;}
     }
 
     /* 1280px desktops */

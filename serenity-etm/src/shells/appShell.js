@@ -10,13 +10,13 @@ import CollapsableLeftSidebar from "@/components/sidebars/collapsableLeftSidebar
 import CollapsableRightSidebar from "@/components/sidebars/collapsableRightSidebar";
 import SecondarySidebar from "@/components/sidebars/secondarySidebar";
 import PrototypeTag from "@/components/prototypeTag";
-import ThinFooter from "@/components/footer/thinFooter";
+import Footer from "@/components/footer/footer";
 import ModeBanner from "@/components/modeBanner";
 import MicroInterventionPopup from "@/components/microIntervention";
 
 export default function AppShell({children}){
     
-    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, setFocusMode, priorityMode, sdkActive} = useStore();
+    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, setFocusMode, priorityMode} = useStore();
     const router = useRouter();
     const showSecondary = screen !== 'dashboard';
 
@@ -123,7 +123,7 @@ export default function AppShell({children}){
                 </aside>
 
                 <footer className="z-0 footer">
-                    <ThinFooter />
+                    <Footer />
                 </footer>
             </div>
         </div>

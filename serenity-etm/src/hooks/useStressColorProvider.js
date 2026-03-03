@@ -9,10 +9,28 @@ export default function UseStressColorProvider({children}) {
     
     const {emotionValue} = useStore();
     const theme = useStore((s) => s.theme);
+    const themeMode = useStore((s) => s.themeMode);
     const visualStress = useRef(0);
 
     useEffect(() => {
         if(emotionValue === null) return;
+
+        if (themeMode !== 'normal') {
+            const palette = themeMode === 'high-contrast' ? STRESS_PALETTE.highContrast[theme] : STRESS_PALETTE.colourVisionFriendly[theme];
+
+            const root = document.documentElement;
+
+            root.style.setProperty('--bg', palette.bg);
+            root.style.setProperty('--a-main', palette.a);
+            root.style.setProperty('--b-main', palette.b);
+            root.style.setProperty('--c-main', palette.c);
+            root.style.setProperty('--d-main', palette.d);
+            root.style.setProperty('--e-main', palette.e);
+            root.style.setProperty('--f-main', palette.f);
+            root.style.setProperty('--g-main', palette.g);
+
+            return;
+        }
 
         let raf;
         const speed = 0.8;

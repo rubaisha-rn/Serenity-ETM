@@ -1,6 +1,6 @@
 // complete
 
-export default function ThinFooter() {
+export default function Footer() {
 
     return(
         <div className='w-full flex flex-col items-center justify-center p-2 relative bg-[var(--bg)]'

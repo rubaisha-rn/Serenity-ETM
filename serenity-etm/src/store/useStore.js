@@ -1,6 +1,19 @@
 import {create} from 'zustand';
 import { supabase } from '@/lib/supabaseClient';
 
+const applyThemeModeClass = (mode) => {
+    const root = document.documentElement;
+
+    root.classList.remove('high-contrast', 'colour-vision-friendly');
+
+    if (mode === 'high-contrast') {
+        root.classList.add('high-contrast');
+    }
+    if (mode === 'colour-vision-friendly') {
+        root.classList.add('colour-vision-friendly');
+    }
+}
+
 const useStore = create((set, get) => ({
 
     // hydration
@@ -19,14 +32,16 @@ const useStore = create((set, get) => ({
         
         if(!session) {
             const theme = 'light';
+            const themeMode = 'normal';
 
             set({
                 theme,
-                themeMode: 'normal',
+                themeMode,
                 profileLoaded: true,
             })
 
             document.documentElement.classList.toggle('dark', theme === 'dark');
+            applyThemeModeClass(themeMode);
 
             return;
         };
@@ -43,10 +58,11 @@ const useStore = create((set, get) => ({
         }
 
         const theme = data.theme ?? 'light';
+        const themeMode = data.theme_mode ?? 'normal';
 
         set({
             theme,
-            themeMode: data.theme_mode ?? 'normal',
+            themeMode,
             emotionValue: data.emotion_value ?? 0,
             calmModeDuration: data.calm_mode_duration ?? 10000,
             sdkActive: data.sdk_active ?? false,
@@ -56,6 +72,7 @@ const useStore = create((set, get) => ({
         })
 
         document.documentElement.classList.toggle('dark', theme === 'dark');
+        applyThemeModeClass(themeMode);
     },
 
     // internal db update helper
@@ -89,13 +106,20 @@ const useStore = create((set, get) => ({
     },
 
     setThemeMode: (themeMode) => {
-        if (get().themeMode === themeMode) return
-        const prev = get().themeMode
-        set({themeMode})
+        if (get().themeMode === themeMode) return;
+
+        const prev = get().themeMode;
+
+        set({themeMode});
+
+        applyThemeModeClass(themeMode);
 
         get().updateProfile(
             {theme_mode: themeMode},
-            () => set({theme_mode: prev})
+            () => {
+                set({theme_mode: prev})
+                applyThemeModeClass(prev);
+            }
         )
     },
 

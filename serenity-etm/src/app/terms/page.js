@@ -1,16 +1,16 @@
 'use client';
 
 import Header from "@/components/header/header";
-import Image from "next/image";
-import ThinFooter from "@/components/footer/thinFooter";
+import Footer from "@/components/footer/footer";
+import { ICONS } from "@/lib/assets";
 
 export default function TermsPage () {
     
     return (
         <main 
-            className={`relative min-h-screen text-[var(--text-a)]`}
+            className="relative min-h-screen text-[var(--text-a)]"
             style={{
-                backgroundImage: "url('/background/bg.png')",
+                backgroundImage: `url(${ICONS.bg.bg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "repeat-y",
@@ -19,110 +19,152 @@ export default function TermsPage () {
             
             <Header
                 title="Serenity ETM"
-                logo={<Image
-                    src="/logo/logo.png"
+                logo={<img
+                    src={ICONS['dark'].logo}
                     alt='Serenity ETM Logo'
-                    width={18}
-                    height={18}
-                    priority
+                    className="header-logo"
                 />}
-                thisPage="/terms"
                 showBack
-                showRight
-                sticky
-                transparent
             />
-        
-            <div className={`flex items-center justify-center min-h-[calc(100vh-4rem)] px-6 md:px-12 py-12 relative z-10 bg-[var(--cardA-main)] mx-6 md:mx-36`}>
 
-                <div className={`w-full max-w-3xl text-[var(--text-b)] p-6`}>
+            <div className="flex flex-col items-center">
+                <div className="flex flex-col terms bg-white">
 
-                    {/* header */}
-                    <div className="mb-12">
-                        
-                        <h1 className='font-sans font-bold text-[calmp(2.8rem, vw, 8rem)] text-2xl'>
-                            Terms & Conditions 
-                        </h1>
-                        
-                        <p className='font-Roboto text-sm'>Last Updated: December, 2025</p>
-                    
+                    {/* heading */}
+                    <div>
+                        <h3 className="font-bold">Terms & Conditions</h3>
+                        <h6 className="font-semibold">Serenity ETM - Emotion-Aware Email & Task Manager</h6>
+                        <h6 className="font-semibold">Last Updated: March, 2026</h6>
                     </div>
 
-                    <section className={`text-[var(--text-b)] font-sans space-y-8 leading-relaxed text-[clamp(0.85rem,1vw,1rem)]`}>
-
+                    {/* section */}
+                    <section>
                         <div>
-                            <h3 className="font-semibold text-base mb-2">1. Prototype Disclaimer</h3>
-
-                            <p className="text-sm">Serenity ETM is a university prototype created strictly for academic and demonstrational purposes. This system is not intended for commercial ot real-world deployment.</p>
-
+                            <h6 className="font-semibold">1. Introduction</h6>
+                            <p>Serenity ETM ("the Application") is a final year university project developed for academic and demonstration purpose.<br/>By accessing or using the Application, you agree to these Terms & Conditions. If you do not agree, you should discontinue use.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
                         <div>
+                            <h6 className="font-semibold">2. Academic Prototype Disclaimer</h6>
+                            <p>Serenity ETM is:</p>
+                            <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                <li><p>An academic coursework project</p></li>
+                                <li><p>A functional prototype demonstrating emotion-aware interface adaptation</p></li>
+                                <li><p>Not a commercial project</p></li>
+                                <li><p>Not intended for production or enterprise deployment</p></li>
+                            </ul>
+                            <p>The Application may contain experimental features, incomplete functionality, or technical limitations.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
+                        </div>
 
-                            <h3 className="font-semibold text-base mb-2">
-                                2. Stress-Based UI Adaption
-                            </h3>
+                        <div>
+                            <h6 className="font-semibold">3. Emotion Detection & Webcam Use</h6>
+                            <p>The Application uses real-time facial emotion inference technology provided by <b>MorphCast</b> to estimate user stress levels for adaptive interface behaviour.<br/>
+                            Important:</p>
+                            <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                <li><p>Emotion detection is probabilistic and may be inaccurate</p></li>
+                                <li><p>It does not diagnose emotional or mental health conditions</p></li>
+                                <li><p>It is not a medical, psychological, or therapeutic tool</p></li>
+                                <li><p>Emotional estimates are used only to adjust interface elements</p></li>
+                            </ul>
+                            <p>Emotion processing occurs locally in your browser. No facial images or emotional data are stored, recorded, or transmitted to external servers.<br/><br/>By granting webcam access, you consent to temporary real-time processing for adaptive interface functionality. You may disable webcam access at any time via your browser settings.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
+                        </div>
 
-                            <p className="text-sm">
-                                The application adapts its visual interface based on calculated stress estimates derived from user interaction or simulated inputs. These values are not medical indicators and carry no diagnostic or clinical meaning.
+                        <div>
+                            <h6 className="font-semibold">4. Data & Storage</h6>
+
+                            <p className="font-semibold">4.1. Emotional Data</p>
+                            <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                <li><p>Emotional states are processed client-side</p></li>
+                                <li><p>No emotional data is saved or profiled</p></li>
+                                <li><p>No biometric identifiers are stored</p></li>
+                            </ul>
+
+                            <p className="font-semibold">4.2. Account & Data</p>
+                            <p>User authentication and data storage are managed using <b>Supabase</b>.<br/>Stored information may include:</p>
+                            <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                <li><p>Account login credentials</p></li>
+                                <li><p>User created tasks</p></li>
+                                <li><p>User created emails</p></li>
+                                <li><p>User account settings, which include:</p></li>
+                                <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                    <li><p>Theme selection</p></li>
+                                    <li><p>Theme mode</p></li>
+                                    <li><p>Calm overlay duration</p></li>
+                                    <li><p>Stress detection interval</p></li>
+                                    <li><p>Stress detection sensitivity</p></li>
+                                </ul>
+                                <li><p>Session-related metadata</p></li>
+                            </ul>
+                            <p>Users are advised not to store sensitive or confidential information, as this is a prototype system and not a production-grade platform.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
+                        </div>
+
+                        <div>
+                            <h6 className="font-semibold">5. Fictional Content</h6>
+                            <p>Any preloaded emails, tasks, or workplace scenarios displayed within the Application are fictional and created solely for demonstration purposes.<br/>
+                            They do not represent real individuals or organisations.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
+                        </div>
+                        
+                        <div>
+                            <h6 className="font-semibold">6. Adaptive Behaviour</h6>
+                            <p>Serenity ETM adapts its visual presentation based on inferred stress levels. Adaptive behaviour may include:</p>
+                            <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                <li><p>Interface simplification</p></li>
+                                <li><p>Colour changes</p></li>
+                                <li><p>Temporary calm overlays</p></li>
+                                <li><p>Micro-break prompts</p></li>
+                            </ul>
+                            <p>These features are designed to support usability and reduce cognitive load. However, the Application does not guarantee stress reduction, improved wellbeing, or productivity gains.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
+                        </div>
+
+                        <div>
+                            <h6 className="font-semibold">7. User Responsibilities</h6>
+                            <p>You agree to:</p>
+                            <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                <li><p>Use the Application for lawful purposes</p></li>
+                                <li><p>Not attempt to exploit, disrupt, or reverse engineer the system</p></li>
+                                <li><p>Understand the prototype nature of the Application</p></li>
+                            </ul>
+                            <p>Use of the system is at your own discretion.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
+                        </div>
+
+                        <div>
+                            <h6 className="font-semibold">
+                                8. Limitation of Liability
+                            </h6>
+                            <p>The Application is provided "as is" for academic demonstration purposes.<br/>The developer assumes no liability for:
                             </p>
-
+                            <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
+                                <li><p>Emotional misinterpretation</p></li>
+                                <li><p>Loss of data</p></li>
+                                <li><p>Technical malfunctions</p></li>
+                                <li><p>Any direct or indirect damages resulting from use</p></li>
+                            </ul>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
                         <div>
-
-                            <h3 className="font-semibold text-base mb-2">
-                                3. Data & Privacy
-                            </h3>
-
-                            <p className="text-sm">
-                                No real biometric, health, or medical data is stored. Stress values calculated locally within the prototype environment for demonstration purposes only and are not used for medical assessment.
-                            </p>
-
+                            <h6 className="font-semibold">9. Modifications</h6>
+                            <p>As this is an academic project under development, features and functionality may change without notice.<br/>These Terms may also be updated as the prototype evolves.</p>
+                            <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
                         <div>
-
-                            <h3 className="font-semibold text-base mb-2">
-                                4. Email & Task Content
-                            </h3>
-
-                            <p className="text-sm">
-                                All displayed emails, tasks, and workplace data are entirely fictional and generated soley for demonstration and interaction testing within the prototupe.
-                            </p>
-
+                            <h6 className="font-semibold">10. Termination</h6>
+                            <p>Access to the Application may be suspended or discontinued at anytime, particularly in cases of misuse.</p>
                         </div>
-
-                        <div>
-
-                            <h3 className="font-semibold text-base mb-2">
-                                5. Liability
-                            </h3>
-
-                            <p className="text-sm">
-                                The creators of Serenity ETM assume no responsibility for improper usage, misinterpretation, or psychological reliance on the prototype's feedback, insights, or adaptive behaviours.
-                            </p>
-
-                        </div>
-
-                        <div>
-
-                            <h3 className="font-semibold text-base mb-2">
-                                6. Modifications
-                            </h3>
-
-                            <p className="text-sm">
-                                These terms are subject to change at any time without prior notice as the prototype evolves during academic development. 
-                            </p>
-
-                        </div>
-
                     </section>
-
                 </div>
-
             </div>
-            <ThinFooter />
+                    
+            <Footer />
+
         </main>
     );  
 }
