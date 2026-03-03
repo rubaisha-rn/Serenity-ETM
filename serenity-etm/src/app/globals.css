@@ -386,6 +386,7 @@
         
         .prim-act-btn {@apply w-[8rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
         .task-layout-btn {@apply w-auto;}
+        .signup-btn {@apply w-full;}
 
         .batch-func {@apply gap-3 mx-1; }
         

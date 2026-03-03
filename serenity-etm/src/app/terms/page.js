@@ -2,7 +2,7 @@
 
 import Header from "@/components/header/header";
 import Image from "next/image";
-import Footer from "@/components/footers/footer";
+import ThinFooter from "@/components/footer/thinFooter";
 
 export default function TermsPage () {
     
@@ -122,7 +122,7 @@ export default function TermsPage () {
                 </div>
 
             </div>
-            <Footer />
+            <ThinFooter />
         </main>
     );  
 }

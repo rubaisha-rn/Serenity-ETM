@@ -2,19 +2,21 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import useStore from '@/store/useStore';
 import PrototypeTag from '@/components/prototypeTag';
 import { ICONS } from '@/lib/assets';
 import { supabase } from '@/lib/supabaseClient';
+import Spinner from '@/components/spinner';
 
 export default function IntroPage() {
     
     const router = useRouter();
-    const {setScreen} = useStore();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
+    const [accepted, setAccepted] = useState(false);
 
     const validatePassword = (password) => {
         const minLength = 8;
@@ -47,9 +49,21 @@ export default function IntroPage() {
         setLoading(true)
         setError(null)
 
+        if (!email || !password || !confirmPassword) {
+            setError('Please fill all required fields.')
+            setLoading(false);
+            return;
+        }
+
         const passwordError = validatePassword(password);
         if (passwordError) {
             setError(passwordError);
+            setLoading(false);
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError('Password do not match.')
             setLoading(false);
             return;
         }
@@ -63,6 +77,7 @@ export default function IntroPage() {
             setError(error.message)
         }
         else {
+            setSuccess('Account created. Please verify your email and login.')
             router.push('/login');
         }
 
@@ -102,34 +117,114 @@ export default function IntroPage() {
                         className='w-10 aspect-square'
                     />
                     <div className='py-1 bg-black/20 px-[0.03rem]'/>
-                    <h1 className='font-AbrilFatface text-[var(--text-b)]'>Sign up</h1>
+                    <h1 className='font-AbrilFatface text-[var(--text-a)]'>Sign Up</h1>
                 </div>
 
-                <form onSubmit={handleSignup} className='w-[100%] items-center justify-center'>
+                {/* error and success messages */}
+                {(error || success) && (
+                    <div className={`error-message w-[50%] ${success ? 'bg-[var(--successL)]' : ''}`}>
+                        <div className="flex flex-row items-center justify-center gap-1">
+                            <img
+                                src={error ? ICONS['light'].warning : ICONS['light'].success}
+                                className="bg-white rounded-full p-0.5"
+                                alt=""
+                                aria-hidden='true'
+                            />
+                            <p className="font-bold">{error ? 'Error!' : 'Success!'}</p>
+                            <p className="text-[var(--text-a)] leading-tight">{error ? error : success}</p>
+                        </div>
+                        <button
+                            onClick={() => {
+                                error ? setError('') : setSuccess('')
+                            }}
+                        >
+                            <img
+                                src={ICONS['light'].close}
+                                className="lg:w-[1rem] aspect-square opacity-70"
+                                alt=""
+                                aria-hidden='true'
+                            />
+                        </button>
+                    </div>
+                )}
+
+                <form onSubmit={handleSignup} className='w-[50%] items-center justify-center'>
+                    
                     <input
                         type="email"
                         placeholder="Email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="bg-[--baseAcc-b] border-[--e-main] w-full"
+                        className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
-                    <br/>
+
                     <input
                         type="password"
                         placeholder="Password"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+                            setPassword(e.target.value);
+                            const validationError = validatePassword(value);
+                            setError(validationError || '');
+                        }}
                         required
-                        className="bg-[--baseAcc-b] border-[--e-main] w-full"
+                        className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
-                    <br/>
-                    <button type="submit" disabled={loading} className='prim-act-btn w-full'>
+
+                    <input
+                        type="password"
+                        placeholder="Confirm password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
+                    />
+
+                    <div className="flex items-center space-x-2 my-2">
+                    
+                        <input
+                            type='checkbox'
+                            id='accept'
+                            checked={accepted}
+                            onChange={() => setAccepted(!accepted)}
+                            className='w-3 h-3 accent-blue-500'
+                        />
+                        
+                        <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}">I agree to the&nbsp;
+                            
+                            <button
+                                className='underline hover:text-blue-400'
+                                onClick={()=> router.push('/terms')}
+                            >Terms and Conditions</button>
+                        
+                        </label>
+                    
+                    </div>
+
+                    <button type="submit" disabled={loading || !accepted} className='prim-act-btn signup-btn my-1'>
                         {loading ? "Signing up..." : "Sign up"}
                     </button>
+
                 </form>
 
-                {error && <p style={{color: 'red'}}>{error}</p>}
+                <div className="flex items-center space-x-2 my-1">
+                    
+                    <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}">Already have an account?&nbsp;
+                        
+                        <button
+                            className='underline hover:text-blue-400'
+                            onClick={()=> router.push('/login')}
+                        >Sign in</button>
+                    
+                    </label>
+                
+                </div>
+
+                <PrototypeTag />
+                {loading && <Spinner/>}
+                
             </div>
         </div>
     );
