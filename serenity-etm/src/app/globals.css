@@ -751,6 +751,19 @@
         .signing-title {@apply text-8xl leading-none;}
         .signing-subtitle {@apply text-3xl leading-none;}
         .signing-subsubtitle {@apply pt-6 text-base leading-snug;}
+
+        .dashboard {@apply grid grid-cols-[1.1fr_0.35fr] gap-4 my-2; }
+        .focus-chart-outer {@apply p-4 rounded-xl shadow-lg border-4; }
+        .focus-chart-inner {@apply h-64; }
+        .dashboard-bottom-row {@apply grid grid-cols-[0.3fr_1fr] gap-4 w-full h-full mb-1; }
+        .mood-outer {@apply p-1 rounded-xl shadow-md h-full border-4; }
+        .mood-inner {@apply rounded-md p-4 h-full };
+        .email-outer {@apply gap-1 p-2 rounded-xl shadow-md h-full w-full border-4;}
+        .email-inner {@apply rounded p-0.5 px-2 w-full; }
+        .dashboard-email-grid {@apply grid grid-cols-[0.5fr_1fr_0.2fr]; }
+        .task-outer {@apply w-full p-4 rounded-xl shadow-lg border-4 mb-1;}
+        .task-inner {@apply gap-2 rounded-lg; }
+        .task-box {@apply gap-1 p-3 rounded-lg shadow-md h-full; }
     }
 
     /* 1280px desktops */

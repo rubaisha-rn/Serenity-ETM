@@ -152,7 +152,15 @@ const useStore = create((set, get) => ({
     },
 
     focusMode: false,
-    setFocusMode: (value) => set({ focusMode: value }),
+    setFocusMode: async (value) => {
+        const prev = get().focusMode;
+
+        set({focusMode: value})
+
+        if (value === true && prev === false) {
+            await get().addFocusTrigger();
+        }
+    },
 
     priorityMode: false,
     setPriorityMode: (value) => set({ priorityMode: value }),
@@ -168,6 +176,55 @@ const useStore = create((set, get) => ({
 
     expandedSecondary: true, 
     setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}),
+
+    focusTriggers: [],
+
+    loadFocusTriggers: async () => {
+        const {data: {session}} = await supabase.auth.getSession();
+        if (!session) return;
+
+        const weekAgoISO = new Date(
+            Date.now() - 7 * 24 * 60 * 60 * 1000
+        ).toISOString();
+
+        const {data, error} = await supabase
+            .from('focus_triggers')
+            .select('created_at')
+            .gte('created_at', weekAgoISO)
+            .eq('user_id', session.user.id)
+            .order('created_at', {ascending: false})
+
+        if (error) {
+            console.log('Focus triggers loading error:', error);
+            return;
+        }
+
+        set({
+            focusTriggers: data.map(row => row.created_at)
+        })
+    },
+
+    addFocusTrigger: async () => {
+        const {data: {session}} = await supabase.auth.getSession();
+        if(!session) return;
+
+        const timestamp = new Date().toISOString();
+
+        const {error} = await supabase
+            .from('focus_triggers')
+            .insert({
+                user_id: session.user.id
+            });
+
+        if (error) {
+            console.log('Focus insert error:', error);
+            return;
+        }
+
+        set((state) => ({
+            focusTriggers: [...state.focusTriggers, timestamp]
+        }));        
+    },
 }));
 
 export default useStore;

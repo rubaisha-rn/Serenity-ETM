@@ -3,6 +3,7 @@
 import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
 import { ICONS } from "@/lib/assets";
+import PrototypeTag from "@/components/prototypeTag";
 
 export default function TermsPage () {
     
@@ -163,6 +164,7 @@ export default function TermsPage () {
                 </div>
             </div>
                     
+            <PrototypeTag />
             <Footer />
 
         </main>

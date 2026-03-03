@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import AddTask from "@/components/tasks/addTask";
 import TaskFunctionsMenu from "@/components/tasks/gridTaskFunctions";
-
+import formatDate from "@/components/formatDate";
 import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
@@ -21,15 +21,13 @@ export default function TasksPage() {
     
     const {loadTasks, classifyMissingTasks, tasks, toggleComplete, toggleDelete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress, selectedIds, toggleSelect, clearSelection, markManyComplete, deleteMany, selectAllVisible, setShowTasks, showTasks, grid, setGrid} = useTaskStore();
 
-    const {emotionValue, focusMode, priorityMode, setTheme, setScreen} = useStore();
+    const {emotionValue, focusMode, priorityMode, setScreen} = useStore();
     const theme = useStore((s) => s.theme);
 
     const [filtered, setFiltered] = useState([]);
 
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
-
-    const [popup, setPopup] = useState(false);
 
     const easeTransition = {
         duration: 0.65,
@@ -221,25 +219,6 @@ export default function TasksPage() {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    // date format
-    function formatTaskDate(timestamp) {
-        const date = new Date(timestamp);
-        const now = new Date();
-
-        const isThisYear = date.getFullYear() === now.getFullYear();
-
-        const options = {
-            day: 'numeric',
-            month: 'short',
-        }; 
-
-        if (!isThisYear) {
-            options.year = 'numeric';
-        }
-
-        return date.toLocaleDateString(undefined, options);
-    }
-
     return (
         <AppShell>
 
@@ -296,7 +275,7 @@ export default function TasksPage() {
                                 >
                                     <div className="flex flex-row justify-between font-bold">
                                         <p>{task.title}</p>
-                                        <p>{formatTaskDate(task.due)}</p>
+                                        <p>{formatDate(task.due)}</p>
                                     </div>
                                     <p className="w-full truncate">{task.description || '(No description)'}</p>
                                 </motion.div>
@@ -428,7 +407,7 @@ export default function TasksPage() {
                             key={task.id}
                             layout
                             transition={easeTransition}
-                            className="bg-[var(--baseAcc-b)]"
+                            className={`bg-[var(--baseAcc-b)] ${grid ? 'rounded-lg' : ''}`}
                         >
                             {/* content morphs */}
                             <motion.div
@@ -471,7 +450,7 @@ export default function TasksPage() {
                                     />}
                                 </div>
 
-                                <p className={!grid ? "truncate" : ''}>{task.description}</p>
+                                <p className={!grid ? "truncate" : ''}>{task.description || '(No description)'}</p>
 
                                 <div className={grid ? `flex flex-row gap-2 items-center` : `text-center ${(new Date(task.due).getTime() < Date.now()) ? 'bg-[var(--priorityHighb)] rounded-sm' : ''}`}>
                                     {grid &&
@@ -479,7 +458,7 @@ export default function TasksPage() {
                                                 src={ICONS[theme].date}
                                             />
                                     }
-                                    <p>{formatTaskDate(task.due)}</p>
+                                    <p>Due: {formatDate(task.due)}</p>
                                 </div>
 
                                 {grid && (

@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useEmailStore } from "@/store/emailStore";
 import EmailReader from "@/components/emails/emailReader";
 import EmailSend from "@/components/emails/emailSend";
-
+import formatDate from "@/components/formatDate";
 import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
@@ -197,25 +197,6 @@ export default function EmailsPage () {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, []);
 
-    // date format
-    function formatMailDate(timestamp) {
-        const date = new Date(timestamp);
-        const now = new Date();
-
-        const isThisYear = date.getFullYear() === now.getFullYear();
-
-        const options = {
-            day: 'numeric',
-            month: 'short',
-        }; 
-
-        if (!isThisYear) {
-            options.year = 'numeric';
-        }
-
-        return date.toLocaleDateString(undefined, options);
-    }
-
     // render
     return (
         <AppShell>
@@ -265,7 +246,7 @@ export default function EmailsPage () {
                                 >
                                     <div className="flex flex-row justify-between font-bold">
                                         <p>{mail.from_name || mail.from_email}</p>
-                                        <p>{formatMailDate(mail.timestamp)}</p>
+                                        <p>{formatDate(mail.timestamp)}</p>
                                     </div>
                                     <p className="font-semibold">{mail.subject || '(No subject)'}</p>
                                     <p className="w-full truncate">{mail.body || '(No body)'}</p>
@@ -466,7 +447,7 @@ export default function EmailsPage () {
                                             <p className={`${mail.read ? 'font-thin' : 'font-normal'} truncate`}>{mail.body}</p>
                                         </div>
 
-                                        <p className="text-center">{formatMailDate(mail.timestamp)}</p>
+                                        <p className="text-center">{formatDate(mail.timestamp)}</p>
 
                                         {(showEmails !== 'sent' && showEmails !== 'drafts') && (
                                             <div className="flex items-center justify-center">
@@ -519,7 +500,7 @@ export default function EmailsPage () {
                                             <p className={`${mail.read ? '' : 'font-semibold'}`}>
                                             {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</p>
                                         </div>
-                                        <p className="text-center">{formatMailDate(mail.timestamp)}</p>
+                                        <p className="text-center">{formatDate(mail.timestamp)}</p>
                                     </div>
 
                                     <div className="grid grid-cols-[0.1fr_2fr]">

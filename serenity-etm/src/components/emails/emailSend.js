@@ -163,6 +163,7 @@ export default function EmailSend({onClose}) {
             )}
 
             <input
+                type="email"
                 className="send-email-container w-full border-y border-[--e-main] input flex-none bg-[--baseAcc-b]"
                 placeholder="To: janedoe@example.com"
                 value={to}
