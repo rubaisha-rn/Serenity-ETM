@@ -1,4 +1,3 @@
-// complete
 import Portal from "./portal";
 
 export default function Spinner() {

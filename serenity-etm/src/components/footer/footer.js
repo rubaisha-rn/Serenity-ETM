@@ -1,5 +1,3 @@
-// complete
-
 export default function Footer() {
 
     return(

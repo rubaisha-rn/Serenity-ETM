@@ -16,6 +16,7 @@ export default function TermsPage () {
                 backgroundPosition: "center",
                 backgroundRepeat: "repeat-y",
             }}
+            aria-labelledby="terms-heading"
         >
             
             <Header
@@ -29,25 +30,25 @@ export default function TermsPage () {
             />
 
             <div className="flex flex-col items-center">
-                <div className="flex flex-col terms bg-white">
+                <div className="flex flex-col terms bg-white" role="document">
 
                     {/* heading */}
                     <div>
-                        <h3 className="font-bold">Terms & Conditions</h3>
+                        <h3 id="terms-heading" className="font-bold">Terms & Conditions</h3>
                         <h6 className="font-semibold">Serenity ETM - Emotion-Aware Email & Task Manager</h6>
                         <h6 className="font-semibold">Last Updated: March, 2026</h6>
                     </div>
 
                     {/* section */}
                     <section>
-                        <div>
-                            <h6 className="font-semibold">1. Introduction</h6>
+                        <div aria-labelledby="section-1-heading">
+                            <h6 id="section-1-heading" className="font-semibold">1. Introduction</h6>
                             <p>Serenity ETM ("the Application") is a final year university project developed for academic and demonstration purpose.<br/>By accessing or using the Application, you agree to these Terms & Conditions. If you do not agree, you should discontinue use.</p>
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">2. Academic Prototype Disclaimer</h6>
+                        <div aria-labelledby="section-2-heading">
+                            <h6 id="section-2-heading" className="font-semibold">2. Academic Prototype Disclaimer</h6>
                             <p>Serenity ETM is:</p>
                             <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
                                 <li><p>An academic coursework project</p></li>
@@ -59,8 +60,8 @@ export default function TermsPage () {
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">3. Emotion Detection & Webcam Use</h6>
+                        <div aria-labelledby="section-3-heading">
+                            <h6 id="section-3-heading" className="font-semibold">3. Emotion Detection & Webcam Use</h6>
                             <p>The Application uses real-time facial emotion inference technology provided by <b>MorphCast</b> to estimate user stress levels for adaptive interface behaviour.<br/>
                             Important:</p>
                             <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
@@ -73,8 +74,8 @@ export default function TermsPage () {
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">4. Data & Storage</h6>
+                        <div aria-labelledby="section-4-heading">
+                            <h6 id="section-4-heading" className="font-semibold">4. Data & Storage</h6>
 
                             <p className="font-semibold">4.1. Emotional Data</p>
                             <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
@@ -103,15 +104,15 @@ export default function TermsPage () {
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">5. Fictional Content</h6>
+                        <div aria-labelledby="section-5-heading">
+                            <h6 id="section-5-heading" className="font-semibold">5. Fictional Content</h6>
                             <p>Any preloaded emails, tasks, or workplace scenarios displayed within the Application are fictional and created solely for demonstration purposes.<br/>
                             They do not represent real individuals or organisations.</p>
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
                         
-                        <div>
-                            <h6 className="font-semibold">6. Adaptive Behaviour</h6>
+                        <div aria-labelledby="section-6-heading">
+                            <h6 id="section-6-heading" className="font-semibold">6. Adaptive Behaviour</h6>
                             <p>Serenity ETM adapts its visual presentation based on inferred stress levels. Adaptive behaviour may include:</p>
                             <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
                                 <li><p>Interface simplification</p></li>
@@ -123,8 +124,8 @@ export default function TermsPage () {
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">7. User Responsibilities</h6>
+                        <div aria-labelledby="section-7-heading">
+                            <h6 id="section-7-heading" className="font-semibold">7. User Responsibilities</h6>
                             <p>You agree to:</p>
                             <ul className="list-disc text-xs leading-tight sm:pl-2 md:pl-4 lg:pl-6 xl:pl-6 2xl:pl-8">
                                 <li><p>Use the Application for lawful purposes</p></li>
@@ -135,8 +136,8 @@ export default function TermsPage () {
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">
+                        <div aria-labelledby="section-8-heading">
+                            <h6 id="section-8-heading" className="font-semibold">
                                 8. Limitation of Liability
                             </h6>
                             <p>The Application is provided "as is" for academic demonstration purposes.<br/>The developer assumes no liability for:
@@ -150,14 +151,14 @@ export default function TermsPage () {
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">9. Modifications</h6>
+                        <div aria-labelledby="section-9-heading">
+                            <h6 id="section-9-heading" className="font-semibold">9. Modifications</h6>
                             <p>As this is an academic project under development, features and functionality may change without notice.<br/>These Terms may also be updated as the prototype evolves.</p>
                             <hr className="sm:my-1 md:my-2 lg:my-4 xl:my-4 2xl:my-6"></hr>
                         </div>
 
-                        <div>
-                            <h6 className="font-semibold">10. Termination</h6>
+                        <div aria-labelledby="section-10-heading">
+                            <h6 id="section-10-heading" className="font-semibold">10. Termination</h6>
                             <p>Access to the Application may be suspended or discontinued at anytime, particularly in cases of misuse.</p>
                         </div>
                     </section>

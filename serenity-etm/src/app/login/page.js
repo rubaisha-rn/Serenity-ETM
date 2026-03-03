@@ -49,7 +49,9 @@ export default function LoginPage() {
 
     return (
 
-        <div className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2">
+        <div 
+            aria-labelledby="login-heading"
+            className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2">
         
             <div
                 className='signing-bg'
@@ -82,28 +84,48 @@ export default function LoginPage() {
                     xl:gap-2 xl:my-4
                     2xl:gap-3 2xl:my-6
                 '>
+
                     <img
                         src={ICONS['light'].logo}
+                        alt=""
+                        aria-hidden="true"
                         className='sm:w-6 md:w-8 lg:w-10 xl:w-10 2xl:w-12  aspect-square'
                     />
                     <div className='py-1 bg-black/20 px-[0.03rem]'/>
-                    <h1 className='font-AbrilFatface text-[var(--text-a)]'>Sign In</h1>
+                    <h1 
+                        id="login-heading"
+                        className='font-AbrilFatface text-[var(--text-a)]'
+                    >
+                        Sign In
+                    </h1>
+
                 </div>
 
                 {/* error and success messages */}
                 {(error || success) && (
-                    <div className={`error-message w-[50%] ${success ? 'bg-[var(--successL)]' : ''}`}>
+                    <div 
+                        role="alert"
+                        aria-live="assertive"
+                        className={`error-message w-[50%] ${success ? 'bg-[var(--successL)]' : ''}`}
+                    >
                         <div className="flex flex-row items-center justify-center gap-1">
+                    
                             <img
                                 src={error ? ICONS['light'].warning : ICONS['light'].success}
                                 className="bg-white rounded-full p-0.5"
                                 alt=""
                                 aria-hidden='true'
                             />
+                    
                             <p className="font-bold">{error ? 'Error!' : 'Success!'}</p>
+                    
                             <p className="text-[var(--text-a)] leading-tight">{error ? error : success}</p>
+                    
                         </div>
+                    
                         <button
+                            type="button"
+                            aria-label="Dismiss message"
                             onClick={() => {
                                 error ? setError('') : setSuccess('')
                             }}
@@ -118,27 +140,43 @@ export default function LoginPage() {
                     </div>
                 )}
 
-                <form onSubmit={handleLogin} className='w-[50%] items-center justify-center'>
-                    
+                <form 
+                    aria-describedby={error ? 'form-error' : undefined}
+                    onSubmit={handleLogin} 
+                    className='w-[50%] items-center justify-center'
+                >
+                    <label className="sr-only" htmlFor="email">Email Address</label>
+
                     <input
+                        id="email"
                         type="email"
                         placeholder="Email"
+                        autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
 
+                    <label htmlFor="password" className="sr-only">Password</label>
+
                     <input
+                        id="password"
                         type="password"
                         placeholder="Password"
+                        autoComplete="current-password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
 
-                    <button type="submit" disabled={loading} className='prim-act-btn signup-btn my-1'>
+                    <button 
+                        type="submit" 
+                        disabled={loading} 
+                        aria-busy={loading}
+                        className='prim-act-btn signup-btn my-1'
+                    >
                         {loading ? "Signing in..." : "Sign in"}
                     </button>
 
@@ -149,10 +187,13 @@ export default function LoginPage() {
                     <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto leading-snug flex flex-row gap-1"><p>Don't have an account?</p>
                         
                         <button
+                            type="button"
                             className='underline hover:text-blue-400'
                             onClick={()=> router.push('/')}
-                        ><p>Sign up</p></button>
-                    
+                        >
+                            <p>Sign up</p>
+                        </button>
+                        
                     </label>
                 </div>
 

@@ -57,7 +57,7 @@ function sortByPriority(items) {
 export default function DashboardPage () {
 
     const theme = useStore((s) => s.theme);
-    const {focusTriggers, loadFocusTriggers} = useStore();
+    const {focusTriggers, loadFocusTriggers, setScreen} = useStore();
 
     const router = useRouter();
 
@@ -136,20 +136,43 @@ export default function DashboardPage () {
 
     return (
         <AppShell>
-            <div className="flex flex-col min-h-0 h-screen overflow-x-hidden overflow-y-auto min-w-0 z-0 dashboard">
+            <div 
+                className="flex flex-col min-h-0 h-screen overflow-x-hidden overflow-y-auto min-w-0 z-0 dashboard"
+                aria-labelledby="dashboard-heading"
+            >
+
+                <h1 id="dashboard-heading" className="sr-only">Dashboard overview</h1>
                 
                 {/* left side */}
                 <div className="flex flex-col sm:gap-2 md:gap-3 lg:gap-4 xl:gap-4 2xl:gap-4">
 
                     {/* weekly focus chart */}
-                    <div className="focus-chart-outer bg-[var(--baseAcc-b)] border-[var(--focusModeInt)]">
+                    <div 
+                        className="focus-chart-outer bg-[var(--baseAcc-b)] border-[var(--focusModeInt)]"
+                        role="region"
+                        aria-labelledby="weekly-focus-heading"
+                    >
                         
-                        <h4 className="font-bold text-center my-1 text-[var(--text-a)]">Focus Mode This Week</h4>
+                        <h4 
+                            id="weekly-focus-heading"
+                            className="font-bold text-center my-1 text-[var(--text-a)]"
+                        >
+                                Focus Mode This Week
+                        </h4>
+
+                        <p className="sr-only">Bar chart showing focus activations for each day over the past week</p>
+
+                        {/* screen reader alternatives */}
+                        <ul className="sr-only">
+                            {weeklyFocusData.map(d => (
+                                <li key={d.day}>
+                                    {d.day}: {d.count} activations
+                                </li>
+                            ))}
+                        </ul>
 
                         <div className="focus-chart-inner">
-                            
                             <ResponsiveContainer width="100%" height="100%">
-                                
                                 <BarChart data={weeklyFocusData}>
 
                                     {/* background */}
@@ -215,18 +238,30 @@ export default function DashboardPage () {
                         </div>
                     </div>
 
-                    {/* left side bottom row */}
+                    {/* left side bottom row: mood + emails */}
                     <div className="flex flex-row dashboard-bottom-row">
 
                         {/* mood */}
-                        <div className={`mood-outer text-white border-[var(--priorityLowb)] bg-[var(--baseAcc-b)]`}>
+                        <div
+                            role="region"
+                            aria-labelledby="today-mood-heading" 
+                            className={`mood-outer text-white border-[var(--priorityLowb)] bg-[var(--baseAcc-b)]`}
+                        >
 
                             <div className={`flex flex-col mood-inner ${todayMood.colour} justify-between`}>
                                 
-                                <div>
-                                    <h6 className="opacity-80">Today's Mood</h6>
-                                    <h1 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl font-bold mt-1">{todayMood.label}</h1>
-                                </div>
+                                <h6 
+                                    id="today-mood-heading" className="opacity-80"
+                                >
+                                    Today's Mood
+                                </h6>
+
+                                <h1 
+                                    className="sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl font-bold mt-1"
+                                >
+                                    {todayMood.label}
+                                </h1>
+
                                 <p className="mt-2">
                                     {todayFocusCount} focus activations today.
                                 </p>
@@ -236,9 +271,18 @@ export default function DashboardPage () {
                         </div>
 
                         {/* emails */}
-                        <div className={`flex flex-col email-outer text-white border-[var(--progressNotc)] bg-[var(--baseAcc-b)]`}>
+                        <div 
+                            role="region"
+                            aria-labelledby="priority-emails-heading"
+                            className={`flex flex-col email-outer text-white border-[var(--progressNotc)] bg-[var(--baseAcc-b)]`}
+                        >
 
-                            <h6 className="font-bold text-center text-[var(--text-a)]">My Priority Emails</h6>
+                            <h6 
+                                id="priority-emails-heading"
+                                className="font-bold text-center text-[var(--text-a)]"
+                            >
+                                My Priority Emails
+                            </h6>
 
                             <div className="dashboard-email-grid text-[var(--text-c)] sm:px-1 md:px-1 lg:px-2 xl:px-2 2xl:px-4">
                                 <p className="group-label">From</p>
@@ -249,6 +293,9 @@ export default function DashboardPage () {
                             {topPriorityEmails.map((mail) => (
                                 <motion.div
                                     key={mail.id}
+                                    role="button"
+                                    tabIndex={0}
+                                    aria-label="Emails"
                                     className="bg-[var(--bg)] email-inner text-[var(--text-b)]"
                                 >
                                     <div className="dashboard-email-grid">
@@ -283,9 +330,18 @@ export default function DashboardPage () {
                 </div>
 
                 {/* right side: tasks */}
-                <div className={`task-outer flex flex-col text-white bg-[var(--baseAcc-b)] border-[var(--priorityNormalb)]`}>
+                <div 
+                    role="region"
+                    aria-labelledby="priority-tasks-heading"
+                    className={`task-outer flex flex-col text-white bg-[var(--baseAcc-b)] border-[var(--priorityNormalb)]`}
+                >
 
-                    <h6 className="font-bold text-center text-[var(--text-a)]">My Priority Tasks</h6>
+                    <h6 
+                        id="priority-tasks-heading"
+                        className="font-bold text-center text-[var(--text-a)]"
+                    >
+                        My Priority Tasks
+                    </h6>
                         
                     <motion.div
                         layout
@@ -296,6 +352,9 @@ export default function DashboardPage () {
                             <motion.div
                                 id={`task-${task.id}`}
                                 key={task.id}
+                                role="group"
+                                tabIndex={0}
+                                aria-labelledby="Tasks"
                                 layout
                                 transition={easeTransition}
                                 className={`bg-[var(--baseAcc-b)] rounded-lg`}

@@ -1,4 +1,3 @@
-// completed
 import { useState } from "react"
 
 export default function PrototypeTag() {
