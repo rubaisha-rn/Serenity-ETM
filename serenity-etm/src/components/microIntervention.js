@@ -9,11 +9,12 @@ import { useEmailStore } from "@/store/emailStore";
 
 export default function MicroInterventionPopup() {
 
-    const {emotionValue, calmMode, focusMode, priorityMode, theme, setFocusMode, setPriorityMode, setCalmMode, setTheme, expandedRight} = useStore();
+    const {emotionValue, calmMode, focusMode, priorityMode, setFocusMode, setPriorityMode, setCalmMode, setTheme, expandedRight} = useStore();
+    const theme = useStore((s) => s.theme);
     const {readEmailCount} = useEmailStore();
     const {completedTasksCount} = useTaskStore();
 
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false); 
     const lastShown = useRef(0);
 
     const cooldown = focusMode ? 75000 : 30000; 
@@ -43,8 +44,8 @@ export default function MicroInterventionPopup() {
                 message: 'Take a short reset break? Recharge your mind, and return with clearer focus and reduced mental fatigue.',
                 icon: ICONS[theme].calmo,
                 action: () => setCalmMode(true),
-                outer_color: 'bg-blue-100 bg-opacity-60',
-                inner_color: 'bg-blue-500',
+                outer_color: theme === 'light' ? 'bg-blue-100 bg-opacity-60' : 'bg-blue-900 bg-opacity-60',
+                inner_color: theme === 'light' ? 'bg-blue-500' : 'bg-blue-900',
             };
         }
 
@@ -122,7 +123,7 @@ export default function MicroInterventionPopup() {
 
     useEffect(() => {
         if(!open) return;
-        const timer = setTimeout(() => setOpen(false), 1200000000000); //12000
+        const timer = setTimeout(() => setOpen(false), 12000); 
         return () => clearTimeout(timer);
     }, [open]);
 
@@ -136,11 +137,16 @@ export default function MicroInterventionPopup() {
                     animate={{opacity: 1, x:'0%'}}
                     exit={{opacity: 0, x:'100%'}}
                     transition={{duration: 0.3}}
-                    className={`microintervention outer fixed z-[9999] bg-[var(--baseAcc-b)] overflow-hidden ${
+                    className={`fixed z-[9999] bg-[var(--baseAcc-b)] overflow-hidden microintervention outer ${
                         !expandedRight ? 'right-14' : 'right-2'
                     }`}
                 >
-                    <div className={`${intervention.outer_color} microintervention inner flex flex-row justify-between items-center justify-center`}>
+                    <div className={`${intervention.outer_color} justify-between items-center justify-center grid grid-cols-[0.2fr_1.2fr_0.1fr] 
+                    sm:p-1 sm:py-2 sm:rounded-md sm:gap-2
+                    md:p-1 md:py-2 md:rounded-md md:gap-3
+                    lg:p-2 lg:py-3 lg:rounded-lg lg:gap-4
+                    xl:p-2 xl:py-3 xl:rounded-lg xl:gap-4
+                    2xl:p-2 2xl:py-3 2xl:rounded-lg 2xl:gap-4`}>
 
                         <div className="flex bg-[var(--baseAcc-b)] rounded-full aspect-square items-center justify-center
                             sm:p-0

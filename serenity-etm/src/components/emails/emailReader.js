@@ -11,7 +11,7 @@ import Spinner from "../spinner";
 
 export default function EmailReader() {
 
-    const {theme} = useStore();
+    const theme = useStore((s) => s.theme);
     const {selectedEmail, setSelectedEmail, sendEmail, saveDraft, sendDraft} = useEmailStore();
     const {unarchiveMany, archiveMany, deleteMany} = useEmailStore();
 
@@ -138,7 +138,7 @@ export default function EmailReader() {
     }
 
     return (
-        <div className="send-email-container h-full flex flex-col min-h-0 w-full border-l-[0.008rem] border-[var(--f-main)] bg-[var(--baseAcc-b)]">
+        <div className="send-email-container h-full flex flex-col min-h-0 w-full border-l-[0.008rem] border-[var(--f-main)] bg-[var(--bg)]">
 
             {loading && <Spinner/>}
 
@@ -232,7 +232,7 @@ export default function EmailReader() {
                 </div>
             </div>
 
-            <div className="flex-1 min-h-0 overflow-y-auto flex flex-col">
+            <div className="flex-1 min-h-0 overflow-y-auto flex flex-col bg-[var(--bg)]">
                 {/* email */}
                 {isDraft ? (
                     <>
@@ -241,7 +241,7 @@ export default function EmailReader() {
                                 <div className="flex flex-row items-center justify-center gap-1">
                                     <img
                                         src={ICONS[theme].warning}
-                                        className="bg-[var(--baseAcc-b)] rounded-full p-0.5"
+                                        className="bg-white rounded-full p-0.5"
                                         alt=""
                                         aria-hidden='true'
                                     />
@@ -269,21 +269,21 @@ export default function EmailReader() {
                             className="min-h-0 h-full overflow-hidden pb-6 flex flex-col"
                         >
                             <input
-                                className="send-email-container input border-y"
+                                className="send-email-container input border-y bg-[--baseAcc-b] border-[--e-main]"
                                 placeholder="To: janedoe@example.com"
                                 value={editTo}
                                 onChange={e => setEditTo(e.target.value)}
                             />
 
                             <input
-                                className="send-email-container input border-y"
+                                className="send-email-container input border-y bg-[--baseAcc-b] border-[--e-main]"
                                 placeholder="Subject"
                                 value={editSubject}
                                 onChange={e => setEditSubject(e.target.value)}
                             />
 
                             <textarea
-                                className="send-email-container input border-y flex-1 min-h-[320px] overflow-y-auto"
+                                className="send-email-container input border-y flex-1 min-h-[320px] overflow-y-auto bg-[--baseAcc-b] border-[--e-main]"
                                 placeholder="Compose email"
                                 value={editBody}
                                 onChange={e => setEditBody(e.target.value)}
@@ -318,7 +318,7 @@ export default function EmailReader() {
                         animate={{opacity:1}}
                         exit={{opacity:0, scale:0.98, position: 'absolute', inset: 0}}
                         transition={easeTransition}
-                        className="flex flex-col flex-1 min-h-0 mt-4 border-t pt-4"
+                        className="flex flex-col flex-1 min-h-0 mt-4 border-t border-[--e-main] pt-4"
                     >
                         <p>
                             Replying to {selectedEmail.from_name || selectedEmail.from_email} 
@@ -327,7 +327,7 @@ export default function EmailReader() {
                         <textarea
                             value={replyBody}
                             onChange={(e) => setReplyBody(e.target.value)}
-                            className="send-email-container input border-y flex-1 min-h-[320px] overflow-y-auto"
+                            className="send-email-container input border-y flex-1 min-h-[320px] overflow-y-auto bg-[--baseAcc-b] border-[--e-main]"
                             placeholder="Type your reply"
                         />
                     </div>

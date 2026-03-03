@@ -22,7 +22,8 @@ export default function EmailsPage () {
 
     const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany} = useEmailStore();
 
-    const {emotionValue, focusMode, priorityMode, setScreen, theme, setTheme} = useStore();
+    const {emotionValue, focusMode, priorityMode, setScreen, setTheme} = useStore();
+    const theme = useStore((s) => s.theme);
 
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
@@ -71,12 +72,6 @@ export default function EmailsPage () {
 
         setSearchResults(matches.slice(0, 12));
     }, [searchQuery, emails])
-
-    // theme init
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
 
     // main filter + sorting pipeline
     useEffect(() => {
@@ -316,7 +311,7 @@ export default function EmailsPage () {
                             readOnly
                             checked={selectedIds.length === filtered.length && filtered.length > 0}
                             className="
-                                aspect-square accent-blue-500
+                                aspect-square accent-blue-500 
                                 sm:w-[0.65rem]
                                 md:w-[0.75rem]
                                 lg:w-[0.85rem]

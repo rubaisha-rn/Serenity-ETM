@@ -10,17 +10,11 @@ import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
-    const {screen, setTheme, expandedSecondary} = useStore();
+    const {screen, expandedSecondary} = useStore();
     const {setShowEmails} = useEmailStore();
     const {setShowTasks} = useTaskStore();
 
     const sidebarRef = useRef(null);
-
-    // theme sync
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
 
     // focus management when expanding
     useEffect(() => {

@@ -5,7 +5,7 @@ const useStore = create((set, get) => ({
 
     // hydration
     profileLoaded: false,
-    theme: 'light',
+    theme: 'dark', // light
     themeMode: 'normal',
     emotionValue: 0,
     calmModeDuration: 10000,
@@ -18,9 +18,16 @@ const useStore = create((set, get) => ({
         const {data: {session}} = await supabase.auth.getSession();
         
         if(!session) {
-            set({profileLoaded: true});
-            set({theme: 'light'});
-            set({themeMode: 'normal'});
+            const theme = 'light';
+
+            set({
+                theme,
+                themeMode: 'normal',
+                profileLoaded: true,
+            })
+
+            document.documentElement.classList.toggle('dark', theme === 'dark');
+
             return;
         };
 
@@ -35,8 +42,10 @@ const useStore = create((set, get) => ({
             return;
         }
 
+        const theme = data.theme ?? 'light';
+
         set({
-            theme: data.theme ?? 'light',
+            theme,
             themeMode: data.theme_mode ?? 'normal',
             emotionValue: data.emotion_value ?? 0,
             calmModeDuration: data.calm_mode_duration ?? 10000,
@@ -45,6 +54,8 @@ const useStore = create((set, get) => ({
             stressSensitivity: data.stress_sensitivity ?? 1.0,
             profileLoaded: true
         })
+
+        document.documentElement.classList.toggle('dark', theme === 'dark');
     },
 
     // internal db update helper
@@ -65,15 +76,11 @@ const useStore = create((set, get) => ({
     
     setTheme: (theme) => {
         if (get().theme === theme) return;
+        
         const prev = get().theme;
         set({theme});
 
-        if (prev === 'dark') {
-            document.documentElement.classList.add('dark');
-        }
-        else {
-            document.documentElement.classList.remove('dark');
-        }
+        document.documentElement.classList.toggle('dark', theme === 'dark');
 
         get().updateProfile(
             {theme},

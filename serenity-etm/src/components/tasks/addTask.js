@@ -8,7 +8,7 @@ import { ICONS } from "@/lib/assets";
 
 export default function AddTask() {
 
-    const {setTheme, theme} = useStore();
+    const theme = useStore((s) => s.theme);
     const {addTask} = useTaskStore();
 
     const [open, setOpen] = useState(false);
@@ -17,11 +17,6 @@ export default function AddTask() {
     const [due, setDue] = useState('');
     const [priority, setPriority] = useState('low');
     const [error, setError] = useState('');
-
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
 
     const now = new Date();
     const nowStr = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
@@ -129,7 +124,7 @@ export default function AddTask() {
                                         setError('');
                                     }}
                                     placeholder="Task Title"
-                                    className="w-full text-sm p-2 rounded border"
+                                    className="w-full text-sm p-2 rounded border bg-[--baseAcc-b] border-[--e-main]"
                                 />
 
                                 <textarea
@@ -149,7 +144,7 @@ export default function AddTask() {
                                             setDue(e.target.value);
                                             setError('');
                                         }}
-                                        className="w-full p-2 text-sm rounded border"
+                                        className="w-full p-2 text-sm rounded border bg-[--baseAcc-b] border-[--e-main]"
                                     />
                                     
                                     {/* optional priority */}

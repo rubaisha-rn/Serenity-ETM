@@ -10,7 +10,7 @@ import { useTaskStore } from '@/store/taskStore'
 export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
 
     const {setCompletedTasksCount, completedTasksCount} = useTaskStore();
-    const {theme} = useStore();
+    const theme = useStore((s) => s.theme);
     const [open, setOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);

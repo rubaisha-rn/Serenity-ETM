@@ -13,7 +13,8 @@ import { createPortal } from 'react-dom'
 export default function ProfileSettingsMenu() {
 
     const router = useRouter()
-    const {theme, setTheme, setThemeMode} = useStore();
+    const {setTheme, setThemeMode} = useStore();
+    const theme = useStore((s) => s.theme);
 
     const [open, setOpen] = useState(false);
     const [openSettings, setOpenSettings] = useState(false);

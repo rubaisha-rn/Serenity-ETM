@@ -11,8 +11,8 @@ import ProfileSettingsMenu from '../profileSettings';
 export default function CollapsableLeftSidebar() {
 
     const router = useRouter();
-    const {screen, setScreen, theme, setTheme, expandedSecondary, setExpandedSecondary} = useStore();
-
+    const {screen, setScreen, expandedSecondary, setExpandedSecondary} = useStore();
+    const theme = useStore((s) => s.theme);
     const [mounted, setMounted] = useState(false);
     
     useEffect(() => {
@@ -31,11 +31,6 @@ export default function CollapsableLeftSidebar() {
         }
     };
 
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
-
     if (!mounted) return null;
 
     return (
@@ -48,7 +43,7 @@ export default function CollapsableLeftSidebar() {
                 
                 {/* brand logo */}
                 <img
-                    src={ICONS.logo.logo}
+                    src={ICONS[theme].logo}
                     alt='Serenity ETM'
                     draggable={false}
                 /> 

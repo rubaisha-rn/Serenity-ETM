@@ -18,7 +18,7 @@ export default function SettingsModal({open, onClose}) {
     
     const panelRef = useRef(null);
     const [active, setActive] = useState('appearance');
-    const {theme} = useStore();
+    const theme = useStore((s) => s.theme);
 
     if (!open) return null;
 

@@ -2,9 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import AppShell from "@/shells/appShell";
+import useStore from "@/store/useStore";
 
 export default function EmailsPage () {
 
+    const theme = useStore((s) => s.theme);
     const router = useRouter();
 
     return (

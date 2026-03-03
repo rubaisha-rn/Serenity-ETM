@@ -11,7 +11,7 @@ import Spinner from "../spinner";
 
 export default function EmailSend({onClose}) {
 
-    const {theme} = useStore();
+    const theme = useStore((s) => s.theme);
     const {sendEmail, saveDraft} = useEmailStore()
 
     const [to, setTo] = useState('')
@@ -108,7 +108,7 @@ export default function EmailSend({onClose}) {
     }
 
     return (
-        <div className="flex-1 flex-col flex-1 min-h-0 bg-[var(--baseAcc-b)] z-0 send-email-container">
+        <div className="flex-1 flex-col flex-1 min-h-0 bg-[var(--bg)] z-0 send-email-container">
 
             {loading && <Spinner/>}
 
@@ -142,7 +142,7 @@ export default function EmailSend({onClose}) {
                     <div className="flex flex-row items-center justify-center gap-1">
                         <img
                             src={ICONS[theme].warning}
-                            className="bg-[var(--baseAcc-b)] rounded-full lg:p-0.5"
+                            className="bg-white rounded-full lg:p-0.5"
                             alt=""
                             aria-hidden='true'
                         />
@@ -163,21 +163,21 @@ export default function EmailSend({onClose}) {
             )}
 
             <input
-                className="send-email-container w-full border-y input flex-none"
+                className="send-email-container w-full border-y border-[--e-main] input flex-none bg-[--baseAcc-b]"
                 placeholder="To: janedoe@example.com"
                 value={to}
                 onChange={e => setTo(e.target.value)}
             />
 
             <input
-                className="send-email-container w-full border-y input flex-none"
+                className="send-email-container w-full border-y border-[--e-main] input flex-none bg-[--baseAcc-b]"
                 placeholder="Subject"
                 value={subject}
                 onChange={e => setSubject(e.target.value)}
             />
 
             <textarea
-                className="send-email-container w-full border-y input flex-1 min-h-[200px] resize-none"
+                className="send-email-container w-full border-y border-[--e-main] input flex-1 min-h-[200px] resize-none bg-[--baseAcc-b]"
                 placeholder="Compose email"
                 value={body}
                 onChange={e => setBody(e.target.value)}

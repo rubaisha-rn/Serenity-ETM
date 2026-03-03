@@ -1,7 +1,6 @@
 // complete
 'use client';
 
-import { useEffect } from 'react';
 import { motion } from "framer-motion";
 import useStore from '@/store/useStore';
 import { Info } from 'lucide-react';
@@ -9,7 +8,8 @@ import { ICONS } from '@/lib/assets';
 
 export default function CollapsableRightSidebar() {
 
-    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode, theme, setTheme, expandedRight, setExpandedRight} = useStore();
+    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode, expandedRight, setExpandedRight} = useStore();
+    const theme = useStore((s) => s.theme);
 
     // keyboard activation helper
     const activate = (e, action) => {
@@ -22,11 +22,6 @@ export default function CollapsableRightSidebar() {
             action?.();
         }
     };
-
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
 
     return (
         <>
@@ -85,7 +80,7 @@ export default function CollapsableRightSidebar() {
                                 onClick={() => setFocusMode(!focusMode)}
                                 onKeyDown={(e) => activate(e, () => setFocusMode(!focusMode))}
                                 className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
-                                ${focusMode ? 'bg-[var(--e-main)]' : ''}`}
+                                ${focusMode ? 'bg-[var(--d-main)]' : ''}`}
                             >
                                 <img
                                     src={ICONS[theme].focus}
@@ -123,7 +118,7 @@ export default function CollapsableRightSidebar() {
                                 onClick={() => setPriorityMode(!priorityMode)}
                                 onKeyDown={(e) => activate(e, () => setPriorityMode(!priorityMode))}
                                 className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
-                                ${priorityMode ? 'bg-[var(--e-main)]' : ''}`}
+                                ${priorityMode ? 'bg-[var(--d-main)]' : ''}`}
                             >
                                 <img
                                     src={ICONS[theme].priority}
@@ -162,7 +157,7 @@ export default function CollapsableRightSidebar() {
                                     onClick={() => {setSdkActive(!sdkActive)}}
                                     onKeyDown={(e) => activate(e, () => setSdkActive(!sdkActive))}
                                     className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collpased'}
-                                    ${sdkActive ? 'bg-[var(--e-main)]' : ''}`}
+                                    ${sdkActive ? 'bg-[var(--d-main)]' : ''}`}
                                 >
                                     <img
                                         src={ICONS[theme].stressdetect}
@@ -199,7 +194,7 @@ export default function CollapsableRightSidebar() {
                                         step={1}
                                         value={emotionValue}
                                         onChange={(e) => setEmotionValue(Number(e.target.value))}
-                                        className={`w-full mt-1 accent-[var(--baseAcc-a)]`}
+                                        className={`w-full mt-1 accent-[var(--baseAcc-a)] bg-[--baseAcc-b] border-[--e-main]`}
                                         aria-valuemin={0}
                                         aria-valuemax={100}
                                         aria-valuenow={emotionValue}
@@ -234,7 +229,7 @@ export default function CollapsableRightSidebar() {
                             onClick={() => setCalmMode(!calmMode)}
                             onKeyDown={(e) => activate(e, () => setCalmMode(!calmMode))}
                             className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
-                            ${calmMode ? 'bg-[var(--e-main)]' : ''}`}
+                            ${calmMode ? 'bg-[var(--d-main)]' : ''}`}
                         >
                             <img
                                 src={ICONS[theme].calm}

@@ -49,6 +49,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="bg-[--baseAcc-b] border-[--e-main]"
                 />
                 <br/>
                 <input
@@ -57,6 +58,7 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="bg-[--baseAcc-b] border-[--e-main]"
                 />
                 <br/>
                 <button type="submit" disabled={loading}>

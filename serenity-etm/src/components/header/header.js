@@ -1,10 +1,9 @@
 'use client';
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { NAV_LINKS } from "@/constants/navigation";
-import useStore from '@/store/useStore';
 
 export default function Header({
     title = 'Serenity ETM',
@@ -16,13 +15,6 @@ export default function Header({
     sticky = false,
     transparent = false,
 }) {
-
-    const {setTheme} = useStore();
-
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
 
     const router = useRouter();
     const [menuOpen, setMenuOpen] = useState(false);

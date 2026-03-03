@@ -6,6 +6,9 @@ export const useTaskStore = create((set, get) => ({
     selectedIds: [],
     showTasks: 'all',
 
+    grid: true, 
+    setGrid: (grid) => set({grid}),
+
     toggleSelect: (id) =>
         set(state => ({
             selectedIds: state.selectedIds.includes(id)

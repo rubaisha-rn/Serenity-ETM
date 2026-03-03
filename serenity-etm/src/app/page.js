@@ -1,121 +1,136 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useStore from '@/store/useStore';
-import Header from '@/components/header/header';
-import Image from 'next/image';
 import PrototypeTag from '@/components/prototypeTag';
-import ThinFooter from '@/components/footer/thinFooter';
+import { ICONS } from '@/lib/assets';
+import { supabase } from '@/lib/supabaseClient';
 
 export default function IntroPage() {
     
     const router = useRouter();
-    
-    const [accepted, setAccepted] = useState(false);
-    const {setTheme} = useStore();
+    const {setScreen} = useStore();
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
 
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
+    const validatePassword = (password) => {
+        const minLength = 8;
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecial = /[^A-Za-z0-9]/.test(password);
+
+        if (password.length < minLength) {
+            return 'Password must be at least 8 characters long.';
+        }
+        if (!hasUpper) {
+            return 'Password must include at least one uppercase letter.';
+        }
+        if (!hasLower) {
+            return 'Password must include at least one lowercase letter.';
+        }
+        if (!hasNumber) {
+            return 'Password must include at least one number.';
+        }
+        if (!hasSpecial) {
+            return 'Password must include at least one special character.';
+        }
+
+        return null;
+    }
+
+    const handleSignup = async (e) => {
+        e.preventDefault()
+        setLoading(true)
+        setError(null)
+
+        const passwordError = validatePassword(password);
+        if (passwordError) {
+            setError(passwordError);
+            setLoading(false);
+            return;
+        }
+
+        const {error} = await supabase.auth.signUp({
+            email,
+            password
+        });
+
+        if (error) {
+            setError(error.message)
+        }
+        else {
+            router.push('/login');
+        }
+
+        setLoading(false)
+    }
 
     return (
-        <div className="text-[var(--text-a)]">
+        <div className="h-[100vh] w-[100vw] grid grid-cols-2">
 
-            <Header
-                title="Serenity ETM"
-                logo={<Image
-                    src="/logo/logo.png"
-                    alt="Serenity ETM Logo"
-                    width={18}
-                    height={18}
-                    priority
-                />}
-                thisPage = '/'
-                showRight
-                sticky
-                transparent
-            />
-
-            <main className="relative min-h-screen overflow-hidden bg-[var(--bg-main)]"
+            <div
+                className='h-auto m-2 w-auto rounded-2xl'
                 style={{
-                    backgroundImage: "url('/background/bg.png')",
+                    backgroundImage: `url(${ICONS.bg.bg})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                     backgroundRepeat: "repeat-y",
                 }}
             >
-                
-                <PrototypeTag />
-
-                {/* 2x2 grid layout */}
-                <div className="relative z-10 grid grid-cols-2 grid-rows-2 h-screen gap-6 p-8">
-
-                    {/* top left box */}
-                    <div className="flex items-center justify-start h-full order-1 md:order-none">
-                        <div className="max-w-md p-6 pt-0">
-                            
-                            <h1 className="text-8xl leading-none font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85">Serenity</h1>
-                            
-                            <h1 className="text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface opacity-80">Email & Task Manager</h1>
-                            
-                            <p className="pt-6 text-[var(--text-b)] font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug">Stay productive, stay calm: your stress-aware inbox.</p>
+                <div className="flex items-end justify-start h-full max-w-md p-6 pt-0">
+                    <div className="max-w-md p-6 pt-0">
                         
-                        </div>
-                    </div>
-
-                    {/* top right and bottom left intentionally left empty */}
-                    <div />
-                    <div />
-
-                    {/* bottom right */}
-                    <div className="flex items-center justify-start h-full order-2 ml-6 mr-6 md:order-none md:ml-40 md:mr-10" >
-                        <div className='w-full max-w-md space-y-4'>
-                            
-                            <p className="text-[var(--text-b)] font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug">
-                                By using this prototype, you agree that the application will adapt its interface based on your detected stress level. No real biometric data is stored, and this is a prototype for academic purposes.  
-                            </p>
-
-                            <div className="flex items-center space-x-2">
-                                
-                                <input
-                                    type='checkbox'
-                                    id='accept'
-                                    checked={accepted}
-                                    onChange={() => setAccepted(!accepted)}
-                                    className='w-3 h-3 accent-blue-500'
-                                />
-                                
-                                <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto text-[clamp(0.6rem,0.9vw,1rem)] leading-snug`}">I agree to the&nbsp;
-                                    
-                                    <button
-                                        className='underline hover:text-blue-400'
-                                        onClick={()=> router.push('/terms')}
-                                    >Terms and Conditions</button>
-                                
-                                </label>
-                            
-                            </div>
-
-                            <button
-                                disabled={!accepted}
-                                className={`font-Roboto text-[clamp(0.8rem,1.05vw,1rem)] leading-snug w-full py-2.5 rounded-lg transition-colors 
-                                ${accepted
-                                    ? "bg-[var(--acc-main)] hover:bg-[var(--accHover-main)] border-[var(--a-main)] border-2 text-[var(--text-d)] cursor-pointer"
-                                    : "bg-[var(--acc-main)] border-[var(--a-main)] border-2 text-[var(--text-d)] opacity-40 pointer-events-none cursor-not-allowed"
-                                }`}
-                                onClick={() => router.push('/login')}
-                            >
-                                Enter Serenity Workplace
-                            </button>
-                        </div>
+                        <h1 className="text-8xl leading-none font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85">Serenity</h1>
+                        
+                        <h1 className="text-[clamp(1.5rem,2.5vw,3rem)] leading-none font-AbrilFatface opacity-80">Email & Task Manager</h1>
+                        
+                        <p className="pt-6 text-[var(--text-b)] font-Roboto text-[clamp(0.8rem,1.2vw,1rem)] leading-snug">Stay productive, stay calm: your stress-aware inbox.</p>
+                    
                     </div>
                 </div>
+            </div>
 
-                <ThinFooter />
+            <div className='flex flex-col items-center justify-center'>
 
-            </main>
+                <div className='flex flex-row gap-2 my-4'>
+                    <img
+                        src={ICONS['light'].logo}
+                        className='w-10 aspect-square'
+                    />
+                    <div className='py-1 bg-black/20 px-[0.03rem]'/>
+                    <h1 className='font-AbrilFatface text-[var(--text-b)]'>Sign up</h1>
+                </div>
+
+                <form onSubmit={handleSignup} className='w-[100%] items-center justify-center'>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="bg-[--baseAcc-b] border-[--e-main] w-full"
+                    />
+                    <br/>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className="bg-[--baseAcc-b] border-[--e-main] w-full"
+                    />
+                    <br/>
+                    <button type="submit" disabled={loading} className='prim-act-btn w-full'>
+                        {loading ? "Signing up..." : "Sign up"}
+                    </button>
+                </form>
+
+                {error && <p style={{color: 'red'}}>{error}</p>}
+            </div>
         </div>
     );
 };

@@ -17,7 +17,8 @@ const BLOB_BLUR = 80;
 
 export default function CalmOverlay() {
 
-    const {calmMode, calmModeDuration, setCalmMode, theme} = useStore();
+    const {calmMode, calmModeDuration, setCalmMode} = useStore();
+    const theme = useStore((s) => s.theme);
 
     const OVERLAY_DURATION = calmModeDuration;
     

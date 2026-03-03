@@ -8,7 +8,8 @@ import { ICONS } from "@/lib/assets";
 
 export default function ModeBanner({mode}) {
 
-    const {theme, setFocusMode, setPriorityMode} = useStore();
+    const {setFocusMode, setPriorityMode} = useStore();
+    const theme = useStore((s) => s.theme);
     const [show, setShow] = useState(false);
     const prevMode = useRef(mode);
 

@@ -19,11 +19,12 @@ export default function TasksPage() {
 
     const router = useRouter()
     
-    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, toggleDelete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress, selectedIds, toggleSelect, clearSelection, markManyComplete, deleteMany, selectAllVisible, setShowTasks, showTasks} = useTaskStore();
-    const {emotionValue, focusMode, priorityMode, sdkActive, setCalmMode, theme, setTheme, setScreen} = useStore();
+    const {loadTasks, classifyMissingTasks, tasks, toggleComplete, toggleDelete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress, selectedIds, toggleSelect, clearSelection, markManyComplete, deleteMany, selectAllVisible, setShowTasks, showTasks, grid, setGrid} = useTaskStore();
+
+    const {emotionValue, focusMode, priorityMode, setTheme, setScreen} = useStore();
+    const theme = useStore((s) => s.theme);
 
     const [filtered, setFiltered] = useState([]);
-    const [grid, setGrid] = useState(true);
 
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
@@ -183,12 +184,6 @@ export default function TasksPage() {
         // final stable fallback
         return a.id.localeCompare(b.id);
     }
-
-    // theme sync
-    useEffect(() => {
-        const darkModeEnabled = document.documentElement.classList.contains('dark');
-        setTheme(darkModeEnabled ? 'dark' : 'light');
-    }, []);
 
     // keyboard shortcuts
     useEffect(() => {

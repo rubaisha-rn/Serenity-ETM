@@ -9,7 +9,7 @@ import Spinner from "../spinner";
 
 export default function AccountSettings() {
 
-    const {theme} = useStore();
+    const theme = useStore((s) => s.theme);
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -41,6 +41,8 @@ export default function AccountSettings() {
         if (!hasSpecial) {
             return 'Password must include at least one special character.';
         }
+
+        return null;
     }
 
     const handleChangePassword = async () => {
@@ -112,7 +114,7 @@ export default function AccountSettings() {
                             <div className="flex flex-row items-center justify-center gap-1">
                                 <img
                                     src={error ? ICONS[theme].warning : ICONS[theme].success}
-                                    className="bg-[var(--baseAcc-b)] rounded-full p-0.5"
+                                    className="bg-white rounded-full p-0.5"
                                     alt=""
                                     aria-hidden='true'
                                 />
@@ -140,7 +142,7 @@ export default function AccountSettings() {
                         value={currentPassword}
                         autoComplete="current-password"
                         onChange={(e) => setCurrentPassword(e.target.value)}
-                        className="w-3/4 text-xs sm:p-0.5 md:p-1 lg:p-1.5 xl:p-1.5 2xl:p-2 rounded-lg border"
+                        className="w-3/4 text-xs sm:p-0.5 md:p-1 lg:p-1.5 xl:p-1.5 2xl:p-2 rounded-lg border bg-[--baseAcc-b] border-[--e-main]"
                     />
 
                     <input
@@ -154,7 +156,7 @@ export default function AccountSettings() {
                             const validationError = validatePassword(value);
                             setError(validationError || '');    
                         }}
-                        className="w-3/4 text-xs sm:p-0.5 md:p-1 lg:p-1.5 xl:p-1.5 2xl:p-2 rounded-lg border"
+                        className="w-3/4 text-xs sm:p-0.5 md:p-1 lg:p-1.5 xl:p-1.5 2xl:p-2 rounded-lg border bg-[--baseAcc-b] border-[--e-main]"
                     />
 
                     <input
@@ -163,7 +165,7 @@ export default function AccountSettings() {
                         value={confirmPassword}
                         autoComplete="confirm-password"
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-3/4 text-xs sm:p-0.5 md:p-1 lg:p-1.5 xl:p-1.5 2xl:p-2 rounded-lg border"
+                        className="w-3/4 text-xs sm:p-0.5 md:p-1 lg:p-1.5 xl:p-1.5 2xl:p-2 rounded-lg border bg-[--baseAcc-b] border-[--e-main]"
                     />
 
                     <button

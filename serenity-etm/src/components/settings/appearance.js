@@ -5,7 +5,8 @@ import useStore from "@/store/useStore";
 
 export default function AppearanceSettings() {
 
-    const {theme, setTheme, themeMode, setThemeMode} = useStore();
+    const {setTheme, themeMode, setThemeMode} = useStore();
+    const theme = useStore((s) => s.theme);
 
     return (
         <div className="space-y-6">

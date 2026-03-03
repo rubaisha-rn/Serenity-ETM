@@ -60,7 +60,7 @@ export default function WellbeingSettings() {
                     step={0.5}
                     value={1 + (stressSensitivity - 0.5) * 9}
                     onChange={(e) => setStressSensitivity(Number(e.target.value))}
-                    className="w-[75%] accent-[var(--baseAcc-a)]"
+                    className="w-[75%] accent-[var(--baseAcc-a)] bg-[--baseAcc-b] border-[--e-main]"
                 />
                 <p>Value: {Math.round((1 + (stressSensitivity - 0.5) * 9) * 100) / 100} {(Math.round((1 + (stressSensitivity - 0.5) * 9) * 100) / 100) === 5.5 ? '(Default)' : ''}</p>
             </SettingsRow>
