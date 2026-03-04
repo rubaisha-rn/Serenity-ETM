@@ -1,3 +1,9 @@
+/**
+ * Email page.
+ * 
+ * Loads and classifies user emails, filters emails by categories, provides search functionality, handles batch operations, adapt email visibility based on emotional stress levels, provides creating and sending emails.
+ */
+
 'use client';
 
 import AppShell from "@/shells/appShell";
@@ -12,46 +18,58 @@ import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
-// priority helper
+// Ensures emails without priorities default to 'normal'
 const getPriority = (p) => p ?? 'normal';
 
 export default function EmailsPage () {
 
+    // Router for navigation
     const router = useRouter();
 
+    // Global state values
     const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany} = useEmailStore();
 
     const {emotionValue, focusMode, priorityMode, setScreen, setTheme} = useStore();
     const theme = useStore((s) => s.theme);
 
+    // Search state
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
+
+    // Filtered emails currently being displayed
     const [filtered, setFiltered] = useState([]);
+
+    // Composer state
     const [showComposer, setShowComposer] = useState(false);
 
+    // Transition
     const easeTransition = {
         duration: 0.65,
         ease: [0.16, 1, 0.3, 1]
     };
 
-    // session init
+    // Session init
     useEffect(() => {
+        
         const init = async () => {
-            
-            const {data} = await supabase.auth.getSession();
+        
+            const {data} = await supabase.auth.getSession()
 
+            // If no user session, route back to sign-in
             if (!data.session) {
-                router.push('/login');
-                return;
+                router.push('/signin')
+                return
             }
 
             await loadEmails();
             await classifyMissingEmails();
         }
+
         init();
+    
     }, []);
 
-    // search
+    // Search functionality
     useEffect(() => {
 
         if (searchQuery.length < 1) {
@@ -60,7 +78,8 @@ export default function EmailsPage () {
         }
         
         const q = searchQuery.toLowerCase();
-            
+        
+        // Check against all email details
         const matches = emails.filter(e => (
             e.subject?.toLowerCase().includes(q) ||
             e.body?.toLowerCase().includes(q) ||
@@ -69,15 +88,38 @@ export default function EmailsPage () {
             e.priority.toLowerCase().includes(q)
         ));
 
+        // Only display top 12 results maximum
         setSearchResults(matches.slice(0, 12));
+
     }, [searchQuery, emails])
 
-    // main filter + sorting pipeline
+    // Close search query block on outside click
+    useEffect(() => {
+
+        const close = () => setSearchQuery('')
+        
+        if (searchQuery) {
+            window.addEventListener('click', close)
+        }
+        return () => {
+            window.removeEventListener('click', close)
+        }
+    
+    }, [searchQuery]);
+
+     /**
+     * Email filtering logic
+     * 
+     * Applies:
+        * Category filtering
+        * Emotional stress filtering
+        * Sorting rules
+     */
     useEffect(() => {
         
         let results = [...emails];
 
-        // category filtering
+        // Category filtering
         if(showEmails === 'inbox') {
             results = results.filter(e => e.folder === 'inbox' && e.isReceiver);
         }
@@ -103,20 +145,20 @@ export default function EmailsPage () {
             );
         }
 
-        // remove deleted
+        // Remove deleted
         if (showEmails !== 'sent') results = results.filter(e => !e.is_delete);
         
-        // medium stress: remove low priority only
+        // Stress-aware filtering: medium stress: remove low priority only
         if (!focusMode && emotionValue >= 40 && emotionValue <= 70) {
             results = results.filter(e =>
                 getPriority(e.priority) !== 'low'
             );
         }
 
-        // sorting
+        // Sorting
         results = results.sort((a, b) => sortEmails(a, b, focusMode || priorityMode));
 
-        // focus mode limit
+        // Focus mode limits emails shown
         if (focusMode) results = results.slice(0, 5);
 
         setFiltered(results);
@@ -124,7 +166,7 @@ export default function EmailsPage () {
 
     }, [emails, showEmails, focusMode, priorityMode, emotionValue]);
 
-    // sort function
+    // Sort function
     function sortEmails(a, b, prioritySort=false){
 
         const rank = {
@@ -133,6 +175,7 @@ export default function EmailsPage () {
             low: 1
         };
 
+        // Priority sort
         if(prioritySort) {
         
             const pa = rank[getPriority(a.priority)];
@@ -144,6 +187,7 @@ export default function EmailsPage () {
             if(b.starred && !a.starred) return 1;
         }
 
+        // Date sort
         const timeA = new Date(a.timestamp).getTime();
         const timeB = new Date(b.timestamp).getTime();
 
@@ -152,41 +196,41 @@ export default function EmailsPage () {
         return a.id.localeCompare(b.id);
     }
 
-    // close search query block on outside click
+    // Keyboard shortcuts
     useEffect(() => {
-        const close = () => setSearchQuery('')
-        if (searchQuery) {
-            window.addEventListener('click', close)
-        }
-        return () => {
-            window.removeEventListener('click', close)
-        }
-    }, [searchQuery]);
-
-    // keyboard shortcuts
-    useEffect(() => {
+        
         const handleKeyDown = (e) => {
+        
             const tag = e.target.tagName;
+        
                 if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        
                 switch (e.key.toLowerCase()) {
+        
                     case '1':
                         setShowEmails('inbox')
                         break;
+        
                     case '2':
                         setShowEmails('starred')
                         break;
+        
                     case '3':
                         setShowEmails('priority')
                         break;
+        
                     case '4':
                         setShowEmails('sent')
                         break;                    
+        
                     case '5':
                         setShowEmails('drafts')
                         break;
+        
                     case '6':
                         setShowEmails('archive')
                         break;
+        
                     default:
                         break;
                 }
@@ -194,18 +238,19 @@ export default function EmailsPage () {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
+    
     }, []);
 
-    // render
     return (
         <AppShell>
-            {/* top row: search bar + compose email button */}
+            
+            {/* Top row: search bar + compose email button */}
             <div className="flex flex-row justify-between">
 
-                {/* search bar */}
+                {/* Search bar */}
                 <div className="relative w-full">
 
-                    {/* search bar input */}
+                    {/* Search bar input */}
                     <input
                         value={searchQuery}
                         onChange={(e) => {
@@ -216,7 +261,7 @@ export default function EmailsPage () {
                         className="flex-1 border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] outline-none shadow items-center search-bar"
                     />
                     
-                    {/* search bar results */}
+                    {/* Search bar results */}
                     {searchQuery && searchResults.length > 0 && (
                         <div className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results">
                             {searchResults.map(mail => (
@@ -255,7 +300,7 @@ export default function EmailsPage () {
                     )}
                 </div>
 
-                {/* compose email button */}
+                {/* Compose email button */}
                 <button
                     disabled={showComposer}
                     onClick={() => {
@@ -273,7 +318,7 @@ export default function EmailsPage () {
                 </button>
             </div>
 
-            {/* batch functions section */}
+            {/* Batch functions section / toolbar */}
             {(selectedIds.length > 0 && (!showComposer || !selectedEmail)) && (
                 <div className="flex flex-row batch-func">
                     <button 

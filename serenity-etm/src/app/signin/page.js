@@ -1,3 +1,9 @@
+/**
+ * Sign in page
+ * 
+ * Handles user authentication using supabase
+ */
+
 'use client';
 
 import { useState } from "react";
@@ -10,26 +16,36 @@ import useStore from "@/store/useStore";
 
 export default function SignInPage() {
     
+    // Global state
     const {setScreen} = useStore();
+
+    // Navigation
     const router = useRouter();
+
+    // Form state
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    // UI states
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
 
+    // Handle form submission and user authentication
     const handleSignIn = async (e) => {
         
         e.preventDefault()
         setLoading(true)
         setError(null)
 
+        // Basic form validation
         if (!email || !password) {
             setError('Please fill all required fields.')
             setLoading(false);
             return;
         }
 
+        // Attempt supabase authentication
         const {error} = await supabase.auth.signInWithPassword({
             email,
             password
@@ -49,10 +65,12 @@ export default function SignInPage() {
 
     return (
 
+        // Main page container
         <div 
             aria-labelledby="login-heading"
-            className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2">
-        
+            className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2"
+        >
+            {/* Branding / Marketing panel */}
             <div
                 className='signing-bg'
                 style={{
@@ -61,6 +79,7 @@ export default function SignInPage() {
                     backgroundPosition: "center",
                     backgroundRepeat: "repeat-y",
                 }}
+                aria-hidden="true"
             >
                 <div className="flex items-end justify-start h-full signing-title-box">
                     <div className="signing-title-box">
@@ -75,8 +94,10 @@ export default function SignInPage() {
                 </div>
             </div>
 
+            {/* Authentication panel */}
             <div className='flex flex-col items-center justify-center'>
-
+                
+                {/* Page heading */}
                 <div className='flex flex-row
                     sm:gap-1 sm:my-1
                     md:gap-1 md:my-2
@@ -101,34 +122,32 @@ export default function SignInPage() {
 
                 </div>
 
-                {/* error and success messages */}
+                {/* Error and success messages */}
                 {(error || success) && (
                     <div 
-                        role="alert"
-                        aria-live="assertive"
+                        role='alert'
+                        aria-live='assertive'
                         className={`error-message w-[50%] ${success ? 'bg-[var(--successL)]' : ''}`}
                     >
                         <div className="flex flex-row items-center justify-center gap-1">
-                    
+                            
                             <img
                                 src={error ? ICONS['light'].warning : ICONS['light'].success}
                                 className="bg-white rounded-full p-0.5"
                                 alt=""
                                 aria-hidden='true'
                             />
-                    
+                            
                             <p className="font-bold">{error ? 'Error!' : 'Success!'}</p>
-                    
                             <p className="text-[var(--text-a)] leading-tight">{error ? error : success}</p>
-                    
                         </div>
-                    
+
+                        {/* Dismiss feedback */}
                         <button
-                            type="button"
-                            aria-label="Dismiss message"
                             onClick={() => {
                                 error ? setError('') : setSuccess('')
                             }}
+                            aria-label='Dismiss message'
                         >
                             <img
                                 src={ICONS['light'].close}
@@ -140,11 +159,13 @@ export default function SignInPage() {
                     </div>
                 )}
 
+                {/* Sign in form */}
                 <form 
                     aria-describedby={error ? 'form-error' : undefined}
                     onSubmit={handleSignIn} 
                     className='w-[50%] items-center justify-center'
                 >
+                    {/* Email input */}
                     <label className="sr-only" htmlFor="email">Email Address</label>
 
                     <input
@@ -158,6 +179,7 @@ export default function SignInPage() {
                         className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
 
+                    {/* Password input */}
                     <label htmlFor="password" className="sr-only">Password</label>
 
                     <input
@@ -171,6 +193,7 @@ export default function SignInPage() {
                         className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
 
+                    {/* Submit button */}
                     <button 
                         type="submit" 
                         disabled={loading} 
@@ -182,6 +205,7 @@ export default function SignInPage() {
 
                 </form>
 
+                {/* Sign up redirect */}
                 <div className="flex items-center space-x-2 my-1">
                     
                     <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto leading-snug flex flex-row gap-1"><p>Don't have an account?</p>
@@ -197,6 +221,7 @@ export default function SignInPage() {
                     </label>
                 </div>
 
+                {/* Prototype indicator and spinner */}
                 <PrototypeTag />
                 {loading && <Spinner/>}
                 

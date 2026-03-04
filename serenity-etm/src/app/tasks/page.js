@@ -1,3 +1,9 @@
+/**
+ * Task page.
+ * 
+ * Loads and classifies user tasks, filters tasks by categories, provides search functionality, handles batch operations, adapt task visibility based on emotional stress levels, provides layout switching and creating tasks.
+ */
+
 'use client';
 
 import AppShell from "@/shells/appShell";
@@ -12,34 +18,43 @@ import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
+// Ensures tasks without priorities default to 'normal'
 const getPriority = (p) => p ?? 'normal';
 
 export default function TasksPage() {
 
+    // Router for navigation
     const router = useRouter()
     
+    // Global state values
     const {loadTasks, classifyMissingTasks, tasks, toggleComplete, toggleDelete, completedTasksCount, setCompletedTasksCount, cyclePriority, cycleProgress, selectedIds, toggleSelect, clearSelection, markManyComplete, deleteMany, selectAllVisible, setShowTasks, showTasks, grid, setGrid} = useTaskStore();
 
     const {emotionValue, focusMode, priorityMode, setScreen} = useStore();
     const theme = useStore((s) => s.theme);
 
+    // Filtered tasks currently being displayed
     const [filtered, setFiltered] = useState([]);
 
+    // Search state
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
 
+    // Transition 
     const easeTransition = {
         duration: 0.65,
         ease: [0.16, 1, 0.3, 1]
     };
 
-    // session init
+    // Session init
     useEffect(() => {
+        
         const init = async () => {
+        
             const {data} = await supabase.auth.getSession()
 
+            // If no user session, route back to sign-in
             if (!data.session) {
-                router.push('/login')
+                router.push('/signin')
                 return
             }
 
@@ -48,18 +63,20 @@ export default function TasksPage() {
         }
 
         init()
+
     }, [])
 
-    // search
+    // Search functionality
     useEffect(() => {
 
-        if (searchQuery.length < 1) {
+        if (!searchQuery || searchQuery.length < 1) {
             setSearchResults([]);
             return;
         }
         
         const q = searchQuery.toLowerCase();
-            
+        
+        // Check against all task details
         const matches = tasks.filter(t => (
             t.title?.toLowerCase().includes(q) ||
             t.description?.toLowerCase().includes(q) ||
@@ -68,20 +85,34 @@ export default function TasksPage() {
             t.priority.toLowerCase().includes(q)
         ));
 
+        // Only display top 12 results maximum
         setSearchResults(matches.slice(0, 12));
+
     }, [searchQuery, tasks]);
 
-    // close search query block on outside click
+    // Close search query block on outside click
     useEffect(() => {
+
         const close = () => setSearchQuery('')
+        
         if (searchQuery) {
             window.addEventListener('click', close)
         }
         return () => {
             window.removeEventListener('click', close)
         }
+    
     }, [searchQuery]);
 
+    /**
+     * Task filtering logic
+     * 
+     * Applies:
+        * Category filtering
+        * Emotional stress filtering
+        * Completion filtering
+        * Sorting rules
+     */
     useEffect(() => {
 
         let results = [...tasks];
@@ -92,7 +123,7 @@ export default function TasksPage() {
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
 
-        // category filtering
+        // Category filtering
         if (showTasks === 'today') {
             results = results.filter(t => {
                 if (!t.due) return false;
@@ -114,21 +145,21 @@ export default function TasksPage() {
             });
         }
 
-        // only show incomplete tasks in all other categories
+        // Remove complete tasks in all other categories
         if (showTasks !== 'completed') results = results.filter(t => !t.completed); 
 
-        // remove deleted
+        // Remove deleted tasks
         results = results.filter(t => !t.is_delete);
 
-        // medium stress -> remove low priority
+        // Stress-aware filtering: medium stress -> remove low priority
         if (!focusMode && emotionValue >= 40 && emotionValue <= 70) {
             results = results.filter(t => getPriority(t.priority) !== 'low');
         }
 
-        // sorting
+        // Sorting
         results = results.sort((a, b) => sortTasks(a, b, focusMode || priorityMode));
 
-        // focus mode limit
+        // Focus mode limits tasks shown
         if (focusMode) results = results.slice(0, 3);
         
         setFiltered(results);
@@ -136,7 +167,7 @@ export default function TasksPage() {
     
     }, [tasks, showTasks, focusMode, priorityMode, emotionValue]);
 
-    // sorting function
+    // Task sorting logic
     function sortTasks(a, b, prioritySort = false) {
         
         const rank = {
@@ -145,50 +176,54 @@ export default function TasksPage() {
             low: 1,
         };
 
-        // incomplete tasks first
+        // Incomplete tasks first
         if (a.completed !== b.completed) {
             return a.completed ? 1 : -1;
         }
 
-        // overdue tasks float to the top
+        // Overdue tasks float to the top
         const now = Date.now();
 
-        // due date sort (earliest first, undated last)
+        // Due date sort (earliest first, undated last)
         const timeA = a.due ? new Date(a.due).getTime() : Infinity;
         const timeB = b.due ? new Date(b.due).getTime() : Infinity;
 
         const overdueA = timeA < now;
         const overdueB = timeB < now;
 
-        // priority sort on priority mode
+        // Priority sort on priority mode
         if (prioritySort) {
             
             const pa = rank[getPriority(a.priority)];
             const pb = rank[getPriority(b.priority)];
 
-            // priority first
+            // Priority first
             if (pa !== pb) return pb - pa;
         }
 
-        // overdue first
+        // Overdue first
         if (overdueA !== overdueB) return overdueA ? -1 : 1;
 
-        // earlier due date first
+        // Earlier due date first
         if (timeA !== timeB) {
             return timeA - timeB;
         }
 
-        // final stable fallback
+        // Final stable fallback
         return a.id.localeCompare(b.id);
     }
 
-    // keyboard shortcuts
+    // Keyboard shortcuts
     useEffect(() => {
+        
         const handleKeyDown = (e) => {
+        
             const tag = e.target.tagName;
+        
                 if (tag === 'INPUT' || tag === 'TEXTAREA') return;
                 
                 switch (e.key.toLowerCase()) {
+        
                     case '1':
                         setShowTasks('all')
                         break;
@@ -216,20 +251,24 @@ export default function TasksPage() {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
+    
     }, []);
 
     return (
+
+        // Appshell provides global layout
         <AppShell>
 
-            {/* top row: search bar + add task button */}
+            {/* Top row: search bar + buttons */}
             <div className="flex flex-row justify-between">
 
-                {/* search bar */}
+                {/* Search bar */}
                 <div className="relative w-full">
 
-                    {/* search bar input */}
+                    {/* Search bar input */}
                     <input
                         value={searchQuery}
+                        aria-label="Search tasks"
                         onChange={(t) => {
                             t.stopPropagation()
                             setSearchQuery(t.target.value)
@@ -238,17 +277,23 @@ export default function TasksPage() {
                         className="flex-1 border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-c)] outline-none shadow items-center search-bar"
                     />
                     
-                    {/* search bar results */}
+                    {/* Search results */}
                     {searchQuery && searchResults.length > 0 && (
-                        <div className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results">
+                        <div 
+                            role="listbox"
+                            className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results"
+                        >
                             {searchResults.map(task => (
                                 <motion.div
                                     key={task.id}
                                     role="button"
+                                    tabIndex={0}
                                     onClick={() => {
+                                       
                                         setSearchQuery('');
 
                                         const el = document.getElementById(`task-${task.id}`);
+                                        
                                         if (el) {
                                             el.scrollIntoView({behavior: 'smooth', block: 'center'});
                                             el.classList.add('ring-2', 'ring-blue-500');
@@ -282,25 +327,33 @@ export default function TasksPage() {
                         </div>
                     )}
                 </div>
-
+                
+                {/* Layout toggle and create task */}
                 <div className="flex flex-row gap-1">
                     <button
+                        aria-label="Toggle grid layout"
                         className="prim-act-btn task-layout-btn"
                         onClick={() => setGrid(!grid)}
                     >
                         <img
                             src={grid ? ICONS[theme].row : ICONS[theme].grid}
+                            alt=""
+                            aria-hidden="true"
                         />
                     </button>
 
-                    {/* add task button */}
+                    {/* Add task button */}
                     <AddTask />
+
                 </div>
             </div>
 
-            {/* batch functions section */}
+            {/* Batch functions section / Toolbar */}
             {(selectedIds.length > 0) && (
+
                 <div className="flex flex-row batch-func">
+                    
+                    {/* Check box button */}
                     <button 
                         className="opacity-80 hover:opacity-60 "
                         onClick={() => {
@@ -326,6 +379,7 @@ export default function TasksPage() {
                         />
                     </button>
 
+                    {/* Mark many as complete / incomplete */}
                     {showTasks !== 'completed' ? 
                         <button
                             className="opacity-80 hover:opacity-60"
@@ -353,6 +407,7 @@ export default function TasksPage() {
                         </button>
                     }
 
+                    {/* Delete */}
                     <button 
                         className="opacity-80 hover:opacity-60"
                         onClick={() => deleteMany(selectedIds)}>
@@ -365,13 +420,13 @@ export default function TasksPage() {
                 </div>
             )}
 
-            {/* main section with tasks listed */}
+            {/* Main section with tasks listed */}
             <motion.div 
                 layout
                 transition={easeTransition}
                 className="flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0 overflow-y-visible"
             >
-                {/* header */}
+                {/* Header */}
                 {!grid && filtered.length > 0 && (
                     <motion.div 
                         layout
@@ -390,7 +445,7 @@ export default function TasksPage() {
                     </motion.div>
                 )}
 
-                {/* container morphs */}
+                {/* Container morphs */}
                 <motion.div
                     layout
                     transition={easeTransition}
@@ -408,7 +463,7 @@ export default function TasksPage() {
                             transition={easeTransition}
                             className={`bg-[var(--baseAcc-b)] ${grid ? 'rounded-lg' : ''}`}
                         >
-                            {/* content morphs */}
+                            {/* Content morphs */}
                             <motion.div
                                 layout
                                 className={
@@ -418,6 +473,7 @@ export default function TasksPage() {
                                     ${(new Date(task.due).getTime() < Date.now()) ? 'border-[0.2rem] border-[var(--priorityHigha)]' : ''}`
                                 }
                             >
+                                {/* Checkbox */}
                                 {!grid && (
                                     <input 
                                         type="checkbox"
@@ -437,6 +493,7 @@ export default function TasksPage() {
                                     />
                                 )}
 
+                                {/* Task info */}
                                 <div className={grid ? 'flex flex-row justify-between' : ''}>
                                     {!grid 
                                     ? <p className="font-semibold">{task.title}</p>
@@ -460,6 +517,7 @@ export default function TasksPage() {
                                     <p>Due: {formatDate(task.due)}</p>
                                 </div>
 
+                                {/* Task progress bar */}
                                 {grid && (
                                     <div className="w-full h-1 bg-black/10 rounded-full my-2">
                                         <div className={`h-1 bg-blue-500 rounded-full ${
@@ -472,6 +530,7 @@ export default function TasksPage() {
                                     </div>
                                 )}
 
+                                {/* Progress button */}
                                 {showTasks !== 'completed' &&
                                     <div className={grid ? 'flex flex-row gap-2 items-center' : ''}>
                                         {grid && (
@@ -497,7 +556,8 @@ export default function TasksPage() {
                                         </div> 
                                     </div>
                                 }
-                                
+
+                                {/* Priority button */}
                                 <div className={grid ? 'flex flex-row gap-4 items-center' : ''}>
                                     {grid && (
                                         <p className="text-[var(--text-b)] leading-tight group-label">Priority</p>
@@ -527,6 +587,7 @@ export default function TasksPage() {
                     ))}
                 </motion.div>
 
+                {/* If no tasks */}
                 {filtered.length === 0 && (
                     <motion.div 
                         key="empty"

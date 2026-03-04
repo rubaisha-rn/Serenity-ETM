@@ -1,3 +1,9 @@
+/**
+ * Sign up page
+ * 
+ * Handles user account registration using supabase authentication.
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -6,55 +12,42 @@ import PrototypeTag from '@/components/prototypeTag';
 import { ICONS } from '@/lib/assets';
 import { supabase } from '@/lib/supabaseClient';
 import Spinner from '@/components/spinner';
+import validatePassword from '@/components/validatePassword';
 
 export default function SignUpPage() {
     
+    // For navigation
     const router = useRouter();
+    
+    // Form states
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
-    const [success, setSuccess] = useState(null)
     const [accepted, setAccepted] = useState(false);
 
-    const validatePassword = (password) => {
-        const minLength = 8;
-        const hasUpper = /[A-Z]/.test(password);
-        const hasLower = /[a-z]/.test(password);
-        const hasNumber = /[0-9]/.test(password);
-        const hasSpecial = /[^A-Za-z0-9]/.test(password);
+    // UI states
+    const [loading, setLoading] = useState(false)
 
-        if (password.length < minLength) {
-            return 'Password must be at least 8 characters long.';
-        }
-        if (!hasUpper) {
-            return 'Password must include at least one uppercase letter.';
-        }
-        if (!hasLower) {
-            return 'Password must include at least one lowercase letter.';
-        }
-        if (!hasNumber) {
-            return 'Password must include at least one number.';
-        }
-        if (!hasSpecial) {
-            return 'Password must include at least one special character.';
-        }
+    // Error and success states
+    const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null)
 
-        return null;
-    }
-
+    // Handles form submission and account creation
     const handleSignup = async (e) => {
+
         e.preventDefault()
+        
         setLoading(true)
         setError(null)
 
+        // Basic validation 
         if (!email || !password || !confirmPassword) {
             setError('Please fill all required fields.')
             setLoading(false);
             return;
         }
 
+        // Password validation
         const passwordError = validatePassword(password);
         if (passwordError) {
             setError(passwordError);
@@ -62,6 +55,7 @@ export default function SignUpPage() {
             return;
         }
 
+        // Match passwords
         if (password !== confirmPassword) {
             setError('Password do not match.')
             setLoading(false);
@@ -77,6 +71,8 @@ export default function SignUpPage() {
             setError(error.message)
         }
         else {
+
+            // Redirect to sign in page for logging in
             setSuccess('Account created. Please verify your email and sign in.')
             router.push('/signin');
         }
@@ -85,8 +81,13 @@ export default function SignUpPage() {
     }
 
     return (
-        <div className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2">
 
+        // Page layout container
+        <div 
+            aria-busy={loading}
+            className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2"
+        >
+            {/* Branding panel */}
             <div
                 className='signing-bg'
                 style={{
@@ -95,6 +96,7 @@ export default function SignUpPage() {
                     backgroundPosition: "center",
                     backgroundRepeat: "repeat-y",
                 }}
+                aria-hidden="true"
             >
                 <div className="flex items-end justify-start h-full signing-title-box">
                     <div className="signing-title-box">
@@ -109,8 +111,10 @@ export default function SignUpPage() {
                 </div>
             </div>
 
+            {/* Sign up form panel */}
             <div className='flex flex-col items-center justify-center'>
 
+                {/* Page title */}
                 <div className='flex flex-row 
                     sm:gap-1 sm:my-1
                     md:gap-1 md:my-2
@@ -121,28 +125,38 @@ export default function SignUpPage() {
                     <img
                         src={ICONS['light'].logo}
                         className='sm:w-6 md:w-8 lg:w-10 xl:w-10 2xl:w-12  aspect-square'
+                        alt='Serenity ETM logo'
                     />
                     <div className='py-1 bg-black/20 px-[0.03rem]'/>
                     <h1 className='font-AbrilFatface text-[var(--text-a)]'>Sign Up</h1>
                 </div>
 
-                {/* error and success messages */}
+                {/* Error and success messages */}
                 {(error || success) && (
-                    <div className={`error-message w-[50%] ${success ? 'bg-[var(--successL)]' : ''}`}>
+                    <div 
+                        role='alert'
+                        aria-live='assertive'
+                        className={`error-message w-[50%] ${success ? 'bg-[var(--successL)]' : ''}`}
+                    >
                         <div className="flex flex-row items-center justify-center gap-1">
+                            
                             <img
                                 src={error ? ICONS['light'].warning : ICONS['light'].success}
                                 className="bg-white rounded-full p-0.5"
                                 alt=""
                                 aria-hidden='true'
                             />
+                            
                             <p className="font-bold">{error ? 'Error!' : 'Success!'}</p>
                             <p className="text-[var(--text-a)] leading-tight">{error ? error : success}</p>
                         </div>
+
+                        {/* Dismiss feedback */}
                         <button
                             onClick={() => {
                                 error ? setError('') : setSuccess('')
                             }}
+                            aria-label='Dismiss message'
                         >
                             <img
                                 src={ICONS['light'].close}
@@ -154,9 +168,19 @@ export default function SignUpPage() {
                     </div>
                 )}
 
-                <form onSubmit={handleSignup} className='w-[50%] items-center justify-center'>
+                {/* Sign up form */}
+                <form 
+                    aria-describedby={error ? 'signup-error' : undefined}
+                    onSubmit={handleSignup} 
+                    className='w-[50%] items-center justify-center'
+                >
+                    {/* Email input */}
+                    <label className="sr-only" htmlFor="email">
+                        Email address 
+                    </label>
                     
                     <input
+                        id='email'
                         type="email"
                         placeholder="Email"
                         value={email}
@@ -165,7 +189,16 @@ export default function SignUpPage() {
                         className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
 
+                    {/* Password input */}
+                    <label 
+                        className="sr-only" 
+                        htmlFor="password"
+                    >
+                        Password
+                    </label>
+
                     <input
+                        id='password'
                         type="password"
                         placeholder="Password"
                         value={password}
@@ -179,7 +212,16 @@ export default function SignUpPage() {
                         className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
 
+                    {/* Confirm password */}
+                    <label 
+                        className="sr-only" 
+                        htmlFor="confirm-password"
+                    >
+                        Confirm password
+                    </label>
+
                     <input
+                        id='confirm-password'
                         type="password"
                         placeholder="Confirm password"
                         value={confirmPassword}
@@ -188,6 +230,7 @@ export default function SignUpPage() {
                         className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
                     />
 
+                    {/* Terms acceptance */}
                     <div className="flex items-center space-x-2 my-2">
                     
                         <input
@@ -209,12 +252,17 @@ export default function SignUpPage() {
                     
                     </div>
 
-                    <button type="submit" disabled={loading || !accepted} className='prim-act-btn signup-btn my-1'>
+                    {/* Submit button */}
+                    <button 
+                        type="submit" 
+                        disabled={loading || !accepted} className='prim-act-btn signup-btn my-1'
+                    >
                         {loading ? "Signing up..." : "Sign up"}
                     </button>
 
                 </form>
 
+                {/* Sign in redirect */}
                 <div className="flex items-center space-x-2 my-1">
                     
                     <label htmlFor='accept' className="text-[var(--text-b)] font-Roboto leading-snug flex flex-row gap-1"><p>Already have an account?</p>
@@ -222,11 +270,14 @@ export default function SignUpPage() {
                         <button
                             className='underline hover:text-blue-400'
                             onClick={()=> router.push('/signin')}
-                        ><p>Sign in</p></button>
+                        >
+                            <p>Sign in</p>
+                        </button>
                     
                     </label>
                 </div>
 
+                {/* Prototype tag and loading spinner */}
                 <PrototypeTag />
                 {loading && <Spinner/>}
                 
