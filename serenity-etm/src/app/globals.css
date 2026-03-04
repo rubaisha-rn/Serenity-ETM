@@ -1083,35 +1083,35 @@
     }
 
     /* X-Large screens */
-    @screen xl {
+    @screen lg {
 
         /* Typography */
-        h1 { @apply text-3xl font-bold; } 
-        h2 { @apply text-2xl font-semibold; }
-        h3 { @apply text-xl font-semibold; }
-        h4 { @apply text-lg font-semibold; }
-        h5 { @apply text-base font-semibold; }
-        h6 { @apply text-[0.95rem] font-thin; }
-        p { @apply text-[0.8rem]; }
+        h1 { @apply text-2xl font-bold; } 
+        h2 { @apply text-xl font-semibold; }
+        h3 { @apply text-lg font-semibold; }
+        h4 { @apply text-base font-semibold; }
+        h5 { @apply text-[0.98rem] font-semibold; }
+        h6 { @apply text-[0.85rem] font-thin; }
+        p { @apply text-[0.7rem]; }
         
         /* Images */
-        img { @apply w-4 aspect-square; }
+        img { @apply w-3 aspect-square; }
 
-        .batch-func img { @apply w-4.5 aspect-square; }
+        .batch-func img { @apply w-3.5 aspect-square; }
         
         .side-bar-menu button img, 
         .mode-banner img, 
-        .header-logo img { @apply w-5 aspect-square; }
+        .header-logo img { @apply w-4 aspect-square; }
         
         .secondary-side-bar img, 
         .settings-side-bar img, 
         .task-layout-btn img, 
         .toolbar img, 
-        .microintervention button img { @apply w-6 aspect-square; }
+        .microintervention button img { @apply w-5 aspect-square; }
         
-        .side-bar img { @apply w-7 aspect-square; }
+        .side-bar img { @apply w-6 aspect-square; }
         
-        .microintervention img { @apply w-8 aspect-square; }
+        .microintervention img { @apply w-7 aspect-square; }
 
         /* Sidebar format */
         .side-bar,
@@ -1126,20 +1126,20 @@
             transition-[grid-template-columns] 
             duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]; 
             grid-template-columns: 
-                var(--left, 120px)
+                var(--left, 100px)
                 1fr
-                var(--right, 70px);
+                var(--right, 50px);
             grid-template-rows: 1fr auto;
         }
         
-        .main-panel { @apply flex flex-col h-full min-h-0 m-2 mx-3 gap-2; }
+        .main-panel { @apply flex flex-col h-full min-h-0 m-1 mx-2 gap-1; }
         
         .footer { grid-column: 1 / -1; }
         
-        .main-content { @apply mb-8; }
+        .main-content { @apply mb-6; }
 
         /* Prototype */
-        .prototype { @apply px-5 py-1 pb-3 rounded-lg; }
+        .prototype { @apply px-4 py-0.5 pb-2.5 rounded-md; }
 
         /* Sidebar buttons */
         .side-bar { @apply px-1 py-2 w-12 h-[calc(100vh-0.5rem)] rounded-lg; }
@@ -1246,7 +1246,168 @@
         .task-box { @apply gap-1 p-3 rounded-lg shadow-md h-full; }
     }
 
-    /* 2X_Large screens */
+    /* 2X-Large screens */
     @screen 2xl {
+
+        /* Typography */
+        h1 { @apply text-3xl font-bold; } 
+        h2 { @apply text-2xl font-semibold; }
+        h3 { @apply text-xl font-semibold; }
+        h4 { @apply text-lg font-semibold; }
+        h5 { @apply text-base font-semibold; }
+        h6 { @apply text-[0.95rem] font-thin; }
+        p { @apply text-[0.8rem]; }
+        
+        /* Images */
+        img { @apply w-4 aspect-square; }
+
+        .batch-func img { @apply w-5 aspect-square; }
+        
+        .side-bar-menu button img, 
+        .mode-banner img, 
+        .header-logo img { @apply w-5 aspect-square; }
+        
+        .secondary-side-bar img, 
+        .settings-side-bar img, 
+        .task-layout-btn img, 
+        .toolbar img, 
+        .microintervention button img { @apply w-6 aspect-square; }
+        
+        .side-bar img { @apply w-7 aspect-square; }
+        
+        .microintervention img { @apply w-8 aspect-square; }
+
+        /* Sidebar format */
+        .side-bar,
+        .secondary-side-bar,
+        .side-bar-toggle { @apply block; }
+        
+        .side-bar { @apply flex flex-col justify-between; }
+
+        /* Main application layout */
+        .app-shell { 
+            @apply grid h-screen w-full
+            transition-[grid-template-columns] 
+            duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]; 
+            grid-template-columns: 
+                var(--left, 120px)
+                1fr
+                var(--right, 70px);
+            grid-template-rows: 1fr auto;
+        }
+        
+        .main-panel { @apply flex flex-col h-full min-h-0 m-2 mx-3 gap-2; }
+        
+        .footer { grid-column: 1 / -1; }
+        
+        .main-content { @apply mb-8; }
+
+        /* Prototype */
+        .prototype { @apply px-5 py-1 pb-3 rounded-lg; }
+
+        /* Sidebar buttons */
+        .side-bar { @apply px-2 py-3 w-14 h-[calc(100vh-0.6rem)] rounded-xl; }
+        .side-bar-btn { @apply gap-2; }
+        
+        .side-bar-btn-active { @apply h-7 w-1.5; }
+        .side-bar-btn-style { @apply rounded-lg py-1.5 px-2 min-w-[36px] min-h-[36px]; }
+        
+        .side-bar-menu { @apply ml-4 w-48 rounded-lg p-1; }
+        .side-bar-menuitem { @apply p-1 px-3 gap-4 min-h-[32px]; }
+        
+        .side-bar-toggle { @apply bottom-[6rem] p-2 py-3; }
+
+        .side-bar-btn-style.expanded { @apply gap-3 w-[14rem] h-10 m-1 px-4 rounded-xl justify-start; }
+        .side-bar-btn-style.collapsed { @apply gap-0 py-1 px-2 rounded-lg; }
+
+        .side-bar-label { @apply text-base; }
+        .side-bar-help { @apply gap-1 text-[0.7rem]; }
+        .side-bar-info { @apply w-2.5 h-2.5 mt-0.5 mx-1.5; }
+        
+        .secondary-side-bar { @apply p-3 pt-4 ml-2 h-[calc(100vh-0.6rem)] rounded-xl; }
+        
+        .secondary-side-bar-btn.expanded { @apply h-8 px-2 gap-4; }
+        .secondary-side-bar-btn.collapsed { @apply gap-0 rounded-lg; }
+        
+        .secondary-side-bar-label { @apply text-[0.9rem]; }
+        
+        .group-label { @apply text-[0.75rem]; }
+        
+        /* Search bar */
+        .search-bar { @apply border-[0.1rem] text-base px-4 py-2 rounded-lg w-2/3 h-auto; }
+        
+        .search-bar-results { @apply border-[0.1rem] text-base mt-2 rounded-lg w-2/3 max-h-[34rem]; }
+        .search-bar-results-show { @apply px-4 py-1 border-b-[0.1rem]; }
+        
+        /* Action buttons */
+        .prim-act-btn { @apply w-[9rem] border-[0.12rem] gap-2 rounded-lg p-2 shadow-lg; }
+        .task-layout-btn { @apply w-auto;}
+        .signup-btn { @apply w-full;}
+
+        /* Batch functions */
+        .batch-func { @apply gap-4 mx-2; }
+        
+        /* Table */
+        .email-grid { @apply gap-3; }
+        
+        /* Send email */
+        .send-email-container { @apply p-3 px-5 gap-2 rounded-lg; }
+        .send-email-container.input { @apply p-2 mb-3 text-base rounded; }
+        
+        /* Error message / popups */
+        .error-message { @apply p-1 px-3 rounded; }
+        
+        .error-popup { @apply p-10 rounded-lg w-[26rem] shadow-2xl gap-3; }
+        .error-popup-btn { @apply w-[7.5rem] border-[0.08rem] rounded p-2 shadow-lg; }
+        
+        /* Priority and progress tags */
+        .priority-tag, 
+        .progress-tag { @apply w-full mx-3 rounded py-1 px-4 gap-2 border-[0.1rem]; }
+
+        /* Mode banner */
+        .mode-banner { @apply px-4 py-2 rounded-xl shadow-xl text-base;}
+
+        /* Settings */
+        .settings { @apply rounded-xl shadow-lg p-2; }
+        .settings-content { @apply p-3 my-2;}
+
+        .appearance-toggle-outer { @apply h-7 w-12;}
+        .appearance-toggle-inner { @apply w-5 shadow-xl;}
+
+        .microintervention.outer { @apply bottom-3 w-[25%] max-w-md h-auto p-2 rounded-2xl shadow-2xl;}
+
+        /* Header */
+        .header { @apply h-10 w-full grid grid-cols-3 px-16 shadow-lg;}
+        
+        /* Terms & Conditions */
+        .terms { @apply min-h-screen h-auto min-w-0 w-[75%] py-16 px-32 gap-8;}
+
+        /* Sign in / out */
+        .signing-bg { @apply h-auto m-3 w-auto rounded-3xl};
+        
+        .signing-title-box { @apply max-w-lg p-8 pt-0;}
+        .signing-title { @apply text-[9rem] leading-none;}
+        
+        .signing-subtitle { @apply text-4xl leading-none;}
+        .signing-subsubtitle { @apply pt-8 text-lg leading-snug;}
+
+        /* Dashboard */
+        .dashboard { @apply grid grid-cols-[1.1fr_0.35fr] gap-6 my-3; }
+        
+        .dashboard-bottom-row { @apply grid grid-cols-[0.3fr_1fr] gap-6 w-full h-full mb-2; }
+        .dashboard-email-grid { @apply grid grid-cols-[0.5fr_1fr_0.2fr]; }
+
+        .focus-chart-outer { @apply p-6 rounded-2xl shadow-xl border-[5px]; }
+        .focus-chart-inner { @apply h-72; }
+
+        .mood-outer { @apply p-2 rounded-2xl shadow-lg h-full border-[5px]; }
+        .mood-inner { @apply rounded-lg p-6 h-full };
+        
+        .email-outer { @apply gap-2 p-3 rounded-2xl shadow-lg h-full w-full border-[5px];}
+        .email-inner { @apply rounded p-1 px-3 w-full; }
+        
+        .task-outer { @apply w-full p-6 rounded-2xl shadow-xl border-[5px] mb-2;}
+        .task-inner { @apply gap-3 rounded-xl; }
+        .task-box { @apply gap-2 p-4 rounded-xl shadow-lg h-full; }
     }
 }
