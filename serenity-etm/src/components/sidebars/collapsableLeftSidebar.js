@@ -1,3 +1,14 @@
+/**
+ * Component renders the primary navigation sidebar as well as selecting which screen to display. 
+ * 
+ * Manages:
+    * Navigation between dashboard, emails, tasks
+    * Toggles secondary sidebar
+    * Displays profile dropdown menu
+    * Displays active navigation state
+    * Provides accessible keyboard navigation
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -9,48 +20,63 @@ import ProfileSettingsMenu from '../profileSettings';
 
 export default function CollapsableLeftSidebar() {
 
+    // Navigation
     const router = useRouter();
+
+    // Global state values
     const {screen, setScreen, expandedSecondary, setExpandedSecondary} = useStore();
     const theme = useStore((s) => s.theme);
+
+    // Used to avoid hydration mismatch issues
     const [mounted, setMounted] = useState(false);
     
+    // Mark component mounted after first render
     useEffect(() => {
         setMounted(true)
     }, [])
 
-    // keyboard activation helper
+    // Keyboard activation helper
     const activate = (e, action) => {
+
         if (!e) return;
 
         const key = e.key || e.code;
 
+        // Improve accessibility via keyboard access
         if (key === 'Enter' || key === ' ') {
             e.preventDefault();
             action?.();
         }
+
     };
 
+    // Prevent rendering until mounted
     if (!mounted) return null;
 
     return (
+
+        // Primary navigation sidebar
         <nav
             aria-label='Primary Navigation'
             className='fixed top-1 flex flex-col justify-between shadow-xl z-20 side-bar left-1 bg-[var(--baseAcc-a)]'
         >
-            {/* navigation buttons */}
-            <div role='menu' className='items-center side-bar-btn flex flex-col'>
+            {/* Navigation buttons */}
+            <div 
+                role='menu' 
+                className='items-center side-bar-btn flex flex-col'
+            >
                 
-                {/* brand logo */}
+                {/* Brand logo */}
                 <img
                     src={ICONS[theme].logo}
                     alt='Serenity ETM'
                     draggable={false}
                 /> 
 
-                {/* dashboard button */}
+                {/* Dashboard button */}
                 <div className='flex flex-row items-center'>
 
-                    {/* active bar indicator */}
+                    {/* Active indicator */}
                     {screen === 'dashboard' && (
                         <div className='absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active left-0'/>
                     )}
@@ -96,7 +122,7 @@ export default function CollapsableLeftSidebar() {
                     </motion.button>
                 </div>
 
-                {/* email manager button */}
+                {/* Email manager button */}
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'emails' && (
@@ -144,7 +170,7 @@ export default function CollapsableLeftSidebar() {
                     </motion.button>
                 </div>
 
-                {/* task manager button */}
+                {/* Task manager button */}
                 <div className='flex flex-row items-center'>
                     
                     {screen === 'tasks' && (
@@ -192,7 +218,7 @@ export default function CollapsableLeftSidebar() {
                 </div>
             </div>
             
-            {/* profile settings section */}
+            {/* Profile settings section */}
             <ProfileSettingsMenu/>
             
         </nav>

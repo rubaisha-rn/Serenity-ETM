@@ -1,8 +1,10 @@
-/* tokens (fonts + variables) */
+/* Global design tokens + tailwind setup */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Font declarations */
 @font-face {
     font-family: 'Abril-Fatface';
     src: url('../../public/fonts/AbrilFatface-Regular.ttf');
@@ -17,47 +19,48 @@
     font-style: normal;
 }
 
-/* design tokens */
+/* Design tokens */
+
 :root {
-    /* background color */
+    /* Background color */
     --bg: #efefef;
 
-    /* darker accent support colours */
+    /* Darker accent support colours */
     --a-main: #2a2c29;
     --b-main: #444741;
     --c-main: #5f635c;
 
-    /* lighter accent support colours */
+    /* Lighter accent support colours */
     --d-main: #b7bab4;
     --e-main: #d3d5cf;
     --f-main: #f0f1ed;
 
-    /* accent colour */
+    /* Accent colour */
     --g-main: #8e918b;
 
-    /* side panel background colours */
+    /* Side panel background colours */
     --baseAcc-a: #101010;
     --baseAcc-b: #ffffff;
 
-    /* text colours */
+    /* Text colours */
     --text-a: #000000;
     --text-b: #363636;
     --text-c: #585858;
     --text-d: #ffffff;
 
-    /* warning labels and prototype tag */
+    /* Warning labels and prototype tag */
     --danger: #b91c1c;
     --dangerH: #871111;
     --dangerL: #ffd8d8;
     --dangerHover: #ebb2b2;
 
-    /* success labels */
+    /* Success labels */
     --success: #00bf63;
     --successH: #006735;
     --successL: #b3fcd9;
     --successHover: #80d8ad;
 
-    /* priority tabs/buttons */
+    /* Priority tabs/buttons */
     --priorityHigha: #ff3131;
     --priorityHighb: #e3bebe;
     --priorityHighc: #f8e4e4;
@@ -73,7 +76,7 @@
     --priorityLowc: #f0f0f0;
     --priorityLowt: #a6a6a6;
 
-    /* progress tabs/buttons */
+    /* Progress tabs/buttons */
     --progressNota: #ff7517;
     --progressNotb: #ffdbc2;
     --progressNotc: #ffe7d6;
@@ -89,7 +92,7 @@
     --progressAlmostc: #eaffe2;
     --progressAlmostt: #66af46;
 
-    /* mode banner */
+    /* Mode banner */
     --focusMode: #04766b;
     --focusModeHover: #02574e;
     --focusModeInt: #d5e6e4;
@@ -101,46 +104,47 @@
     --disabledMode: #272727;
 }
 
+/* Dark mode overwrite root variable when .dark class is activated */
 .dark {
-    /* background color */
+    /* Background color */
     --bg: #212121;
 
-    /* darker accent support colours */
+    /* Darker accent support colours */
     --a-main: #c5c6c3;
     --b-main: #b4b6ae;
     --c-main: #82867e;
 
-    /* lighter accent support colours */
+    /* Lighter accent support colours */
     --d-main: #494b46;
     --e-main: #373934;
     --f-main: #252624;
 
-    /* accent colour */
+    /* Accent colour */
     --g-main: #4c5041;
 
-    /* side panel background colours */
+    /* Side panel background colours */
     --baseAcc-a: #e8eaea;
     --baseAcc-b: #2b2b2b;
 
-    /* text colours */
+    /* Text colours */
     --text-a: #ffffff;
     --text-b: #d5d5d5;
     --text-c: #a8a8a8;
     --text-d: #000000;
 
-    /* warning labels and prototype tag */
+    /* Warning labels and prototype tag */
     --danger: #df4c4c;
     --dangerH: #f26666;
     --dangerL: #471a1a;
     --dangerHover: #5b2525;
 
-    /* success labels */
+    /* Success labels */
     --success: #00bf63;
     --successH: #006735;
     --successL: #26523d;
     --successHover: #80d8ad;
 
-    /* priority tabs/buttons */
+    /* Priority tabs/buttons */
     --priorityHigha: #ff3131;
     --priorityHighb: #382020;
     --priorityHighc: #482a2a;
@@ -156,7 +160,7 @@
     --priorityLowc: #2f2f2f;
     --priorityLowt: #a6a6a6;
 
-    /* progress tabs/buttons */
+    /* Progress tabs/buttons */
     --progressNota: #ff7517;
     --progressNotb: #312013;
     --progressNotc: #412b1b;
@@ -172,7 +176,7 @@
     --progressAlmostc: #222e1d;
     --progressAlmostt: #66af46;
 
-    /* mode banner */
+    /* Mode banner */
     --focusMode: #c1ece8;
     --focusModeHover: #9bc3bf;
     --focusModeInt: #263836;
@@ -184,46 +188,47 @@
     --disabledMode: #dddddd;
 }
 
+/* High contrast mode */
 .high-contrast {
-    /* background color */
+    /* Background color */
     --bg: #ffffff;
 
-    /* darker accent support colours */
+    /* Darker accent support colours */
     --a-main: #000000;
     --b-main: #000000;
     --c-main: #222222;
 
-    /* lighter accent support colours */
+    /* Lighter accent support colours */
     --d-main: #ffffff;
     --e-main: #f5f5f5;
     --f-main: #ffffff;
 
-    /* accent colour */
+    /* Accent colour */
     --g-main: #000000;
 
-    /* side panel background colours */
+    /* Side panel background colours */
     --baseAcc-a: #000000;
     --baseAcc-b: #ffffff;
 
-    /* text colours */
+    /* Text colours */
     --text-a: #000000;
     --text-b: #000000;
     --text-c: #111111;
     --text-d: #ffffff;
 
-    /* warning labels and prototype tag */
+    /* Warning labels and prototype tag */
     --danger: #b00020;
     --dangerH: #7a0015;
     --dangerL: #ffffff;
     --dangerHover: #d0002a;
 
-    /* success labels */
+    /* Success labels */
     --success: #006b2e;
     --successH: #004d21;
     --successL: #ffffff;
     --successHover: #008a3a;
 
-    /* priority tabs/buttons */
+    /* Priority tabs/buttons */
     --priorityHigha: #b00020;
     --priorityHighb: #ffffff;
     --priorityHighc: #ffffff;
@@ -239,7 +244,7 @@
     --priorityLowc: #ffffff;
     --priorityLowt: #000000;
 
-    /* progress tabs/buttons */
+    /* Progress tabs/buttons */
     --progressNota: #c24e00;
     --progressNotb: #ffffff;
     --progressNotc: #ffffff;
@@ -255,7 +260,7 @@
     --progressAlmostc: #ffffff;
     --progressAlmostt: #006b2e;
 
-    /* mode banner */
+    /* Mode banner */
     --focusMode: #0033cc;
     --focusModeHover: #001f80;
     --focusModeInt: #ffffff;
@@ -267,46 +272,47 @@
     --disabledMode: #555555;
 }
 
+/* High contrast dark class */
 .dark.high-contrast {
-    /* background color */
+    /* Background color */
     --bg: #000000;
 
-    /* darker accent support colours */
+    /* Darker accent support colours */
     --a-main: #ffffff;
     --b-main: #ffffff;
     --c-main: #dddddd;
 
-    /* lighter accent support colours */
+    /* Lighter accent support colours */
     --d-main: #000000;
     --e-main: #111111;
     --f-main: #000000;
 
-    /* accent colour */
+    /* Accent colour */
     --g-main: #ffffff;
 
-    /* side panel background colours */
+    /* Side panel background colours */
     --baseAcc-a: #ffffff;
     --baseAcc-b: #000000;
 
-    /* text colours */
+    /* Text colours */
     --text-a: #ffffff;
     --text-b: #ffffff;
     --text-c: #e5e5e5;
     --text-d: #000000;
 
-    /* warning labels and prototype tag */
+    /* Warning labels and prototype tag */
     --danger: #ff4d4d;
     --dangerH: #ff8080;
     --dangerL: #000000;
     --dangerHover: #ff6666;
 
-    /* success labels */
+    /* Success labels */
     --success: #00ff66;
     --successH: #33ff85;
     --successL: #000000;
     --successHover: #00e65c;
 
-    /* priority tabs/buttons */
+    /* Priority tabs/buttons */
     --priorityHigha: #ff4d4d;
     --priorityHighb: #000000;
     --priorityHighc: #111111;
@@ -322,7 +328,7 @@
     --priorityLowc: #111111;
     --priorityLowt: #ffffff;
 
-    /* progress tabs/buttons */
+    /* Progress tabs/buttons */
     --progressNota: #ff8c00;
     --progressNotb: #000000;
     --progressNotc: #111111;
@@ -338,7 +344,7 @@
     --progressAlmostc: #111111;
     --progressAlmostt: #00ff66;
 
-    /* mode banner */
+    /* Mode banner */
     --focusMode: #4da6ff;
     --focusModeHover: #1a75ff;
     --focusModeInt: #000000;
@@ -350,46 +356,47 @@
     --disabledMode: #aaaaaa;
 }
 
+/* Colour vision friendly */
 .colour-vision-friendly {
-    /* background color */
+    /* Background color */
     --bg: #f7f7f7;
 
-    /* darker accent support colours */
+    /* Darker accent support colours */
     --a-main: #172937;
     --b-main: #374151;
     --c-main: #4b5563;
 
-    /* lighter accent support colours */
+    /* Lighter accent support colours */
     --d-main: #d1d5db;
     --e-main: #e5e7eb;
     --f-main: #f3f4f6;
 
-    /* accent colour */
+    /* Accent colour */
     --g-main: #6b7280;
 
-    /* side panel background colours */
+    /* Side panel background colours */
     --baseAcc-a: #111827;
     --baseAcc-b: #ffffff;
 
-    /* text colours */
+    /* Text colours */
     --text-a: #111827;
     --text-b: #374151;
     --text-c: #6b7280;
     --text-d: #ffffff;
 
-    /* warning labels and prototype tag */
+    /* Warning labels and prototype tag */
     --danger: #d97706;
     --dangerH: #b45309;
     --dangerL: #fff7ed;
     --dangerHover: #ea580c;
 
-    /* success labels */
+    /* Success labels */
     --success: #2563eb;
     --successH: #1d4ed8;
     --successL: #eff6ff;
     --successHover: #3b82f6;
 
-    /* priority tabs/buttons */
+    /* Priority tabs/buttons */
     --priorityHigha: #d97706;
     --priorityHighb: #ffedd5;
     --priorityHighc: #fff7ed;
@@ -405,7 +412,7 @@
     --priorityLowc: #f3f4f6;
     --priorityLowt: #4b5563;
 
-    /* progress tabs/buttons */
+    /* Progress tabs/buttons */
     --progressNota: #f97316;
     --progressNotb: #ffedd5;
     --progressNotc: #fff7ed;
@@ -421,7 +428,7 @@
     --progressAlmostc: #f0f9ff;
     --progressAlmostt: #0284c7;
 
-    /* mode banner */
+    /* Mode banner */
     --focusMode: #2563eb;
     --focusModeHover: #1d4ed8;
     --focusModeInt: #eff6ff;
@@ -433,46 +440,47 @@
     --disabledMode: #9ca3af;
 }
 
+/* Colour vision friendly dark class */
 .dark.colour-vision-friendly {
-    /* background color */
+    /* Background color */
     --bg: #111827;
 
-    /* darker accent support colours */
+    /* Darker accent support colours */
     --a-main: #f3f4f6;
     --b-main: #e5e7eb;
     --c-main: #d1d5db;
 
-    /* lighter accent support colours */
+    /* Lighter accent support colours */
     --d-main: #374151;
     --e-main: #1f2937;
     --f-main: #111827;
 
-    /* accent colour */
+    /* Accent colour */
     --g-main: #9ca3af;
 
-    /* side panel background colours */
+    /* Side panel background colours */
     --baseAcc-a: #f9fafb;
     --baseAcc-b: #1f2937;
 
-    /* text colours */
+    /* Text colours */
     --text-a: #f9fafb;
     --text-b: #e5e7eb;
     --text-c: #9ca3af;
     --text-d: #111827;
 
-    /* warning labels and prototype tag */
+    /* Warning labels and prototype tag */
     --danger: #fb923c;
     --dangerH: #f97316;
     --dangerL: #2a1a0f;
     --dangerHover: #fdba74;
 
-    /* success labels */
+    /* Success labels */
     --success: #60a5fa;
     --successH: #3b82f6;
     --successL: #1e293b;
     --successHover: #93c5fd;
 
-    /* priority tabs/buttons */
+    /* Priority tabs/buttons */
     --priorityHigha: #fb923c;
     --priorityHighb: #2a1a0f;
     --priorityHighc: #3b2415;
@@ -488,7 +496,7 @@
     --priorityLowc: #111827;
     --priorityLowt: #d1d5db;
 
-    /* progress tabs/buttons */
+    /* Progress tabs/buttons */
     --progressNota: #f97316;
     --progressNotb: #2a1a0f;
     --progressNotc: #3b2415;
@@ -504,7 +512,7 @@
     --progressAlmostc: #0a1f29;
     --progressAlmostt: #7dd3fc;
 
-    /* mode banner */
+    /* Mode banner */
     --focusMode: #60a5fa;
     --focusModeHover: #3b82f6;
     --focusModeInt: #1e293b;
@@ -516,20 +524,26 @@
     --disabledMode: #6b7280;
 }
 
-/* base layer */
+/* Base layer */
 @layer base {
     
-    html, body {
+    /* Default font stack */
+    html, 
+    body {
         font-family: system-ui, sans-serif;
     }
 
+    /* Global body styling */
     body {
         background-color: var(--bg);
         color: var(--text-a);
         overflow-x: hidden;
     }
 
-    button, input, textarea { 
+    /* Accessible focus styles for interactive elements */
+    button, 
+    input, 
+    textarea { 
         @apply focus:outline-none 
         focus-visible:ring-2 
         focus-visible:ring-blue-500/60 
@@ -538,7 +552,7 @@
         transition-all duration-150; 
     }
 
-    /* typography */
+    /* Typography scale */
     h1 { @apply text-2xl font-bold; } 
     h2 { @apply text-xl font-semibold; }
     h3 { @apply text-lg font-semibold; }
@@ -548,10 +562,10 @@
     p { @apply text-sm; }
 }
 
-/* layout primitives define mobile-first defaults */
+/* Component layer */
 @layer components {
 
-    /* completed components */
+    /* Main application layout grid */
     .app-shell { 
         @apply grid h-screen w-full
         transition-[grid-template-columns] 
@@ -562,30 +576,39 @@
             var(--right, 50px);
         grid-template-rows: 1fr auto;
     }
-            
-    .secondary-side-bar-btn {@apply flex items-center w-full rounded; }
-    .secondary-side-bar-btn.expanded {@apply justify-start; }
-    .secondary-side-bar-btn.collapsed {@apply justify-center; }
 
-    .secondary-side-bar-label {@apply text-[var(--text-a)] font-semibold whitespace-nowrap transition-all duration-150; }
-    .secondary-side-bar-label.show {@apply opacity-100; }
-    .secondary-side-bar-label.hide {@apply opacity-0 w-0 overflow-hidden; }
+    /* Sidebar buttons */
+    .secondary-side-bar-btn { @apply flex items-center w-full rounded; }
     
-    .prim-act-btn {@apply bg-[var(--baseAcc-a)] border-[var(--a-main)] flex flex-row items-center justify-center text-[var(--text-d)] transform transition-transform duration-200 ease-out hover:scale-105 hover:bg-[var(--a-main)]; }
-        
-    .error-message {@apply bg-[var(--dangerL)] flex items-center justify-between; }
-    .error-popup {@apply bg-[var(--baseAcc-b)] flex flex-col items-center text-center; }
+    .secondary-side-bar-btn.expanded { @apply justify-start; }
+    .secondary-side-bar-btn.collapsed { @apply justify-center; }
+
+    .secondary-side-bar-label { @apply text-[var(--text-a)] font-semibold whitespace-nowrap transition-all duration-150; }
     
-    .error-popup-btn {@apply items-center; }
-    .error-popup-btn.a {@apply bg-[var(--d-main)] border-[var(--c-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]; }
-    .error-popup-btn.b {@apply bg-[var(--dangerH)] border-[var(--danger)] hover:bg-[var(--danger)] text-[var(--text-d)]; }
+    .secondary-side-bar-label.show { @apply opacity-100; }
+    .secondary-side-bar-label.hide { @apply opacity-0 w-0 overflow-hidden; }
+    
+    /* Primary action button */
+    .prim-act-btn { @apply bg-[var(--baseAcc-a)] border-[var(--a-main)] flex flex-row items-center justify-center text-[var(--text-d)] transform transition-transform duration-200 ease-out hover:scale-105 hover:bg-[var(--a-main)]; }
+    
+    /* Error states and popups */
+    .error-message { @apply bg-[var(--dangerL)] flex items-center justify-between; }
+    
+    .error-popup { @apply bg-[var(--baseAcc-b)] flex flex-col items-center text-center; }
+    
+    .error-popup-btn { @apply items-center; }
+    
+    .error-popup-btn.a { @apply bg-[var(--d-main)] border-[var(--c-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]; }
+    .error-popup-btn.b { @apply bg-[var(--dangerH)] border-[var(--danger)] hover:bg-[var(--danger)] text-[var(--text-d)]; }
 }
 
-/* responsiveness */
+/* Responsive utilities */
 @layer utilities {
 
-    /* 640px large phones/small tablets */
+    /* Small screens */
     @screen sm {
+
+        /* Typography */
         h1 { @apply text-lg font-bold; } 
         h2 { @apply text-base font-semibold; }
         h3 { @apply text-[0.95rem] font-semibold; }
@@ -593,27 +616,153 @@
         h5 { @apply text-[0.75rem] font-semibold; }
         h6 { @apply text-[0.65rem] font-thin; }
         p { @apply text-[0.55rem]; }
-        img {@apply w-2 aspect-square; }
+        
+        /* Images */
+        img { @apply w-1 aspect-square; }
 
+        .batch-func img { @apply w-1.5 aspect-square; }
+        
+        .side-bar-menu button img, 
+        .mode-banner img, 
+        .header-logo img { @apply w-2 aspect-square; }
+        
+        .secondary-side-bar img, 
+        .settings-side-bar img, 
+        .task-layout-btn img, 
+        .toolbar img, 
+        .microintervention button img { @apply w-3 aspect-square; }
+        
+        .side-bar img { @apply w-4 aspect-square; }
+        
+        .microintervention img { @apply w-5 aspect-square; }
+
+        /* Sidebar format */
         .side-bar,
         .secondary-side-bar,
-        .side-bar-toggle {
-            @apply hidden;
-        }
+        .side-bar-toggle { @apply hidden; }
+
+        /* Main application layout */
+        .app-shell { grid-template-columns: 0px 1fr 0px; }
+
+        .main-panel { @apply m-0 mx-2 gap-2; }
         
-        .app-shell {
-            grid-template-columns: 0px 1fr 0px;
-        }
-        .main-panel {
-            @apply m-0 mx-2 gap-2;
-        }
-        .main-content {
-            @apply mb-2;
-        }
+        .footer { grid-column: 1 / -1; }
+        
+        .main-content { @apply mb-2; }
+
+        /* Prototype */
+        .prototype { @apply px-2 py-0.5 pb-1.5 rounded; }
+
+        /* Sidebar buttons */
+        .side-bar { @apply px-0.5 py-1 w-8 h-[calc(100vh-0.25rem)] rounded-md; }
+        .side-bar-btn { @apply gap-1; }
+        
+        .side-bar-btn-active { @apply h-4 w-[0.15rem]; }
+        .side-bar-btn-style { @apply rounded py-0.5 px-1 min-w-[18px] min-h-[18px]; }
+        
+        .side-bar-menu { @apply ml-1 w-28 rounded p-0.5; }
+        .side-bar-menuitem { @apply p-0.5 px-1 gap-2 min-h-[18px]; }
+        
+        .side-bar-toggle { @apply bottom-[3rem] p-0.5 py-1.5; }
+
+        .side-bar-btn-style.expanded { @apply gap-1 w-[7rem] h-6 m-0.5 px-1.5 rounded-md justify-start; }
+        .side-bar-btn-style.collapsed { @apply gap-0 py-0.5 px-0.5 rounded; }
+
+        .side-bar-label { @apply text-[0.6rem]; }
+        .side-bar-help { @apply gap-0.5 text-[0.45rem]; }
+        .side-bar-info { @apply w-1 h-1 mt-0.5 mx-0.5; }
+        
+        .secondary-side-bar { @apply p-1 pt-1.5 ml-0.5 h-[calc(100vh-0.25rem)] rounded-md; }
+        
+        .secondary-side-bar-btn.expanded { @apply h-5 px-0.5 gap-2; }
+        .secondary-side-bar-btn.collapsed { @apply gap-0 rounded; }
+        
+        .secondary-side-bar-label { @apply text-[0.6rem]; }
+        
+        .group-label { @apply text-[0.5rem]; }
+        
+        /* Search bar */
+        .search-bar { @apply border-[0.05rem] text-[0.65rem] px-2 py-0.5 rounded w-full h-auto; }
+        
+        .search-bar-results { @apply border-[0.05rem] text-[0.65rem] mt-1 rounded w-full max-h-[16rem]; }
+        .search-bar-results-show { @apply px-2 py-0.5 border-b-[0.05rem]; }
+        
+        /* Action buttons */
+        .prim-act-btn { @apply w-[5rem] border-[0.06rem] gap-1 rounded p-0.5 shadow; }
+        .task-layout-btn { @apply w-auto;}
+        .signup-btn { @apply w-full;}
+
+        /* Batch functions */
+        .batch-func { @apply gap-1.5 mx-0.5; }
+        
+        /* Table */
+        .email-grid { @apply gap-1; }
+        
+        /* Send email */
+        .send-email-container { @apply p-1 px-2 gap-0.5 rounded; }
+        .send-email-container.input { @apply p-0.5 mb-1 text-[0.65rem] rounded; }
+        
+        /* Error message / popups */
+        .error-message { @apply p-0.5 px-1 rounded; }
+        
+        .error-popup { @apply p-4 rounded w-[14rem] shadow-lg gap-1; }
+        .error-popup-btn { @apply w-[4rem] border-[0.04rem] rounded p-0.5 shadow; }
+        
+        /* Priority and progress tags */
+        .priority-tag, 
+        .progress-tag { @apply w-full mx-1 rounded py-0.5 px-1.5 gap-0.5 border-[0.05rem]; }
+
+        /* Mode banner */
+        .mode-banner { @apply px-1.5 py-0.5 rounded-md shadow text-[0.65rem];}
+
+        /* Settings */
+        .settings { @apply rounded-md shadow p-0.5; }
+        .settings-content { @apply p-1 my-0.5;}
+
+        .appearance-toggle-outer { @apply h-4 w-7;}
+        .appearance-toggle-inner { @apply w-2.5 shadow;}
+
+        .microintervention.outer { @apply bottom-1 w-[85%] max-w-xs h-auto p-0.5 rounded-lg shadow-lg;}
+
+        /* Header */
+        .header { @apply h-6 w-full grid grid-cols-3 px-3 shadow;}
+        
+        /* Terms & Conditions */
+        .terms { @apply min-h-screen h-auto min-w-0 w-full py-6 px-4 gap-3;}
+
+        /* Sign in / out */
+        .signing-bg { @apply h-auto m-1 w-auto rounded-xl};
+        
+        .signing-title-box { @apply max-w-xs p-3 pt-0;}
+        .signing-title { @apply text-5xl leading-none;}
+        
+        .signing-subtitle { @apply text-xl leading-none;}
+        .signing-subsubtitle { @apply pt-3 text-[0.7rem] leading-snug;}
+
+        /* Dashboard */
+        .dashboard { @apply grid grid-cols-1 gap-2 my-1; }
+        
+        .dashboard-bottom-row { @apply grid grid-cols-1 gap-2 w-full h-full mb-1; }
+        .dashboard-email-grid { @apply grid grid-cols-[1fr_auto]; }
+
+        .focus-chart-outer { @apply p-2 rounded-lg shadow border-2; }
+        .focus-chart-inner { @apply h-40; }
+
+        .mood-outer { @apply p-0.5 rounded-lg shadow h-full border-2; }
+        .mood-inner { @apply rounded p-2 h-full };
+        
+        .email-outer { @apply gap-0.5 p-1 rounded-lg shadow h-full w-full border-2;}
+        .email-inner { @apply rounded p-0.5 px-1 w-full; }
+        
+        .task-outer { @apply w-full p-2 rounded-lg shadow border-2 mb-1;}
+        .task-inner { @apply gap-1 rounded-md; }
+        .task-box { @apply gap-0.5 p-1.5 rounded-md shadow h-full; }
     }
 
-    /* 768px tablets */
+    /* Medium screens */
     @screen md {
+
+        /* Typography */
         h1 { @apply text-xl font-bold; } 
         h2 { @apply text-lg font-semibold; }
         h3 { @apply text-base font-semibold; }
@@ -621,30 +770,158 @@
         h5 { @apply text-[0.85rem] font-semibold; }
         h6 { @apply text-[0.75rem] font-thin; }
         p { @apply text-[0.65rem]; }
-        img {@apply w-3 aspect-square; }
 
+        /* Images */
+        img { @apply w-2 aspect-square; }
+
+        .batch-func img { @apply w-2.5 aspect-square; }
+        
+        .side-bar-menu button img, 
+        .mode-banner img, 
+        .header-logo img { @apply w-3 aspect-square; }
+        
+        .secondary-side-bar img, 
+        .settings-side-bar img, 
+        .task-layout-btn img, 
+        .toolbar img, 
+        .microintervention button img { @apply w-4 aspect-square; }
+        
+        .side-bar img { @apply w-5 aspect-square; }
+        
+        .microintervention img { @apply w-6 aspect-square; }
+
+        /* Sidebar format */
         .side-bar,
         .secondary-side-bar,
-        .side-bar-toggle {
-            @apply block;
-        }
+        .side-bar-toggle { @apply block; }
 
+        /* Main application layout */
         .app-shell {
             grid-template-columns: 
                 var(--left, 100px)
                 1fr
                 0px;
         }
-        .main-panel {
-            @apply mx-3 gap-2;
-        }
-        .main-content {
-            @apply mb-4;
-        }
+
+        .main-panel { @apply mx-3 gap-2; }
+
+        .footer { grid-column: 1 / -1; }
+
+        .main-content { @apply mb-4; }
+
+        /* Prototype */
+        .prototype { @apply px-3 py-0.5 pb-2 rounded-md; }
+
+        /* Sidebar buttons */
+        .side-bar { @apply px-1 py-2 w-10 h-[calc(100vh-0.4rem)] rounded-lg; }
+        .side-bar-btn { @apply gap-1; }
+        
+        .side-bar-btn-active { @apply h-5 w-[0.2rem]; }
+        .side-bar-btn-style { @apply rounded-md py-0.5 px-1 min-w-[24px] min-h-[24px]; }
+        
+        .side-bar-menu { @apply ml-2 w-32 rounded-md p-0.5; }
+        .side-bar-menuitem { @apply p-0.5 px-2 gap-2 min-h-[24px]; }
+        
+        .side-bar-toggle { @apply bottom-[4rem] p-0.5 py-2; }
+
+        .side-bar-btn-style.expanded { @apply gap-2 w-[10rem] h-8 m-0.5 px-2 rounded-lg justify-start; }
+        .side-bar-btn-style.collapsed { @apply gap-0 py-0.5 px-1 rounded-md; }
+
+        .side-bar-label { @apply text-[0.8rem]; }
+        .side-bar-help { @apply gap-1 text-[0.55rem]; }
+        .side-bar-info { @apply w-1.5 h-1.5 mt-0.5 mx-1; }
+        
+        .secondary-side-bar { @apply p-1.5 pt-2 ml-1 h-[calc(100vh-0.4rem)] rounded-lg; }
+        
+        .secondary-side-bar-btn.expanded { @apply h-6 px-1 gap-2; }
+        .secondary-side-bar-btn.collapsed { @apply gap-0 rounded-md; }
+        
+        .secondary-side-bar-label { @apply text-[0.7rem]; }
+        
+        .group-label { @apply text-[0.6rem]; }
+        
+        /* Search bar */
+        .search-bar { @apply border-[0.07rem] text-[0.75rem] px-2 py-1 rounded-md w-3/4 h-auto; }
+        
+        .search-bar-results { @apply border-[0.07rem] text-[0.75rem] mt-1 rounded-md w-3/4 max-h-[24rem]; }
+        .search-bar-results-show { @apply px-2 py-0.5 border-b-[0.07rem]; }
+        
+        /* Action buttons */
+        .prim-act-btn { @apply w-[6.5rem] border-[0.08rem] gap-1 rounded-md p-1 shadow; }
+        .task-layout-btn { @apply w-auto;}
+        .signup-btn { @apply w-full;}
+
+        /* Batch functions */
+        .batch-func { @apply gap-2 mx-1; }
+        
+        /* Table */
+        .email-grid { @apply gap-1.5; }
+        
+        /* Send email */
+        .send-email-container { @apply p-1.5 px-3 gap-1 rounded-md; }
+        .send-email-container.input { @apply p-1 mb-1.5 text-[0.75rem] rounded; }
+        
+        /* Error message / popups */
+        .error-message { @apply p-0.5 px-1.5 rounded; }
+        
+        .error-popup { @apply p-6 rounded-md w-[18rem] shadow-xl gap-2; }
+        .error-popup-btn { @apply w-[5rem] border-[0.05rem] rounded p-1 shadow; }
+        
+        /* Priority and progress tags */
+        .priority-tag, 
+        .progress-tag { @apply w-full mx-1.5 rounded-sm py-0.5 px-2 gap-1 border-[0.07rem]; }
+
+        /* Mode banner */
+        .mode-banner { @apply px-2 py-0.5 rounded-lg shadow-lg text-[0.8rem];}
+
+        /* Settings */
+        .settings { @apply rounded-lg shadow-md p-0.5; }
+        .settings-content { @apply p-1.5 my-1;}
+
+        .appearance-toggle-outer { @apply h-5 w-8;}
+        .appearance-toggle-inner { @apply w-3 shadow;}
+
+        .microintervention.outer { @apply bottom-2 w-[40%] max-w-xs h-auto p-1 rounded-xl shadow-xl;}
+
+        /* Header */
+        .header { @apply h-7 w-full grid grid-cols-3 px-8 shadow-md;}
+        
+        /* Terms & Conditions */
+        .terms { @apply min-h-screen h-auto min-w-0 w-[90%] py-10 px-16 gap-5;}
+
+        /* Sign in / out */
+        .signing-bg { @apply h-auto m-2 w-auto rounded-xl};
+        
+        .signing-title-box { @apply max-w-sm p-5 pt-0;}
+        .signing-title { @apply text-7xl leading-none;}
+        
+        .signing-subtitle { @apply text-2xl leading-none;}
+        .signing-subsubtitle { @apply pt-4 text-[0.9rem] leading-snug;}
+
+        /* Dashboard */
+        .dashboard { @apply grid grid-cols-[1.1fr_0.4fr] gap-3 my-2; }
+        
+        .dashboard-bottom-row { @apply grid grid-cols-[0.35fr_1fr] gap-3 w-full h-full mb-1; }
+        .dashboard-email-grid { @apply grid grid-cols-[0.6fr_1fr_0.25fr]; }
+
+        .focus-chart-outer { @apply p-3 rounded-xl shadow-lg border-4; }
+        .focus-chart-inner { @apply h-56; }
+
+        .mood-outer { @apply p-1.5 rounded-xl shadow-md h-full border-4; }
+        .mood-inner { @apply rounded p-3 h-full };
+        
+        .email-outer { @apply gap-1 p-1.5 rounded-xl shadow-md h-full w-full border-4;}
+        .email-inner { @apply rounded p-0.5 px-2 w-full; }
+        
+        .task-outer { @apply w-full p-3 rounded-xl shadow-lg border-4 mb-1;}
+        .task-inner { @apply gap-1.5 rounded-lg; }
+        .task-box { @apply gap-1 p-2 rounded-lg shadow-md h-full; }
     }
 
-    /* 1024px laptops (mine) */
+    /* Large screens */
     @screen lg {
+
+        /* Typography */
         h1 { @apply text-2xl font-bold; } 
         h2 { @apply text-xl font-semibold; }
         h3 { @apply text-lg font-semibold; }
@@ -653,23 +930,33 @@
         h6 { @apply text-[0.85rem] font-thin; }
         p { @apply text-[0.7rem]; }
         
-        img {@apply w-3 aspect-square; }
+        /* Images */
+        img { @apply w-3 aspect-square; }
+
         .batch-func img { @apply w-3.5 aspect-square; }
-        .side-bar-menu button img, .mode-banner img, .header-logo img { @apply w-4 aspect-square; }
-        .secondary-side-bar img, .settings-side-bar img, .task-layout-btn img, .toolbar img, .microintervention button img { @apply w-5 aspect-square; }
+        
+        .side-bar-menu button img, 
+        .mode-banner img, 
+        .header-logo img { @apply w-4 aspect-square; }
+        
+        .secondary-side-bar img, 
+        .settings-side-bar img, 
+        .task-layout-btn img, 
+        .toolbar img, 
+        .microintervention button img { @apply w-5 aspect-square; }
+        
         .side-bar img { @apply w-6 aspect-square; }
+        
         .microintervention img { @apply w-7 aspect-square; }
 
+        /* Sidebar format */
         .side-bar,
         .secondary-side-bar,
-        .side-bar-toggle {
-            @apply block;
-        }
+        .side-bar-toggle { @apply block; }
         
-        .side-bar { 
-            @apply flex flex-col justify-between;
-        }
+        .side-bar { @apply flex flex-col justify-between; }
 
+        /* Main application layout */
         .app-shell { 
             @apply grid h-screen w-full
             transition-[grid-template-columns] 
@@ -682,93 +969,284 @@
         }
         
         .main-panel { @apply flex flex-col h-full min-h-0 m-1 mx-2 gap-1; }
+        
         .footer { grid-column: 1 / -1; }
+        
         .main-content { @apply mb-6; }
 
+        /* Prototype */
         .prototype { @apply px-4 py-0.5 pb-2.5 rounded-md; }
-        
+
+        /* Sidebar buttons */
         .side-bar { @apply px-1 py-2 w-12 h-[calc(100vh-0.5rem)] rounded-lg; }
-        .side-bar-btn {@apply gap-1.5; }
-        .side-bar-btn-active {@apply h-6 w-1; }
-        .side-bar-btn-style {@apply rounded-md py-1 px-1.5 min-w-[30px] min-h-[30px]; }
+        .side-bar-btn { @apply gap-1.5; }
         
-        .side-bar-menu {@apply ml-3 w-40 rounded-md p-0.5; }
-        .side-bar-menuitem {@apply p-0.5 px-2 gap-3 min-h-[28px]; }
+        .side-bar-btn-active { @apply h-6 w-1; }
+        .side-bar-btn-style { @apply rounded-md py-1 px-1.5 min-w-[30px] min-h-[30px]; }
         
-        .side-bar-toggle {@apply bottom-[5rem] p-1 py-3; }
+        .side-bar-menu { @apply ml-3 w-40 rounded-md p-0.5; }
+        .side-bar-menuitem { @apply p-0.5 px-2 gap-3 min-h-[28px]; }
+        
+        .side-bar-toggle { @apply bottom-[5rem] p-1 py-3; }
 
-        .side-bar-btn-style.expanded {@apply gap-2 w-[12.4rem] h-9 m-0.5 px-3 gap-3 rounded-lg justify-start; }
-        .side-bar-btn-style.collapsed {@apply gap-0 py-0.5 px-1.5 rounded-md; }
+        .side-bar-btn-style.expanded { @apply gap-2 w-[12.4rem] h-9 m-0.5 px-3 gap-3 rounded-lg justify-start; }
+        .side-bar-btn-style.collapsed { @apply gap-0 py-0.5 px-1.5 rounded-md; }
 
-        .side-bar-label {@apply text-sm; }
-        .side-bar-help {@apply gap-1 text-[0.6rem]; }
-        .side-bar-info {@apply w-2 h-2 mt-0.5 mx-1; }
+        .side-bar-label { @apply text-sm; }
+        .side-bar-help { @apply gap-1 text-[0.6rem]; }
+        .side-bar-info { @apply w-2 h-2 mt-0.5 mx-1; }
         
-        .secondary-side-bar {@apply p-2 pt-3 ml-1 h-[calc(100vh-0.5rem)] rounded-lg; }
-        .secondary-side-bar-btn.expanded {@apply h-7 px-1 gap-3; }
-        .secondary-side-bar-btn.collapsed {@apply gap-0 rounded-md; }
+        .secondary-side-bar { @apply p-2 pt-3 ml-1 h-[calc(100vh-0.5rem)] rounded-lg; }
         
-        .secondary-side-bar-label {@apply text-[0.8rem]; }
+        .secondary-side-bar-btn.expanded { @apply h-7 px-1 gap-3; }
+        .secondary-side-bar-btn.collapsed { @apply gap-0 rounded-md; }
         
-        .group-label {@apply text-[0.65rem]; }
+        .secondary-side-bar-label { @apply text-[0.8rem]; }
         
-        .search-bar {@apply border-[0.08rem] text-sm px-3 py-1 rounded-md w-2/3 h-auto; }
-        .search-bar-results {@apply border-[0.08rem] text-sm mt-1 rounded-md w-2/3 max-h-[30rem]; }
-        .search-bar-results-show {@apply px-3 py-0.5 border-b-[0.08rem]; }
+        .group-label { @apply text-[0.65rem]; }
         
-        .prim-act-btn {@apply w-[8rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
-        .task-layout-btn {@apply w-auto;}
-        .signup-btn {@apply w-full;}
+        /* Search bar */
+        .search-bar { @apply border-[0.08rem] text-sm px-3 py-1 rounded-md w-2/3 h-auto; }
+        
+        .search-bar-results { @apply border-[0.08rem] text-sm mt-1 rounded-md w-2/3 max-h-[30rem]; }
+        .search-bar-results-show { @apply px-3 py-0.5 border-b-[0.08rem]; }
+        
+        /* Action buttons */
+        .prim-act-btn { @apply w-[8rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
+        .task-layout-btn { @apply w-auto;}
+        .signup-btn { @apply w-full;}
 
-        .batch-func {@apply gap-3 mx-1; }
+        /* Batch functions */
+        .batch-func { @apply gap-3 mx-1; }
         
-        .email-grid {@apply gap-2; }
+        /* Table */
+        .email-grid { @apply gap-2; }
         
-        .send-email-container {@apply p-2 px-4 gap-1 rounded-md; }
-        .send-email-container.input {@apply p-1 mb-2 text-sm rounded; }
+        /* Send email */
+        .send-email-container { @apply p-2 px-4 gap-1 rounded-md; }
+        .send-email-container.input { @apply p-1 mb-2 text-sm rounded; }
         
-        .error-message {@apply p-0.5 px-2 rounded; }
-        .error-popup {@apply p-8 rounded-md w-[22rem] shadow-xl gap-2; }
-        .error-popup-btn {@apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
+        /* Error message / popups */
+        .error-message { @apply p-0.5 px-2 rounded; }
         
-        .priority-tag, .progress-tag {@apply w-full mx-2 rounded-sm py-0.5 px-3 gap-1 border-[0.08rem]; }
+        .error-popup { @apply p-8 rounded-md w-[22rem] shadow-xl gap-2; }
+        .error-popup-btn { @apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
+        
+        /* Priority and progress tags */
+        .priority-tag, .progress-tag { @apply w-full mx-2 rounded-sm py-0.5 px-3 gap-1 border-[0.08rem]; }
 
-        .mode-banner {@apply px-3 py-1 rounded-lg shadow-black/20 shadow-xl text-sm;}
+        /* Mode banner */
+        .mode-banner { @apply px-3 py-1 rounded-lg shadow-black/20 shadow-xl text-sm;}
 
-        .settings {@apply rounded-lg shadow-md p-1; }
-        .settings-content {@apply p-2 my-1;}
+        /* Settings */
+        .settings { @apply rounded-lg shadow-md p-1; }
+        .settings-content { @apply p-2 my-1;}
 
-        .appearance-toggle-outer {@apply h-6 w-10;}
-        .appearance-toggle-inner {@apply w-4 shadow-lg;}
+        .appearance-toggle-outer { @apply h-6 w-10;}
+        .appearance-toggle-inner { @apply w-4 shadow-lg;}
 
-        .microintervention.outer {@apply bottom-2 w-[28%] max-w-sm h-auto p-1 rounded-xl shadow-xl;}
+        .microintervention.outer { @apply bottom-2 w-[28%] max-w-sm h-auto p-1 rounded-xl shadow-xl;}
 
-        .header {@apply h-8 w-full grid grid-cols-3 px-12 shadow-md;}
-        .terms {@apply min-h-screen h-auto min-w-0 w-[80%] py-12 px-24 gap-6;}
+        /* Header */
+        .header { @apply h-8 w-full grid grid-cols-3 px-12 shadow-md;}
+        
+        /* Terms & Conditions */
+        .terms { @apply min-h-screen h-auto min-w-0 w-[80%] py-12 px-24 gap-6;}
 
-        .signing-bg {@apply h-auto m-2 w-auto rounded-2xl};
-        .signing-title-box {@apply max-w-md p-6 pt-0;}
-        .signing-title {@apply text-8xl leading-none;}
-        .signing-subtitle {@apply text-3xl leading-none;}
-        .signing-subsubtitle {@apply pt-6 text-base leading-snug;}
+        /* Sign in / out */
+        .signing-bg { @apply h-auto m-2 w-auto rounded-2xl};
+        
+        .signing-title-box { @apply max-w-md p-6 pt-0;}
+        .signing-title { @apply text-8xl leading-none;}
+        
+        .signing-subtitle { @apply text-3xl leading-none;}
+        .signing-subsubtitle { @apply pt-6 text-base leading-snug;}
 
-        .dashboard {@apply grid grid-cols-[1.1fr_0.35fr] gap-4 my-2; }
-        .focus-chart-outer {@apply p-4 rounded-xl shadow-lg border-4; }
-        .focus-chart-inner {@apply h-64; }
-        .dashboard-bottom-row {@apply grid grid-cols-[0.3fr_1fr] gap-4 w-full h-full mb-1; }
-        .mood-outer {@apply p-1 rounded-xl shadow-md h-full border-4; }
-        .mood-inner {@apply rounded-md p-4 h-full };
-        .email-outer {@apply gap-1 p-2 rounded-xl shadow-md h-full w-full border-4;}
-        .email-inner {@apply rounded p-0.5 px-2 w-full; }
-        .dashboard-email-grid {@apply grid grid-cols-[0.5fr_1fr_0.2fr]; }
-        .task-outer {@apply w-full p-4 rounded-xl shadow-lg border-4 mb-1;}
-        .task-inner {@apply gap-2 rounded-lg; }
-        .task-box {@apply gap-1 p-3 rounded-lg shadow-md h-full; }
+        /* Dashboard */
+        .dashboard { @apply grid grid-cols-[1.1fr_0.35fr] gap-4 my-2; }
+        
+        .dashboard-bottom-row { @apply grid grid-cols-[0.3fr_1fr] gap-4 w-full h-full mb-1; }
+        .dashboard-email-grid { @apply grid grid-cols-[0.5fr_1fr_0.2fr]; }
+
+        .focus-chart-outer { @apply p-4 rounded-xl shadow-lg border-4; }
+        .focus-chart-inner { @apply h-64; }
+
+        .mood-outer { @apply p-1 rounded-xl shadow-md h-full border-4; }
+        .mood-inner { @apply rounded-md p-4 h-full };
+        
+        .email-outer { @apply gap-1 p-2 rounded-xl shadow-md h-full w-full border-4;}
+        .email-inner { @apply rounded p-0.5 px-2 w-full; }
+        
+        .task-outer { @apply w-full p-4 rounded-xl shadow-lg border-4 mb-1;}
+        .task-inner { @apply gap-2 rounded-lg; }
+        .task-box { @apply gap-1 p-3 rounded-lg shadow-md h-full; }
     }
 
-    /* 1280px desktops */
-    @screen xl {}
+    /* X-Large screens */
+    @screen xl {
 
-    /* 1536px large monitors */
-    @screen 2xl {}
+        /* Typography */
+        h1 { @apply text-3xl font-bold; } 
+        h2 { @apply text-2xl font-semibold; }
+        h3 { @apply text-xl font-semibold; }
+        h4 { @apply text-lg font-semibold; }
+        h5 { @apply text-base font-semibold; }
+        h6 { @apply text-[0.95rem] font-thin; }
+        p { @apply text-[0.8rem]; }
+        
+        /* Images */
+        img { @apply w-4 aspect-square; }
+
+        .batch-func img { @apply w-4.5 aspect-square; }
+        
+        .side-bar-menu button img, 
+        .mode-banner img, 
+        .header-logo img { @apply w-5 aspect-square; }
+        
+        .secondary-side-bar img, 
+        .settings-side-bar img, 
+        .task-layout-btn img, 
+        .toolbar img, 
+        .microintervention button img { @apply w-6 aspect-square; }
+        
+        .side-bar img { @apply w-7 aspect-square; }
+        
+        .microintervention img { @apply w-8 aspect-square; }
+
+        /* Sidebar format */
+        .side-bar,
+        .secondary-side-bar,
+        .side-bar-toggle { @apply block; }
+        
+        .side-bar { @apply flex flex-col justify-between; }
+
+        /* Main application layout */
+        .app-shell { 
+            @apply grid h-screen w-full
+            transition-[grid-template-columns] 
+            duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]; 
+            grid-template-columns: 
+                var(--left, 120px)
+                1fr
+                var(--right, 70px);
+            grid-template-rows: 1fr auto;
+        }
+        
+        .main-panel { @apply flex flex-col h-full min-h-0 m-2 mx-3 gap-2; }
+        
+        .footer { grid-column: 1 / -1; }
+        
+        .main-content { @apply mb-8; }
+
+        /* Prototype */
+        .prototype { @apply px-5 py-1 pb-3 rounded-lg; }
+
+        /* Sidebar buttons */
+        .side-bar { @apply px-1 py-2 w-12 h-[calc(100vh-0.5rem)] rounded-lg; }
+        .side-bar-btn { @apply gap-1.5; }
+        
+        .side-bar-btn-active { @apply h-6 w-1; }
+        .side-bar-btn-style { @apply rounded-md py-1 px-1.5 min-w-[30px] min-h-[30px]; }
+        
+        .side-bar-menu { @apply ml-3 w-40 rounded-md p-0.5; }
+        .side-bar-menuitem { @apply p-0.5 px-2 gap-3 min-h-[28px]; }
+        
+        .side-bar-toggle { @apply bottom-[5rem] p-1 py-3; }
+
+        .side-bar-btn-style.expanded { @apply gap-2 w-[12.4rem] h-9 m-0.5 px-3 gap-3 rounded-lg justify-start; }
+        .side-bar-btn-style.collapsed { @apply gap-0 py-0.5 px-1.5 rounded-md; }
+
+        .side-bar-label { @apply text-sm; }
+        .side-bar-help { @apply gap-1 text-[0.6rem]; }
+        .side-bar-info { @apply w-2 h-2 mt-0.5 mx-1; }
+        
+        .secondary-side-bar { @apply p-2 pt-3 ml-1 h-[calc(100vh-0.5rem)] rounded-lg; }
+        
+        .secondary-side-bar-btn.expanded { @apply h-7 px-1 gap-3; }
+        .secondary-side-bar-btn.collapsed { @apply gap-0 rounded-md; }
+        
+        .secondary-side-bar-label { @apply text-[0.8rem]; }
+        
+        .group-label { @apply text-[0.65rem]; }
+        
+        /* Search bar */
+        .search-bar { @apply border-[0.08rem] text-sm px-3 py-1 rounded-md w-2/3 h-auto; }
+        
+        .search-bar-results { @apply border-[0.08rem] text-sm mt-1 rounded-md w-2/3 max-h-[30rem]; }
+        .search-bar-results-show { @apply px-3 py-0.5 border-b-[0.08rem]; }
+        
+        /* Action buttons */
+        .prim-act-btn { @apply w-[8rem] border-[0.1rem] gap-1.5 rounded-md p-1 shadow-md; }
+        .task-layout-btn { @apply w-auto;}
+        .signup-btn { @apply w-full;}
+
+        /* Batch functions */
+        .batch-func { @apply gap-3 mx-1; }
+        
+        /* Table */
+        .email-grid { @apply gap-2; }
+        
+        /* Send email */
+        .send-email-container { @apply p-2 px-4 gap-1 rounded-md; }
+        .send-email-container.input { @apply p-1 mb-2 text-sm rounded; }
+        
+        /* Error message / popups */
+        .error-message { @apply p-0.5 px-2 rounded; }
+        
+        .error-popup { @apply p-8 rounded-md w-[22rem] shadow-xl gap-2; }
+        .error-popup-btn { @apply w-[6.5rem] border-[0.05rem] rounded p-1.5 shadow-md; }
+        
+        /* Priority and progress tags */
+        .priority-tag, .progress-tag { @apply w-full mx-2 rounded-sm py-0.5 px-3 gap-1 border-[0.08rem]; }
+
+        /* Mode banner */
+        .mode-banner { @apply px-3 py-1 rounded-lg shadow-black/20 shadow-xl text-sm;}
+
+        /* Settings */
+        .settings { @apply rounded-lg shadow-md p-1; }
+        .settings-content { @apply p-2 my-1;}
+
+        .appearance-toggle-outer { @apply h-6 w-10;}
+        .appearance-toggle-inner { @apply w-4 shadow-lg;}
+
+        .microintervention.outer { @apply bottom-2 w-[28%] max-w-sm h-auto p-1 rounded-xl shadow-xl;}
+
+        /* Header */
+        .header { @apply h-8 w-full grid grid-cols-3 px-12 shadow-md;}
+        
+        /* Terms & Conditions */
+        .terms { @apply min-h-screen h-auto min-w-0 w-[80%] py-12 px-24 gap-6;}
+
+        /* Sign in / out */
+        .signing-bg { @apply h-auto m-2 w-auto rounded-2xl};
+        
+        .signing-title-box { @apply max-w-md p-6 pt-0;}
+        .signing-title { @apply text-8xl leading-none;}
+        
+        .signing-subtitle { @apply text-3xl leading-none;}
+        .signing-subsubtitle { @apply pt-6 text-base leading-snug;}
+
+        /* Dashboard */
+        .dashboard { @apply grid grid-cols-[1.1fr_0.35fr] gap-4 my-2; }
+        
+        .dashboard-bottom-row { @apply grid grid-cols-[0.3fr_1fr] gap-4 w-full h-full mb-1; }
+        .dashboard-email-grid { @apply grid grid-cols-[0.5fr_1fr_0.2fr]; }
+
+        .focus-chart-outer { @apply p-4 rounded-xl shadow-lg border-4; }
+        .focus-chart-inner { @apply h-64; }
+
+        .mood-outer { @apply p-1 rounded-xl shadow-md h-full border-4; }
+        .mood-inner { @apply rounded-md p-4 h-full };
+        
+        .email-outer { @apply gap-1 p-2 rounded-xl shadow-md h-full w-full border-4;}
+        .email-inner { @apply rounded p-0.5 px-2 w-full; }
+        
+        .task-outer { @apply w-full p-4 rounded-xl shadow-lg border-4 mb-1;}
+        .task-inner { @apply gap-2 rounded-lg; }
+        .task-box { @apply gap-1 p-3 rounded-lg shadow-md h-full; }
+    }
+
+    /* 2X_Large screens */
+    @screen 2xl {
+    }
 }

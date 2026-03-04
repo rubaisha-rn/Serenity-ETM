@@ -1,23 +1,22 @@
+/**
+ * Client-side root layout wrapper for the application.
+ * 
+ * Initialises stress detector, 
+ * Loads external scripts, 
+ * Hydrates user profile, 
+ * Applies dynamic stress-based colour provider.
+ */
+
 'use client';
 
-import { Geist, Geist_Mono } from "next/font/google";
 import useStressDetector from "@/hooks/useStressDetector";
 import Script from "next/script";
 import UseStressColorProvider from "@/hooks/useStressColorProvider";
 import ProfileHydrator from "./providers/profileHydrator";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export default function RootLayoutClient({ children }) {
-    
+
+    // Initialise stress detection 
     useStressDetector();
 
     return (
@@ -26,12 +25,16 @@ export default function RootLayoutClient({ children }) {
             <Script src="https://sdk.morphcast.com/mphtools/v1.1/mphtools.js" data-config="cameraPrivacyPopup" strategy="afterInteractive" />
             <Script src="https://ai-sdk.morphcast.com/v1.16/ai-sdk.js" strategy="afterInteractive" />
             
+            {/* Profile hydrator loads profile data from supabase into global store on initial app load */}
             <ProfileHydrator>
-                <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-                    <UseStressColorProvider>
-                        {children}
-                    </UseStressColorProvider>
-                </div>
+
+                {/* Stress colour provider for dynamic UI colour changes */}
+                <UseStressColorProvider>
+
+                    {/* Application content */}
+                    {children}
+
+                </UseStressColorProvider>
             </ProfileHydrator>
         </>
     );

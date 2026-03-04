@@ -1,10 +1,20 @@
+/**
+ * Prototype tag component
+ * 
+ * Displays a label on the screen indicating that the application is a prototype. 
+ * Can be dismissed by the user by clicking on it.
+ */
+
 import { useState } from "react"
 
 export default function PrototypeTag() {
-    
+
+    // Hidden state to control tag visibility 
     const [hidden, setHidden] = useState(false);
 
     return (
+
+        // Button to improve accessibility
         <button 
             type="button"
             aria-label="Dismiss prototype build tag"

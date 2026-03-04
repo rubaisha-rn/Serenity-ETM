@@ -8,7 +8,7 @@ import { ICONS } from "@/lib/assets";
 import PrototypeTag from "@/components/prototypeTag";
 import useStore from "@/store/useStore";
 
-export default function LoginPage() {
+export default function SignInPage() {
     
     const {setScreen} = useStore();
     const router = useRouter();
@@ -18,7 +18,7 @@ export default function LoginPage() {
     const [error, setError] = useState(null)
     const [success, setSuccess] = useState(null)
 
-    const handleLogin = async (e) => {
+    const handleSignIn = async (e) => {
         
         e.preventDefault()
         setLoading(true)
@@ -142,7 +142,7 @@ export default function LoginPage() {
 
                 <form 
                     aria-describedby={error ? 'form-error' : undefined}
-                    onSubmit={handleLogin} 
+                    onSubmit={handleSignIn} 
                     className='w-[50%] items-center justify-center'
                 >
                     <label className="sr-only" htmlFor="email">Email Address</label>

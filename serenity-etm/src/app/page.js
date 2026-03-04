@@ -7,7 +7,7 @@ import { ICONS } from '@/lib/assets';
 import { supabase } from '@/lib/supabaseClient';
 import Spinner from '@/components/spinner';
 
-export default function IntroPage() {
+export default function SignUpPage() {
     
     const router = useRouter();
     const [email, setEmail] = useState('')
@@ -77,8 +77,8 @@ export default function IntroPage() {
             setError(error.message)
         }
         else {
-            setSuccess('Account created. Please verify your email and login.')
-            router.push('/login');
+            setSuccess('Account created. Please verify your email and sign in.')
+            router.push('/signin');
         }
 
         setLoading(false)
@@ -221,7 +221,7 @@ export default function IntroPage() {
                         
                         <button
                             className='underline hover:text-blue-400'
-                            onClick={()=> router.push('/login')}
+                            onClick={()=> router.push('/signin')}
                         ><p>Sign in</p></button>
                     
                     </label>

@@ -1,10 +1,28 @@
+/**
+ * Email management Zustand store.
+ * 
+ * Manages:
+    * Email CURD operations (supabase)
+    * Bulk actions (read, archive, delete)
+    * Folder management (inbox, archive, drafts)
+    * Email selection for multi-actions
+    * Priority classification via API
+    * Draft handling
+ */
+
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
 export const useEmailStore = create((set, get) => ({
 
+    /**
+     * Selection state
+     */
+
+    // Selected IDs for bulk actions
     selectedIds: [],
 
+    // Toggle select. If email is already selected, remove it, otherwise add it.
     toggleSelect: (id) =>
         set(state => ({
             selectedIds: state.selectedIds.includes(id)
@@ -12,35 +30,48 @@ export const useEmailStore = create((set, get) => ({
                 : [...state.selectedIds, id]
         })),
 
+    // Clear all selected emails
     clearSelection: () => set({selectedIds: []}),
 
+    // Select all emails visible in the UI
     selectAllVisible: (ids) => set({selectedIds: ids}),
 
+    /**
+     * Bulk actions
+     */
+
+    // Mark many emails as read/unread
     markManyRead: async (ids, read=true) => {
         if (!ids.length) return
 
+        // Update db depending on marking it as read or unread
         await supabase
             .from('emails')
             .update({is_read: read})
             .in('id', ids)
 
+        // Clear selection and reload emails
         get().clearSelection()
         get().loadEmails()
     },
 
+    // Archive many
     archiveMany: async (ids) => {
         
         if (!ids.length) return
 
+        // DB update
         await supabase
             .from('emails')
             .update({folder: 'archive'})
             .in('id', ids)
 
+        // Clear selection and reload
         get().clearSelection()
         get().loadEmails()
     },
 
+    // Unarchive and send to inbox
     unarchiveMany: async (ids) => {
         
         if (!ids.length) return
@@ -50,23 +81,31 @@ export const useEmailStore = create((set, get) => ({
             .update({folder: 'inbox'})
             .in('id', ids)
 
+        // Clear selection and refresh list
         get().clearSelection()
         get().loadEmails()
     },
-
+    
+    // Soft delete many emails
     deleteMany: async (ids) => {
    
         if (!ids.length) return
-
+        
+        // Mark as deleted
         await supabase
             .from('emails')
             .update({is_delete: true})
             .in('id', ids)
 
+        // Clear selection and reload emails
         get().clearSelection()
         get().loadEmails()
     },
 
+    /**
+     * Email classification
+     * Uses API to determine email priroity when it has not been classified by the user
+     */
     classifyMissingEmails: async () => {
 
         const {data: sessionData} = await supabase.auth.getSession();
@@ -74,6 +113,7 @@ export const useEmailStore = create((set, get) => ({
 
         const emails = get().emails;
 
+        // Classify emails missing priority or that can be classified by rules/AI
         const unclassified = emails.filter(
             e => (e.priority_src === 'rules' || e.priority === null)
         )
@@ -81,9 +121,13 @@ export const useEmailStore = create((set, get) => ({
         if (unclassified.length === 0) return;
 
         try {
+
             const results = await Promise.all(
                 unclassified.map(async (email) => {
+            
                     try {
+            
+                        // Send email subject and body to classification API
                         const res = await fetch('/api/classify', {
                             method: 'POST',
                             headers: {'Content-Type': 'application/json'},
@@ -94,6 +138,7 @@ export const useEmailStore = create((set, get) => ({
 
                         const data = await res.json();
 
+                        // Get classification per email
                         return {
                             id: email.id,
                             priority: data.priority,
@@ -106,11 +151,13 @@ export const useEmailStore = create((set, get) => ({
                 })
             );
 
+            // Remove classifications that are boolean or null which indicates a failed classification
             const validUpdates = results.filter(Boolean);
 
+            // Return if not valid classifications
             if (validUpdates.length === 0) return;
 
-            // safe db update - not overwriting user
+            // Safe db update by not overwriting user defined priorities 
             for (const update of validUpdates) {
                 await supabase
                     .from('emails')
@@ -122,7 +169,7 @@ export const useEmailStore = create((set, get) => ({
                     .is('priority', null);
             }
 
-            // update local state
+            // Update local state
             const updatedEmails = emails.map(email => {
                 const match = validUpdates.find(u => u.id === email.id);
                 return match ? {...email, ...match} : email;
@@ -135,13 +182,18 @@ export const useEmailStore = create((set, get) => ({
         }
     },
 
+    /**
+     * Load emails
+     */
     loadEmails: async () => {
 
+        // If in session
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
 
         const userId = sessionData.session.user.id
 
+        // Load all emails where user is either sender or receiver
         const {data: rows, error} = await supabase
             .from('emails')
             .select(`
@@ -160,12 +212,16 @@ export const useEmailStore = create((set, get) => ({
             .or(`sender_id.eq.${userId},receiver_id.eq.${userId}`)
             .order('created_at', {ascending: false})
 
+        // If no error, normalise data for easier UI use
         if (!error) {
-            const normalised = rows.map(e => {
 
+            const normalised = rows.map(e => {
+                
+                // Define if user is sender, receiver, or both
                 const isSender = e.sender_id === userId
                 const isReceiver = e.receiver_id === userId
 
+                // Define names
                 const senderName = e.sender
                     ? `${e.sender.first_name || ''} ${e.sender.last_name || ''}`.trim()
                     : ''
@@ -174,25 +230,32 @@ export const useEmailStore = create((set, get) => ({
                     ? `${e.receiver.first_name || ''} ${e.receiver.last_name || ''}`.trim()
                     : ''
 
+                // Folder 
                 let folder = e.folder || 'inbox'
                 
                 return {
                     ...e,
 
+                    // Sender info
                     from_email: e.sender?.email || '',
                     from_name: senderName,
 
+                    // Receiver info
                     to_email: e.receiver?.email || '',
                     to_name: receiverName,
 
+                    // Relationship flags
                     isSender,
                     isReceiver,
 
+                    // Read status and timestamps with fallback
                     read: e.read ?? e.is_read,
                     timestamp: e.timestamp || e.created_at,
 
+                    // Folder
                     folder,
                     
+                    // Additional flags and priority classification
                     starred: e.starred ?? false,
                     priority: e.priority,
                     priority_src: e.priority_src,
@@ -206,21 +269,36 @@ export const useEmailStore = create((set, get) => ({
         }
     },
 
+    /**
+     * Email State. Accessors and mutators
+     */
+    
     emails: [],
+    
+    // Currently opened email
     selectedEmail: null,
-    showEmails: 'inbox',
-    readEmailCount: 0,
-
     setSelectedEmail: (email) => set({selectedEmail: email}),
+
+    // Currently visible folder
+    showEmails: 'inbox',
     setShowEmails: (folder) => set({showEmails: folder}),
+
+    // Total emails read in current session
+    readEmailCount: 0,
     setReadEmailCount: (count) => set({readEmailCount: count}),
 
+    /**
+     * Email Actions
+     */
+
+    // Toggle star status
     toggleStar: async (id) => {
 
         const email = get().emails.find(e => e.id === id)
 
         if (!email) return
 
+        //Update in db
         await supabase
             .from('emails')
             .update({starred: !email.starred})
@@ -229,6 +307,7 @@ export const useEmailStore = create((set, get) => ({
         get().loadEmails()
     },
 
+    // Toggle read status by marking as read/unread
     markAsRead: async (id, read=true) => {
 
         await supabase
@@ -239,6 +318,7 @@ export const useEmailStore = create((set, get) => ({
         get().loadEmails()
     },
 
+    // Move email to different folder
     moveToFolder: async (id, newfolder='inbox') => {
 
         await supabase
@@ -249,11 +329,15 @@ export const useEmailStore = create((set, get) => ({
         get().loadEmails()
     },
     
+    /**
+     * Send email
+     */
     sendEmail: async (data) => {
 
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
 
+        // Insert data if in session
         const {data: rows, error} = await supabase
             .from('emails')
             .insert([{
@@ -263,6 +347,8 @@ export const useEmailStore = create((set, get) => ({
                 folder: 'inbox',
                 is_read: false,
                 priority: 'normal',
+
+                // Priority is defined by API as default
                 priority_src: 'rules',
             }])
 
@@ -274,18 +360,25 @@ export const useEmailStore = create((set, get) => ({
         get().loadEmails()
     },
 
+    /**
+     * Priority management cycle: low -> normal -> high
+     */
     cyclePriority: async (id) => {
         
+        // Get current email    
         const emails = get().emails;
         const email = emails.find(e => e.id === id);
         if (!email) return;
 
+        // Define its priority index 
         const order = ['low', 'normal', 'high'];
         const current = email.priority ?? 'normal';
         const currentIndex = order.indexOf(current);
 
+        // Define next priority index
         const nextPriority = order[(currentIndex + 1) % order.length];
 
+        // Set next priority and change source to user
         set({
             emails: emails.map(e =>
                 e.id === id
@@ -294,6 +387,7 @@ export const useEmailStore = create((set, get) => ({
             )
         });
 
+        // Update in db
         const {error} = await supabase
             .from('emails')
             .update({
@@ -302,19 +396,25 @@ export const useEmailStore = create((set, get) => ({
             })
             .eq('id', id)
 
+        // Rollback on failure
         if (error) {
             console.log('Priority update failed.', error);
             set({emails});
         }
     },
 
+    /**
+     * Draft management
+     */
     saveDraft: async (data) => {
         
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
 
+        // Empty drafts prevented 
         if (!data.subject && !data.body && !data.receiver_id) return
 
+        // Insert email to drafts folder
         const {data: rows, error} = await supabase
             .from('emails')
             .insert([{        
@@ -328,6 +428,7 @@ export const useEmailStore = create((set, get) => ({
                 folder: 'drafts',
                 is_read: true,
 
+                // Default priority depends on API classification
                 priority: 'normal',
                 priority_src: 'rules',
         }])
@@ -340,11 +441,15 @@ export const useEmailStore = create((set, get) => ({
         get().loadEmails()
     },
 
+    /**
+     * Send an existing draft
+     */
     sendDraft: async (draftId, receiverId, subject, body) => {
         
         const {data: sessionData} = await supabase.auth.getSession()
         if (!sessionData.session) return
 
+        // Move draft mail to inbox
         const {error} = await supabase
             .from('emails')
             .update({
@@ -366,16 +471,4 @@ export const useEmailStore = create((set, get) => ({
 
         get().loadEmails()
     },
-
-    updateDraft: async (id, subject, body) => {
-        await supabase
-            .from('emails')
-            .update({
-                subject,
-                body,
-            })
-            .eq('id', id)
-
-        get().loadEmails()
-    }
 }))

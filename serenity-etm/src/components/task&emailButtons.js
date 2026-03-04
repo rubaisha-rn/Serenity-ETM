@@ -1,3 +1,7 @@
+/**
+ * Render navigation buttons for email and task screens inside the secondary sidebar. 
+ */
+
 'use client';
 
 import React from "react";
@@ -6,12 +10,22 @@ import EmailsSidebarButton from "./emails/sidebarButtons";
 import { ICONS } from "@/lib/assets";
 import useStore from "@/store/useStore";
 
-const theme = useStore.getState().theme;
-
+/**
+ * Task button group component
+ * 
+ * Renders task navigation buttons inside secondary sidebar on tasks screen.
+ */
 export const TaskButtons = React.memo(({expandedSecondary, setShowTasks}) => {
 
+    // Access theme so ensure re-render when theme changes
     const theme = useStore((s) => s.theme);
 
+    /**
+     * Task button configuration grouped by categories.
+     * 
+     * Each group contains a label and buttons.
+     * Each button defines its own label, key, icon, keyboard shortcut.
+     */
     const taskGroups = [
         {
             label: 'Overview',
@@ -40,18 +54,37 @@ export const TaskButtons = React.memo(({expandedSecondary, setShowTasks}) => {
         },
     ];
 
+    // Render task sidebar buttons
     return (
+
+        // Container depending on sidebar's expansion. Contains all buttons
         <div className={`flex flex-col ${expandedSecondary ? 'gap-6' : 'gap-2'}`}>
+
             {taskGroups.map((group) => (
+            
+                // Render a button
                 <div key={group.label} className={`flex flex-col gap-1`}>
+
+                    {/* If expanded, show categories, else only show icons */}
                     {expandedSecondary && (    
                         <div className="text-[var(--text-b)] leading-tight group-label">
                             {group.label}
                         </div>
                     )}
 
+                    {/* Render each button inside its group */}
                     {group.buttons.map((btn) => (
-                        <TasksSidebarButton key={btn.key} label={btn.label} shortLabel={btn.key} icon={btn.icon} shortcut={btn.shortcut} expanded={expandedSecondary} onClick={() => setShowTasks(btn.key)} />
+                        <TasksSidebarButton 
+                            key={btn.key} 
+                            label={btn.label} 
+                            shortLabel={btn.key} 
+                            icon={btn.icon} 
+                            shortcut={btn.shortcut} 
+                            expanded={expandedSecondary} 
+
+                            // Button's function
+                            onClick={() => setShowTasks(btn.key)} 
+                        />
                     ))}
                 </div>
             ))}
@@ -59,10 +92,19 @@ export const TaskButtons = React.memo(({expandedSecondary, setShowTasks}) => {
     );
 });
 
+/**
+ * Email button group component
+ * 
+ * Render email navigation buttons inside secondary sidebar.
+ */
 export const EmailButtons = React.memo(({expandedSecondary, setShowEmails}) => {
 
+    // Theme to update icons accordingly
     const theme = useStore((s) => s.theme);
     
+    /**
+     * Email button configuration grouped by category
+     */
     const emailGroups = [
         {
             label: 'Incoming',
@@ -88,17 +130,35 @@ export const EmailButtons = React.memo(({expandedSecondary, setShowEmails}) => {
     ];
 
     return (
+
+        // Main container displaying buttons according to sidebar's expansion
         <div className={`flex flex-col ${expandedSecondary ? 'gap-6' : 'gap-2'}`}>
+
             {emailGroups.map((group) => (
+            
+                // Each button is rendered
                 <div key={group.label} className={`flex flex-col gap-1`}>
+
+                    {/* Show category labels only if sidebar is expanded, else only display icons */}
                     {expandedSecondary && (
                         <div className="text-[var(--text-b)] leading-tight group-label">
                             {group.label}
                         </div>
                     )}
 
+                    {/* Render each button */}
                     {group.buttons.map((btn) => (
-                        <EmailsSidebarButton key={btn.key} label={btn.label} shortLabel={btn.key} icon={btn.icon} shortcut={btn.shortcut} expanded={expandedSecondary} onClick={() => setShowEmails(btn.key)} />
+                        <EmailsSidebarButton 
+                            key={btn.key} 
+                            label={btn.label} 
+                            shortLabel={btn.key} 
+                            icon={btn.icon} 
+                            shortcut={btn.shortcut} 
+                            expanded={expandedSecondary} 
+                            
+                            // Button function
+                            onClick={() => setShowEmails(btn.key)} 
+                        />
                     ))}
                 </div>
             ))}

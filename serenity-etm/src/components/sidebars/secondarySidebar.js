@@ -1,3 +1,9 @@
+/**
+ * Secondary side bar
+ * 
+ * Renders secondary side bar for tasks and emails screens. Shows contextual navigation options relevant to currently active screen.
+ */
+
 'use client';
 
 import { motion } from "framer-motion";
@@ -9,29 +15,42 @@ import { TaskButtons, EmailButtons } from "../task&emailButtons";
 
 export default function SecondarySidebar() {
     
+    // Global state values
     const {screen, expandedSecondary} = useStore();
     const {setShowEmails} = useEmailStore();
     const {setShowTasks} = useTaskStore();
 
+    // Reference to sidebar container for focus management
     const sidebarRef = useRef(null);
 
-    // focus management when expanding
+    /**
+     * Focus management
+     * 
+     * When sidebar expands, focus is moved to the first button inside the sidebar. 
+     * Improves keyboard accessibility and ensures screen reader users are placed inside the navigation.
+     */
     useEffect(() => {
+        
         if (expandedSecondary && sidebarRef.current) {
+        
             const firstButton = sidebarRef.current.querySelector('button');
             firstButton?.focus();
+        
         }
+    
     }, [expandedSecondary]);
 
+    // Determine the heading based on the active screen
     const headingText = 
         screen === 'emails'
          ? 'Email Manager'
          : screen === 'tasks'
          ? 'Task Manager'
-         : 'Dashboard';
+         : '';
 
     return (
 
+        // Sidebar container
         <motion.div
             ref={sidebarRef}
             aria-label="Secondary navigation panel"
@@ -41,8 +60,13 @@ export default function SecondarySidebar() {
             transition={{type: 'spring', stiffness: 260, damping: 36}}
             className={`${expandedSecondary ? 'fixed top-1 overflow-hidden items-center justify-center motion-safe:transition-colors shadow-xl backdrop-blur-xl z-10 secondary-side-bar' : 'fixed top-1 flex flex-col justify-between shadow-xl z-20 side-bar ml-1 pt-0.5'}`}
         >
-            <div role="menu" aria-label={`${headingText} options`} className="flex flex-col gap-1">
-
+            {/* Navigation container */}
+            <div 
+                role="menu" 
+                aria-label={`${headingText} options`} 
+                className="flex flex-col gap-1"
+            >
+                {/* Sidebar heading shown only when expanded */}
                 {expandedSecondary && (
                     <h5
                         id="secondary-sidebar-heading"
@@ -52,6 +76,7 @@ export default function SecondarySidebar() {
                     </h5>
                 )}
 
+                {/* Task navigation buttons for task screen */}
                 {screen === 'tasks' && (
                     <TaskButtons
                         expandedSecondary={expandedSecondary}
@@ -59,13 +84,13 @@ export default function SecondarySidebar() {
                     />
                 )}
 
+                {/* Email navigation buttons for email screen */}
                 {screen === 'emails' && (
                     <EmailButtons
                         expandedSecondary={expandedSecondary}
                         setShowEmails={setShowEmails}
                     />
                 )}
-
             </div>
         </motion.div>
     );

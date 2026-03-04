@@ -1,5 +1,15 @@
+/** 
+ * Colour palettes for three theme modes: normal, high-contrast, and colour-vision friendly. 
+ * Normal theme mode's light and dark themes have colour changing palettes depending on user stress level.
+ * High-contrast and colour-vision friendly mode's light and dark themes do not have the colour changing feature as it defeats the purpose of the mode.
+ */
+
 export const STRESS_PALETTE = {
+
+    // Normal mode - Light theme 
     light: {
+
+        // Low stress
         low: {  
             a: '#2a2c29',
             b: '#444741',
@@ -10,6 +20,8 @@ export const STRESS_PALETTE = {
             g: '#8e918b',
             bg: '#f5f5f5',
         },
+
+        // Medium stress
         mid: {
             a: '#2f4443',
             b: '#446261',
@@ -20,6 +32,8 @@ export const STRESS_PALETTE = {
             g: '#7fb8b6',
             bg: '#ebedec',
         },
+
+        // High stress
         high: {
             a: '#1c2b3a',
             b: '#25394d',
@@ -32,7 +46,10 @@ export const STRESS_PALETTE = {
         },
     },
 
+    // Normal mode - Dark theme
     dark: {
+
+        // Low stress
         low: {  
             a: '#c5c6c3',
             b: '#b4b6ae',
@@ -43,6 +60,8 @@ export const STRESS_PALETTE = {
             g: '#4c5041',
             bg: '#212121',
         },
+
+        // Medium stress
         mid: {
             a: '#c3c6c4',
             b: '#aeb6b3',
@@ -53,6 +72,8 @@ export const STRESS_PALETTE = {
             g: '#415049',
             bg: '#1e201e',
         },
+
+        // High stress
         high: {
             a: '#c3c4c6',
             b: '#aeb0b6',
@@ -65,7 +86,10 @@ export const STRESS_PALETTE = {
         },
     },
 
+    // High contrast mode
     highContrast: {
+
+        // Light theme
         light: {
             a: '#000000',
             b: '#000000',
@@ -77,6 +101,7 @@ export const STRESS_PALETTE = {
             bg: '#ffffff',
         }, 
 
+        // Dark theme
         dark: {
             a: '#ffffff',
             b: '#ffffff',
@@ -89,7 +114,10 @@ export const STRESS_PALETTE = {
         },
     },
 
+    // Colour-vision friendly mode
     colourVisionFriendly: {
+
+        // Light theme
         light: {
             a: '#172937',
             b: '#374151',
@@ -101,6 +129,7 @@ export const STRESS_PALETTE = {
             bg: '#f7f7f7',
         }, 
 
+        // Dark theme
         dark: {
             a: '#f3f4f6',
             b: '#e5e7eb',

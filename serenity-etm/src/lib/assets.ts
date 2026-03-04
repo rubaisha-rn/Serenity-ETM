@@ -1,12 +1,25 @@
+// Base URL for all UI assets stores in supabase storage
 const SUPABASE_ASSET_URL = 'https://funqzsdhvrnloatkmipm.supabase.co/storage/v1/object/public/assets-ui/'
 
+/**
+ * Centralised mapping of all UI icon assets used throughout the app.
+    * bg -> background assets
+    * light -> used in light theme
+    * dark -> used in dark theme
+ */
 export const ICONS = {
+
+    // Background assets
     bg: {
         bg: `${SUPABASE_ASSET_URL}/bg/bg.png`,
     },
+
+    // Light mode assets
     light: {
+        account: `${SUPABASE_ASSET_URL}/light-mode/account.png`,
         add: `${SUPABASE_ASSET_URL}/light-mode/add.png`,
         alltasks: `${SUPABASE_ASSET_URL}/light-mode/alltasks.png`,
+        appearance: `${SUPABASE_ASSET_URL}/light-mode/appearance.png`,
         archive: `${SUPABASE_ASSET_URL}/light-mode/archive.png`,
         arrow: `${SUPABASE_ASSET_URL}/light-mode/arrow.png`,
         calm: `${SUPABASE_ASSET_URL}/light-mode/calm.png`,
@@ -50,14 +63,16 @@ export const ICONS = {
         unread: `${SUPABASE_ASSET_URL}/light-mode/unread.png`,
         upcoming: `${SUPABASE_ASSET_URL}/light-mode/upcoming.png`,
         warning: `${SUPABASE_ASSET_URL}/light-mode/warning.png`,
-        yellowflag: `${SUPABASE_ASSET_URL}/light-mode/yellowflag.png`,
-        appearance: `${SUPABASE_ASSET_URL}/light-mode/appearance.png`,
         wellbeing: `${SUPABASE_ASSET_URL}/light-mode/wellbeing.png`,
-        account: `${SUPABASE_ASSET_URL}/light-mode/account.png`,
+        yellowflag: `${SUPABASE_ASSET_URL}/light-mode/yellowflag.png`,
    },
+
+    // Dark mode assets
    dark: {
+        account: `${SUPABASE_ASSET_URL}/dark-mode/account.png`,
         add: `${SUPABASE_ASSET_URL}/dark-mode/add.png`,
         alltasks: `${SUPABASE_ASSET_URL}/dark-mode/alltasks.png`,
+        appearance: `${SUPABASE_ASSET_URL}/dark-mode/appearance.png`,
         archive: `${SUPABASE_ASSET_URL}/dark-mode/archive.png`,
         arrow: `${SUPABASE_ASSET_URL}/dark-mode/arrow.png`,
         calm: `${SUPABASE_ASSET_URL}/dark-mode/calm.png`,
@@ -101,9 +116,7 @@ export const ICONS = {
         unread: `${SUPABASE_ASSET_URL}/dark-mode/unread.png`,
         upcoming: `${SUPABASE_ASSET_URL}/dark-mode/upcoming.png`,
         warning: `${SUPABASE_ASSET_URL}/dark-mode/warning.png`,
-        yellowflag: `${SUPABASE_ASSET_URL}/dark-mode/yellowflag.png`,
-        appearance: `${SUPABASE_ASSET_URL}/dark-mode/appearance.png`,
         wellbeing: `${SUPABASE_ASSET_URL}/dark-mode/wellbeing.png`,
-        account: `${SUPABASE_ASSET_URL}/dark-mode/account.png`,
-   }
+        yellowflag: `${SUPABASE_ASSET_URL}/dark-mode/yellowflag.png`,
+   },
 }

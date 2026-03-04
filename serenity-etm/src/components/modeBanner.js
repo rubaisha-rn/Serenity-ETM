@@ -1,3 +1,8 @@
+/**
+ * Mode banner component displays a temporary banner notification when the UI mode changes. 
+ * Automatically hides after a few seconds or can be dismissed manually.
+ */
+
 'use client';
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,35 +12,57 @@ import { ICONS } from "@/lib/assets";
 
 export default function ModeBanner({mode}) {
 
+    // Store actions and states
     const {setFocusMode, setPriorityMode} = useStore();
     const theme = useStore((s) => s.theme);
+
+    // Controls visibility of the banner
     const [show, setShow] = useState(false);
+
+    // Stores previous mode value so we only trigger the banner when the mode actually changes
     const prevMode = useRef(mode);
 
+    // Runs whenever mode changes. 
     useEffect(() => {
 
-        // only run when mode changes
         if(prevMode.current !== mode) {
+
             setShow(true);
-            const timer = setTimeout(() => setShow(false), 4000); // 4 secs
+            
+            // Hides after 4 seconds
+            const timer = setTimeout(() => setShow(false), 4000);
+
+            // Previous mode updated
             prevMode.current = mode;
+
+            // Cleanup timer for next mode change
             return () => clearTimeout(timer);
         }
+
     }, [mode]);
 
     return (
+
+        // Animate presence for animating banner's smooth entry and exit
         <AnimatePresence>
+
             {show && (
+                
+                // Banner container
                 <motion.div
+                    role="status"
+                    aria-live="polite"
                     initial={{y: -50, opacity: 0, x: '-50%'}}
                     animate={{y: 0, opacity: 1, x: '-50%'}}
                     exit={{y: -50, opacity: 0, x: '-50%'}}
                     transition={{ duration: 0.35, ease:[0.16, 1, 0.3, 1] }}
                     className={`fixed top-1 left-1/2 transform -translate-x-1/2 text-[var(--text-d)] z-50 justify-center mode-banner ${mode === 'focus' ? 'bg-[var(--focusMode)]' : mode === 'priority' ? 'bg-[var(--priorityMode)]' : 'bg-[var(--disabledMode)]'}`}
-                >
+                >   
+
+                    {/* Banner content container */}
                     <div className="flex flex-row w-[45vw] justify-between items-center">
 
-                        {/* left */}
+                        {/* Left side: icon, label, text */}
                         <div className="flex flex-row items-center
                             sm:gap-1
                             md:gap-1
@@ -43,6 +70,8 @@ export default function ModeBanner({mode}) {
                             xl:gap-2
                             2xl:gap-3
                         ">
+
+                            {/* Icon */}
                             <img
                                 src={
                                     mode === 'focus'
@@ -52,6 +81,8 @@ export default function ModeBanner({mode}) {
                                     : ICONS[theme].info
                                 }
                             />
+
+                            {/* Label and text */}
                             <div>
                                 <h6 className="font-semibold">
                                     {mode === 'focus' ? 'Focus mode enabled.' : mode === 'priority' ? 'Priority mode enabled.' : 'Mode disabled'}
@@ -65,15 +96,21 @@ export default function ModeBanner({mode}) {
                             </div>
                         </div>
 
-                        {/* right side */}
+                        {/* Right side */}
                         <div className="flex flex-row 
                             sm:gap-1
                             md:gap-1
                             lg:gap-2
                             xl:gap-2
-                            2xl:gap-3">
+                            2xl:gap-3"
+                        >
+
+                            {/* Buttons */}
                             {mode !== 'default' && (
+
+                                // Turn off mode button
                                 <button
+                                    aria-label={`Turn off ${mode} mode`}
                                     onClick={() => {
                                         mode === 'focus' 
                                             ? setFocusMode(false)
@@ -85,7 +122,10 @@ export default function ModeBanner({mode}) {
                                     <p>Turn off</p>
                                 </button>
                             )}
+
+                            {/* Close banner button */}
                             <button
+                                aria-label="Dismiss mode notification"
                                 onClick={() => setShow(false)}
                             >
                                 <img
