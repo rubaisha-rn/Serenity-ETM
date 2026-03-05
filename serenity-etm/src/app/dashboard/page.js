@@ -1,3 +1,8 @@
+/**
+ * Dashboard screen
+ * 
+ * Displays weekly focus activity chart, current day's inferred mood, top three priority emails and tasks.
+ */
 'use client';
 
 import { useEffect, useMemo } from "react";
@@ -12,16 +17,18 @@ import { supabase } from "@/lib/supabaseClient";
 import { ICONS } from "@/lib/assets";
 import formatDate from "@/components/formatDate";
 
-// weekly focus grouping
+// Weekly focus grouping used to populate the weekly focus triggers bar chart
 function getWeeklyFocusCounts(triggers) {
 
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const counts = {Sun:0, Mon:0, Tue:0, Wed:0, Thu:0, Fri:0, Sat:0}; 
 
+    // Get date for exactly a week ago
     const now = new Date();
     const weekAgo = new Date();
     weekAgo.setDate(now.getDate() - 6);
 
+    // Map triggers to each day
     triggers.forEach(ts => {
         const d = new Date(ts);
         if (d >= weekAgo) {
@@ -35,16 +42,20 @@ function getWeeklyFocusCounts(triggers) {
     }));
 }
 
-// today's mood
+// Today's mood based on focus activation score
 function getTodayFocusCount(triggers) {
+
     const today = new Date().toDateString();
+    
     return triggers.filter(ts => new Date(ts).toDateString() === today).length;
 }
 
-// priority sort
+// Priority sort
 function sortByPriority(items) {
+    
     const rank = {high: 3, normal: 2, low: 1};
 
+    // Items sorted based on priority sliced to three
     return [...items]
         .sort((a, b) => {
             const pa = rank[a.priority ?? 'normal'];
@@ -56,25 +67,29 @@ function sortByPriority(items) {
 
 export default function DashboardPage () {
 
+    // Global states
     const theme = useStore((s) => s.theme);
     const {focusTriggers, loadFocusTriggers, setScreen} = useStore();
+    const {emails, loadEmails, classifyMissingEmails, setSelectedEmail, markAsRead, readEmailCount, setReadEmailCount, setShowComposer} = useEmailStore();
+    const {tasks, loadTasks, classifyMissingTasks, setGrid} = useTaskStore();
 
+    // Navigation
     const router = useRouter();
 
-    const {emails, loadEmails, classifyMissingEmails} = useEmailStore();
-    const {tasks, loadTasks, classifyMissingTasks} = useTaskStore();
-
-    // init
+    // Init
     useEffect(() => {
+        
         const init = async () => {
                     
             const {data} = await supabase.auth.getSession();
 
+            // No session? re-route to sign in page
             if (!data.session) {
                 router.push('/signin');
                 return;
             }
 
+            // Load and classify email and tasks, load focus triggers
             await Promise.all([
                 loadEmails(),
                 loadTasks(),
@@ -85,17 +100,24 @@ export default function DashboardPage () {
         }
 
         init();
+
     }, [])
 
-    // get mood from focus count
+    // Get mood label and colour from today's focus count
     function getMoodFromFocusCount(count) {
+        
         if (count === 0) return {label: 'Calm', colour: theme === 'light' ? 'bg-blue-600 bg-opacity-60' : 'bg-blue-900 opacity-80'};
+        
         if (count === 1) return {label: 'Stable', colour: theme === 'light' ? 'bg-green-600 bg-opacity-60' : 'bg-green-900'}
+        
         if (count === 2) return {label: 'Alert', colour: theme === 'light' ? 'bg-yellow-600 bg-opacity-60' : 'bg-yellow-900'}
+        
         if (count <= 4) return {label: 'Stressed', colour: theme === 'light' ? 'bg-orange-600 bg-opacity-60' : 'bg-orange-800 opacity-80'}
+        
         return {label: 'Overwhelmed', colour: theme === 'light' ? 'bg-red-600 bg-opacity-60' : 'bg-red-900'}
     }
 
+    // Memoized data calculations
     const weeklyFocusData = useMemo(
         () => getWeeklyFocusCounts(focusTriggers || []),
         [focusTriggers]
@@ -129,25 +151,29 @@ export default function DashboardPage () {
         [tasks]
     );
 
+    // Animation easing
     const easeTransition = {
         duration: 0.65,
         ease: [0.16, 1, 0.3, 1]
     };
 
     return (
+
+        // Global layout
         <AppShell>
+
             <div 
                 className="flex flex-col min-h-0 h-screen overflow-x-hidden overflow-y-auto min-w-0 z-0 dashboard"
                 aria-labelledby="dashboard-heading"
             >
-
+                {/* Hidden heading for screen readers */}
                 <h1 id="dashboard-heading" className="sr-only">Dashboard overview</h1>
                 
-                {/* left side */}
+                {/* Left section */}
                 <div className="flex flex-col sm:gap-2 md:gap-3 lg:gap-4 xl:gap-4 2xl:gap-4">
 
-                    {/* weekly focus chart */}
-                    <div 
+                    {/* Weekly focus chart */}
+                    <section 
                         className="focus-chart-outer bg-[var(--baseAcc-b)] border-[var(--focusModeInt)]"
                         role="region"
                         aria-labelledby="weekly-focus-heading"
@@ -159,10 +185,11 @@ export default function DashboardPage () {
                         >
                                 Focus Mode This Week
                         </h4>
-
+                        
+                        {/* Screen reader chart summary */}
                         <p className="sr-only">Bar chart showing focus activations for each day over the past week</p>
 
-                        {/* screen reader alternatives */}
+                        {/* Screen reader alternatives */}
                         <ul className="sr-only">
                             {weeklyFocusData.map(d => (
                                 <li key={d.day}>
@@ -172,7 +199,9 @@ export default function DashboardPage () {
                         </ul>
 
                         <div className="focus-chart-inner">
+                            
                             <ResponsiveContainer width="100%" height="100%">
+                            
                                 <BarChart data={weeklyFocusData}>
 
                                     {/* background */}
@@ -216,6 +245,7 @@ export default function DashboardPage () {
 
                                 </BarChart>
 
+                                {/* If no data is found */}
                                 {weeklyFocusData.length === 0 && (
                                     <motion.div 
                                         key="empty"
@@ -233,21 +263,19 @@ export default function DashboardPage () {
                                         ">No data found.</p>
                                     </motion.div>
                                 )}
-
                             </ResponsiveContainer>
                         </div>
-                    </div>
+                    </section>
 
-                    {/* left side bottom row: mood + emails */}
+                    {/* Bottom row: mood + priority emails */}
                     <div className="flex flex-row dashboard-bottom-row">
 
-                        {/* mood */}
+                        {/* Mood */}
                         <div
                             role="region"
                             aria-labelledby="today-mood-heading" 
                             className={`mood-outer text-white border-[var(--priorityLowb)] bg-[var(--baseAcc-b)]`}
                         >
-
                             <div className={`flex flex-col mood-inner ${todayMood.colour} justify-between`}>
                                 
                                 <h6 
@@ -267,10 +295,9 @@ export default function DashboardPage () {
                                 </p>
 
                             </div>
-
                         </div>
 
-                        {/* emails */}
+                        {/* Emails */}
                         <div 
                             role="region"
                             aria-labelledby="priority-emails-heading"
@@ -291,21 +318,41 @@ export default function DashboardPage () {
                             </div>
 
                             {topPriorityEmails.map((mail) => (
-                                <motion.div
+                                <motion.button
                                     key={mail.id}
                                     role="button"
                                     tabIndex={0}
                                     aria-label="Emails"
                                     className="bg-[var(--bg)] email-inner text-[var(--text-b)]"
+                                    onClick={() => {
+                                        setScreen('email');
+                                        router.push('/emails');
+                                        setShowComposer(false)
+                                        setSelectedEmail(mail)
+                                        markAsRead(mail.id)
+                                        setReadEmailCount(readEmailCount+1)
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter' || e.key === ' ') {
+                                            e.preventDefault();
+                                            setScreen('email');
+                                            router.push('/emails');
+                                            setShowComposer(false)
+                                            setSelectedEmail(mail)
+                                            markAsRead(mail.id)
+                                            setReadEmailCount(readEmailCount+1)
+                                        }
+                                    }}
                                 >
                                     <div className="dashboard-email-grid">
                                         <p className="truncate">{mail.from_name || mail.from_email}</p>
                                         <p className="truncate">{mail.subject || '(No subject)'}</p>
                                         <p>{formatDate(mail.timestamp)}</p>
                                     </div>
-                                </motion.div>
+                                </motion.button>
                             ))}
 
+                            {/* In case no emails are found */}
                             {topPriorityEmails.length === 0 && (
                                 <motion.div 
                                     key="empty"
@@ -325,11 +372,10 @@ export default function DashboardPage () {
                             )}
 
                         </div>
-
                     </div>
                 </div>
 
-                {/* right side: tasks */}
+                {/* Right section: tasks */}
                 <div 
                     role="region"
                     aria-labelledby="priority-tasks-heading"
@@ -349,21 +395,36 @@ export default function DashboardPage () {
                         className="flex flex-col task-inner text-[var(--text-a)]"
                     >
                         {topPriorityTasks.map((task) => (
-                            <motion.div
+                            <motion.button
                                 id={`task-${task.id}`}
                                 key={task.id}
-                                role="group"
+                                role="button"
                                 tabIndex={0}
                                 aria-labelledby="Tasks"
                                 layout
                                 transition={easeTransition}
                                 className={`bg-[var(--baseAcc-b)] rounded-lg`}
+                                onClick={() => {
+
+                                    setScreen('tasks');
+                                    router.push(`/tasks?highlight=${task.id}`);
+                                    setGrid(true);
+                                }}
+                                onKeyDown={(e) => {
+                                    if(e.key === 'Enter' || e.key === ' ') {
+
+                                        setScreen('tasks');
+                                        router.push(`/tasks?highlight=${task.id}`);
+                                        setGrid(true);
+                                    }
+                                }}
                             >
-                                {/* content morphs */}
+                                {/* Content morphs */}
                                 <motion.div
                                     layout
                                     className='flex flex-col task-box'
                                 >
+                                    {/* Task details */}
                                     <h6 className="font-semibold">{task.title}</h6>
                                     <p className="truncate">{task.description || '(No description)'}</p>
     
@@ -373,7 +434,8 @@ export default function DashboardPage () {
                                         />
                                         <p>Due: {formatDate(task.due)}</p>
                                     </div>
-    
+
+                                    {/* Progress label */}
                                     <div className='flex flex-row gap-2 items-center'>
                                         
                                         <p className="text-[var(--text-b)] leading-tight group-label">Progress</p>
@@ -392,6 +454,7 @@ export default function DashboardPage () {
                                         </div> 
                                     </div>
                                     
+                                    {/* Priority label */}
                                     <div className='flex flex-row gap-4 items-center'>
                                         
                                         <p className="text-[var(--text-b)] leading-tight group-label">Priority</p>
@@ -407,12 +470,14 @@ export default function DashboardPage () {
                                                 task.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
                                             />
                                             <p className="text-xs text-left">{task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}</p>
+
                                         </div>
                                     </div>
                                 </motion.div>
-                            </motion.div>
+                            </motion.button>
                         ))}
 
+                        {/* If no tasks are found */}
                         {topPriorityTasks.length === 0 && (
                             <motion.div 
                                 key="empty"

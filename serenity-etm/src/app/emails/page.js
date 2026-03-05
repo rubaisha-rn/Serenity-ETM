@@ -27,7 +27,7 @@ export default function EmailsPage () {
     const router = useRouter();
 
     // Global state values
-    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany} = useEmailStore();
+    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany, showComposer, setShowComposer} = useEmailStore();
 
     const {emotionValue, focusMode, priorityMode, setScreen, setTheme} = useStore();
     const theme = useStore((s) => s.theme);
@@ -38,9 +38,6 @@ export default function EmailsPage () {
 
     // Filtered emails currently being displayed
     const [filtered, setFiltered] = useState([]);
-
-    // Composer state
-    const [showComposer, setShowComposer] = useState(false);
 
     // Transition
     const easeTransition = {
@@ -242,6 +239,8 @@ export default function EmailsPage () {
     }, []);
 
     return (
+
+        // Global layout shell
         <AppShell>
             
             {/* Top row: search bar + compose email button */}
@@ -250,7 +249,6 @@ export default function EmailsPage () {
                 {/* Search bar */}
                 <div className="relative w-full">
 
-                    {/* Search bar input */}
                     <input
                         value={searchQuery}
                         onChange={(e) => {
@@ -259,16 +257,23 @@ export default function EmailsPage () {
                         }}
                         placeholder="Search mail"
                         className="flex-1 border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] outline-none shadow items-center search-bar"
+                        aria-label="Search emails"
                     />
                     
                     {/* Search bar results */}
                     {searchQuery && searchResults.length > 0 && (
-                        <div className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results">
+                        <div 
+                            role="listbox"
+                            aria-label="Search results"
+                            className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results"
+                        >
                             {searchResults.map(mail => (
+
                                 <motion.div
                                     key={mail.id}
-                                    role="button"
+                                    role="option"
                                     tabIndex={0}
+                                    aria-label={`Open email from ${mail.from_name || mail.from_email}`}
                                     onClick={() => {
                                         setSelectedEmail(mail)
                                         setSearchQuery('')
@@ -302,6 +307,7 @@ export default function EmailsPage () {
 
                 {/* Compose email button */}
                 <button
+                    aria-label="Compose new email"
                     disabled={showComposer}
                     onClick={() => {
                         setShowComposer(true)
@@ -320,8 +326,15 @@ export default function EmailsPage () {
 
             {/* Batch functions section / toolbar */}
             {(selectedIds.length > 0 && (!showComposer || !selectedEmail)) && (
-                <div className="flex flex-row batch-func">
+                <div 
+                    aria-label="Batch email actions"
+                    role="toolbar"
+                    className="flex flex-row batch-func"
+                >   
+                    {/* Select/unselect multiple items */}
                     <button 
+                        aria-label="Select all visible emails"
+                        title="Select all"
                         className="opacity-80 hover:opacity-60"
                         onClick={() => {
                         if (selectedIds.length === filtered.length) {
@@ -334,6 +347,7 @@ export default function EmailsPage () {
                         <input
                             type="checkbox"
                             readOnly
+                            aria-hidden="true"
                             checked={selectedIds.length === filtered.length && filtered.length > 0}
                             className="
                                 aspect-square accent-blue-500 
@@ -346,9 +360,12 @@ export default function EmailsPage () {
                         />
                     </button>
 
+                    {/* Mark as read */}
                     {(showEmails !== 'drafts') && ( 
                         <>                       
                             <button 
+                                aria-label="Mark selected emails as read"
+                                title="Mark as read"
                                 className="opacity-80 hover:opacity-60"
                                 onClick={() => markManyRead(selectedIds, true)}>
                                 <img
@@ -357,7 +374,11 @@ export default function EmailsPage () {
                                     aria-hidden='true'
                                 />
                             </button>
+
+                            {/* Mark as unread */}
                             <button 
+                                aria-label="Mark selected emails as unread"
+                                title="Mark as unread"
                                 className="opacity-80 hover:opacity-60"
                                 onClick={() => markManyRead(selectedIds, false)}>
                                 <img
@@ -367,10 +388,14 @@ export default function EmailsPage () {
                                 />
                             </button>
                             
+                            {/* Archive emails */}
                             {(showEmails !== 'sent' && showEmails !== 'archive') && (
                                 <button 
+                                    aria-label="Archive selected emails"
+                                    title="Archive"
                                     className="opacity-80 hover:opacity-60"
-                                    onClick={() => archiveMany(selectedIds)}>
+                                    onClick={() => archiveMany(selectedIds)}
+                                >
                                     <img
                                         src={ICONS[theme].archive}
                                         alt=""
@@ -379,10 +404,14 @@ export default function EmailsPage () {
                                 </button>
                             )}
 
+                            {/* Unarchive */}
                             {(showEmails === 'archive') && (
                                 <button 
+                                    aria-label="Unarchive selected emails"
+                                    title="Unarchive"
                                     className="opacity-80 hover:opacity-60"
-                                    onClick={() => unarchiveMany(selectedIds)}>
+                                    onClick={() => unarchiveMany(selectedIds)}
+                                >
                                     <img
                                         src={ICONS[theme].unarchive}
                                         alt=""
@@ -393,7 +422,10 @@ export default function EmailsPage () {
                         </>
                     )}     
 
+                    {/* Delete emails */}
                     <button 
+                        aria-label="Delete selected emails"
+                        title="Delete"
                         className="opacity-80 hover:opacity-60"
                         onClick={() => deleteMany(selectedIds)}>
                         <img
@@ -405,8 +437,9 @@ export default function EmailsPage () {
                 </div>
             )}
 
-            {/* main section with emails listed */}
-            <motion.div 
+            {/* Main section with emails listed. Two pane setup: Email list + Reader / Composer */}
+            <motion.div
+                aria-label="Email workspace" 
                 layout
                 transition={easeTransition}
                 className="flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0 grid gap-2"
@@ -418,36 +451,51 @@ export default function EmailsPage () {
                 }}
             >
 
-                {/* left pane: emails */}
-                <div>
+                {/* Left pane: emails list */}
+                <div role="list" aria-label="Email list" >
+                    
+                    {/* Table header row */}
                     {(!selectedEmail && !showComposer) ? (
+                        
                         <motion.div
                             layout={false}
                             className="min-w-0"
                         >
                             {(filtered.length > 0 && selectedIds.length <= 0) && (
-                                <div className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} justify-start items-center text-left email-grid border-b-[0.005rem] border-[var(--e-main)]`}>
-                                        <div /><div />
-                                        <p>{showEmails == 'sent' ? 'To' : 'From'}</p>
-                                        <p>Subject / Preview</p>
-                                        <p className="text-center">Timestamp</p>
-                                        {(showEmails !== 'sent' && showEmails !== 'drafts') && (    
-                                            <p className="text-center">Priority</p>
-                                        )}
+                                <div 
+                                    aria-hidden="true"
+                                    className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} justify-start items-center text-left email-grid border-b-[0.005rem] border-[var(--e-main)]`}
+                                >
+                                    <div />
+                                    <div />
+                                    
+                                    <p>{showEmails == 'sent' ? 'To' : 'From'}</p>
+                                    <p>Subject / Preview</p>
+                                    <p className="text-center">Timestamp</p>
+                                    {(showEmails !== 'sent' && showEmails !== 'drafts') && (    
+                                        <p className="text-center">Priority</p>
+                                    )}
                                 </div>
                             )}
 
+                            {/* Email rows */}
                             <AnimatePresence mode="popLayout">
+                                
                                 {filtered.map((mail) => (
+                                
                                     <motion.div
                                         layout
                                         key={mail.id}
+                                        role="listitem"
+                                        aria-label={`Email from ${mail.from_email}`}
                                         className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} border-b-[0.005rem] border-[var(--e-main)] justify-start items-center text-left email-grid ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]
                                         `}
                                         transition={{layout:easeTransition}}   
                                     >
+                                        {/* Selected checkbox */}
                                         <div className="flex items-center justify-center">
                                             <input
+                                                aria-label="Select email"
                                                 type="checkbox"
                                                 checked={selectedIds.includes(mail.id)}
                                                 onChange={(e) => {
@@ -465,7 +513,12 @@ export default function EmailsPage () {
                                             />
                                         </div>
                                         
+                                        {/* Star toggle */}
                                         <button
+                                            aria-label={mail.starred 
+                                                ? 'Unstar email' 
+                                                : 'Star email'
+                                            }
                                             className='flex items-center justify-center text-[var(--text-b)]'
                                             onClick={(e) => {
                                                 e.stopPropagation();
@@ -475,10 +528,14 @@ export default function EmailsPage () {
                                             <h2 className="font-normal">{mail.starred ? '★' : '☆'}</h2>
                                         </button>
 
+                                        {/* Sender */}
                                         <h6 className={`${mail.read ? 'font-thin' : 'font-semibold'}`}>
                                         {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</h6>
-
-                                        <div
+                                    
+                                        {/* Clickable email preview */}
+                                        <div    
+                                            role="button"
+                                            tabIndex={0}
                                             onClick={() => {
                                                 setShowComposer(false)
                                                 setSelectedEmail(mail)
@@ -486,16 +543,28 @@ export default function EmailsPage () {
                                                 setReadEmailCount(readEmailCount+1)
                                             }}
                                             className='cursor-pointer items-center text-left min-w-0'
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' || e.key === ' ') {
+                                                    e.preventDefault();
+                                                    setShowComposer(false)
+                                                    setSelectedEmail(mail)
+                                                    markAsRead(mail.id)
+                                                    setReadEmailCount(readEmailCount+1)
+                                                }
+                                            }}
                                         >
                                             <h6 className={`${mail.read ? 'font-thin' : 'font-semibold'}`}>{mail.subject}</h6>
                                             <p className={`${mail.read ? 'font-thin' : 'font-normal'} truncate`}>{mail.body}</p>
                                         </div>
 
+                                        {/* Timestamp */}
                                         <p className="text-center">{formatDate(mail.timestamp)}</p>
 
+                                        {/* Priority control */}
                                         {(showEmails !== 'sent' && showEmails !== 'drafts') && (
                                             <div className="flex items-center justify-center">
                                                 <button 
+                                                    aria-label="Change email priority"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         cyclePriority(mail.id)
@@ -509,6 +578,7 @@ export default function EmailsPage () {
                                                         <img
                                                             src={mail.priority === 'high' ? ICONS[theme].redflag :
                                                             mail.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
+                                                            alt="Email priority"
                                                         />
                                                         <p className="lg:text-xs text-left">{mail.priority === 'high' ? 'High' : mail.priority === 'low' ? 'Low' : 'Normal'}</p>
                                                 </button>
@@ -519,10 +589,16 @@ export default function EmailsPage () {
                             </AnimatePresence>
                         </motion.div>
                     ) : (
+
+                        // Email rows in second format, when email composer/reader is open 
                         <AnimatePresence className="overflow-hidden">
+
                             {filtered.map((mail) => (
+                            
                                 <motion.div
                                     key={mail.id}
+                                    role="listitem"
+                                    aria-label={`Email from ${mail.from_email}`}
                                     onClick={() => {
                                         setSelectedEmail(mail)
                                         markAsRead(mail.id)
@@ -531,8 +607,12 @@ export default function EmailsPage () {
                                     className={`border-y-[0.005rem] border-[var(--e-main)] justify-start items-center text-left email-grid px-1 ${selectedEmail?.id === mail.id ? 'bg-[var(--f-main)]' : mail.read ? 'bg-[var(--bg)]' : 'bg-[var(--baseAcc-b)]'} hover:bg-[var(--f-main)]`}
                                     transition={{layout:easeTransition}}
                                 >
+                                    {/* Email details */}
                                     <div className="flex flex-row justify-between items-center">
+
                                         <div className="flex flex-row items-center gap-1">
+                                            
+                                            {/* Small priority indicator */}
                                             <div className={`
                                                 ${mail.priority === 'high' ? 'bg-[var(--priorityHigha)]' : mail.priority === 'low' ? 'bg-[var(--priorityLowa)]' : 'bg-[var(--priorityNormala)]'} rounded-full 
                                                 sm:w-[0.25rem] sm:h-[0.25rem]
@@ -541,10 +621,14 @@ export default function EmailsPage () {
                                                 xl:w-[0.5rem] xl:h-[0.5rem]
                                                 2xl:w-[0.65rem] 2xl:h-[0.65rem]
                                             `} />
+                                        
                                             <p className={`${mail.read ? '' : 'font-semibold'}`}>
+                                        
                                             {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</p>
+                                        
                                         </div>
                                         <p className="text-center">{formatDate(mail.timestamp)}</p>
+                                    
                                     </div>
 
                                     <div className="grid grid-cols-[0.1fr_2fr]">
@@ -554,12 +638,12 @@ export default function EmailsPage () {
                                             <p className={`${mail.read ? 'font-thin' : 'font-normal'} truncate`}>{mail.body}</p>
                                         </div>
                                     </div>
-                                
                                 </motion.div>
                             ))}
                         </AnimatePresence>
                     )}
                     
+                    {/* Empty state */}
                     <AnimatePresence>
                         {filtered.length === 0 && (
                             <motion.div 
@@ -567,7 +651,8 @@ export default function EmailsPage () {
                                 initial={{opacity:0}}
                                 animate={{opacity:1}}
                                 exit={{opacity:0}}
-                                className="overflow-hidden">
+                                className="overflow-hidden"
+                            >
                                 <p className="
                                     text-center
                                     sm:m-1
@@ -575,15 +660,19 @@ export default function EmailsPage () {
                                     lg:m-4
                                     xl:m-4
                                     2xl:m-4
-                                ">No emails found.</p>
+                                ">
+                                    No emails found.
+                                </p>
                             </motion.div>
                         )}
                     </AnimatePresence>
                 </div>
 
-                {/* right pane: opened composer/reader */}
+                {/* Right pane: opened composer / reader */}
                 <AnimatePresence mode="popLayout">
+
                     {(selectedEmail || showComposer) && (
+                    
                         <motion.div
                             layout
                             key={showComposer ? 'composer' : 'reader'}
@@ -592,8 +681,16 @@ export default function EmailsPage () {
                             exit={{opacity:0, x:80}}
                             transition={easeTransition}
                             className="min-w-0 min-h-0 h-full flex flex-col overflow-hidden"
+                            aria-label={
+                                showComposer 
+                                    ? 'Email composer'
+                                    : 'Email reader'
+                            }
                         >
-                            {showComposer ? <EmailSend onClose={() => setShowComposer(false)}/> : <EmailReader />}
+                            {showComposer 
+                                ? <EmailSend onClose={() => setShowComposer(false)}/> 
+                                : <EmailReader />
+                            }
                         </motion.div>
                     )}
                 </AnimatePresence>

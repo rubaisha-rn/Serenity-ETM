@@ -471,4 +471,11 @@ export const useEmailStore = create((set, get) => ({
 
         get().loadEmails()
     },
+
+    /**
+     * UI state
+     */
+    // UI state
+    showComposer: false,
+    setShowComposer: (value) => set({showComposer: value}),
 }))

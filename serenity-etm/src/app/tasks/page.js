@@ -16,7 +16,7 @@ import TaskFunctionsMenu from "@/components/tasks/gridTaskFunctions";
 import formatDate from "@/components/formatDate";
 import { ICONS } from "@/lib/assets";
 import { supabase } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 // Ensures tasks without priorities default to 'normal'
 const getPriority = (p) => p ?? 'normal';
@@ -38,6 +38,10 @@ export default function TasksPage() {
     // Search state
     const [searchQuery, setSearchQuery] = useState([]);
     const [searchResults, setSearchResults] = useState('');
+
+    // Search parameters
+    const searchParams = useSearchParams();
+    const highlightId = searchParams.get('highlight');
 
     // Transition 
     const easeTransition = {
@@ -254,6 +258,29 @@ export default function TasksPage() {
     
     }, []);
 
+    // Scrolling and highlighting task when it renders
+    useEffect(() => {
+        
+        if (!highlightId) return;
+
+        const timer = setTimeout(() => {
+            
+            const el = document.getElementById(`task-${highlightId}`);
+                                        
+            if (el) {
+                el.scrollIntoView({behavior: 'smooth', block: 'center'});
+                el.classList.add('ring-2', 'ring-blue-500');
+                setTimeout(() => {
+                    el.classList.remove('ring-2', 'ring-blue-500'); 
+                }, 1200);
+            }
+
+        }, 300);
+
+        return () => clearTimeout(timer);
+    
+    }, []);
+
     return (
 
         // Appshell provides global layout
@@ -265,7 +292,6 @@ export default function TasksPage() {
                 {/* Search bar */}
                 <div className="relative w-full">
 
-                    {/* Search bar input */}
                     <input
                         value={searchQuery}
                         aria-label="Search tasks"
@@ -281,13 +307,16 @@ export default function TasksPage() {
                     {searchQuery && searchResults.length > 0 && (
                         <div 
                             role="listbox"
+                            aria-label="Search results"
                             className="absolute top-full w-full leading-tight border-[var(--f-main)] bg-[var(--baseAcc-b)] text-[var(--text-b)] shadow z-30 overflow-x-hidden overflow-y-auto search-bar-results"
                         >
                             {searchResults.map(task => (
+
                                 <motion.div
                                     key={task.id}
                                     role="button"
                                     tabIndex={0}
+                                    aria-label={`See task ${task.title}`}
                                     onClick={() => {
                                        
                                         setSearchQuery('');
@@ -304,9 +333,17 @@ export default function TasksPage() {
                                     }}
                                     onKeyDown={(e) => {
                                         if(e.key === 'Enter' || e.key === ' ') {
-                                            e.preventDefault()
-                                            setSelectedEmail(mail)
-                                            setSearchQuery('')
+                                            setSearchQuery('');
+
+                                            const el = document.getElementById(`task-${task.id}`);
+                                            
+                                            if (el) {
+                                                el.scrollIntoView({behavior: 'smooth', block: 'center'});
+                                                el.classList.add('ring-2', 'ring-blue-500');
+                                                setTimeout(() => {
+                                                el.classList.remove('ring-2', 'ring-blue-500'); 
+                                                }, 1200);
+                                            }
                                         }
                                     }}
                                     className="flex flex-col m-0.5 border-b border-[var(--f-main)] hover:bg-[var(--f-main)] cursor-pointer search-bar-results-show
@@ -328,8 +365,10 @@ export default function TasksPage() {
                     )}
                 </div>
                 
-                {/* Layout toggle and create task */}
+                {/* Layout toggle and create task buttons */}
                 <div className="flex flex-row gap-1">
+
+                    {/* Layout toggle */}
                     <button
                         aria-label="Toggle grid layout"
                         className="prim-act-btn task-layout-btn"
@@ -348,13 +387,18 @@ export default function TasksPage() {
                 </div>
             </div>
 
-            {/* Batch functions section / Toolbar */}
+            {/* Batch functions section / toolbar */}
             {(selectedIds.length > 0) && (
 
-                <div className="flex flex-row batch-func">
-                    
-                    {/* Check box button */}
+                <div 
+                    role="toolbar"
+                    aria-label="Batch task actions"
+                    className="flex flex-row batch-func"
+                >
+                    {/* Select/unselect multiple items */}
                     <button 
+                        aria-label="Select all visible tasks"
+                        title="Select all"
                         className="opacity-80 hover:opacity-60 "
                         onClick={() => {
                         if (selectedIds.length === filtered.length) {
@@ -367,6 +411,7 @@ export default function TasksPage() {
                         <input
                             type="checkbox"
                             readOnly
+                            aria-hidden="true"
                             checked={selectedIds.length === filtered.length && filtered.length > 0}
                             className="
                                 aspect-square accent-blue-500
@@ -379,36 +424,44 @@ export default function TasksPage() {
                         />
                     </button>
 
-                    {/* Mark many as complete / incomplete */}
-                    {showTasks !== 'completed' ? 
-                        <button
-                            className="opacity-80 hover:opacity-60"
-                            onClick={() => {
-                                markManyComplete(selectedIds);
-                                setCompletedTasksCount(completedTasksCount+selectedIds.length);  
-                            }}
-                        >
-                            <img
-                                src={ICONS[theme].markcomplete}
-                                alt=""
-                                aria-hidden='true'
-                            />
-                        </button>
+                    {/* Mark as complete */}
+                    {showTasks !== 'completed' 
+                        ? 
+                            <button
+                                aria-label="Mark selected tasks as complete"
+                                title="Mark as complete"
+                                className="opacity-80 hover:opacity-60"
+                                onClick={() => {
+                                    markManyComplete(selectedIds);
+                                    setCompletedTasksCount(completedTasksCount+selectedIds.length);  
+                                }}
+                            >
+                                <img
+                                    src={ICONS[theme].markcomplete}
+                                    alt=""
+                                    aria-hidden='true'
+                                />
+                            </button>
                         : 
-                        <button
-                            className="opacity-80 hover:opacity-60"
-                            onClick={() => markManyComplete(selectedIds, false)}
-                        >
-                            <img
-                                src={ICONS[theme].markincomplete}
-                                alt=""
-                                aria-hidden='true'
-                            />
-                        </button>
+                            // Mark as incomplete
+                            <button
+                                aria-label="Mark selected tasks as incomplete"
+                                title="Mark as incomplete"
+                                className="opacity-80 hover:opacity-60"
+                                onClick={() => markManyComplete(selectedIds, false)}
+                            >
+                                <img
+                                    src={ICONS[theme].markincomplete}
+                                    alt=""
+                                    aria-hidden='true'
+                                />
+                            </button>
                     }
 
                     {/* Delete */}
                     <button 
+                        aria-label="Delete selected tasks"
+                        title="Delete"
                         className="opacity-80 hover:opacity-60"
                         onClick={() => deleteMany(selectedIds)}>
                         <img
@@ -421,14 +474,18 @@ export default function TasksPage() {
             )}
 
             {/* Main section with tasks listed */}
-            <motion.div 
+            <motion.div
+                role="list" 
+                aria-label="Task list" 
                 layout
                 transition={easeTransition}
                 className="flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0 overflow-y-visible"
             >
-                {/* Header */}
+                {/* Table header row */}
                 {!grid && filtered.length > 0 && (
+                
                     <motion.div 
+                        aria-hidden="true"
                         layout
                         transition={easeTransition}
                         className={`${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.6fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.6fr]'} border-b-[0.005rem] border-[var(--e-main)] justify-start items-center text-left email-grid`}
@@ -456,10 +513,13 @@ export default function TasksPage() {
                     }
                 >
                     {filtered.map((task) => (
+                        
                         <motion.div
                             id={`task-${task.id}`}
                             key={task.id}
                             layout
+                            role="listitem"
+                            aria-label={`Task ${task.title}`}
                             transition={easeTransition}
                             className={`bg-[var(--baseAcc-b)] ${grid ? 'rounded-lg' : ''}`}
                         >
@@ -476,6 +536,7 @@ export default function TasksPage() {
                                 {/* Checkbox */}
                                 {!grid && (
                                     <input 
+                                        aria-label="Select task"
                                         type="checkbox"
                                         checked={selectedIds.includes(task.id)}
                                         onChange={(t) => {
@@ -496,9 +557,11 @@ export default function TasksPage() {
                                 {/* Task info */}
                                 <div className={grid ? 'flex flex-row justify-between' : ''}>
                                     {!grid 
-                                    ? <p className="font-semibold">{task.title}</p>
-                                    : <h6 className="font-semibold">{task.title}</h6>
+                                        ? <p className="font-semibold">{task.title}</p>
+                                        : <h6 className="font-semibold">{task.title}</h6>
                                     }
+
+                                    {/* Dropdown menu */}
                                     {grid && <TaskFunctionsMenu
                                         onComplete={() => toggleComplete(task.id)}
                                         onDelete={() => toggleDelete(task.id)}
@@ -536,8 +599,11 @@ export default function TasksPage() {
                                         {grid && (
                                             <p className="text-[var(--text-b)] leading-tight group-label">Progress</p>
                                         )}
+
                                     <div className="flex items-center justify-center">
+                                            
                                             <button 
+                                                aria-label="Change task progress"
                                                 onClick={(e) => {
                                                     e.stopPropagation()
                                                     cycleProgress(task.id)
@@ -559,11 +625,15 @@ export default function TasksPage() {
 
                                 {/* Priority button */}
                                 <div className={grid ? 'flex flex-row gap-4 items-center' : ''}>
+                                    
                                     {grid && (
                                         <p className="text-[var(--text-b)] leading-tight group-label">Priority</p>
                                     )}
+                                    
                                     <div className="flex items-center justify-center">
+                                        
                                         <button 
+                                            aria-label="Change task priority"
                                             onClick={(e) => {
                                                 e.stopPropagation()
                                                 cyclePriority(task.id)
@@ -577,6 +647,7 @@ export default function TasksPage() {
                                                 <img
                                                     src={task.priority === 'high' ? ICONS[theme].redflag :
                                                     task.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
+                                                    alt="Task priority"
                                                 />
                                                 <p className="text-xs text-left">{task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}</p>
                                         </button>
@@ -587,7 +658,7 @@ export default function TasksPage() {
                     ))}
                 </motion.div>
 
-                {/* If no tasks */}
+                {/* Empty state */}
                 {filtered.length === 0 && (
                     <motion.div 
                         key="empty"

@@ -1,42 +1,63 @@
+/**
+ * Email and task priority classifier API
+ * 
+ * POST request containing task or email details is used to define priority for those missing it. Done using numeric importance score and confidence classification.
+ */
+
 import { NextResponse } from "next/server";
+
+// Escape regex characters to safely build dynamic patters
+function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
 export async function POST(req) {
     
     try {
+        
         const body = await req.json();
 
-        const subject = body?.subject || '';
-        const content = body?.text || '';
+        // Store text in lowercase to avoid inconsistencies during scoring
+        const subject = body?.subject ?? body?.text ?? "";
+        const content = body?.text ?? "";
 
         const text = `${subject} ${content}`;
         const lower = text.toLowerCase();
 
         let score = 0;
 
-        if (lower.includes('$task$')) { 
-            return NextResponse.json({priority: 'low', score: -10});
-        }
-
-        // helpers
+        // Helpers
         const countMatches = (pattern) => (lower.match(new RegExp(pattern, 'g')) || []).length;
 
         const addScore = (words, value) => {
             for (const word of words) {
-                const matches = countMatches(word);
+                
+                const regex = new RegExp(
+                    `\\b${escapeRegex(word)}\\b`,
+                    "g"
+                )
+                
+                const matches = (lower.match(regex) || []).length;
+                
                 if (matches) score += matches * value;
             }
         };
 
+        // Subject keyword boost
         const subjectBoost = 1.5;
         const addSubjectScore = (words, value) => {
             const sub = subject.toLowerCase();
             for (const word of words) {
-                const matches = (sub.match(new RegExp(word, 'g')) || []).length;
+                const regex = new RegExp(
+                    `\\b${escapeRegex(word)}\\b`,
+                    "g"
+                )
+                const matches = (sub.match(regex) || []).length;
                 if (matches) score += matches * value * subjectBoost;
             }
         }
         
-        // keywords
+        // Keyword dictionaries
         const urgentWords = [
             'urgent',
             'asap',
@@ -103,6 +124,7 @@ export async function POST(req) {
             'unsubscribe',
         ];
 
+        // Postive scoring
         addScore(urgentWords, 5);
         addScore(deadlineWords, 4);
         addScore(riskWords, 5);
@@ -112,29 +134,27 @@ export async function POST(req) {
         addSubjectScore(urgentWords, 5);
         addSubjectScore(deadlineWords, 4);
 
-        // time detection
+        // Time pattern detection
         if (/\bby \d{1,2}(:\d{2})?\s?(am|pm)?\b/.test(lower)) score += 4;
         if (/\btoday\b|\tonight\b/.test(lower)) score += 3;
         if (/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/.test(lower)) score += 2;
 
-        // all caps urgency
+        // Subject emphasis
         if (/[A-Z]{4,}/.test(subject)) score += 2;
 
-        // thread downgrade
+        // Thread downgrade
         if (/^(re:|fwd:)/i.test(subject)) score -=2;
 
-        // marketing penalty
-        for (const word of marketingWords) {
-            if (lower.includes(word)) score -= 4;
-        }
+        // Marketing penalty
+        addScore(marketingWords, -4);
 
-        // excessive exclamation
+        // Excessive punctuation
         if (countMatches('!') > 3) score -= 2;
 
-        // important word (weak alone)
+        // Weak signal keyword
         if (lower.includes('important')) score += 1;
 
-        // final classification
+        // Final classification
         let priority = 'normal';
 
         if (score >= 7) priority = 'high';
