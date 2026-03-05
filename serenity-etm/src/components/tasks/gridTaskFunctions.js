@@ -119,6 +119,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
                                 setOpen(false);
                             }}
                         >
+                            
                             {/* Icons and label */}
                             <img
                                 src={completed ? ICONS[theme].markincomplete : ICONS[theme].markcomplete}
@@ -128,6 +129,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
                             <h6>
                                 Mark as {completed ? 'incomplete' : 'complete'}
                             </h6>
+
                         </button>
 
                         {/* Delete task button */}
@@ -139,6 +141,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
                                 setOpen(false);
                             }}
                         >
+                            
                             {/* Icon and label */}
                             <img
                                 src={ICONS[theme].delete}
@@ -148,6 +151,7 @@ export default function TaskFunctionsMenu({onComplete, onDelete, completed}) {
                             <h6>
                                 Delete
                             </h6>
+
                         </button>
                     </motion.div>
                 )}

@@ -175,13 +175,16 @@ export default function MicroInterventionPopup() {
                         !expandedRight ? 'right-14' : 'right-2'
                     }`}
                 >   
+                    
                     {/* Popup layout container */}
-                    <div className={`${intervention.outer_color} justify-between items-center justify-center grid grid-cols-[0.2fr_1.2fr_0.1fr] 
-                    sm:p-1 sm:py-2 sm:rounded-md sm:gap-2
-                    md:p-1 md:py-2 md:rounded-md md:gap-3
-                    lg:p-2 lg:py-3 lg:rounded-lg lg:gap-4
-                    xl:p-2 xl:py-3 xl:rounded-lg xl:gap-4
-                    2xl:p-2 2xl:py-3 2xl:rounded-lg 2xl:gap-4`}>
+                    <div 
+                        className={`${intervention.outer_color} justify-between items-center justify-center grid grid-cols-[0.2fr_1.2fr_0.1fr] 
+                        sm:p-1 sm:py-2 sm:rounded-md sm:gap-2
+                        md:p-1 md:py-2 md:rounded-md md:gap-3
+                        lg:p-2 lg:py-3 lg:rounded-lg lg:gap-4
+                        xl:p-2 xl:py-3 xl:rounded-lg xl:gap-4
+                        2xl:p-2 2xl:py-3 2xl:rounded-lg 2xl:gap-4
+                    `}>
 
                         {/* Icon section */}
                         <div className="flex bg-[var(--baseAcc-b)] rounded-full aspect-square items-center justify-center
@@ -206,6 +209,7 @@ export default function MicroInterventionPopup() {
                                     aria-hidden={true}
                                 />
                             </div>
+
                         </div>
 
                         {/* Text section */}
@@ -218,6 +222,7 @@ export default function MicroInterventionPopup() {
                             <p className="text-[var(--text-b)] leading-tight">
                                 {intervention.message}
                             </p>
+
                         </div>
                         
                         {/* Action buttons */}
@@ -253,6 +258,7 @@ export default function MicroInterventionPopup() {
                                     aria-hidden={true}
                                 />
                             </button>
+                            
                         </div>
                     </div>
                 </motion.div>

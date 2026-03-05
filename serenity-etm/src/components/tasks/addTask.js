@@ -86,12 +86,14 @@ export default function AddTask() {
                 onClick={() => setOpen(true)}
                 className="prim-act-btn"
             >
+                
                 <img
                     src={ICONS[theme].add}
                     alt=""
                     aria-hidden='true'
                 />
                 <h6 className="font-semibold">Create</h6>
+
             </button>
 
             {/* Modal */}
@@ -127,6 +129,7 @@ export default function AddTask() {
                             
                             {/* Error message */}
                             {error && (
+                                
                                 <div
                                     role="alert"
                                     aria-live="assertive" 
@@ -157,7 +160,9 @@ export default function AddTask() {
                                             aria-hidden='true'
                                         />
                                     </button>
+
                                 </div>
+
                             )}
 
                             {/* Form fields */}
@@ -214,7 +219,9 @@ export default function AddTask() {
                                         <option value='normal'>Normal Priority</option>
                                         <option value='high'>High Priority</option>
                                     </select>
+
                                 </div>
+
                             </div>
 
                             {/* Modal actions */}
@@ -237,6 +244,7 @@ export default function AddTask() {
                                 >
                                     <h6 className="font-semibold">Create</h6>
                                 </button>
+
                             </div>
                         </motion.div>
                     </motion.div>

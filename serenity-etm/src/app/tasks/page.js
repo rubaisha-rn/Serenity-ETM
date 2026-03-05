@@ -318,7 +318,6 @@ export default function TasksPage() {
                                     tabIndex={0}
                                     aria-label={`See task ${task.title}`}
                                     onClick={() => {
-                                       
                                         setSearchQuery('');
 
                                         const el = document.getElementById(`task-${task.id}`);
@@ -354,11 +353,14 @@ export default function TasksPage() {
                                     focus-visible:shadow-[0_0_0_3px_rgba(59,130,246,0.25)]
                                     transition-all duration-150"
                                 >
+
                                     <div className="flex flex-row justify-between font-bold">
                                         <p>{task.title}</p>
                                         <p>{formatDate(task.due)}</p>
                                     </div>
+                                
                                     <p className="w-full truncate">{task.description || '(No description)'}</p>
+                                
                                 </motion.div>
                             ))}
                         </div>
@@ -395,6 +397,7 @@ export default function TasksPage() {
                     aria-label="Batch task actions"
                     className="flex flex-row batch-func"
                 >
+
                     {/* Select/unselect multiple items */}
                     <button 
                         aria-label="Select all visible tasks"
@@ -481,6 +484,7 @@ export default function TasksPage() {
                 transition={easeTransition}
                 className="flex flex-col min-h-0 h-full overflow-hidden min-w-0 z-0 overflow-y-visible"
             >
+                
                 {/* Table header row */}
                 {!grid && filtered.length > 0 && (
                 
@@ -491,12 +495,15 @@ export default function TasksPage() {
                         className={`${showTasks !== 'completed' ? 'grid grid-cols-[0.1fr_1fr_2fr_0.4fr_0.8fr_0.6fr]' : 'grid grid-cols-[0.1fr_1fr_2.4fr_0.4fr_0.6fr]'} border-b-[0.005rem] border-[var(--e-main)] justify-start items-center text-left email-grid`}
                     >
                             <div />
+                            
                             <p>Task</p>
                             <p>Description</p>
                             <p className="text-center">Due</p>
+                            
                             {showTasks !== 'completed' && (    
                                 <p className="text-center">Progress</p>
                             )}
+                            
                             <p className="text-center">Priority</p>
 
                     </motion.div>
@@ -573,9 +580,9 @@ export default function TasksPage() {
 
                                 <div className={grid ? `flex flex-row gap-2 items-center` : `text-center ${(new Date(task.due).getTime() < Date.now()) ? 'bg-[var(--priorityHighb)] rounded-sm' : ''}`}>
                                     {grid &&
-                                            <img
-                                                src={ICONS[theme].date}
-                                            />
+                                        <img
+                                            src={ICONS[theme].date}
+                                        />
                                     }
                                     <p>Due: {formatDate(task.due)}</p>
                                 </div>
@@ -614,10 +621,19 @@ export default function TasksPage() {
                                                 : 'bg-[var(--progressInc)] hover:bg-[var(--progressInb)] border-[var(--progressIna)] text-[var(--progressInt)]'}
                                                 transform transition-transform duration-300 ease-out hover:scale-105`}
                                             >
-                                                    <div className={`rounded-full p-[0.12rem] border-[0.1rem] 
-                                                    ${task.progress === 'Not started' ? 'bg-[var(--progressNotb)] border-[var(--progressNota)]' :
-                                                    task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)]' : 'bg-[var(--progressInb)] border-[var(--progressIna)]'}`} />
-                                                    <p className="text-xs text-left whitespace-nowrap">{task.progress === 'Not started' ? 'Not started' : task.progress === 'Almost complete' ? 'Almost complete' : 'In progress'}</p>
+                                                {/* Task progress indicator */}
+                                                <div 
+                                                    className={`rounded-full p-[0.12rem] border-[0.1rem] 
+                                                    ${task.progress === 'Not started' 
+                                                        ? 'bg-[var(--progressNotb)] border-[var(--progressNota)]' 
+                                                        : task.progress === 'Almost complete' 
+                                                        ? 'bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)]' 
+                                                        : 'bg-[var(--progressInb)] border-[var(--progressIna)]'}`} 
+                                                />
+                                                
+                                                <p className="text-xs text-left whitespace-nowrap">
+                                                    {task.progress === 'Not started' ? 'Not started' : task.progress === 'Almost complete' ? 'Almost complete' : 'In progress'}
+                                                </p>
                                             </button>
                                         </div> 
                                     </div>
@@ -649,7 +665,10 @@ export default function TasksPage() {
                                                     task.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
                                                     alt="Task priority"
                                                 />
-                                                <p className="text-xs text-left">{task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}</p>
+
+                                                <p className="text-xs text-left">
+                                                    {task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}
+                                                </p>
                                         </button>
                                     </div>
                                 </div>
@@ -660,21 +679,28 @@ export default function TasksPage() {
 
                 {/* Empty state */}
                 {filtered.length === 0 && (
+                    
                     <motion.div 
+                        
                         key="empty"
                         initial={{opacity:0}}
                         animate={{opacity:1}}
                         exit={{opacity:0}}
                         transition={easeTransition}
-                        className="overflow-hidden
+                        className="
+                            overflow-hidden
                             sm:m-1
                             md:m-2
                             lg:m-4
                             xl:m-4
                             2xl:m-4
                         ">
-                        <p className="text-center">No tasks found.</p>
+                        <p className="text-center">
+                            No tasks found.
+                        </p>
+
                     </motion.div>
+                    
                 )}
            </motion.div>
         </AppShell>

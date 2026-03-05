@@ -86,6 +86,7 @@ export const TaskButtons = React.memo(({expandedSecondary, setShowTasks}) => {
                             onClick={() => setShowTasks(btn.key)} 
                         />
                     ))}
+
                 </div>
             ))}
         </div>
@@ -160,6 +161,7 @@ export const EmailButtons = React.memo(({expandedSecondary, setShowEmails}) => {
                             onClick={() => setShowEmails(btn.key)} 
                         />
                     ))}
+                    
                 </div>
             ))}
         </div>

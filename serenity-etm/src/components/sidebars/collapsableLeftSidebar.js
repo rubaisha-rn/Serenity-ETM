@@ -60,6 +60,7 @@ export default function CollapsableLeftSidebar() {
             aria-label='Primary Navigation'
             className='fixed top-1 flex flex-col justify-between shadow-xl z-20 side-bar left-1 bg-[var(--baseAcc-a)]'
         >
+            
             {/* Navigation buttons */}
             <div 
                 role='menu' 
@@ -120,6 +121,7 @@ export default function CollapsableLeftSidebar() {
                             alt=''
                         />
                     </motion.button>
+
                 </div>
 
                 {/* Email manager button */}
@@ -168,6 +170,7 @@ export default function CollapsableLeftSidebar() {
                             aria-hidden='true'
                         />
                     </motion.button>
+
                 </div>
 
                 {/* Task manager button */}
@@ -176,6 +179,7 @@ export default function CollapsableLeftSidebar() {
                     {screen === 'tasks' && (
                         <div className='absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active left-0'/>
                     )}
+
                     <motion.button
                         whileHover={{scale: 1.05}}
                         whileTap={{scale: 0.95}}
@@ -215,7 +219,9 @@ export default function CollapsableLeftSidebar() {
                             alt=''
                         />
                     </motion.button>
+                
                 </div>
+                
             </div>
             
             {/* Profile settings section */}

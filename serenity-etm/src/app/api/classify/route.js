@@ -30,12 +30,13 @@ export async function POST(req) {
         const countMatches = (pattern) => (lower.match(new RegExp(pattern, 'g')) || []).length;
 
         const addScore = (words, value) => {
+            
             for (const word of words) {
                 
                 const regex = new RegExp(
                     `\\b${escapeRegex(word)}\\b`,
                     "g"
-                )
+                );
                 
                 const matches = (lower.match(regex) || []).length;
                 
@@ -45,14 +46,20 @@ export async function POST(req) {
 
         // Subject keyword boost
         const subjectBoost = 1.5;
+
         const addSubjectScore = (words, value) => {
+        
             const sub = subject.toLowerCase();
+        
             for (const word of words) {
+        
                 const regex = new RegExp(
                     `\\b${escapeRegex(word)}\\b`,
                     "g"
-                )
+                );
+        
                 const matches = (sub.match(regex) || []).length;
+        
                 if (matches) score += matches * value * subjectBoost;
             }
         }
@@ -162,10 +169,11 @@ export async function POST(req) {
 
         const confidence = Math.min(1, Math.abs(score) / 10);
 
-        return NextResponse.json({priority, score, confidence})
+        return NextResponse.json({priority, score, confidence});
     }
     catch (error) {
-        console.log(error)
-        return NextResponse.json({error: 'Classifier failed'}, {status: 500})
+        
+        console.log(error);
+        return NextResponse.json({error: 'Classifier failed'}, {status: 500});
     }
 }

@@ -109,6 +109,7 @@ export default function ProfileSettingsMenu() {
                 }}
                 className={`side-bar-btn-style hover:bg-[var(--b-main)] p-0.5 ml-0.5 ${open ? 'bg-[var(--a-main)]' : ''}`}
             >
+                
                 {/* Profile icon */}
                 <img
                     src={ICONS[theme].profile}
@@ -116,6 +117,7 @@ export default function ProfileSettingsMenu() {
                     alt=''
                     aria-hidden="true"
                 />
+
             </motion.button>
 
             {/* Dropdown menu */}
@@ -133,6 +135,7 @@ export default function ProfileSettingsMenu() {
                         aria-label='Profile Menu'
                         className='absolute bottom-0 left-full bg-[var(--baseAcc-a)] shadow-xl text-[var(--text-d)] shadow-xl z-20 side-bar-menu'
                     >
+                        
                         {/* Settings button */}
                         <button
                             role='menuitem'
@@ -181,6 +184,7 @@ export default function ProfileSettingsMenu() {
                 open={openSettings} 
                 onClose={() => setOpenSettings(false)} 
             />
+            
         </div>
     )
 }

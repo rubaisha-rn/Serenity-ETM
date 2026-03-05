@@ -30,7 +30,9 @@ function getWeeklyFocusCounts(triggers) {
 
     // Map triggers to each day
     triggers.forEach(ts => {
+
         const d = new Date(ts);
+        
         if (d >= weekAgo) {
             counts[days[d.getDay()]]++;
         }
@@ -40,15 +42,14 @@ function getWeeklyFocusCounts(triggers) {
         day,
         count: counts[day]
     }));
-}
+};
 
 // Today's mood based on focus activation score
 function getTodayFocusCount(triggers) {
 
     const today = new Date().toDateString();
-    
     return triggers.filter(ts => new Date(ts).toDateString() === today).length;
-}
+};
 
 // Priority sort
 function sortByPriority(items) {
@@ -63,7 +64,7 @@ function sortByPriority(items) {
             return pb - pa;
         })
         .slice(0, 3);
-}
+};
 
 export default function DashboardPage () {
 
@@ -101,21 +102,21 @@ export default function DashboardPage () {
 
         init();
 
-    }, [])
+    }, []);
 
     // Get mood label and colour from today's focus count
     function getMoodFromFocusCount(count) {
         
         if (count === 0) return {label: 'Calm', colour: theme === 'light' ? 'bg-blue-600 bg-opacity-60' : 'bg-blue-900 opacity-80'};
         
-        if (count === 1) return {label: 'Stable', colour: theme === 'light' ? 'bg-green-600 bg-opacity-60' : 'bg-green-900'}
+        if (count === 1) return {label: 'Stable', colour: theme === 'light' ? 'bg-green-600 bg-opacity-60' : 'bg-green-900'};
         
-        if (count === 2) return {label: 'Alert', colour: theme === 'light' ? 'bg-yellow-600 bg-opacity-60' : 'bg-yellow-900'}
+        if (count === 2) return {label: 'Alert', colour: theme === 'light' ? 'bg-yellow-600 bg-opacity-60' : 'bg-yellow-900'};
         
-        if (count <= 4) return {label: 'Stressed', colour: theme === 'light' ? 'bg-orange-600 bg-opacity-60' : 'bg-orange-800 opacity-80'}
+        if (count <= 4) return {label: 'Stressed', colour: theme === 'light' ? 'bg-orange-600 bg-opacity-60' : 'bg-orange-800 opacity-80'};
         
-        return {label: 'Overwhelmed', colour: theme === 'light' ? 'bg-red-600 bg-opacity-60' : 'bg-red-900'}
-    }
+        return {label: 'Overwhelmed', colour: theme === 'light' ? 'bg-red-600 bg-opacity-60' : 'bg-red-900'};
+    };
 
     // Memoized data calculations
     const weeklyFocusData = useMemo(
@@ -136,7 +137,8 @@ export default function DashboardPage () {
     const topPriorityEmails = useMemo(
         () => sortByPriority(
             (emails || []).filter(e =>
-                !e.is_delete && (e.folder !== 'archive' && e.folder !== 'drafts' && e.folder !== 'sent')
+                !e.is_delete && 
+                (e.folder !== 'archive' && e.folder !== 'drafts' && e.folder !== 'sent')
             )
         ),
         [emails]
@@ -161,13 +163,19 @@ export default function DashboardPage () {
 
         // Global layout
         <AppShell>
-
+            
             <div 
                 className="flex flex-col min-h-0 h-screen overflow-x-hidden overflow-y-auto min-w-0 z-0 dashboard"
                 aria-labelledby="dashboard-heading"
             >
+
                 {/* Hidden heading for screen readers */}
-                <h1 id="dashboard-heading" className="sr-only">Dashboard overview</h1>
+                <h1 
+                    id="dashboard-heading" 
+                    className="sr-only"
+                >
+                    Dashboard overview
+                </h1>
                 
                 {/* Left section */}
                 <div className="flex flex-col sm:gap-2 md:gap-3 lg:gap-4 xl:gap-4 2xl:gap-4">
@@ -191,11 +199,13 @@ export default function DashboardPage () {
 
                         {/* Screen reader alternatives */}
                         <ul className="sr-only">
+                            
                             {weeklyFocusData.map(d => (
                                 <li key={d.day}>
                                     {d.day}: {d.count} activations
                                 </li>
                             ))}
+
                         </ul>
 
                         <div className="focus-chart-inner">
@@ -247,22 +257,29 @@ export default function DashboardPage () {
 
                                 {/* If no data is found */}
                                 {weeklyFocusData.length === 0 && (
+                                    
                                     <motion.div 
                                         key="empty"
                                         initial={{opacity:0}}
                                         animate={{opacity:1}}
                                         exit={{opacity:0}}
-                                        className="overflow-hidden">
-                                        <p className="
-                                            text-center
-                                            sm:m-1
-                                            md:m-2
-                                            lg:m-4
-                                            xl:m-4
-                                            2xl:m-4
-                                        ">No data found.</p>
+                                        className="overflow-hidden"
+                                    >
+                                        <p 
+                                            className="
+                                                text-center
+                                                sm:m-1
+                                                md:m-2
+                                                lg:m-4
+                                                xl:m-4
+                                                2xl:m-4
+                                        ">
+                                            No data found.
+                                        </p>
                                     </motion.div>
+
                                 )}
+
                             </ResponsiveContainer>
                         </div>
                     </section>
@@ -279,14 +296,13 @@ export default function DashboardPage () {
                             <div className={`flex flex-col mood-inner ${todayMood.colour} justify-between`}>
                                 
                                 <h6 
-                                    id="today-mood-heading" className="opacity-80"
+                                    id="today-mood-heading" 
+                                    className="opacity-80"
                                 >
                                     Today's Mood
                                 </h6>
 
-                                <h1 
-                                    className="sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl font-bold mt-1"
-                                >
+                                <h1 className="sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl 2xl:text-4xl font-bold mt-1">
                                     {todayMood.label}
                                 </h1>
 
@@ -312,14 +328,17 @@ export default function DashboardPage () {
                             </h6>
 
                             {topPriorityEmails.length > 0 &&
+                                
                                 <div className="dashboard-email-grid text-[var(--text-c)] sm:px-1 md:px-1 lg:px-2 xl:px-2 2xl:px-4">
                                     <p className="group-label">From</p>
                                     <p className="group-label">Subject</p>
                                     <p className="group-label">Date</p>
                                 </div>
+
                             }
 
                             {topPriorityEmails.map((mail) => (
+                                
                                 <motion.button
                                     key={mail.id}
                                     role="button"
@@ -352,10 +371,12 @@ export default function DashboardPage () {
                                         <p>{formatDate(mail.timestamp)}</p>
                                     </div>
                                 </motion.button>
+
                             ))}
 
                             {/* In case no emails are found */}
                             {topPriorityEmails.length === 0 && (
+                                
                                 <motion.div 
                                     key="empty"
                                     initial={{opacity:0}}
@@ -370,10 +391,12 @@ export default function DashboardPage () {
                                         lg:m-4
                                         xl:m-4
                                         2xl:m-4
-                                    ">No emails found.</p>
+                                    ">
+                                        No emails found.
+                                    </p>
                                 </motion.div>
-                            )}
 
+                            )}
                         </div>
                     </div>
                 </div>
@@ -398,6 +421,7 @@ export default function DashboardPage () {
                         className="flex flex-col task-inner text-[var(--text-a)]"
                     >
                         {topPriorityTasks.map((task) => (
+                            
                             <motion.button
                                 id={`task-${task.id}`}
                                 key={task.id}
@@ -408,14 +432,12 @@ export default function DashboardPage () {
                                 transition={easeTransition}
                                 className={`bg-[var(--baseAcc-b)] rounded-lg hover:bg-[var(--f-main)]`}
                                 onClick={() => {
-
                                     setScreen('tasks');
                                     router.push(`/tasks?highlight=${task.id}`);
                                     setGrid(true);
                                 }}
                                 onKeyDown={(e) => {
                                     if(e.key === 'Enter' || e.key === ' ') {
-
                                         setScreen('tasks');
                                         router.push(`/tasks?highlight=${task.id}`);
                                         setGrid(true);
@@ -447,13 +469,19 @@ export default function DashboardPage () {
                                             className={`flex flex-row justify-center items-center progress-tag 
                                             ${task.progress === 'Not started' ? 'bg-[var(--progressNotc)] border-[var(--progressNota)] text-[var(--progressNott)]' :
                                             task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostc)] border-[var(--progressAlmosta)] text-[var(--progressAlmostt)]'
-                                            : 'bg-[var(--progressInc)] border-[var(--progressIna)] text-[var(--progressInt)]'}`}>
+                                            : 'bg-[var(--progressInc)] border-[var(--progressIna)] text-[var(--progressInt)]'}
+                                        `}>
 
-                                            <div className={`rounded-full p-[0.12rem] border-[0.1rem] 
+                                            <div 
+                                                className={`rounded-full p-[0.12rem] border-[0.1rem] 
                                                 ${task.progress === 'Not started' ? 'bg-[var(--progressNotb)] border-[var(--progressNota)]' :
-                                                task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)]' : 'bg-[var(--progressInb)] border-[var(--progressIna)]'}`} />
+                                                task.progress === 'Almost complete' ? 'bg-[var(--progressAlmostb)] border-[var(--progressAlmosta)]' : 'bg-[var(--progressInb)] border-[var(--progressIna)]'}`} 
+                                            />
                                                 
-                                                <p className="text-xs text-left whitespace-nowrap">{task.progress === 'Not started' ? 'Not started' : task.progress === 'Almost complete' ? 'Almost complete' : 'In progress'}</p>
+                                            <p className="text-xs text-left whitespace-nowrap">
+                                                {task.progress === 'Not started' ? 'Not started' : task.progress === 'Almost complete' ? 'Almost complete' : 'In progress'}
+                                            </p>
+                                            
                                         </div> 
                                     </div>
                                     
@@ -466,13 +494,17 @@ export default function DashboardPage () {
                                             className={`flex flex-row justify-center items-center priority-tag
                                             ${task.priority === 'high' ? 'bg-[var(--priorityHighc)] border-[var(--priorityHigha)] text-[var(--priorityHight)]' :
                                             task.priority === 'low' ? 'bg-[var(--priorityLowc)] border-[var(--priorityLowa)] text-[var(--priorityLowt)]'
-                                            : 'bg-[var(--priorityNormalc)] border-[var(--priorityNormala)] text-[var(--priorityNormalt)]'}`}>
+                                            : 'bg-[var(--priorityNormalc)] border-[var(--priorityNormala)] text-[var(--priorityNormalt)]'}
+                                        `}>
                                             
                                             <img
                                                 src={task.priority === 'high' ? ICONS[theme].redflag :
                                                 task.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
                                             />
-                                            <p className="text-xs text-left">{task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}</p>
+
+                                            <p className="text-xs text-left">
+                                                {task.priority === 'high' ? 'High' : task.priority === 'low' ? 'Low' : 'Normal'}
+                                            </p>
 
                                         </div>
                                     </div>
@@ -482,6 +514,7 @@ export default function DashboardPage () {
 
                         {/* If no tasks are found */}
                         {topPriorityTasks.length === 0 && (
+                            
                             <motion.div 
                                 key="empty"
                                 initial={{opacity:0}}
@@ -496,7 +529,9 @@ export default function DashboardPage () {
                                     lg:m-4
                                     xl:m-4
                                     2xl:m-4
-                                ">No tasks found.</p>
+                                ">
+                                    No tasks found.
+                                </p>
                             </motion.div>
                         )}
 

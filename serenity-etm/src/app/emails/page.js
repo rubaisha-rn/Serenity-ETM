@@ -297,8 +297,10 @@ export default function EmailsPage () {
                                         <p>{mail.from_name || mail.from_email}</p>
                                         <p>{formatDate(mail.timestamp)}</p>
                                     </div>
+
                                     <p className="font-semibold">{mail.subject || '(No subject)'}</p>
                                     <p className="w-full truncate">{mail.body || '(No body)'}</p>
+
                                 </motion.div>
                             ))}
                         </div>
@@ -315,22 +317,26 @@ export default function EmailsPage () {
                     }}
                     className="prim-act-btn w-full"
                 >
+                    
                     <img
                         src={ICONS[theme].add}
                         alt=""
                         aria-hidden='true'
                     />
                     <h6 className="font-semibold">Compose</h6>
+
                 </button>
             </div>
 
             {/* Batch functions section / toolbar */}
             {(selectedIds.length > 0 && (!showComposer || !selectedEmail)) && (
+                
                 <div 
                     aria-label="Batch email actions"
                     role="toolbar"
                     className="flex flex-row batch-func"
                 >   
+
                     {/* Select/unselect multiple items */}
                     <button 
                         aria-label="Select all visible emails"
@@ -356,8 +362,7 @@ export default function EmailsPage () {
                                 lg:w-[0.85rem]
                                 xl:w-[0.85rem]
                                 2xl:w-[0.95rem]
-                            "
-                        />
+                            "/>
                     </button>
 
                     {/* Mark as read */}
@@ -462,10 +467,12 @@ export default function EmailsPage () {
                             className="min-w-0"
                         >
                             {(filtered.length > 0 && selectedIds.length <= 0) && (
+                                
                                 <div 
                                     aria-hidden="true"
                                     className={`${(showEmails !== 'sent' && showEmails !== 'drafts') ? 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2fr_0.4fr_0.4fr]' : 'grid grid-cols-[0.1fr_0.1fr_0.8fr_2.4fr_0.4fr]'} justify-start items-center text-left email-grid border-b-[0.005rem] border-[var(--e-main)]`}
                                 >
+                                    
                                     <div />
                                     <div />
                                     
@@ -475,7 +482,9 @@ export default function EmailsPage () {
                                     {(showEmails !== 'sent' && showEmails !== 'drafts') && (    
                                         <p className="text-center">Priority</p>
                                     )}
+
                                 </div>
+
                             )}
 
                             {/* Email rows */}
@@ -492,6 +501,7 @@ export default function EmailsPage () {
                                         `}
                                         transition={{layout:easeTransition}}   
                                     >
+                                        
                                         {/* Selected checkbox */}
                                         <div className="flex items-center justify-center">
                                             <input
@@ -530,7 +540,8 @@ export default function EmailsPage () {
 
                                         {/* Sender */}
                                         <h6 className={`${mail.read ? 'font-thin' : 'font-semibold'}`}>
-                                        {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</h6>
+                                            {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}
+                                        </h6>
                                     
                                         {/* Clickable email preview */}
                                         <div    
@@ -562,7 +573,9 @@ export default function EmailsPage () {
 
                                         {/* Priority control */}
                                         {(showEmails !== 'sent' && showEmails !== 'drafts') && (
+                                            
                                             <div className="flex items-center justify-center">
+                                            
                                                 <button 
                                                     aria-label="Change email priority"
                                                     onClick={(e) => {
@@ -580,8 +593,11 @@ export default function EmailsPage () {
                                                             mail.priority === 'low' ? ICONS[theme].greyflag : ICONS[theme].yellowflag}
                                                             alt="Email priority"
                                                         />
-                                                        <p className="lg:text-xs text-left">{mail.priority === 'high' ? 'High' : mail.priority === 'low' ? 'Low' : 'Normal'}</p>
+                                                        <p className="lg:text-xs text-left">
+                                                            {mail.priority === 'high' ? 'High' : mail.priority === 'low' ? 'Low' : 'Normal'}
+                                                        </p>
                                                 </button>
+
                                             </div>
                                         )}
                                     </motion.div>
@@ -627,17 +643,21 @@ export default function EmailsPage () {
                                             {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}</p>
                                         
                                         </div>
+
                                         <p className="text-center">{formatDate(mail.timestamp)}</p>
                                     
                                     </div>
 
                                     <div className="grid grid-cols-[0.1fr_2fr]">
+                                        
                                         <div />
                                         <div className="truncate">
                                             <p className={`${mail.read ? '' : 'font-semibold'} truncate`}>{mail.subject}</p>
                                             <p className={`${mail.read ? 'font-thin' : 'font-normal'} truncate`}>{mail.body}</p>
                                         </div>
+
                                     </div>
+
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -645,7 +665,9 @@ export default function EmailsPage () {
                     
                     {/* Empty state */}
                     <AnimatePresence>
+
                         {filtered.length === 0 && (
+                        
                             <motion.div 
                                 key="empty"
                                 initial={{opacity:0}}
@@ -663,6 +685,7 @@ export default function EmailsPage () {
                                 ">
                                     No emails found.
                                 </p>
+                        
                             </motion.div>
                         )}
                     </AnimatePresence>

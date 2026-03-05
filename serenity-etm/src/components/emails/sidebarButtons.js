@@ -50,6 +50,7 @@ export default function EmailsSidebarButton({label, shortLabel, icon, expanded, 
             ${expanded ? 'expanded' : 'collapsed'} 
             ${showEmails === shortLabel ? 'bg-[var(--baseAcc-b)] shadow-md' : ''}`}
         >
+            
             {/* Icon */}
             <img 
                 src={icon} 
@@ -62,6 +63,7 @@ export default function EmailsSidebarButton({label, shortLabel, icon, expanded, 
             <span className={`secondary-side-bar-label ${expanded ? 'show' : 'hide'}`}>
                 {label}
             </span>
+
         </motion.button>
     );
 }

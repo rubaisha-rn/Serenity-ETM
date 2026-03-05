@@ -29,16 +29,21 @@ export default function WellbeingSettings() {
             >
                 {/* Dropdown for duration selection */}
                 <div className="text-xs">
+                    
                     <select 
                         aria-label="Calm overlay duration"
                         value={calmModeDuration}
                         onChange={(e) => setCalmModeDuration(Number(e.target.value))}
-                        className="border border-[var(--f-main)] rounded bg-[--baseAcc-b] sm:p-0.5 md:p-0.5 lg:p-1 xl:p-1 2xl:p-2">
+                        className="border border-[var(--f-main)] rounded bg-[--baseAcc-b] sm:p-0.5 md:p-0.5 lg:p-1 xl:p-1 2xl:p-2"
+                    >
+                    
                         <option value={10000}>10 secs (Default)</option>
                         <option value={30000}>30 secs</option>
                         <option value={60000}>1 min</option>
                         <option value={120000}>2 min</option>
+                    
                     </select>
+                
                 </div>
             </SettingsRow>
 
@@ -49,17 +54,21 @@ export default function WellbeingSettings() {
             >
                 {/* Dropdown for stress interval selection */}
                 <div className="text-xs">
+                    
                     <select 
                         value={stressDetectionDuration}
                         onChange={(e) => setStressDetectionDuration(Number(e.target.value))}
                         className="border border-[var(--f-main)] rounded bg-[--baseAcc-b] sm:p-0.5 md:p-0.5 lg:p-1 xl:p-1 2xl:p-2"
                         aria-label="Stress detection interval"
                     >
+                    
                         <option value={10000}>10 secs (Default)</option>
                         <option value={30000}>30 secs</option>
                         <option value={60000}>1 min</option>
                         <option value={120000}>2 min</option>
+                    
                     </select>
+                
                 </div>
             </SettingsRow>
 
@@ -69,6 +78,7 @@ export default function WellbeingSettings() {
                 text='Adjusts how strongly the system responds to changes in your detected stress signals. Higher sensitivity picks up subtle shifts and adapts more quickly, while lower sensitivity reacts only to more noticable changes for a more stable experience.'
                 col={true}
             >
+                
                 {/* Slider used to adjust algorithm sensitivity */}
                 <input 
                     type="range"
@@ -86,6 +96,7 @@ export default function WellbeingSettings() {
 
                 {/* Display current value */}
                 <p>Value: {Math.round((1 + (stressSensitivity - 0.5) * 9) * 100) / 100} {(Math.round((1 + (stressSensitivity - 0.5) * 9) * 100) / 100) === 5.5 ? '(Default)' : ''}</p>
+            
             </SettingsRow>
         </div>
     );

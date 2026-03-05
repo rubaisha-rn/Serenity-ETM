@@ -50,6 +50,7 @@ export default function CollapsableRightSidebar() {
                 onKeyDown={(e) => activate(e, () => setExpandedRight(!expandedRight))}
                 className="fixed bg-[var(--baseAcc-a)] hover:bg-[var(--a-main)] shadow-xl rounded-full z-30 side-bar-toggle"
             >
+
                 <img
                     src={ICONS[theme].arrow}
                     alt='close arrow'
@@ -69,6 +70,7 @@ export default function CollapsableRightSidebar() {
                 ${expandedRight ? 'p-2' : ''}`}
                 style={{overflow: 'clip'}}
             >
+
                 {/* Mode controls */}
                 <div 
                     role='menu' 
@@ -115,6 +117,7 @@ export default function CollapsableRightSidebar() {
                                 </span>
                             )}
                         </div>
+                        
                     </div>
 
                     {/* Priority mode toggle */}
@@ -155,6 +158,7 @@ export default function CollapsableRightSidebar() {
                                 </span>
                             )}
                         </div>
+
                     </div>
 
                     {/* Stress detection toggle */}
@@ -179,20 +183,23 @@ export default function CollapsableRightSidebar() {
                                 className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collpased'}
                                 ${sdkActive ? 'bg-[var(--d-main)]' : ''}`}
                             >
+                                
                                 <img
                                     src={ICONS[theme].stressdetect}
                                     alt=''
                                     aria-hidden='true'
                                 />
+
                                 <span className={`text-[var(--text-a)] whitespace-nowrap transition-all duration-150 side-bar-label ${expandedRight? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                                     Stress Detection
                                 </span>
+
                             </motion.button>
 
                             {/* Mode description */}
                             {expandedRight && (
                                 <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
-                                <Info className='shrink-0 side-bar-info'/>
+                                    <Info className='shrink-0 side-bar-info'/>
                                     Automatically estimates stress.
                                     If turned off, use the slider to set your stress level manually.
                                 </span>
@@ -206,6 +213,7 @@ export default function CollapsableRightSidebar() {
                                 className='w-[95%] overflow-hidden'
                                 style={{pointerEvents: expandedRight ? 'auto' : 'none'}}
                             >
+                                
                                 <p>Stress Level: {emotionValue}</p>
 
                                 <input
@@ -224,12 +232,15 @@ export default function CollapsableRightSidebar() {
                                     title='Stress Level Slider'
                                     disabled={sdkActive}
                                 />
+                                
                                 <div className='flex flex-row justify-between'>
                                     <p>Lowest</p>
                                     <p>Highest</p>
                                 </div>
+
                             </motion.div>
                         </div>  
+
                     </div>
                 </div>
 

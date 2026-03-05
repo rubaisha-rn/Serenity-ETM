@@ -70,6 +70,7 @@ export default function SignInPage() {
             aria-labelledby="login-heading"
             className="h-[100vh] w-[100vw] grid sm:lg:grid-cols-1 md:lg:grid-cols-2 lg:grid-cols-2 xl:lg:grid-cols-2 2xl:lg:grid-cols-2"
         >
+            
             {/* Branding / Marketing panel */}
             <div
                 className='signing-bg'
@@ -82,6 +83,7 @@ export default function SignInPage() {
                 aria-hidden="true"
             >
                 <div className="flex items-end justify-start h-full signing-title-box">
+                    
                     <div className="signing-title-box">
                         
                         <h1 className="signing-title font-AbrilFatface transition-colors duration-500 ease-in-out opacity-85">Serenity</h1>
@@ -91,6 +93,7 @@ export default function SignInPage() {
                         <p className="signing-subsubtitle text-[var(--text-b)] font-Roboto">Stay productive, stay calm: your stress-aware inbox.</p>
                     
                     </div>
+
                 </div>
             </div>
 
@@ -156,6 +159,7 @@ export default function SignInPage() {
                                 aria-hidden='true'
                             />
                         </button>
+
                     </div>
                 )}
 
@@ -165,6 +169,7 @@ export default function SignInPage() {
                     onSubmit={handleSignIn} 
                     className='w-[50%] items-center justify-center'
                 >
+                    
                     {/* Email input */}
                     <label className="sr-only" htmlFor="email">Email Address</label>
 
@@ -219,6 +224,7 @@ export default function SignInPage() {
                         </button>
                         
                     </label>
+                    
                 </div>
 
                 {/* Prototype indicator and spinner */}

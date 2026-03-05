@@ -60,11 +60,13 @@ export default function SettingsModal({open, onClose}) {
                     ref={panelRef}
                     onClick={(e) => e.stopPropagation()}
                 >
+                    
                     {/* Sidebar navigation */}
                     <div 
                         className="w-1/4 p-1.5 m-0.5 rounded-md backdrop-blur-xl shadow-lg"
                     >
                         {sections.map(section => (
+
                             <button
                                 key={section.id}
                                 role="tab"
@@ -74,14 +76,18 @@ export default function SettingsModal({open, onClose}) {
                                 className={`settings-side-bar secondary-side-bar-btn expanded hover:bg-[var(--e-main)] mb-1 hover:scale-105
                                 ${active === section.id ? 'bg-[var(--baseAcc-b)] shadow-md' : ''}`}
                             >
+                                
                                 {/* Section icon and label */}
                                 <img
                                     src={section.id === 'appearance' ? ICONS[theme].appearance : section.id === 'wellbeing' ? ICONS[theme].wellbeing : ICONS[theme].account}
                                     className="opacity-80 m-1.5"
                                 />
                                 <p className="secondary-side-bar-label show">{section.label}</p>
+                            
                             </button>
+
                         ))}
+                        
                     </div>
 
                     {/* Settings content panel */}
@@ -90,9 +96,11 @@ export default function SettingsModal({open, onClose}) {
                         aria-label={`${active} settings`}
                         className="flex-1 overflow-y-auto settings-content"
                     >
+
                         {active === 'appearance' && <AppearanceSettings />}
                         {active === 'wellbeing' && <WellbeingSettings />}
                         {active === 'account' && <AccountSettings />}
+                    
                     </div>
                 </div>
             </div>

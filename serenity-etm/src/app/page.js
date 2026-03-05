@@ -147,11 +147,13 @@ export default function SignUpPage() {
 
                 {/* Error and success messages */}
                 {(error || success) && (
+                    
                     <div 
                         role='alert'
                         aria-live='assertive'
                         className={`error-message w-[50%] ${success ? 'bg-[var(--successL)]' : ''}`}
                     >
+                    
                         <div className="flex flex-row items-center justify-center gap-1">
                             
                             <img
@@ -163,6 +165,7 @@ export default function SignUpPage() {
                             
                             <p className="font-bold">{error ? 'Error!' : 'Success!'}</p>
                             <p className="text-[var(--text-a)] leading-tight">{error ? error : success}</p>
+                    
                         </div>
 
                         {/* Dismiss feedback */}
@@ -179,6 +182,7 @@ export default function SignUpPage() {
                                 aria-hidden='true'
                             />
                         </button>
+                    
                     </div>
                 )}
 
@@ -317,6 +321,7 @@ export default function SignUpPage() {
                         </button>
                     
                     </label>
+                    
                 </div>
 
                 {/* Prototype tag and loading spinner */}

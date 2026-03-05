@@ -117,6 +117,7 @@ export default function CalmOverlay() {
 
         // Generate blob configurations with palette according to theme
         const arr = Array.from({ length: BLOB_COUNT }).map(() => {
+            
             const colors = Palettes[theme][Math.floor(Math.random() * Palettes[theme].length)];
 
             return {
@@ -155,6 +156,7 @@ export default function CalmOverlay() {
             exit={{opacity:0, backdropFilter: "blur(0px)"}}
             transition={{duration: 0.6, ease: 'easeOut'}}    
         >
+            
             {/* Screen reader live countdown */}
             <div className='sr-only' aria-live='polite'>
                 {timeLeft} seconds remaining
@@ -186,6 +188,7 @@ export default function CalmOverlay() {
                     <feBlend in='SourceGraphic' in2='gooey' />
                 
                 </filter>
+
             </svg>
 
             {/* Top control bar */}
@@ -219,6 +222,7 @@ export default function CalmOverlay() {
                         aria-hidden='true'
                     />
                 </button>
+
             </div>
             
             {/* Animated blob background */}
@@ -228,6 +232,7 @@ export default function CalmOverlay() {
                 aria-hidden='true'
             >
                 {blobs.map((b, i) => (
+                    
                     <motion.div
                         key={i}
                         style={{
@@ -254,6 +259,7 @@ export default function CalmOverlay() {
                             ease: 'easeInOut',
                         }}
                     />
+
                 ))}
             </div>
 
@@ -269,6 +275,7 @@ export default function CalmOverlay() {
                 >
                     Let's slow things down for a moment.
                 </motion.div>
+                
             </div>
         </motion.div> 
     );

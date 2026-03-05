@@ -208,6 +208,7 @@ export default function AppShell({children}){
 
                     {/* Page content */}
                     {children}
+                    
                 </main>
 
                 {/* Right sidebar region */}

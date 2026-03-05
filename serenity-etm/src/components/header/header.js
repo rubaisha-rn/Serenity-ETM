@@ -47,6 +47,7 @@ export default function Header({
                 className={`flex items-center justify-center gap-1 transition-all duration-500 ease-[cubic-bezier(.4,0,.2,1)]`}
                 aria-label="Application title"
             >
+                
                 {logo && 
                     <div 
                         className="header-logo"
@@ -55,11 +56,13 @@ export default function Header({
                         {logo}
                     </div>
                 }
+
                 <h6 
                     className="font-AbrilFatface font-semibold text-[var(--text-b)]"
                 >
                     {title}
                 </h6>
+
             </div>
         </header>
     );

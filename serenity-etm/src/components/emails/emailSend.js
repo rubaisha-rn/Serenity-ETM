@@ -167,15 +167,18 @@ export default function EmailSend({onClose}) {
                         aria-hidden='true'
                     />
                 </button>
+
             </div>
 
             {/* Error message */}
             {error && (
+                
                 <div 
                     role="alert"
                     aria-live="assertive"
                     className="error-message"
                 >
+                    
                     <div 
                         className="flex flex-row items-center justify-center gap-1"
                     >
@@ -202,6 +205,7 @@ export default function EmailSend({onClose}) {
                             aria-hidden='true'
                         />
                     </button>
+
                 </div>
             )}
 

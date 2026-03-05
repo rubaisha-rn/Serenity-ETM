@@ -106,11 +106,13 @@ export default function AccountSettings() {
 
                     {/* Error and success messages */}
                     {(error || success) && (
+                        
                         <div 
                             role="alert"
                             aria-live="assertive"
                             className={`error-message w-3/4 ${success ? 'bg-[var(--successL)]' : ''}`}
                         >
+                            
                             <div 
                                 className="flex flex-row items-center justify-center gap-1"
                             >
@@ -136,6 +138,7 @@ export default function AccountSettings() {
                                     aria-hidden='true'
                                 />
                             </button>
+
                         </div>
                     )}
 
@@ -209,6 +212,7 @@ export default function AccountSettings() {
                     >
                         {loading ? 'Updating...' : 'Change Password'}
                     </button>
+                    
                 </div>
             </SettingsRow>
         </div>

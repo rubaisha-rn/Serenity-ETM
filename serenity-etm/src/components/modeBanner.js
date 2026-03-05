@@ -94,6 +94,7 @@ export default function ModeBanner({mode}) {
                                     : 'Standard view is active. All emails are displayed without adaptive filtering.'}
                                 </p>
                             </div>
+
                         </div>
 
                         {/* Right side */}
@@ -121,6 +122,7 @@ export default function ModeBanner({mode}) {
                                 >
                                     <p>Turn off</p>
                                 </button>
+
                             )}
 
                             {/* Close banner button */}
@@ -133,6 +135,7 @@ export default function ModeBanner({mode}) {
                                     className="rotate-45 hover:opacity-70"
                                 />
                             </button>
+                            
                         </div>
                     </div>   
                 </motion.div>

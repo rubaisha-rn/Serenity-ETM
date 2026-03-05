@@ -189,6 +189,7 @@ export default function EmailReader() {
                 aria-label="Email actions"
                 className="flex flex-row justify-between h-auto mb-1 toolbar"
             >
+                
                 {/* Close reader */}
                 <button
                     className="prim-act-btn task-layout-btn bg-[var(--baseAcc-b)] hover:bg-[var(--f-main)] border-[var(--f-main)]"
@@ -288,6 +289,7 @@ export default function EmailReader() {
                             />
                         </button>
                     )}
+
                 </div>
             </div>
 
@@ -298,12 +300,12 @@ export default function EmailReader() {
                 {isDraft ? (
                     <>
                         {error && (
+                            
                             <div 
                                 role="alert"
                                 aria-live="assertive"
                                 className="error-message"
                             >
-                                
                                 <div className="flex flex-row items-center justify-center gap-1">
                                     <img
                                         src={ICONS[theme].warning}
@@ -363,9 +365,7 @@ export default function EmailReader() {
                     </>
                 ) : (
                     // Standard email display
-                    <div 
-                        className="flex flex-col gap-1 pb-6"
-                    >
+                    <div className="flex flex-col gap-1 pb-6">
                         <div className="flex flex-row justify-between">
                             <h5>{selectedEmail.subject || '(No subject)'}</h5>
                             <p>
@@ -380,15 +380,12 @@ export default function EmailReader() {
                         <p className="text-[var(--text-b)]">From: {selectedEmail.isSender ? 'Me' : selectedEmail.from_name || selectedEmail.from_email}</p>
                         <p className="text-[var(--text-b)]">To: {selectedEmail.isReceiver ? 'Me' : selectedEmail.to_name || selectedEmail.to_email}</p>
                         <p className="text-xs">{selectedEmail.body || '(No body)'}</p>
-
                     </div>
                 )}
 
                 {/* Reply composer  */}
                 {replyMode && (
-                    <div 
-                        className="flex flex-col flex-1 min-h-0 mt-4 border-t border-[--e-main] pt-4"
-                    >
+                    <div className="flex flex-col flex-1 min-h-0 mt-4 border-t border-[--e-main] pt-4">
                         <p>
                             Replying to {selectedEmail.from_name || selectedEmail.from_email} 
                         </p>

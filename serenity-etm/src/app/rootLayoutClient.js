@@ -35,6 +35,7 @@ export default function RootLayoutClient({ children }) {
                     {children}
 
                 </UseStressColorProvider>
+                
             </ProfileHydrator>
         </>
     );

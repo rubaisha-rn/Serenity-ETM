@@ -50,6 +50,7 @@ export default function TasksSidebarButton({label, shortLabel, icon, expanded, o
             ${expanded ? 'expanded' : 'collapsed'} 
             ${showTasks === shortLabel ? 'bg-[var(--baseAcc-b)] shadow-md' : ''}`}
         >
+            
             {/* Icon */}
             <img 
                 src={icon} 
@@ -62,6 +63,7 @@ export default function TasksSidebarButton({label, shortLabel, icon, expanded, o
             <span className={`secondary-side-bar-label ${expanded ? 'show' : 'hide'}`}>
                 {label}
             </span>
+
         </motion.button>
     );
 }
