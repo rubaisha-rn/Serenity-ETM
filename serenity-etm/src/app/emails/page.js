@@ -680,7 +680,7 @@ export default function EmailsPage () {
                             animate={{opacity:1, x:0}}
                             exit={{opacity:0, x:80}}
                             transition={easeTransition}
-                            className="min-w-0 min-h-0 h-full flex flex-col overflow-hidden"
+                            className="min-w-0 min-h-0 h-full flex flex-col overflow-hidden shadow-xl"
                             aria-label={
                                 showComposer 
                                     ? 'Email composer'

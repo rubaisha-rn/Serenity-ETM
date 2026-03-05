@@ -136,7 +136,7 @@ export default function DashboardPage () {
     const topPriorityEmails = useMemo(
         () => sortByPriority(
             (emails || []).filter(e =>
-                !e.is_delete && e.folder !== 'archive'
+                !e.is_delete && (e.folder !== 'archive' && e.folder !== 'drafts' && e.folder !== 'sent')
             )
         ),
         [emails]
@@ -311,11 +311,13 @@ export default function DashboardPage () {
                                 My Priority Emails
                             </h6>
 
-                            <div className="dashboard-email-grid text-[var(--text-c)] sm:px-1 md:px-1 lg:px-2 xl:px-2 2xl:px-4">
-                                <p className="group-label">From</p>
-                                <p className="group-label">Subject</p>
-                                <p className="group-label">Date</p>
-                            </div>
+                            {topPriorityEmails.length > 0 &&
+                                <div className="dashboard-email-grid text-[var(--text-c)] sm:px-1 md:px-1 lg:px-2 xl:px-2 2xl:px-4">
+                                    <p className="group-label">From</p>
+                                    <p className="group-label">Subject</p>
+                                    <p className="group-label">Date</p>
+                                </div>
+                            }
 
                             {topPriorityEmails.map((mail) => (
                                 <motion.button
@@ -323,7 +325,7 @@ export default function DashboardPage () {
                                     role="button"
                                     tabIndex={0}
                                     aria-label="Emails"
-                                    className="bg-[var(--bg)] email-inner text-[var(--text-b)]"
+                                    className="bg-[var(--bg)] hover:bg-[var(--f-main)] email-inner text-[var(--text-b)] text-left"
                                     onClick={() => {
                                         setScreen('email');
                                         router.push('/emails');
@@ -361,6 +363,7 @@ export default function DashboardPage () {
                                     exit={{opacity:0}}
                                     className="overflow-hidden">
                                     <p className="
+                                        text-[var(--text-a)]
                                         text-center
                                         sm:m-1
                                         md:m-2
@@ -403,7 +406,7 @@ export default function DashboardPage () {
                                 aria-labelledby="Tasks"
                                 layout
                                 transition={easeTransition}
-                                className={`bg-[var(--baseAcc-b)] rounded-lg`}
+                                className={`bg-[var(--baseAcc-b)] rounded-lg hover:bg-[var(--f-main)]`}
                                 onClick={() => {
 
                                     setScreen('tasks');
@@ -422,7 +425,7 @@ export default function DashboardPage () {
                                 {/* Content morphs */}
                                 <motion.div
                                     layout
-                                    className='flex flex-col task-box'
+                                    className='flex flex-col task-box text-left'
                                 >
                                     {/* Task details */}
                                     <h6 className="font-semibold">{task.title}</h6>
@@ -486,6 +489,7 @@ export default function DashboardPage () {
                                 exit={{opacity:0}}
                                 className="overflow-hidden">
                                 <p className="
+                                    text-[var(--text-a)]
                                     text-center
                                     sm:m-1
                                     md:m-2

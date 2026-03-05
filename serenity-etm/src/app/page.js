@@ -24,6 +24,8 @@ export default function SignUpPage() {
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [accepted, setAccepted] = useState(false);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
 
     // UI states
     const [loading, setLoading] = useState(false)
@@ -62,9 +64,21 @@ export default function SignUpPage() {
             return;
         }
 
+        if (!accepted) {
+            setError('Accept the Terms & Conditions to proceed.')
+            setLoading(false);
+            return;
+        }
+
         const {error} = await supabase.auth.signUp({
             email,
-            password
+            password,
+            options: {
+                data: {
+                    first_name: firstName,
+                    last_name: lastName
+                }
+            }
         });
 
         if (error) {
@@ -174,6 +188,34 @@ export default function SignUpPage() {
                     onSubmit={handleSignup} 
                     className='w-[50%] items-center justify-center'
                 >
+                    {/* First name input */}
+                    <label className="sr-only" htmlFor="f-name">
+                        First name 
+                    </label>
+                    
+                    <input
+                        id='f-name'
+                        type="text"
+                        placeholder="First name"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
+                    />
+
+                    {/* Last name input */}
+                    <label className="sr-only" htmlFor="l-name">
+                        Last name 
+                    </label>
+                    
+                    <input
+                        id='l-name'
+                        type="text"
+                        placeholder="Last name"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        className="bg-[--baseAcc-b] border-[--f-main] w-full px-3 py-1.5 text-sm rounded-md border-[0.008rem] my-1"
+                    />
+
                     {/* Email input */}
                     <label className="sr-only" htmlFor="email">
                         Email address 
@@ -255,7 +297,7 @@ export default function SignUpPage() {
                     {/* Submit button */}
                     <button 
                         type="submit" 
-                        disabled={loading || !accepted} className='prim-act-btn signup-btn my-1'
+                        disabled={loading} className='prim-act-btn signup-btn my-1'
                     >
                         {loading ? "Signing up..." : "Sign up"}
                     </button>

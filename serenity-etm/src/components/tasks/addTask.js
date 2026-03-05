@@ -183,7 +183,7 @@ export default function AddTask() {
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="Short description (optional)"
                                     rows={2}
-                                    className="w-full text-sm p-2 rounded border resize-none"
+                                    className="w-full text-sm p-2 rounded border resize-none bg-[--baseAcc-b] border-[--e-main] border"
                                 />
                                 
                                 {/* Date + Priority */}
@@ -206,7 +206,7 @@ export default function AddTask() {
                                     <select
                                         value={priority}
                                         onChange={(e) => setPriority(e.target.value)}
-                                        className="w-full p-2 text-sm rounded border"
+                                        className="w-full p-2 text-sm rounded border bg-[--baseAcc-b] border-[--e-main] "
                                         aria-label="Task priority"
                                     >
                                         <option value=''>No Priority</option>

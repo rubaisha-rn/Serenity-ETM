@@ -198,38 +198,37 @@ export default function CollapsableRightSidebar() {
                                 </span>
                             )}
                             
-                            {/* Stress slider - only visibel when automatic stress detection is off */}
-                            {!sdkActive && <motion.div
-                                    initial={{ opacity: 0, height: 0 }}
-                                    animate={{ height: expandedRight ? 90 : 0, opacity: expandedRight ? 1 : 0 }}
-                                    transition={{duration: 0.25}}
-                                    className='w-[95%] overflow-hidden'
-                                    style={{pointerEvents: expandedRight ? 'auto' : 'none'}}
-                                >
-                                    <p>Stress Level: {emotionValue}</p>
+                            {/* Stress slider - only usable when automatic stress detection is off */}
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ height: expandedRight ? 90 : 0, opacity: expandedRight ? 1 : 0 }}
+                                transition={{duration: 0.25}}
+                                className='w-[95%] overflow-hidden'
+                                style={{pointerEvents: expandedRight ? 'auto' : 'none'}}
+                            >
+                                <p>Stress Level: {emotionValue}</p>
 
-                                    <input
-                                        id='stress-slider'
-                                        type='range'
-                                        min={0}
-                                        max={100}
-                                        step={1}
-                                        value={emotionValue}
-                                        onChange={(e) => setEmotionValue(Number(e.target.value))}
-                                        className={`w-full mt-1 accent-[var(--baseAcc-a)] bg-[--baseAcc-b] border-[--e-main]`}
-                                        aria-valuemin={0}
-                                        aria-valuemax={100}
-                                        aria-valuenow={emotionValue}
-                                        aria-label='Stress Level slider'
-                                        title='Stress Level Slider'
-                                        disabled={sdkActive}
-                                    />
-                                    <div className='flex flex-row justify-between'>
-                                        <p>Lowest</p>
-                                        <p>Highest</p>
-                                    </div>
-                                </motion.div>
-                            }
+                                <input
+                                    id='stress-slider'
+                                    type='range'
+                                    min={0}
+                                    max={100}
+                                    step={1}
+                                    value={emotionValue}
+                                    onChange={(e) => setEmotionValue(Number(e.target.value))}
+                                    className={`w-full mt-1 accent-[var(--baseAcc-a)] bg-[--baseAcc-b] border-[--e-main]`}
+                                    aria-valuemin={0}
+                                    aria-valuemax={100}
+                                    aria-valuenow={emotionValue}
+                                    aria-label='Stress Level slider'
+                                    title='Stress Level Slider'
+                                    disabled={sdkActive}
+                                />
+                                <div className='flex flex-row justify-between'>
+                                    <p>Lowest</p>
+                                    <p>Highest</p>
+                                </div>
+                            </motion.div>
                         </div>  
                     </div>
                 </div>
