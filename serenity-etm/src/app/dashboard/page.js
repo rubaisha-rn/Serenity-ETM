@@ -430,7 +430,7 @@ export default function DashboardPage () {
                                 aria-labelledby="Tasks"
                                 layout
                                 transition={easeTransition}
-                                className={`bg-[var(--baseAcc-b)] rounded-lg hover:bg-[var(--f-main)]`}
+                                className={`bg-[var(--baseAcc-b)] rounded-lg hover:bg-[var(--f-main)] border-[0.005rem] border-[var(--e-main)]`}
                                 onClick={() => {
                                     setScreen('tasks');
                                     router.push(`/tasks?highlight=${task.id}`);

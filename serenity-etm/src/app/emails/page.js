@@ -29,7 +29,7 @@ export default function EmailsPage () {
     // Global state values
     const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany, showComposer, setShowComposer} = useEmailStore();
 
-    const {emotionValue, focusMode, priorityMode, setScreen, setTheme} = useStore();
+    const {emotionValue, focusMode, priorityMode, setScreen} = useStore();
     const theme = useStore((s) => s.theme);
 
     // Search state

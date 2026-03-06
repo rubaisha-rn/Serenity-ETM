@@ -528,7 +528,7 @@ export default function TasksPage() {
                             role="listitem"
                             aria-label={`Task ${task.title}`}
                             transition={easeTransition}
-                            className={`bg-[var(--baseAcc-b)] ${grid ? 'rounded-lg' : ''}`}
+                            className={`bg-[var(--baseAcc-b)] ${grid ? 'rounded-lg border-[0.005rem] border-[var(--e-main)]' : ''}`}
                         >
                             {/* Content morphs */}
                             <motion.div
