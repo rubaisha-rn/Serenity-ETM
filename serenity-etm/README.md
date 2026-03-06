@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#### **Serenity ETM – Emotion-Aware Email \& Task Manager**
 
-## Getting Started
+Serenity ETM is a **prototype productivity tool** designed to reduce cognitive overload and workplace stress by adapting its interface based on the user’s inferred emotional state.
 
-First, run the development server:
+The system combines **email and task management** with **emotion-aware interaction design**, dynamically adjusting the interface to support focus and reduce information overload.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project was developed as part of a **final-year computer science project exploring adaptive user interfaces and calm technology principles**.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##### **Running the Project Locally**
 
-## Learn More
+1. **Clone the Repository**
+   	git clone <repository-url>
+   	cd serenity-etm
+   
+2. **Install Dependencies**
+   	npm install or yarn install
+   
+3. **Configure Environment Variables**
+   	This project requires a .env file containing environment variables.
 
-To learn more about Next.js, take a look at the following resources:
+   	Create a file named:
+   	.env.local
+   	in the root directory.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    Add the following variables:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    NEXT\_PUBLIC\_SUPABASE\_URL=your\_supabase\_project\_url
+    NEXT\_PUBLIC\_SUPABASE\_ANON\_KEY=your\_supabase\_anon\_key
 
-## Deploy on Vercel
+    NEXT\_PUBLIC\_MORPHCAST\_API\_KEY=your\_morphcast\_api\_key
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    The .env file is not included in this repository because it contains sensitive credentials. You must create your own .env.local file using the variables above, with the credentials provided in the report.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. **Run the Development Server**
+
+    npm run dev
+    or
+    yarn dev
+
+    The application will be available at:
+    http://localhost:3000
+
+**5. Authentication Setup**
+
+    The system uses Supabase authentication.
+
+    To use the system locally:
+    Create an account
+    Verify the email address
+    Sign in to access the workspace
+
+    User-specific data such as emails and tasks are stored securely using Row Level Security (RLS) policies.
+
+
+
+##### **Prototype Notice**
+
+This system is a research prototype developed for academic purposes.
+Certain features may be simplified and the system is not intended for production use.
+
+
+
+##### **License**
+
+This project is intended for academic research and demonstration purposes.
