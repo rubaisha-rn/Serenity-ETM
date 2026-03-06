@@ -38,9 +38,12 @@ export default function ProfileSettingsMenu() {
      */
     const handleSignOut = async () => {
         await supabase.auth.signOut();
+
+        // Return to default settings when signing out
+        const root = document.documentElement;
+        root.classList.remove('dark', 'high-contrast', 'colour-vision-friendly');
+
         router.push('/signin');
-        setTheme('light');
-        setThemeMode('normal');
     }
 
     /**
