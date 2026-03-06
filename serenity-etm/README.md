@@ -1,4 +1,4 @@
-#### **Serenity ETM – Emotion-Aware Email \& Task Manager**
+### **Serenity ETM – Emotion-Aware Email \& Task Manager**
 
 Serenity ETM is a **prototype productivity tool** designed to reduce cognitive overload and workplace stress by adapting its interface based on the user’s inferred emotional state.
 
@@ -8,60 +8,63 @@ This project was developed as part of a **final-year computer science project ex
 
 
 
-##### **Running the Project Locally**
+#### **Running the Project Locally**
 
 1. **Clone the Repository**
-   	git clone <repository-url>
-   	cd serenity-etm
-   
+   git clone <repository-url>
+   cd serenity-etm
 2. **Install Dependencies**
-   	npm install or yarn install
-   
+   npm install
+   or
+   yarn install
 3. **Configure Environment Variables**
-   	This project requires a .env file containing environment variables.
+   This project requires an .env file containing environment variables.
 
-   	Create a file named:
-   	.env.local
-   	in the root directory.
+   Create a file named:
+   **.env.local**
+   inside the serenity-etm directory.
 
-    Add the following variables:
+   Add the following variables:
+   NEXT\_PUBLIC\_SUPABASE\_URL=supabase\_project\_url\_from\_the\_report
+   NEXT\_PUBLIC\_SUPABASE\_ANON\_KEY=supabase\_anon\_key\_from\_the\_report
+   NEXT\_PUBLIC\_MORPHCAST\_API\_KEY=morphcast\_api\_key\_from\_the\_report
 
-    NEXT\_PUBLIC\_SUPABASE\_URL=your\_supabase\_project\_url
-    NEXT\_PUBLIC\_SUPABASE\_ANON\_KEY=your\_supabase\_anon\_key
-
-    NEXT\_PUBLIC\_MORPHCAST\_API\_KEY=your\_morphcast\_api\_key
-
-    The .env file is not included in this repository because it contains sensitive credentials. You must create your own .env.local file using the variables above, with the credentials provided in the report.
+   The .env file is not included in this repository because it contains sensitive credentials. You must create your own .env.local file using the variables above, with the credentials provided in the report.
 
 4. **Run the Development Server**
+   npm run dev
+   or
+   yarn dev
 
-    npm run dev
-    or
-    yarn dev
+   The application will be available at:
+   http://localhost:3000
 
-    The application will be available at:
-    http://localhost:3000
+5. **Authentication Setup**
+   The system uses Supabase authentication.
 
-**5. Authentication Setup**
+   To use the system locally:
+   Create an account
+   Verify the email address
+   Sign in to access the workspace
 
-    The system uses Supabase authentication.
+   **or**
 
-    To use the system locally:
-    Create an account
-    Verify the email address
-    Sign in to access the workspace
+   Use the test user credentials provided in the report.
 
-    User-specific data such as emails and tasks are stored securely using Row Level Security (RLS) policies.
+   
 
+   User-specific data such as emails and tasks are stored securely using Row Level Security (RLS) policies.
 
+   
 
-##### **Prototype Notice**
+#### **Prototype Notice**
 
 This system is a research prototype developed for academic purposes.
 Certain features may be simplified and the system is not intended for production use.
 
+   
 
-
-##### **License**
+#### **License**
 
 This project is intended for academic research and demonstration purposes.
+
