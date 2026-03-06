@@ -11,40 +11,61 @@ This project was developed as part of a **final-year computer science project ex
 #### **Running the Project Locally**
 
 1. **Clone the Repository**
+
    git clone <repository-url>
+
    cd serenity-etm
-2. **Install Dependencies**
+   
+3. **Install Dependencies**
+
    npm install
+
    or
+
    yarn install
-3. **Configure Environment Variables**
+   
+5. **Configure Environment Variables**
+
    This project requires an .env file containing environment variables.
 
    Create a file named:
+
    **.env.local**
+
    inside the serenity-etm directory.
 
    Add the following variables:
+
    NEXT\_PUBLIC\_SUPABASE\_URL=supabase\_project\_url\_from\_the\_report
+
    NEXT\_PUBLIC\_SUPABASE\_ANON\_KEY=supabase\_anon\_key\_from\_the\_report
+
    NEXT\_PUBLIC\_MORPHCAST\_API\_KEY=morphcast\_api\_key\_from\_the\_report
 
    The .env file is not included in this repository because it contains sensitive credentials. You must create your own .env.local file using the variables above, with the credentials provided in the report.
 
-4. **Run the Development Server**
+7. **Run the Development Server**
+
    npm run dev
+
    or
+
    yarn dev
 
    The application will be available at:
+
    http://localhost:3000
 
-5. **Authentication Setup**
+9. **Authentication Setup**
+
    The system uses Supabase authentication.
 
    To use the system locally:
+
    Create an account
+
    Verify the email address
+
    Sign in to access the workspace
 
    **or**
