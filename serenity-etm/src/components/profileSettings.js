@@ -18,7 +18,6 @@ export default function ProfileSettingsMenu() {
     const router = useRouter()
 
     // Store values
-    const {setTheme, setThemeMode} = useStore();
     const theme = useStore((s) => s.theme);
 
     // Controls opening dropdown menu and settings modal
@@ -34,15 +33,10 @@ export default function ProfileSettingsMenu() {
      * 
      * Sign out
      * Redirects user to signin page
-     * Changes theme mode and theme to default states
      */
     const handleSignOut = async () => {
+        
         await supabase.auth.signOut();
-
-        // Return to default settings when signing out
-        const root = document.documentElement;
-        root.classList.remove('dark', 'high-contrast', 'colour-vision-friendly');
-
         router.push('/signin');
     }
 

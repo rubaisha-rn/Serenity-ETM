@@ -318,6 +318,36 @@ const useStore = create((set, get) => ({
     // Toggle left side secondary panel
     expandedSecondary: true, 
     setExpandedSecondary: (expandedSecondary) => set({expandedSecondary}),
+
+    /**
+     * Reset Store
+     * 
+     * Used to default back to original settings when a user session expires or user signs out.
+     */
+    resetStore: () => {
+        
+        set({
+            theme: 'light',
+            themeMode: 'normal',
+            emotionValue: 0,
+            calmModeDuration: 10000,
+            sdkActive: false,
+            stressDetectionDuration: 20000,
+            stressSensitivity: 1.0,
+            focusTriggers: [],
+            focusMode: false,
+            priorityMode: false,
+            calmMode: false,
+            screen: 'dashboard',
+            expandedRight: false,
+            expandedSecondary: false,
+            profileLoaded: true
+        })
+
+        // Remove any theme settings that may persist
+        const root = document.documentElement;
+        root.classList.remove('dark', 'high-contrast', 'colour-vision-friendly');
+    }
 }));
 
 export default useStore;

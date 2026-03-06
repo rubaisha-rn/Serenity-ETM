@@ -1,24 +1,45 @@
 /**
  * Profile hydrator
  * 
- * Responsible for loading user's profile from supabase into global store, applying saved theme, preventing application rendering until the profile is loaded.
+ * Responsible for loading user's profile from supabase into global store, applying saved settings, preventing application rendering until the profile is loaded.
  */
 
 'use client';
 
 import { useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import useStore from "@/store/useStore";
 
 export default function ProfileHydrator({children}) {
 
     // Global states
-    const loadProfile = useStore((s) => s.loadProfile)
-    const profileLoaded = useStore((s) => s.profileLoaded)
+    const loadProfile = useStore((s) => s.loadProfile);
+    const resetStore = useStore((s) => s.resetStore);
+    const profileLoaded = useStore((s) => s.profileLoaded);
     const theme = useStore((s) => s.theme);
 
-    // Load user profile when application first mounts
+    // Load user profile when ever there are authentication changes
     useEffect(() => {
-        loadProfile();
+
+        // Load initial session
+        supabase.auth.getSession().then(({data: {session}}) => {
+            loadProfile();
+        });
+
+        // Listen for auth changes. If in session, load user settings, else load default settings
+        const {data: {subscription}} = 
+            supabase.auth.onAuthStateChange((event, session) => {
+
+                if (session) {
+                    loadProfile();
+                }
+                else {
+                    resetStore();
+                }
+            });
+
+        return () => subscription.unsubscribe();
+        
     }, []);
 
     // Apply theme to the document root
