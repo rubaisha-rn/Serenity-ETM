@@ -405,7 +405,7 @@ export default function DashboardPage () {
                 <div 
                     role="region"
                     aria-labelledby="priority-tasks-heading"
-                    className={`task-outer flex flex-col text-white bg-[var(--baseAcc-b)] border-[var(--priorityNormalb)]`}
+                    className={`task-outer flex flex-col text-white bg-[var(--baseAcc-b)] border-[var(--priorityNormalb)] min-w-[100]`}
                 >
 
                     <h6 

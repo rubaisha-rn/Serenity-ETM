@@ -539,9 +539,11 @@ export default function EmailsPage () {
                                         </button>
 
                                         {/* Sender */}
-                                        <h6 className={`${mail.read ? 'font-thin' : 'font-semibold'}`}>
-                                            {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}
-                                        </h6>
+                                        <div className="truncate">
+                                            <h6 className={`truncate ${mail.read ? 'font-thin' : 'font-semibold'}`}>
+                                                {showEmails == 'sent' ? mail.isReceiver ? 'Me' : mail.to_email : mail.isSender? 'Me' : mail.from_email}
+                                            </h6>
+                                        </div>
                                     
                                         {/* Clickable email preview */}
                                         <div    
@@ -553,7 +555,7 @@ export default function EmailsPage () {
                                                 markAsRead(mail.id)
                                                 setReadEmailCount(readEmailCount+1)
                                             }}
-                                            className='cursor-pointer items-center text-left min-w-0'
+                                            className='cursor-pointer items-center text-left min-w-0 truncate'
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' || e.key === ' ') {
                                                     e.preventDefault();

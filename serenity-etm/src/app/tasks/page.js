@@ -562,9 +562,9 @@ export default function TasksPage() {
                                 )}
 
                                 {/* Task info */}
-                                <div className={grid ? 'flex flex-row justify-between' : ''}>
+                                <div className={grid ? 'flex flex-row justify-between' : 'truncate'}>
                                     {!grid 
-                                        ? <p className="font-semibold">{task.title}</p>
+                                        ? <p className="font-semibold truncate">{task.title}</p>
                                         : <h6 className="font-semibold">{task.title}</h6>
                                     }
 
@@ -584,7 +584,7 @@ export default function TasksPage() {
                                             src={ICONS[theme].date}
                                         />
                                     }
-                                    <p>Due: {formatDate(task.due)}</p>
+                                    <p>{grid ? 'Due:' : ''} {formatDate(task.due)}</p>
                                 </div>
 
                                 {/* Task progress bar */}
