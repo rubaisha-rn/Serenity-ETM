@@ -106,7 +106,7 @@ export const useTaskStore = create((set, get) => ({
 
         // Only on tasks without priorities or with AI/rules are priority source
         const unclassified = tasks.filter(
-            t => (t.priority_src === 'rules' || t.priority === 'null')
+            t => (t.priority_src === 'rules' || t.priority === null)
         );
 
         if (unclassified.length === 0) return;
@@ -157,7 +157,7 @@ export const useTaskStore = create((set, get) => ({
                         priority_src: update.priority_src
                     })
                     .eq('id', update.id)
-                    .is('priority', null);
+                    .neq('priority_src', 'user');
             }
 
             // Update local state
@@ -196,7 +196,7 @@ export const useTaskStore = create((set, get) => ({
                 timestamp: t.timestamp || t.created_at,
 
                 // Default priority
-                priority: t.priority || 'low',
+                priority: t.priority ?? null,
 
                 // Due date
                 due: t.due_date,

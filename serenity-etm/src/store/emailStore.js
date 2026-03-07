@@ -166,7 +166,7 @@ export const useEmailStore = create((set, get) => ({
                         priority_src: update.priority_src
                     })
                     .eq('id', update.id)
-                    .is('priority', null);
+                    .neq('priority_src', 'user');
             }
 
             // Update local state
