@@ -11,7 +11,7 @@
 
 'use client';
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import useStore from "@/store/useStore";
@@ -27,17 +27,21 @@ import Footer from "@/components/footer/footer";
 export default function AppShell({children}){
     
     // Global UI states store
-    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, focusMode, setFocusMode, priorityMode} = useStore();
+    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, setCalmMode, focusMode, setFocusMode, priorityMode} = useStore();
 
     const router = useRouter();
     
     // Secondary sidebar should not appear on dashboard
     const showSecondary = screen !== 'dashboard';
 
+    // Calm mode trigger states
+    const lastCalmTriggerRef = useRef(0);
+    const calmResetRef = useRef(true);
+
     /**
      * Focus mode hysteresis:
      * Automatically enables/disables focus mode based on stress levels/emotionValue
-     * Uses hysteresis to svoid rapid toggling:
+     * Uses hysteresis to avoid rapid toggling:
         * > 69 -> Enable focus mode
         * < 40 -> Disable focus mode
      */
@@ -71,6 +75,38 @@ export default function AppShell({children}){
             setExpandedSecondary(true);
         }
     }, [focusMode]);
+
+    /**
+     * Calm mode hysteresis:
+     * Automatically trigger calm mode based on emotion value
+     * Use hysteresis to avoid rapid toggling:
+        * > 90 -> Enable calm mode with 15 mins cooldown
+        * < 70 -> Enable calm mode for hysteresis reset
+     */
+    useEffect(() => {
+
+        const CALM_THRESHOLD = 90;
+        const CALM_RESET = 70;
+        const COOLDOWN = 15 * 60 * 1000; // 15 mins
+
+        const now = Date.now();
+
+        // Trigger calm mode
+        if ((emotionValue > CALM_THRESHOLD) && 
+            (calmResetRef.current) && 
+            (now - lastCalmTriggerRef.current > COOLDOWN)) {
+            
+            lastCalmTriggerRef.current = now;
+            calmResetRef.current = false;
+            setCalmMode(true);
+        }
+
+        // Reset hysteresis gate
+        if (emotionValue < CALM_RESET) {
+            calmResetRef.current = true;
+        }
+
+    }, [emotionValue]);
 
     /**
      * Global keyboard shortcuts
