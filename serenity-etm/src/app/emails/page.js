@@ -146,10 +146,16 @@ export default function EmailsPage () {
         if (showEmails !== 'sent') results = results.filter(e => !e.is_delete);
         
         // Stress-aware filtering: medium stress: remove low priority only
-        if (!focusMode && emotionValue >= 40 && emotionValue <= 70) {
-            results = results.filter(e =>
-                getPriority(e.priority) !== 'low'
-            );
+        // Only hide low-priority emails if there are other available
+        if (!focusMode && emotionValue >= 40 && emotionValue <= 70 && results.length > 5) {
+
+            const hasNonLowPriority = results.some(e => getPriority(e.priority) !== 'low');
+
+            if (hasNonLowPriority) {
+                results = results.filter(e =>
+                    getPriority(e.priority) !== 'low'
+                );
+            }
         }
 
         // Sorting

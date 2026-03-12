@@ -156,8 +156,14 @@ export default function TasksPage() {
         results = results.filter(t => !t.is_delete);
 
         // Stress-aware filtering: medium stress -> remove low priority
-        if (!focusMode && emotionValue >= 40 && emotionValue <= 70) {
-            results = results.filter(t => getPriority(t.priority) !== 'low');
+        // Only hide low-priority tasks if there are other available
+        if (!focusMode && (emotionValue >= 40) && (emotionValue <= 70) && (results.length > 3)) {
+
+            const hasNonLowPriority = results.some(t => getPriority(t.priority) !== 'low');
+
+            if (hasNonLowPriority) {
+                results = results.filter(t => getPriority(t.priority) !== 'low');
+            }
         }
 
         // Sorting
