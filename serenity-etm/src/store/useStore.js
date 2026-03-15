@@ -179,7 +179,11 @@ const useStore = create((set, get) => ({
         const bounded = Math.min(100, Math.max(0, value))
         
         set({emotionValue: bounded})
-        get().updateProfile({emotion_value: bounded})
+
+        // Only persist when when user updates it/SDK is inactive
+        if (!get().sdkActive) {
+            get().updateProfile({emotion_value: bounded})
+        }
     },
 
     // Update calm mode duration
