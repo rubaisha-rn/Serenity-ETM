@@ -12,7 +12,7 @@ This project was developed as part of a **final-year computer science project ex
 
 1. **Clone the Repository**
 
-   git clone <repository-url>
+   git clone https://github.com/rubaisha-rn/Serenity-ETM.git
 
    cd serenity-etm
    
