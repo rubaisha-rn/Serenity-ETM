@@ -1,5 +1,5 @@
 // Base URL for all UI assets stores in supabase storage
-const SUPABASE_ASSET_URL = 'https://funqzsdhvrnloatkmipm.supabase.co/storage/v1/object/public/assets-ui/'
+const SUPABASE_ASSET_URL = 'https://funqzsdhvrnloatkmipm.supabase.co/storage/v1/object/public/assets-ui'
 
 /**
  * Centralised mapping of all UI icon assets used throughout the app.
