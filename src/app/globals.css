@@ -102,6 +102,10 @@
     --priorityModeInt: #fff7e9;
 
     --disabledMode: #272727;
+
+    /* Summary tags */
+    --summaryA: #ffde72;
+    --summaryB: #fcf1cc;
 }
 
 /* Dark mode overwrite root variable when .dark class is activated */
@@ -186,6 +190,10 @@
     --priorityModeInt: #523708;
 
     --disabledMode: #dddddd;
+
+    /* Summary tags */
+    --summaryA: #664e00;
+    --summaryB: #5c584c;
 }
 
 /* High contrast mode */
@@ -270,6 +278,10 @@
     --priorityModeInt: #ffffff;
 
     --disabledMode: #555555;
+
+    /* Summary tags */
+    --summaryA: #8c6b00;
+    --summaryB: #fff7e0;
 }
 
 /* High contrast dark class */
@@ -354,6 +366,10 @@
     --priorityModeInt: #000000;
 
     --disabledMode: #aaaaaa;
+
+    /* Summary tags */
+    --summaryA: #ffc400;
+    --summaryB: #31302c;
 }
 
 /* Colour vision friendly */
@@ -438,6 +454,10 @@
     --priorityModeInt: #fefce8;
 
     --disabledMode: #9ca3af;
+
+    /* Summary tags */
+    --summaryA: #ca8a04;
+    --summaryB: #eec161;
 }
 
 /* Colour vision friendly dark class */
@@ -522,6 +542,10 @@
     --priorityModeInt: #3a2f00;
 
     --disabledMode: #6b7280;
+
+    /* Summary tags */
+    --summaryA: #ffdd00;
+    --summaryB: #b5ab6b;
 }
 
 /* Base layer */
@@ -600,6 +624,9 @@
     
     .error-popup-btn.a { @apply bg-[var(--d-main)] border-[var(--c-main)] hover:bg-[var(--e-main)] text-[var(--text-a)]; }
     .error-popup-btn.b { @apply bg-[var(--dangerH)] border-[var(--danger)] hover:bg-[var(--danger)] text-[var(--text-d)]; }
+
+    /* Summary tag */
+    .summary-tag { @apply bg-[var(--summaryB)] border-[var(--summaryA)] text-[var(--text-a)] flex flex-row items-center w-full px-1 rounded-md border-[0.05rem] gap-1;}
 }
 
 /* Responsive utilities */
@@ -1083,7 +1110,7 @@
     }
 
     /* X-Large screens */
-    @screen lg {
+    @screen xl {
 
         /* Typography */
         h1 { @apply text-2xl font-bold; } 

@@ -13,6 +13,8 @@
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
+const AI_API = process.env.NEXT_PUBLIC_AI_API;
+
 export const useEmailStore = create((set, get) => ({
 
     /**
@@ -179,6 +181,100 @@ export const useEmailStore = create((set, get) => ({
         }
         catch (err) {
             console.log("Classification failed.", err);
+        }
+    },
+
+    /**
+     * Email summarisation
+     * Uses API to summarise emails that don't already have a summary
+     */
+    summariseMissingEmails: async () => {
+
+        const { data:sessionData } = await supabase.auth.getSession();
+        if ( !sessionData.session ) return;
+
+        // Check if local AI service is running
+        try {
+            const health = await fetch(`${AI_API}/health`);
+
+            if (!health.ok) {
+                console.log('AI service is not running.');
+                return;
+            }
+        }
+        catch {
+            console.log('AI service is running.');
+            return;
+        }
+
+        const emails = get().emails;
+
+        // only emails without summaries
+        const unsummarised = emails.filter(
+            e => !e.summary || e.summary.trim() === ""
+        );
+
+        if ( unsummarised.length === 0 ) return;
+
+        try {
+            // batch size
+            const batchSize = 3;
+            
+            const batches = [];
+            for (let i=0; i<unsummarised.length; i+=batchSize) {
+                batches.push(unsummarised.slice(i, i+batchSize));
+            }
+
+            let allUpdates = [];
+            for (const batch of batches) {
+                const res = await fetch(`${AI_API}/summarise-batch`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        emails: batch.map(email => ({
+                            id: email.id,
+                            content: `${email.subject ?? ""} ${email.body ?? ""}`
+                        }))
+                    })
+                });
+
+                const data = await res.json();
+
+                if (!data.results) continue;
+
+                const updates = data.results
+                    .filter(r => typeof r.summary === 'string' && r.summary.trim().length > 0)
+                    .map(r => ({
+                        id: r.id,
+                        summary: r.summary
+                            .replace(/^\d+[\).\-\s]*/, '')
+                            .trim()
+                    }));
+                
+                allUpdates.push(...updates);
+            }
+
+            if (allUpdates.length === 0) return;
+
+            // save to supabase
+            await Promise.all(
+                allUpdates.map(update => 
+                    supabase
+                        .from('emails')
+                        .update({ summary: update.summary })
+                        .eq('id', update.id)
+                )
+            );
+
+            const updatedEmails = emails.map(email => {
+                const match = allUpdates.find(u => u.id === email.id);
+                return match ? {...email, ...match} : email;
+            });
+
+            set({emails: updatedEmails});
+        }
+        catch (err) {
+            console.log("Summarisation failed.", err);
         }
     },
 

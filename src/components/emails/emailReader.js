@@ -18,11 +18,13 @@ import { ICONS } from "@/lib/assets";
 import useStore from "@/store/useStore";
 import { createPortal } from "react-dom";
 import Spinner from "../spinner";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function EmailReader() {
 
     // Global state values
     const theme = useStore((s) => s.theme);
+    const summaryMode = useStore((s) => s.summaryMode);
     const {selectedEmail, setSelectedEmail, sendEmail, saveDraft, sendDraft, unarchiveMany, archiveMany, deleteMany} = useEmailStore();
 
     // Reply state
@@ -80,7 +82,7 @@ export default function EmailReader() {
             On ${new Date(selectedEmail.timestamp).toLocaleString()} ${
                 selectedEmail.from_name || selectedEmail.from_email
             } wrote:
-            ${ selectedEmail.body }
+            ${ summaryMode ? selectedE.summaryMode || selectedEmail.body : selectedEmail.body }
         `
 
         // Insert in db
@@ -379,7 +381,59 @@ export default function EmailReader() {
 
                         <p className="text-[var(--text-b)]">From: {selectedEmail.isSender ? 'Me' : selectedEmail.from_name || selectedEmail.from_email}</p>
                         <p className="text-[var(--text-b)]">To: {selectedEmail.isReceiver ? 'Me' : selectedEmail.to_name || selectedEmail.to_email}</p>
-                        <p className="text-xs">{selectedEmail.body || '(No body)'}</p>
+                        <AnimatePresence initial={false}>
+                            {summaryMode && (
+                                <motion.div
+                                    className="overflow-hidden"
+                                    initial={{
+                                        opacity: 0,
+                                        height: 0,
+                                        marginTop: 0,
+                                        marginBottom: 0,
+                                    }}
+                                    animate={{
+                                        opacity: 1,
+                                        height: "auto",
+                                        marginTop: 8,
+                                        marginBottom: 4,
+                                    }}
+                                    exit={{
+                                        opacity: 0,
+                                        height: 0,
+                                        marginTop: 0,
+                                        marginBottom: 0,
+                                    }}
+                                    transition={{
+                                        duration: 0.2,
+                                    }}
+                                >
+                                    <div className="summary-tag">
+                                        <img
+                                            src={ICONS[theme].summary}
+                                            alt=""
+                                            aria-hidden="true"
+                                        />
+                                        <p>This email's content has been summarised.</p>
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                        <div className="relative overflow-hidden">
+                            <AnimatePresence mode="wait" initial={false}>
+                                <motion.p
+                                    key={summaryMode ? "summary" : "body"}
+                                    className="text-xs"
+                                    initial={{ opacity: 0, y: 2 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -2 }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    {summaryMode
+                                        ? selectedEmail.summary || selectedEmail.body
+                                        : selectedEmail.body || "(No body)"}
+                                </motion.p>
+                            </AnimatePresence>
+                        </div>
                     </div>
                 )}
 

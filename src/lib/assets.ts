@@ -110,7 +110,7 @@ export const ICONS = {
         star: `${SUPABASE_ASSET_URL}/dark-mode/star.png`,
         stressdetect: `${SUPABASE_ASSET_URL}/dark-mode/stressdetection.png`,
         success: `${SUPABASE_ASSET_URL}/dark-mode/success.png`,
-        summary: `${SUPABASE_ASSET_URL}/light-mode/flash.png`,
+        summary: `${SUPABASE_ASSET_URL}/dark-mode/flash.png`,
         tasks: `${SUPABASE_ASSET_URL}/dark-mode/tasks.png`,
         tick: `${SUPABASE_ASSET_URL}/dark-mode/tick.png`,
         today: `${SUPABASE_ASSET_URL}/dark-mode/today.png`,

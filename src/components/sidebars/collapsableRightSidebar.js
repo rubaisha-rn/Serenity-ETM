@@ -185,6 +185,7 @@ export default function CollapsableRightSidebar() {
                                     src={ICONS[theme].summary}
                                     alt=''
                                     aria-hidden='true'
+                                    className="aspect-square"
                                 />
                                 <span className={`text-[var(--text-a)] whitespace-nowrap transition-all duration-150 side-bar-label ${expandedRight? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                                     Summary Mode
