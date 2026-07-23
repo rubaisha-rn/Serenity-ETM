@@ -303,6 +303,10 @@ const useStore = create((set, get) => ({
     priorityMode: false,
     setPriorityMode: (value) => set({ priorityMode: value }),
 
+    // Toggle summary mode
+    summaryMode: false,
+    setSummaryMode: (value) => set({ summaryMode: value }),
+
     // Toggle calm mode
     calmMode: false,
     setCalmMode: (value) => set({ calmMode: value }),
@@ -341,6 +345,7 @@ const useStore = create((set, get) => ({
             focusTriggers: [],
             focusMode: false,
             priorityMode: false,
+            summaryMode: false,
             calmMode: false,
             screen: 'dashboard',
             expandedRight: false,

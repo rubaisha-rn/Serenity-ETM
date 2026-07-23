@@ -16,7 +16,7 @@ import { ICONS } from '@/lib/assets';
 export default function CollapsableRightSidebar() {
 
     // Global state values
-    const {focusMode, setFocusMode, priorityMode, setPriorityMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode, expandedRight, setExpandedRight} = useStore();
+    const {focusMode, setFocusMode, priorityMode, setPriorityMode, summaryMode, setSummaryMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode, expandedRight, setExpandedRight} = useStore();
     const theme = useStore((s) => s.theme);
 
     // Keyboard activation helper
@@ -96,8 +96,8 @@ export default function CollapsableRightSidebar() {
                                 title='Focus Mode'
                                 onClick={() => setFocusMode(!focusMode)}
                                 onKeyDown={(e) => activate(e, () => setFocusMode(!focusMode))}
-                                className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
-                                ${focusMode ? 'bg-[var(--d-main)]' : ''}`}
+                                className={`flex items-center justify-center transition-colors side-bar-btn-style ${expandedRight ? 'expanded' : 'justify-center collapsed'}
+                                ${focusMode ? 'bg-[var(--d-main)] hover:bg-[var(--e-main)]' : 'bg-[var(--f-main)] hover:bg-[var(--e-main)]'}`}
                             >
                                 <img
                                     src={ICONS[theme].focus}
@@ -137,8 +137,8 @@ export default function CollapsableRightSidebar() {
                                 title='Priority Mode'
                                 onClick={() => setPriorityMode(!priorityMode)}
                                 onKeyDown={(e) => activate(e, () => setPriorityMode(!priorityMode))}
-                                className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
-                                ${priorityMode ? 'bg-[var(--d-main)]' : ''}`}
+                                className={`flex items-center justify-center transition-colors side-bar-btn-style ${expandedRight ? 'expanded' : 'justify-center collapsed'}
+                                ${priorityMode ? 'bg-[var(--d-main)] hover:bg-[var(--e-main)]' : 'bg-[var(--f-main)] hover:bg-[var(--e-main)]'}`}
                             >
                                 <img
                                     src={ICONS[theme].priority}
@@ -161,6 +161,48 @@ export default function CollapsableRightSidebar() {
 
                     </div>
 
+                    {/* Summary mode toggle */}
+                    <div className='flex flex-row items-center'>
+                    
+                        {summaryMode && (
+                            <div className={`${expandedRight ? '' : 'absolute bg-[var(--g-main)] rounded-full shadow side-bar-btn-active right-0'}`}/>
+                        )}
+
+                        <div>    
+                            <motion.button
+                                whileHover={{scale: 1.05}}
+                                whileTap={{scale: 0.95}}
+                                role='menuitemcheckbox'
+                                aria-label='Toggle summary mode'
+                                aria-checked={summaryMode}
+                                title='Summary Mode'
+                                onClick={() => setSummaryMode(!summaryMode)}
+                                onKeyDown={(e) => activate(e, () => setFocusMode(!summaryMode))}
+                                className={`flex items-center justify-center transition-colors side-bar-btn-style ${expandedRight ? 'expanded' : 'justify-center collapsed'}
+                                ${summaryMode ? 'bg-[var(--d-main)] hover:bg-[var(--e-main)]' : 'bg-[var(--f-main)] hover:bg-[var(--e-main)]'}`}
+                            >
+                                <img
+                                    src={ICONS[theme].summary}
+                                    alt=''
+                                    aria-hidden='true'
+                                    className="aspect-square"
+                                />
+                                <span className={`text-[var(--text-a)] whitespace-nowrap transition-all duration-150 side-bar-label ${expandedRight? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
+                                    Summary Mode
+                                </span>
+                            </motion.button>
+
+                            {/* Mode description visible when sidebar expanded */}
+                            {expandedRight && (
+                                <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
+                                    <Info className='shrink-0 side-bar-info'/>
+                                    Summarises long content. You can also activate it manually. 
+                                </span>
+                            )}
+                        </div>
+                        
+                    </div>
+
                     {/* Stress detection toggle */}
                     <div className='flex flex-row items-center'>
                     
@@ -180,8 +222,8 @@ export default function CollapsableRightSidebar() {
                                 title='Stress Detection'
                                 onClick={() => {setSdkActive(!sdkActive)}}
                                 onKeyDown={(e) => activate(e, () => setSdkActive(!sdkActive))}
-                                className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'collpased'}
-                                ${sdkActive ? 'bg-[var(--d-main)]' : ''}`}
+                                className={`flex items-center justify-center transition-colors side-bar-btn-style ${expandedRight ? 'expanded' : 'collpased'}
+                                ${sdkActive ? 'bg-[var(--d-main)] hover:bg-[var(--e-main)]' : 'bg-[var(--f-main)] hover:bg-[var(--e-main)]'}`}
                             >
                                 
                                 <img
@@ -262,8 +304,8 @@ export default function CollapsableRightSidebar() {
                             title='Calm Overlay'
                             onClick={() => setCalmMode(!calmMode)}
                             onKeyDown={(e) => activate(e, () => setCalmMode(!calmMode))}
-                            className={`flex items-center justify-center transition-colors side-bar-btn-style bg-[var(--f-main)] hover:bg-[var(--d-main)] ${expandedRight ? 'expanded' : 'justify-center collapsed'}
-                            ${calmMode ? 'bg-[var(--d-main)]' : ''}`}
+                            className={`flex items-center justify-center transition-colors side-bar-btn-style ${expandedRight ? 'expanded' : 'justify-center collapsed'}
+                            ${calmMode ? 'bg-[var(--d-main)] hover:bg-[var(--e-main)]' : 'bg-[var(--f-main)] hover:bg-[var(--e-main)]'}`}
                         >
                             <img
                                 src={ICONS[theme].calm}

@@ -27,9 +27,9 @@ export default function EmailsPage () {
     const router = useRouter();
 
     // Global state values
-    const {loadEmails, cyclePriority, classifyMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany, showComposer, setShowComposer} = useEmailStore();
+    const {loadEmails, cyclePriority, classifyMissingEmails, summariseMissingEmails, emails, showEmails, setShowEmails, toggleStar, setSelectedEmail, selectedEmail, markAsRead, readEmailCount, setReadEmailCount, selectedIds, toggleSelect, clearSelection, selectAllVisible, markManyRead, archiveMany, unarchiveMany, deleteMany, showComposer, setShowComposer} = useEmailStore();
 
-    const {emotionValue, focusMode, priorityMode, setScreen} = useStore();
+    const {emotionValue, focusMode, priorityMode, summaryMode, setScreen} = useStore();
     const theme = useStore((s) => s.theme);
 
     // Search state
@@ -59,12 +59,23 @@ export default function EmailsPage () {
             }
 
             await loadEmails();
-            await classifyMissingEmails();
+
+            await Promise.all([
+                classifyMissingEmails(),
+                summariseMissingEmails()
+            ]);
         }
 
         init();
     
     }, []);
+
+    // Summarise emails. Recheck as well.
+    useEffect(() => {
+        if(summaryMode) {
+            summariseMissingEmails();
+        }
+    }, [summaryMode])
 
     // Search functionality
     useEffect(() => {
@@ -305,7 +316,7 @@ export default function EmailsPage () {
                                     </div>
 
                                     <p className="font-semibold">{mail.subject || '(No subject)'}</p>
-                                    <p className="w-full truncate">{mail.body || '(No body)'}</p>
+                                    <p className="w-full truncate">{summaryMode ? mail.summary || mail.body || '(No body)' : mail.body || '(No body)'}</p>
 
                                 </motion.div>
                             ))}
@@ -573,7 +584,18 @@ export default function EmailsPage () {
                                             }}
                                         >
                                             <h6 className={`${mail.read ? 'font-thin' : 'font-semibold'}`}>{mail.subject}</h6>
-                                            <p className={`${mail.read ? 'font-thin' : 'font-normal'} truncate`}>{mail.body}</p>
+                                            <AnimatePresence mode="wait" initial={false}>
+                                                <motion.p
+                                                    key={summaryMode ? "summary" : "body"}
+                                                    className={`${mail.read ? "font-thin" : "font-normal"} truncate`}
+                                                    initial={{ opacity: 0, y: 2 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: -2 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    {summaryMode ? mail.summary || mail.body : mail.body}
+                                                </motion.p>
+                                            </AnimatePresence>
                                         </div>
 
                                         {/* Timestamp */}
@@ -661,7 +683,18 @@ export default function EmailsPage () {
                                         <div />
                                         <div className="truncate">
                                             <p className={`${mail.read ? '' : 'font-semibold'} truncate`}>{mail.subject}</p>
-                                            <p className={`${mail.read ? 'font-thin' : 'font-normal'} truncate`}>{mail.body}</p>
+                                            <AnimatePresence mode="wait" initial={false}>
+                                                <motion.p
+                                                    key={summaryMode ? "summary" : "body"}
+                                                    className={`${mail.read ? "font-thin" : "font-normal"} truncate`}
+                                                    initial={{ opacity: 0, y: 2 }}
+                                                    animate={{ opacity: 1, y: 0 }}
+                                                    exit={{ opacity: 0, y: -2 }}
+                                                    transition={{ duration: 0.2 }}
+                                                >
+                                                    {summaryMode ? mail.summary || mail.body : mail.body}
+                                                </motion.p>
+                                            </AnimatePresence>
                                         </div>
 
                                     </div>
