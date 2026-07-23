@@ -480,4 +480,4 @@ The raw calculated stress value updates continuously as new emotion frames arriv
 
 ## Licence
 
-MIT
+This project is intended for academic and research purposes only.
