@@ -141,6 +141,23 @@ Standard inbox with Starred, Important, Sent, Drafts, and Archive categorisation
 
 ---
 
+### AI-Powered Summarisation with Retrieval-Augmented Generation (Local, Experimental)
+
+When cognitive load is elevated, condensing an email to its essential point reduces reading burden further than filtering alone. Serenity ETM includes a local summarisation service that generates a one-sentence summary per email, **grounded in the user's own relevant email history** rather than the email in isolation.
+
+**How it works:**
+
+1. Each email is embedded into a vector representation using Ollama's `nomic-embed-text` model and stored via [pgvector](https://github.com/pgvector/pgvector), Supabase's native vector extension.
+2. When an email is summarised, its embedding is used to retrieve the most similar past emails the user can access — via a Postgres RPC function (`match_emails`) that runs under the same Row-Level Security policies as the rest of the database, so retrieval never crosses user boundaries.
+3. Retrieved context is passed alongside the new email to a local LLM (`phi3`, via Ollama), which generates a summary informed by relevant history — e.g. a follow-up email referencing "the report" is summarised with awareness of what that report actually is, based on an earlier related email.
+4. Summaries and embeddings are cached in the `emails` table (`summary`, `embedding` columns), so retrieval and generation only run once per email, not on every render.
+
+**Why pgvector instead of a separate vector database:** the application is already fully built on Supabase/Postgres. Using pgvector means no additional infrastructure to run or maintain, and — critically — similarity search is automatically scoped by the existing RLS policies, rather than requiring access control to be reimplemented in a second data store.
+
+**Local-only by design:** this feature runs entirely on the user's own machine (Ollama + a local FastAPI service) and is **not available on the deployed Vercel demo**, since Vercel's serverless environment cannot host a persistent local LLM. See [Getting Started](#7-optional-enable-local-ai-summarisation) for setup.
+
+---
+
 ## Architecture
 
 ```
@@ -182,12 +199,19 @@ Standard inbox with Starred, Important, Sent, Drafts, and Archive categorisation
 
 | Table | Purpose |
 |---|---|
-| `emails` | Email records with sender, receiver, subject, body, priority, priority_src, folder, read/star/delete state |
+| `emails` | Email records with sender, receiver, subject, body, priority, priority_src, folder, read/star/delete state, cached AI `summary`, and a pgvector `embedding` used for retrieval |
 | `tasks` | Task items with title, description, due date, priority, priority_src, progress, completion state |
 | `profiles` | User configuration including theme, adaptive settings, and stress sensitivity parameter |
 | `focus_triggers` | Timestamps of Focus Mode activations — used to populate the weekly dashboard chart |
 
-- **Row-Level Security:** RLS policies on all tables enforce that `auth.uid() = user_id` on every query. Data isolation is enforced at the database level, not the application layer.
+- **Row-Level Security:** RLS policies on all tables enforce that `auth.uid() = user_id` on every query. Data isolation is enforced at the database level, not the application layer. The `match_emails` retrieval function runs with `SECURITY INVOKER`, so vector similarity search inherits these same RLS guarantees automatically.
+
+### AI Summarisation Service (Local)
+
+- **Framework:** FastAPI (Python), run as a standalone local process alongside the Next.js dev server
+- **Model runtime:** [Ollama](https://ollama.com), running `phi3` for summary generation and `nomic-embed-text` for embeddings
+- **Endpoints:** `/summarise-batch` (batch email summarisation, RAG-aware via an optional per-email `context` field), `/embed-batch` (batch embedding generation), `/health` (availability check)
+- **Contract with the frontend:** the Zustand `emailStore` calls this service directly over HTTP, checks `/health` with a bounded timeout before use, and degrades gracefully (surfacing an "AI summarisation unavailable" notice) if the service isn't running
 
 ### Application Shell
 
@@ -271,7 +295,8 @@ Temporal smoothing, hysteresis control, and threshold triggering were all verifi
 ### Prerequisites
 
 - Node.js 18+
-- Python 3.11+ (for LLM extension only)
+- Python 3.11+ (for the local AI summarisation service only)
+- [Ollama](https://ollama.com) (for the local AI summarisation service only)
 - A [Supabase](https://supabase.com) project (free tier sufficient)
 - A [MorphCast](https://morphcast.com) SDK key
 
@@ -395,12 +420,51 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 A pre-populated demo account is available at the live deployment for immediate exploration without setup. Credentials are available upon email.
 
+### 7. (Optional) Enable Local AI Summarisation
+
+AI summarisation and RAG-based retrieval require running a local model server and a local API service alongside the Next.js app. This is entirely optional — the rest of the app works without it.
+
+**a. Install Ollama and pull the required models:**
+
+```bash
+ollama pull phi3
+ollama pull nomic-embed-text
+```
+
+**b. Start Ollama** (keep this running in its own terminal for the duration of your session):
+
+```bash
+ollama serve
+```
+
+**c. Enable pgvector and the retrieval function** — run the contents of `supabase/migrations/003_add_pgvector_retrieval.sql` in your Supabase SQL Editor. This enables the `pgvector` extension, adds an `embedding` column to `emails`, and creates the `match_emails` retrieval function.
+
+**d. Install and run the AI service:**
+
+```bash
+cd src/ai-service
+python -m venv venv
+source venv/bin/activate      # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
+
+Keep this running in its own terminal, separate from `ollama serve` and `npm run dev`. All three must be running simultaneously for AI summarisation to work locally.
+
+**e. Verify it's working:**
+
+```bash
+curl -X POST http://localhost:8000/health
+```
+
+Should return `{"status": "ok"}`. If the Next.js app can't reach this service, it fails gracefully — email summaries simply won't generate, with a visible notice in the UI rather than a silent failure.
+
 ---
 
 ## Project Structure
 
 ```
-serenity-etm/
+src/
 ├── app/                          # Next.js App Router
 │   ├── (auth)/                   # Sign in / Sign up pages
 │   ├── dashboard/                # Dashboard page
@@ -431,7 +495,11 @@ serenity-etm/
 │   ├── classifier/               # NLP priority classifier
 │   └── colours/                  # Palette definitions + interpolation
 │
-└── public/
+├── ai-service/                   # Local FastAPI service (summarisation + RAG)
+│   ├── main.py                   # /summarise-batch, /embed-batch, /health
+│   └── requirements.txt
+└── supabase/
+    └── migrations/               # SQL migrations, incl. pgvector + match_emails
 ```
 
 ---
@@ -453,6 +521,12 @@ Additive combination allows individual signals to dominate — very high arousal
 **Why a rule-based classifier rather than an ML model?**
 Two reasons. First, interpretability — a rule-based classifier produces the same output for the same input every time, and the rationale is transparent and auditable. Second, domain specificity — email and task priority signals are well-defined enough that a carefully designed keyword system performs reliably without requiring training data. An ML model would require labelled email datasets that introduce privacy concerns and may not generalise to individual users' communication patterns.
 
+**Why pgvector instead of a dedicated vector database?**
+The application's data layer is already entirely Supabase/Postgres. Introducing a separate vector database (e.g. Chroma, Pinecone) for one feature would mean a second system to run, secure, and keep in sync — and would require reimplementing the access control that Row-Level Security already provides for free. pgvector keeps embeddings co-located with the data they describe and lets retrieval inherit the same per-user isolation guarantees as every other query in the app.
+
+**Why keep AI summarisation local-only rather than deploying it?**
+Running a local LLM (Ollama) requires a persistent process with real memory and compute — incompatible with Vercel's serverless deployment model. Rather than introduce a hosted inference API (and the API-key security surface that comes with it) before the feature was proven, it was scoped deliberately to local-only for this iteration, with the frontend degrading gracefully — health-checked, timeout-bounded, and visibly communicated to the user — when the service isn't present.
+
 **Why separate activation and display stress values?**
 The raw calculated stress value updates continuously as new emotion frames arrive. Displaying this directly would produce jittery, rapidly changing UI feedback. The displayed value is a smoothed version that interpolates toward the raw target. This separation means the display is stable and readable while the underlying calculation remains responsive.
 
@@ -465,6 +539,8 @@ The raw calculated stress value updates continuously as new emotion frames arriv
 **Evaluation was short-term.** The controlled study captured initial interaction effects, not long-term behaviour. Adaptive systems may produce different patterns over weeks of use — users may habituate to features, develop different interaction strategies, or find that features they initially found useful become less relevant over time.
 
 **The sample size is small.** 10 participants in the within-subjects study is consistent with established usability testing practice for identifying key interaction patterns, but limits the generalisability of quantitative findings.
+
+**AI summarisation is local-only.** The RAG-based summarisation feature requires Ollama and a local FastAPI service running on the user's own machine, and is not available on the deployed Vercel demo. This was a deliberate scoping decision (see Design Decisions) rather than an oversight, but it does mean the feature can't be evaluated from the live link alone.
 
 **Environmental factors affect inference quality.** Poor lighting, unusual camera angles, glasses, or facial coverings can reduce the reliability of MorphCast's signal extraction. The temporal smoothing and hysteresis mechanisms mitigate the impact of degraded signals but do not eliminate it.
 
