@@ -498,6 +498,7 @@ src/
 ├── ai-service/                   # Local FastAPI service (summarisation + RAG)
 │   ├── main.py                   # /summarise-batch, /embed-batch, /health
 │   └── requirements.txt
+│
 └── supabase/
     └── migrations/               # SQL migrations, incl. pgvector + match_emails
 ```
