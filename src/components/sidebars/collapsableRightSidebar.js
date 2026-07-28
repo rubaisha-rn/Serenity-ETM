@@ -2,7 +2,7 @@
  * Collapsable right sidebar. 
  * 
  * Renders adaptive workspace control panel.
- * Features: focus mode, priority mode, calm overlay, stress detection.
+ * Features: focus mode, priority mode, summary mode, calm overlay, stress detection.
  * Can expand and collapse to reduce UI clutter.
  */
 
@@ -10,7 +10,8 @@
 
 import { motion } from "framer-motion";
 import useStore from '@/store/useStore';
-import { Info } from 'lucide-react';
+import { useEmailStore } from "@/store/emailStore";
+import { Info, TriangleAlert } from 'lucide-react';
 import { ICONS } from '@/lib/assets';
 
 export default function CollapsableRightSidebar() {
@@ -18,6 +19,9 @@ export default function CollapsableRightSidebar() {
     // Global state values
     const {focusMode, setFocusMode, priorityMode, setPriorityMode, summaryMode, setSummaryMode, emotionValue, setEmotionValue, sdkActive, setSdkActive, calmMode, setCalmMode, expandedRight, setExpandedRight} = useStore();
     const theme = useStore((s) => s.theme);
+
+    // For summarisation button
+    const {aiServiceAvailable} = useEmailStore();
 
     // Keyboard activation helper
     const activate = (e, action) => {
@@ -170,8 +174,8 @@ export default function CollapsableRightSidebar() {
 
                         <div>    
                             <motion.button
-                                whileHover={{scale: 1.05}}
-                                whileTap={{scale: 0.95}}
+                                whileHover={!aiServiceAvailable ? {scale:1} :{scale: 1.05}}
+                                whileTap={!aiServiceAvailable ? {scale:1} :{scale: 0.95}}
                                 role='menuitemcheckbox'
                                 aria-label='Toggle summary mode'
                                 aria-checked={summaryMode}
@@ -180,6 +184,7 @@ export default function CollapsableRightSidebar() {
                                 onKeyDown={(e) => activate(e, () => setFocusMode(!summaryMode))}
                                 className={`flex items-center justify-center transition-colors side-bar-btn-style ${expandedRight ? 'expanded' : 'justify-center collapsed'}
                                 ${summaryMode ? 'bg-[var(--d-main)] hover:bg-[var(--e-main)]' : 'bg-[var(--f-main)] hover:bg-[var(--e-main)]'}`}
+                                disabled={!aiServiceAvailable}
                             >
                                 <img
                                     src={ICONS[theme].summary}
@@ -194,10 +199,18 @@ export default function CollapsableRightSidebar() {
 
                             {/* Mode description visible when sidebar expanded */}
                             {expandedRight && (
-                                <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
-                                    <Info className='shrink-0 side-bar-info'/>
-                                    Summarises long content. You can also activate it manually. 
-                                </span>
+                                <>
+                                    <span className={`flex transition-all duration-150 text-[var(--text-b)] leading-tight side-bar-help`}>
+                                        <Info className='shrink-0 side-bar-info'/>
+                                        Summarises long content. You can also activate it manually. 
+                                    </span>
+                                    {!aiServiceAvailable && (
+                                        <span className={`flex transition-all duration-150 text-[var(--danger)] leading-tight side-bar-help`}>
+                                            <TriangleAlert className='shrink-0 side-bar-info'/>
+                                            AI summarisation is unavailable — local AI service not running.
+                                        </span>
+                                    )}
+                                </>
                             )}
                         </div>
                         

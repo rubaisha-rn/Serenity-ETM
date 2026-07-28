@@ -4,7 +4,7 @@
  * Manages:
     * Global UI layout (sidebars + main panel + footer)
     * Keyboard navigation
-    * Focus mode behaviour
+    * Focus mode behaviour + Summary mode
     * Calm mode overlay
     * Dynamic sidebar widths based on state
  */
@@ -15,6 +15,7 @@ import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import useStore from "@/store/useStore";
+import { useEmailStore } from "@/store/emailStore";
 import CollapsableLeftSidebar from "@/components/sidebars/collapsableLeftSidebar";
 import CollapsableRightSidebar from "@/components/sidebars/collapsableRightSidebar";
 import SecondarySidebar from "@/components/sidebars/secondarySidebar";
@@ -27,7 +28,10 @@ import Footer from "@/components/footer/footer";
 export default function AppShell({children}){
     
     // Global UI states store
-    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, setCalmMode, focusMode, setFocusMode, priorityMode} = useStore();
+    const {emotionValue, expandedRight, setExpandedRight, expandedSecondary, setExpandedSecondary, setScreen, screen, calmMode, setCalmMode, focusMode, setFocusMode, priorityMode, summaryMode, setSummaryMode} = useStore();
+
+    // For summarisation button
+    const {aiServiceAvailable} = useEmailStore();
 
     const router = useRouter();
     
@@ -39,8 +43,8 @@ export default function AppShell({children}){
     const calmResetRef = useRef(true);
 
     /**
-     * Focus mode hysteresis:
-     * Automatically enables/disables focus mode based on stress levels/emotionValue
+     * Focus mode hysteresis + summary mode:
+     * Automatically enables/disables focus mode/summary mode based on stress levels/emotionValue
      * Uses hysteresis to avoid rapid toggling:
         * > 69 -> Enable focus mode
         * < 40 -> Disable focus mode
@@ -49,9 +53,11 @@ export default function AppShell({children}){
 
         if (emotionValue > 69 && !focusMode) {
             setFocusMode(true);
+            if (aiServiceAvailable) setSummaryMode(true);
         }
         else if (emotionValue < 40 && focusMode) {
             setFocusMode(false);
+            if (summaryMode) setSummaryMode(false);
         }
 
     }, [emotionValue]);
