@@ -8,12 +8,29 @@
     * Email selection for multi-actions
     * Priority classification via API
     * Draft handling
+    * Summarising emails + RAG pipeline
  */
 
 import { create } from "zustand";
 import { supabase } from "@/lib/supabaseClient";
 
 const AI_API = process.env.NEXT_PUBLIC_AI_API;
+
+// AI service check helper function
+const checkAIServiceHealth = async () => {
+    try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 1500);
+
+        const res = await fetch(`${AI_API}/health`, {signal: controller.signal});
+        
+        clearTimeout(timeout);
+        return res.ok;
+    }
+    catch {
+        return false;
+    }
+}
 
 export const useEmailStore = create((set, get) => ({
 
@@ -193,17 +210,14 @@ export const useEmailStore = create((set, get) => ({
         const { data:sessionData } = await supabase.auth.getSession();
         if ( !sessionData.session ) return;
 
-        try {
-            const health = await fetch(`${AI_API}/health`);
-            if (!health.ok) {
-                console.log("AI service is not running.");
-                return;
-            }
-        }
-        catch {
-            console.log("AI service is not running.");
+        const isHealthy = await checkAIServiceHealth();
+        if (!isHealthy) {
+            set({aiServiceAvailable: false});
+            console.log('AI Service is not running.');
             return;
         }
+
+        set({aiServiceAvailable: true});
 
         const emails = get().emails;
         const unembedded = emails.filter(e => !e.embedding);
@@ -275,18 +289,14 @@ export const useEmailStore = create((set, get) => ({
         if ( !sessionData.session ) return;
 
         // Check if local AI service is running
-        try {
-            const health = await fetch(`${AI_API}/health`);
-
-            if (!health.ok) {
-                console.log('AI service is not running.');
-                return;
-            }
-        }
-        catch {
-            console.log('AI service is not running.');
+        const isHealthy = await checkAIServiceHealth();
+        if (!isHealthy) {
+            set({aiServiceAvailable: false});
+            console.log('AI Service is not running.');
             return;
         }
+
+        set({aiServiceAvailable: true});
 
         // make sure emails are embedded first
         await get().embedMissingEmails();
@@ -485,6 +495,9 @@ export const useEmailStore = create((set, get) => ({
      */
     
     emails: [],
+
+    // AI service state
+    aiServiceAvailable: true,
     
     // Currently opened email
     selectedEmail: null,
