@@ -185,6 +185,87 @@ export const useEmailStore = create((set, get) => ({
     },
 
     /**
+     * Email embedding
+     * Embeds emails that don't already have a stored embedding, so they become searchable as RAG context for future summaries.
+     */
+    embedMissingEmails: async () => {
+        
+        const { data:sessionData } = await supabase.auth.getSession();
+        if ( !sessionData.session ) return;
+
+        try {
+            const health = await fetch(`${AI_API}/health`);
+            if (!health.ok) {
+                console.log("AI service is not running.");
+                return;
+            }
+        }
+        catch {
+            console.log("AI service is not running.");
+            return;
+        }
+
+        const emails = get().emails;
+        const unembedded = emails.filter(e => !e.embedding);
+
+        if (unembedded.length === 0) return;
+
+        try {
+            const batchSize = 5;
+            const batches = [];
+
+            for (let i=0; i<unembedded.length; i+=batchSize) {
+                batches.push(unembedded.slice(i, i+batchSize));
+            }
+
+            let allUpdates = [];
+
+            for (const batch of batches) {
+                const res = await fetch(`${AI_API}/embed-batch`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        emails: batch.map(email => ({
+                            id: email.id,
+                            content: `${email.subject ?? ""} ${email.body ?? ""}`
+                        }))
+                    })
+                });
+
+                const data = await res.json();
+
+                if (!data.results) continue;
+
+                const updates = data.results.filter(r => Array.isArray(r.embedding));
+
+                allUpdates.push(...updates);
+            }
+
+            if (allUpdates.length === 0) return;
+
+            // save embeddings to supabase
+            await Promise.all(
+                allUpdates.map(update =>
+                    supabase
+                        .from('emails')
+                        .update({embedding: update.embedding})
+                        .eq('id', update.id)
+                )
+            );
+
+            const updatedEmails = emails.map(email => {
+                const match = allUpdates.find(u => u.id === email.id);
+                return match ? {...email, embedding: match.embedding} : email;
+            });
+
+            set({emails: updatedEmails});
+        }
+        catch (err) {
+            console.log("Embedding failed.", err);
+        }
+    },
+
+    /**
      * Email summarisation
      * Uses API to summarise emails that don't already have a summary
      */
@@ -203,9 +284,12 @@ export const useEmailStore = create((set, get) => ({
             }
         }
         catch {
-            console.log('AI service is running.');
+            console.log('AI service is not running.');
             return;
         }
+
+        // make sure emails are embedded first
+        await get().embedMissingEmails();
 
         const emails = get().emails;
 
@@ -217,15 +301,45 @@ export const useEmailStore = create((set, get) => ({
         if ( unsummarised.length === 0 ) return;
 
         try {
+            // Retrieve context for each email individually
+            // DB calls not LLM calls, so unbatched
+            const withContext = await Promise.all(
+                unsummarised.map(async (email) => {
+                
+                    if (!email.embedding) {
+                        // no embedding yet, summarise without context
+                        return {...email, ragContext: []};
+                    }
+
+                    const { data: matches, error } = await supabase.rpc('match_emails', {
+                        query_embedding: email.embedding,
+                        match_count: 3,
+                        exclude_id: email.id
+                    });
+
+                    if (error) {
+                        console.log('Retrieval failed for', email.id, error);
+                        return {...email, ragContext:[]};
+                    }
+
+                    const ragContext = (matches ?? []).map(
+                        m => `${m.subject ?? ""}: ${m.body ?? ""}`
+                    );
+
+                    return {...email, ragContext};                
+                })
+            );
+
             // batch size
             const batchSize = 3;
-            
             const batches = [];
+
             for (let i=0; i<unsummarised.length; i+=batchSize) {
                 batches.push(unsummarised.slice(i, i+batchSize));
             }
 
             let allUpdates = [];
+            
             for (const batch of batches) {
                 const res = await fetch(`${AI_API}/summarise-batch`, {
                     method: 'POST',
@@ -233,7 +347,8 @@ export const useEmailStore = create((set, get) => ({
                     body: JSON.stringify({
                         emails: batch.map(email => ({
                             id: email.id,
-                            content: `${email.subject ?? ""} ${email.body ?? ""}`
+                            content: `${email.subject ?? ""} ${email.body ?? ""}`,
+                            context: email.ragContext
                         }))
                     })
                 });
